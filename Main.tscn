@@ -17,19 +17,19 @@ script = ExtResource( 1 )
 mesh = SubResource( 1 )
 material/0 = null
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.744929, 0.667144, 0, -0.667144, 0.744929, 0, 3.17732, 4.34297 )
-
 [node name="SM64Godot" parent="." instance=ExtResource( 2 )]
 
-[node name="Mario" type="KinematicBody" parent="."]
+[node name="Mario" type="KinematicBody" parent="SM64Godot"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Mario"]
+[node name="CollisionShape" type="CollisionShape" parent="SM64Godot/Mario"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.30747, 0 )
 shape = SubResource( 2 )
 
-[node name="MeshInstance" type="MeshInstance" parent="Mario"]
+[node name="MeshInstance" type="MeshInstance" parent="SM64Godot/Mario"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.5, 0 )
 mesh = SubResource( 3 )
 material/0 = null
+
+[node name="Camera" type="Camera" parent="SM64Godot"]
+transform = Transform( 1, 0, 0, 0, 0.744929, 0.667144, 0, -0.667144, 0.744929, 0, 3.17732, 4.34297 )

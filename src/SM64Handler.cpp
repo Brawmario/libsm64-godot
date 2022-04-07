@@ -3,12 +3,7 @@
 #include <string>
 #include <cstdio>
 
-extern "C"
-{
-#include <libsm64.h>
-}
-
-static constexpr real_t SM64_SCALE_FACTOR = 50;
+static constexpr real_t SM64_SCALE_FACTOR = 500;
 
 static void SM64DebugPrintFunction(const char *msg)
 {
@@ -54,6 +49,10 @@ SM64Handler::SM64Handler()
 
 void SM64Handler::_init()
 {
+    mario_geometry.position = (float*) malloc( sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES );
+    mario_geometry.color    = (float*) malloc( sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES );
+    mario_geometry.normal   = (float*) malloc( sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES );
+    mario_geometry.uv       = (float*) malloc( sizeof(float) * 6 * SM64_GEO_MAX_TRIANGLES );
 }
 
 SM64Handler::~SM64Handler()
@@ -62,6 +61,14 @@ SM64Handler::~SM64Handler()
 
     if (mario_texture)
         ::free(mario_texture);
+    if (mario_geometry.position)
+        ::free(mario_geometry.position);
+    if (mario_geometry.color)
+        ::free(mario_geometry.color);
+    if (mario_geometry.normal)
+        ::free(mario_geometry.normal);
+    if (mario_geometry.uv)
+        ::free(mario_geometry.uv);
 }
 
 void SM64Handler::global_init(godot::String rom_filename)
@@ -117,8 +124,59 @@ void SM64Handler::static_surfaces_load(godot::PoolVector3Array vertexes)
     ::free(surface_array);
 }
 
+int SM64Handler::mario_create(godot::Vector3 vec)
+{
+    if (!check_in_bounds(vec))
+        return -2;
+
+    int16_t x = (int16_t)(vec.z * SM64_SCALE_FACTOR);
+    int16_t y = (int16_t)(vec.y * SM64_SCALE_FACTOR);
+    int16_t z = (int16_t)(-vec.x * SM64_SCALE_FACTOR);
+    return sm64_mario_create(x, y, z);
+}
+
+godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary inputs)
+{
+    godot::Dictionary ret;
+    struct SM64MarioState out_state;
+
+    godot::Vector2 cam_look = inputs["cam_look"];
+    godot::Vector2 stick = inputs["stick"];
+    bool a = inputs["a"];
+    bool b = inputs["b"];
+    bool z = inputs["z"];
+
+    struct SM64MarioInputs mario_inputs = {
+        cam_look.y, // camLookX
+        -cam_look.x, // camLookZ
+        stick.x,
+        stick.y,
+        (uint8_t) a,
+        (uint8_t) b,
+        (uint8_t) z
+    };
+
+    sm64_mario_tick(mario_id, &mario_inputs, &out_state, &mario_geometry);
+
+    ret["position"]   = godot::Vector3(out_state.position[2] / SM64_SCALE_FACTOR, out_state.position[1] / SM64_SCALE_FACTOR, -out_state.position[0] / SM64_SCALE_FACTOR);
+    ret["velocity"]   = godot::Vector3(out_state.velocity[2] / SM64_SCALE_FACTOR, out_state.velocity[1] / SM64_SCALE_FACTOR, -out_state.velocity[0] / SM64_SCALE_FACTOR);
+    ret["face_angle"] = (real_t) out_state.faceAngle;
+    ret["health"]     = (int) out_state.health;
+    // TODO: ret["array_mesh"]
+
+    return ret;
+}
+
+void SM64Handler::mario_delete(int mario_id)
+{
+    sm64_mario_delete(mario_id);
+}
+
 void SM64Handler::_register_methods()
 {
     godot::register_method("global_init", &SM64Handler::global_init);
     godot::register_method("static_surfaces_load", &SM64Handler::static_surfaces_load);
+    godot::register_method("mario_create", &SM64Handler::mario_create);
+    godot::register_method("mario_tick", &SM64Handler::mario_tick);
+    godot::register_method("mario_delete", &SM64Handler::mario_delete);
 }
