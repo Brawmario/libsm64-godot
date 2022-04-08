@@ -3,7 +3,9 @@
 #include <string>
 #include <cstdio>
 
-static constexpr real_t SM64_SCALE_FACTOR = 500;
+#include<ArrayMesh.hpp>
+
+static constexpr real_t SM64_SCALE_FACTOR = 50;
 
 static void SM64DebugPrintFunction(const char *msg)
 {
@@ -59,8 +61,6 @@ SM64Handler::~SM64Handler()
 {
     sm64_global_terminate();
 
-    if (mario_texture)
-        ::free(mario_texture);
     if (mario_geometry.position)
         ::free(mario_geometry.position);
     if (mario_geometry.color)
@@ -71,7 +71,7 @@ SM64Handler::~SM64Handler()
         ::free(mario_geometry.uv);
 }
 
-void SM64Handler::global_init(godot::String rom_filename)
+godot::Ref<godot::Image> SM64Handler::global_init(godot::String rom_filename)
 {
     size_t rom_size;
     uint8_t *rom = utils_read_file_alloc(rom_filename.ascii().get_data(), &rom_size);
@@ -79,14 +79,25 @@ void SM64Handler::global_init(godot::String rom_filename)
     if (rom == NULL)
     {
         godot::Godot::print(godot::String("[SM64Handler] Failed to read ROM file: ") + rom_filename);
-        return;
+        return nullptr;
     }
 
-    mario_texture = (uint8_t *)malloc(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
+    uint8_t *mario_texture = (uint8_t *)malloc(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
 
     sm64_global_init(rom, mario_texture, SM64DebugPrintFunction);
 
+    godot::PoolByteArray mario_texure_pool;
+    mario_texure_pool.resize(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
+    for (size_t i = 0; i < 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT; i++)
+        mario_texure_pool.set(i, mario_texture[i]);
+    
+    godot::Ref<godot::Image> mario_image = godot::Image::_new();
+    mario_image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texure_pool);
+
     ::free(rom);
+    ::free(mario_texture);
+
+    return mario_image;
 }
 
 void SM64Handler::static_surfaces_load(godot::PoolVector3Array vertexes)
@@ -138,6 +149,7 @@ int SM64Handler::mario_create(godot::Vector3 vec)
 godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary inputs)
 {
     godot::Dictionary ret;
+    godot::Array mesh_array;
     struct SM64MarioState out_state;
 
     godot::Vector2 cam_look = inputs["cam_look"];
@@ -158,11 +170,62 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary inputs
 
     sm64_mario_tick(mario_id, &mario_inputs, &out_state, &mario_geometry);
 
-    ret["position"]   = godot::Vector3(out_state.position[2] / SM64_SCALE_FACTOR, out_state.position[1] / SM64_SCALE_FACTOR, -out_state.position[0] / SM64_SCALE_FACTOR);
-    ret["velocity"]   = godot::Vector3(out_state.velocity[2] / SM64_SCALE_FACTOR, out_state.velocity[1] / SM64_SCALE_FACTOR, -out_state.velocity[0] / SM64_SCALE_FACTOR);
+    ret["position"]   = godot::Vector3(-out_state.position[2] / SM64_SCALE_FACTOR, out_state.position[1] / SM64_SCALE_FACTOR, out_state.position[0] / SM64_SCALE_FACTOR);
+    ret["velocity"]   = godot::Vector3(-out_state.velocity[2] / SM64_SCALE_FACTOR, out_state.velocity[1] / SM64_SCALE_FACTOR, out_state.velocity[0] / SM64_SCALE_FACTOR);
     ret["face_angle"] = (real_t) out_state.faceAngle;
     ret["health"]     = (int) out_state.health;
-    // TODO: ret["array_mesh"]
+
+    mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
+    mario_position.resize(mario_geometry.numTrianglesUsed*3);
+    mario_normal.resize(mario_geometry.numTrianglesUsed*3);
+    mario_color.resize(mario_geometry.numTrianglesUsed*3);
+    mario_uv.resize(mario_geometry.numTrianglesUsed*3);
+
+    for (int i = 0; i < mario_geometry.numTrianglesUsed; i++)
+    {
+        godot::Vector3 positions[3];
+        positions[0].z = mario_geometry.position[9*i+0] / SM64_SCALE_FACTOR;
+        positions[0].y = mario_geometry.position[9*i+1] / SM64_SCALE_FACTOR;
+        positions[0].x = -mario_geometry.position[9*i+2] / SM64_SCALE_FACTOR;
+        positions[1].z = mario_geometry.position[9*i+3] / SM64_SCALE_FACTOR;
+        positions[1].y = mario_geometry.position[9*i+4] / SM64_SCALE_FACTOR;
+        positions[1].x = -mario_geometry.position[9*i+5] / SM64_SCALE_FACTOR;
+        positions[2].z = mario_geometry.position[9*i+6] / SM64_SCALE_FACTOR;
+        positions[2].y = mario_geometry.position[9*i+7] / SM64_SCALE_FACTOR;
+        positions[2].x = -mario_geometry.position[9*i+8] / SM64_SCALE_FACTOR;
+        mario_position.set(3*i+0, positions[0]);
+        mario_position.set(3*i+1, positions[1]);
+        mario_position.set(3*i+2, positions[2]);
+
+        godot::Vector3 normals[3];
+        normals[0].z = mario_geometry.normal[9*i+0];
+        normals[0].y = mario_geometry.normal[9*i+1];
+        normals[0].x = -mario_geometry.normal[9*i+2];
+        normals[1].z = mario_geometry.normal[9*i+3];
+        normals[1].y = mario_geometry.normal[9*i+4];
+        normals[1].x = -mario_geometry.normal[9*i+5];
+        normals[2].z = mario_geometry.normal[9*i+6];
+        normals[2].y = mario_geometry.normal[9*i+7];
+        normals[2].x = -mario_geometry.normal[9*i+8];
+        mario_normal.set(3*i+0, normals[0]);
+        mario_normal.set(3*i+1, normals[1]);
+        mario_normal.set(3*i+2, normals[2]);
+
+        mario_color.set(3*i+0, godot::Color(mario_geometry.color[9*i+0], mario_geometry.color[9*i+1], mario_geometry.color[9*i+2]));
+        mario_color.set(3*i+1, godot::Color(mario_geometry.color[9*i+3], mario_geometry.color[9*i+4], mario_geometry.color[9*i+5]));
+        mario_color.set(3*i+2, godot::Color(mario_geometry.color[9*i+6], mario_geometry.color[9*i+7], mario_geometry.color[9*i+8]));
+
+        mario_uv.set(3*i+0, godot::Vector2(mario_geometry.uv[6*i+0], mario_geometry.uv[6*i+1]));
+        mario_uv.set(3*i+1, godot::Vector2(mario_geometry.uv[6*i+2], mario_geometry.uv[6*i+3]));
+        mario_uv.set(3*i+2, godot::Vector2(mario_geometry.uv[6*i+4], mario_geometry.uv[6*i+5]));
+    }
+
+    mesh_array[godot::ArrayMesh::ARRAY_VERTEX] = mario_position;
+    mesh_array[godot::ArrayMesh::ARRAY_NORMAL] = mario_normal;
+    mesh_array[godot::ArrayMesh::ARRAY_COLOR] = mario_color;
+    mesh_array[godot::ArrayMesh::ARRAY_TEX_UV] = mario_uv;
+
+    ret["mesh_array"] = mesh_array;
 
     return ret;
 }

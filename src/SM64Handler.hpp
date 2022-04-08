@@ -1,5 +1,6 @@
 #include <Godot.hpp>
 #include <Reference.hpp>
+#include<Image.hpp>
 
 extern "C"
 {
@@ -16,7 +17,7 @@ public:
 
     void _init();
 
-    void global_init(godot::String rom_filename);
+    godot::Ref<godot::Image> global_init(godot::String rom_filename);
     void static_surfaces_load(godot::PoolVector3Array vertexes);
 
     int mario_create(godot::Vector3 vec);
@@ -54,6 +55,10 @@ public:
     static void _register_methods();
 
 private:
-    uint8_t *mario_texture = NULL;
     struct SM64MarioGeometryBuffers mario_geometry = {NULL, NULL, NULL, NULL, 0};
+
+    godot::PoolVector3Array mario_position;
+    godot::PoolVector3Array mario_normal;
+    godot::PoolColorArray mario_color;
+    godot::PoolVector2Array mario_uv;
 };
