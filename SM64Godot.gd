@@ -73,9 +73,4 @@ func load_static_sufaces() -> void:
 	var faces := plataform_mesh.get_faces()
 	for i in range(faces.size()):
 		faces[i] = platform.global_transform.xform(faces[i])
-	# Flip vertex order
-	for i in range(faces.size() / 3):
-		var temp := faces[3*i+0]
-		faces[3*i+0] = faces[3*i+1]
-		faces[3*i+1] = temp
 	sm64_handler.static_surfaces_load(faces)

@@ -45,16 +45,42 @@ static bool check_in_bounds(godot::Vector3 vec)
     return check_in_bounds(vec.x) && check_in_bounds(vec.y) && check_in_bounds(vec.z);
 }
 
+static void invert_vertex_order(float *arr, size_t triangle_count)
+{
+    for (size_t i = 0; i < triangle_count * 9; i += 9)
+    {
+        float temp_x = arr[i+0];
+        float temp_y = arr[i+1];
+        float temp_z = arr[i+2];
+        arr[i+0] = arr[i+3];
+        arr[i+1] = arr[i+4];
+        arr[i+2] = arr[i+5];
+        arr[i+3] = temp_x;
+        arr[i+4] = temp_y;
+        arr[i+5] = temp_z;
+    }
+}
+
+static void invert_vertex_order(godot::PoolVector3Array &arr)
+{
+    for (size_t i = 0; i < arr.size() / 3; i++)
+    {
+        godot::Vector3 temp = arr[3*i+0];
+        arr.set(3*i+0, arr[3*i+1]);
+        arr.set(3*i+1, temp);
+    }
+}
+
 SM64Handler::SM64Handler()
 {
 }
 
 void SM64Handler::_init()
 {
-    mario_geometry.position = (float*) malloc( sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES );
-    mario_geometry.color    = (float*) malloc( sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES );
-    mario_geometry.normal   = (float*) malloc( sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES );
-    mario_geometry.uv       = (float*) malloc( sizeof(float) * 6 * SM64_GEO_MAX_TRIANGLES );
+    mario_geometry.position = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
+    mario_geometry.color    = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
+    mario_geometry.normal   = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
+    mario_geometry.uv       = (float*) malloc(sizeof(float) * 6 * SM64_GEO_MAX_TRIANGLES);
 }
 
 SM64Handler::~SM64Handler()
@@ -82,7 +108,7 @@ godot::Ref<godot::Image> SM64Handler::global_init(godot::String rom_filename)
         return nullptr;
     }
 
-    uint8_t *mario_texture = (uint8_t *)malloc(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
+    uint8_t *mario_texture = (uint8_t *) malloc(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
 
     sm64_global_init(rom, mario_texture, SM64DebugPrintFunction);
 
@@ -102,35 +128,33 @@ godot::Ref<godot::Image> SM64Handler::global_init(godot::String rom_filename)
 
 void SM64Handler::static_surfaces_load(godot::PoolVector3Array vertexes)
 {
-    uint32_t num_surfaces = vertexes.size() / 3;
-    struct SM64Surface *surface_array = (SM64Surface *)malloc(sizeof(SM64Surface) * num_surfaces);
+    struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes.size() / 3);
+
+    invert_vertex_order(vertexes);
 
     uint32_t j = 0;
     for (size_t i = 0; i < vertexes.size(); i += 3)
     {
         if (!check_in_bounds(vertexes[i]) || !check_in_bounds(vertexes[i+1]) || !check_in_bounds(vertexes[i+2]))
-        {
-            num_surfaces--;
             continue;
-        }
 
         surface_array[j].type = 0x0000; // SURFACE_DEFAULT
         surface_array[j].force = 0;
         surface_array[j].terrain = 0x0002; // TERRAIN_SNOW
-        surface_array[j].vertices[0][0] = (int16_t) (vertexes[i].z * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[0][1] = (int16_t) (vertexes[i].y * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i].x * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[1][0] = (int16_t) (vertexes[i+1].z * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[1][1] = (int16_t) (vertexes[i+1].y * SM64_SCALE_FACTOR);
+        surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * SM64_SCALE_FACTOR);
+        surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * SM64_SCALE_FACTOR);
+        surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * SM64_SCALE_FACTOR);
+        surface_array[j].vertices[1][0] = (int16_t) ( vertexes[i+1].z * SM64_SCALE_FACTOR);
+        surface_array[j].vertices[1][1] = (int16_t) ( vertexes[i+1].y * SM64_SCALE_FACTOR);
         surface_array[j].vertices[1][2] = (int16_t) (-vertexes[i+1].x * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[2][0] = (int16_t) (vertexes[i+2].z * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[2][1] = (int16_t) (vertexes[i+2].y * SM64_SCALE_FACTOR);
+        surface_array[j].vertices[2][0] = (int16_t) ( vertexes[i+2].z * SM64_SCALE_FACTOR);
+        surface_array[j].vertices[2][1] = (int16_t) ( vertexes[i+2].y * SM64_SCALE_FACTOR);
         surface_array[j].vertices[2][2] = (int16_t) (-vertexes[i+2].x * SM64_SCALE_FACTOR);
 
         j++;
     }
 
-    sm64_static_surfaces_load(surface_array, num_surfaces);
+    sm64_static_surfaces_load(surface_array, j);
 
     ::free(surface_array);
 }
@@ -181,31 +205,33 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary inputs
     mario_color.resize(mario_geometry.numTrianglesUsed*3);
     mario_uv.resize(mario_geometry.numTrianglesUsed*3);
 
+    invert_vertex_order(mario_geometry.position, mario_geometry.numTrianglesUsed);
+
     for (int i = 0; i < mario_geometry.numTrianglesUsed; i++)
     {
         godot::Vector3 positions[3];
-        positions[0].z = mario_geometry.position[9*i+0] / SM64_SCALE_FACTOR;
-        positions[0].y = mario_geometry.position[9*i+1] / SM64_SCALE_FACTOR;
+        positions[0].z =  mario_geometry.position[9*i+0] / SM64_SCALE_FACTOR;
+        positions[0].y =  mario_geometry.position[9*i+1] / SM64_SCALE_FACTOR;
         positions[0].x = -mario_geometry.position[9*i+2] / SM64_SCALE_FACTOR;
-        positions[1].z = mario_geometry.position[9*i+3] / SM64_SCALE_FACTOR;
-        positions[1].y = mario_geometry.position[9*i+4] / SM64_SCALE_FACTOR;
+        positions[1].z =  mario_geometry.position[9*i+3] / SM64_SCALE_FACTOR;
+        positions[1].y =  mario_geometry.position[9*i+4] / SM64_SCALE_FACTOR;
         positions[1].x = -mario_geometry.position[9*i+5] / SM64_SCALE_FACTOR;
-        positions[2].z = mario_geometry.position[9*i+6] / SM64_SCALE_FACTOR;
-        positions[2].y = mario_geometry.position[9*i+7] / SM64_SCALE_FACTOR;
+        positions[2].z =  mario_geometry.position[9*i+6] / SM64_SCALE_FACTOR;
+        positions[2].y =  mario_geometry.position[9*i+7] / SM64_SCALE_FACTOR;
         positions[2].x = -mario_geometry.position[9*i+8] / SM64_SCALE_FACTOR;
         mario_position.set(3*i+0, positions[0]);
         mario_position.set(3*i+1, positions[1]);
         mario_position.set(3*i+2, positions[2]);
 
         godot::Vector3 normals[3];
-        normals[0].z = mario_geometry.normal[9*i+0];
-        normals[0].y = mario_geometry.normal[9*i+1];
+        normals[0].z =  mario_geometry.normal[9*i+0];
+        normals[0].y =  mario_geometry.normal[9*i+1];
         normals[0].x = -mario_geometry.normal[9*i+2];
-        normals[1].z = mario_geometry.normal[9*i+3];
-        normals[1].y = mario_geometry.normal[9*i+4];
+        normals[1].z =  mario_geometry.normal[9*i+3];
+        normals[1].y =  mario_geometry.normal[9*i+4];
         normals[1].x = -mario_geometry.normal[9*i+5];
-        normals[2].z = mario_geometry.normal[9*i+6];
-        normals[2].y = mario_geometry.normal[9*i+7];
+        normals[2].z =  mario_geometry.normal[9*i+6];
+        normals[2].y =  mario_geometry.normal[9*i+7];
         normals[2].x = -mario_geometry.normal[9*i+8];
         mario_normal.set(3*i+0, normals[0]);
         mario_normal.set(3*i+1, normals[1]);
