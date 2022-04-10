@@ -1,5 +1,6 @@
 extends Spatial
 
+const FPS_30_DELTA = 1.0/30.0
 
 export var rom_filename := "baserom.us.z64"
 
@@ -15,22 +16,26 @@ onready var camera: Camera = $Camera
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	sm64_handler = load("res://SM64Handler.gdns").new()
+	mario_material.vertex_color_use_as_albedo = true
 	var mario_image: Image = sm64_handler.global_init(rom_filename)
 	var mario_texture := ImageTexture.new()
 	mario_texture.create_from_image(mario_image)
-	mario_material.albedo_texture = mario_texture
+	var mario_texture_material := SpatialMaterial.new()
+	mario_texture_material.albedo_texture = mario_texture
+	mario_texture_material.flags_transparent = true
+	mario_material.next_pass = mario_texture_material
 	load_static_sufaces()
 	sm64_mario_id = sm64_handler.mario_create(mario.to_global(mario.translation))
 	if sm64_mario_id < 0:
 		print("Failed to create Mario")
+	mario_mesh.set_as_toplevel(true)
 
 
 func _physics_process(delta):
-	# Force 30 fps physics
 	time_since_last_tick += delta
-	if time_since_last_tick < 1.0/30.0:
+	if time_since_last_tick < FPS_30_DELTA:
 		return
-	time_since_last_tick -= 1.0/30.0
+	time_since_last_tick -= FPS_30_DELTA
 
 	var stick_x := Input.get_action_strength("mario_stick_left") - Input.get_action_strength("mario_stick_right")
 	var stick_y := Input.get_action_strength("mario_stick_up") - Input.get_action_strength("mario_stick_down")
@@ -54,23 +59,25 @@ func _physics_process(delta):
 	var tick_output: Dictionary = sm64_handler.mario_tick(sm64_mario_id, inputs)
 
 	# FIXME: Makes Mario vibrate too much
-	#var mario_position: Vector3 = tick_output["position"]
+	var mario_position: Vector3 = tick_output["position"]
 	#if not mario_position.is_equal_approx(Vector3.ZERO):
-	#	mario.translate(mario_position - mario.to_global(mario.translation))
+	mario.translate(mario_position - mario.to_global(mario.translation))
 
 	var mesh_array: Array = tick_output["mesh_array"]
 
-	# FIXME: Colors wrong?
 	mario_mesh.mesh.clear_surfaces()
 	mario_mesh.mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_array)
-	# FIXME: Add these texures after figuiring out the colors
-	# mario_mesh.set_surface_material(0, mario_material)
+	mario_mesh.set_surface_material(0, mario_material)
 
 
 func load_static_sufaces() -> void:
 	var platform: MeshInstance = $"../Platform"
 	var plataform_mesh := platform.get_mesh()
 	var faces := plataform_mesh.get_faces()
+	var wall_faces = $"../Wall".get_mesh().get_faces()
+	for i in range(faces.size()):
+		wall_faces[i] = $"../Wall".global_transform.xform(wall_faces[i])
 	for i in range(faces.size()):
 		faces[i] = platform.global_transform.xform(faces[i])
+	faces.append_array(wall_faces)
 	sm64_handler.static_surfaces_load(faces)

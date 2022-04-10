@@ -45,7 +45,21 @@ static bool check_in_bounds(godot::Vector3 vec)
     return check_in_bounds(vec.x) && check_in_bounds(vec.y) && check_in_bounds(vec.z);
 }
 
-static void invert_vertex_order(float *arr, size_t triangle_count)
+static void invert_vertex_order_2d(float *arr, size_t triangle_count)
+{
+    for (size_t i = 0; i < triangle_count * 6; i += 6)
+    {
+        float temp_x = arr[i+0];
+        float temp_y = arr[i+1];
+        arr[i+0] = arr[i+2];
+        arr[i+1] = arr[i+3];
+        arr[i+2] = temp_x;
+        arr[i+3] = temp_y;
+    }
+}
+
+
+static void invert_vertex_order_3d(float *arr, size_t triangle_count)
 {
     for (size_t i = 0; i < triangle_count * 9; i += 9)
     {
@@ -205,7 +219,10 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary inputs
     mario_color.resize(mario_geometry.numTrianglesUsed*3);
     mario_uv.resize(mario_geometry.numTrianglesUsed*3);
 
-    invert_vertex_order(mario_geometry.position, mario_geometry.numTrianglesUsed);
+    invert_vertex_order_3d(mario_geometry.position, mario_geometry.numTrianglesUsed);
+    invert_vertex_order_3d(mario_geometry.normal, mario_geometry.numTrianglesUsed);
+    invert_vertex_order_3d(mario_geometry.color, mario_geometry.numTrianglesUsed);
+    invert_vertex_order_2d(mario_geometry.uv, mario_geometry.numTrianglesUsed);
 
     for (int i = 0; i < mario_geometry.numTrianglesUsed; i++)
     {
