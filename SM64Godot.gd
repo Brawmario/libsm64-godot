@@ -29,6 +29,7 @@ func _ready():
 	if sm64_mario_id < 0:
 		print("Failed to create Mario")
 	mario_mesh.set_as_toplevel(true)
+	mario_mesh.translation = Vector3.ZERO
 
 
 func _physics_process(delta):
@@ -58,10 +59,8 @@ func _physics_process(delta):
 
 	var tick_output: Dictionary = sm64_handler.mario_tick(sm64_mario_id, inputs)
 
-	# FIXME: Makes Mario vibrate too much
 	var mario_position: Vector3 = tick_output["position"]
-	#if not mario_position.is_equal_approx(Vector3.ZERO):
-	mario.translate(mario_position - mario.to_global(mario.translation))
+	mario.translation = mario_position
 
 	var mesh_array: Array = tick_output["mesh_array"]
 
@@ -72,12 +71,12 @@ func _physics_process(delta):
 
 func load_static_sufaces() -> void:
 	var platform: MeshInstance = $"../Platform"
-	var plataform_mesh := platform.get_mesh()
-	var faces := plataform_mesh.get_faces()
-	var wall_faces = $"../Wall".get_mesh().get_faces()
-	for i in range(faces.size()):
-		wall_faces[i] = $"../Wall".global_transform.xform(wall_faces[i])
-	for i in range(faces.size()):
-		faces[i] = platform.global_transform.xform(faces[i])
-	faces.append_array(wall_faces)
-	sm64_handler.static_surfaces_load(faces)
+	var wall: MeshInstance = $"../Wall"
+	var platform_faces := platform.get_mesh().get_faces()
+	var wall_faces = wall.get_mesh().get_faces()
+	for i in range(wall_faces.size()):
+		wall_faces[i] += wall.global_transform.origin
+	for i in range(platform_faces.size()):
+		platform_faces[i] += platform.global_transform.origin
+	platform_faces.append_array(wall_faces)
+	sm64_handler.static_surfaces_load(platform_faces)
