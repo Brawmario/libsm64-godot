@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://SM64Godot.tscn" type="PackedScene" id=2]
+[ext_resource path="res://SM64Handler.tres" type="Resource" id=3]
 
 [sub_resource type="PlaneMesh" id=7]
 size = Vector2( 20, 20 )
@@ -33,6 +34,7 @@ mesh = SubResource( 8 )
 material/0 = null
 
 [node name="SM64Godot" parent="." instance=ExtResource( 2 )]
+sm64_handler = ExtResource( 3 )
 
 [node name="Mario" type="KinematicBody" parent="SM64Godot"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )

@@ -3,8 +3,8 @@ extends Spatial
 const FPS_30_DELTA = 1.0/30.0
 
 export var rom_filename := "baserom.us.z64"
+export var sm64_handler: Resource
 
-var sm64_handler
 var sm64_mario_id := -1
 var mario_material := SpatialMaterial.new()
 var time_since_last_tick := 0.0
@@ -15,7 +15,6 @@ onready var camera: Camera = $Camera
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	sm64_handler = load("res://SM64Handler.gdns").new()
 	mario_material.vertex_color_use_as_albedo = true
 	var mario_image: Image = sm64_handler.global_init(rom_filename)
 	var mario_texture := ImageTexture.new()

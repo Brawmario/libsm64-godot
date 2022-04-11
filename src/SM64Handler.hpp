@@ -1,5 +1,5 @@
 #include <Godot.hpp>
-#include <Reference.hpp>
+#include <Resource.hpp>
 #include<Image.hpp>
 
 extern "C"
@@ -7,9 +7,9 @@ extern "C"
 #include <libsm64.h>
 }
 
-class SM64Handler : public godot::Reference
+class SM64Handler : public godot::Resource
 {
-    GODOT_CLASS(SM64Handler, godot::Reference);
+    GODOT_CLASS(SM64Handler, godot::Resource);
 
 public:
     SM64Handler();
@@ -55,7 +55,7 @@ public:
     static void _register_methods();
 
 private:
-    real_t scale_factor = 50.0;
+    real_t scale_factor;
 
     struct SM64MarioGeometryBuffers mario_geometry = {NULL, NULL, NULL, NULL, 0};
 
