@@ -41,8 +41,8 @@ func _physics_process(delta):
 	var stick_y := Input.get_action_strength("mario_stick_up") - Input.get_action_strength("mario_stick_down")
 	var stick := Vector2(stick_x, stick_y)
 
-	var camera_pos := camera.to_global(camera.translation)
-	var cam_look := Vector2(camera_pos.x, camera_pos.z)
+	var look_direction := camera.get_global_transform().basis.z
+	var cam_look := Vector2(look_direction.x, look_direction.z)
 
 	var a := Input.is_action_pressed("mario_a")
 	var b := Input.is_action_pressed("mario_b")
