@@ -5,8 +5,6 @@
 
 #include<ArrayMesh.hpp>
 
-static constexpr real_t SM64_SCALE_FACTOR = 50;
-
 static void SM64DebugPrintFunction(const char *msg)
 {
     godot::Godot::print(godot::String("[libsm64] ") + godot::String(msg) + godot::String("\n"));
@@ -39,9 +37,8 @@ static bool check_in_bounds(real_t num)
     return (num > -bounds && num < bounds);
 }
 
-static bool check_in_bounds(godot::Vector3 vec)
+static bool check_in_bounds(const godot::Vector3 &vec)
 {
-    vec *= SM64_SCALE_FACTOR;
     return check_in_bounds(vec.x) && check_in_bounds(vec.y) && check_in_bounds(vec.z);
 }
 
@@ -149,21 +146,23 @@ void SM64Handler::static_surfaces_load(godot::PoolVector3Array vertexes)
     uint32_t j = 0;
     for (size_t i = 0; i < vertexes.size(); i += 3)
     {
-        if (!check_in_bounds(vertexes[i]) || !check_in_bounds(vertexes[i+1]) || !check_in_bounds(vertexes[i+2]))
+        if (!check_in_bounds(vertexes[i] * scale_factor)
+                || !check_in_bounds(vertexes[i+1] * scale_factor)
+                || !check_in_bounds(vertexes[i+2] * scale_factor))
             continue;
 
         surface_array[j].type = 0x0000; // SURFACE_DEFAULT
         surface_array[j].force = 0;
         surface_array[j].terrain = 0x0002; // TERRAIN_SNOW
-        surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[1][0] = (int16_t) ( vertexes[i+1].z * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[1][1] = (int16_t) ( vertexes[i+1].y * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[1][2] = (int16_t) (-vertexes[i+1].x * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[2][0] = (int16_t) ( vertexes[i+2].z * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[2][1] = (int16_t) ( vertexes[i+2].y * SM64_SCALE_FACTOR);
-        surface_array[j].vertices[2][2] = (int16_t) (-vertexes[i+2].x * SM64_SCALE_FACTOR);
+        surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * scale_factor);
+        surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * scale_factor);
+        surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * scale_factor);
+        surface_array[j].vertices[1][0] = (int16_t) ( vertexes[i+1].z * scale_factor);
+        surface_array[j].vertices[1][1] = (int16_t) ( vertexes[i+1].y * scale_factor);
+        surface_array[j].vertices[1][2] = (int16_t) (-vertexes[i+1].x * scale_factor);
+        surface_array[j].vertices[2][0] = (int16_t) ( vertexes[i+2].z * scale_factor);
+        surface_array[j].vertices[2][1] = (int16_t) ( vertexes[i+2].y * scale_factor);
+        surface_array[j].vertices[2][2] = (int16_t) (-vertexes[i+2].x * scale_factor);
 
         j++;
     }
@@ -178,9 +177,9 @@ int SM64Handler::mario_create(godot::Vector3 vec)
     if (!check_in_bounds(vec))
         return -2;
 
-    int16_t x = (int16_t)(vec.z * SM64_SCALE_FACTOR);
-    int16_t y = (int16_t)(vec.y * SM64_SCALE_FACTOR);
-    int16_t z = (int16_t)(-vec.x * SM64_SCALE_FACTOR);
+    int16_t x = (int16_t)(vec.z * scale_factor);
+    int16_t y = (int16_t)(vec.y * scale_factor);
+    int16_t z = (int16_t)(-vec.x * scale_factor);
     return sm64_mario_create(x, y, z);
 }
 
@@ -208,8 +207,8 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary inputs
 
     sm64_mario_tick(mario_id, &mario_inputs, &out_state, &mario_geometry);
 
-    ret["position"]   = godot::Vector3(-out_state.position[2] / SM64_SCALE_FACTOR, out_state.position[1] / SM64_SCALE_FACTOR, out_state.position[0] / SM64_SCALE_FACTOR);
-    ret["velocity"]   = godot::Vector3(-out_state.velocity[2] / SM64_SCALE_FACTOR, out_state.velocity[1] / SM64_SCALE_FACTOR, out_state.velocity[0] / SM64_SCALE_FACTOR);
+    ret["position"]   = godot::Vector3(-out_state.position[2] / scale_factor, out_state.position[1] / scale_factor, out_state.position[0] / scale_factor);
+    ret["velocity"]   = godot::Vector3(-out_state.velocity[2] / scale_factor, out_state.velocity[1] / scale_factor, out_state.velocity[0] / scale_factor);
     ret["face_angle"] = (real_t) out_state.faceAngle;
     ret["health"]     = (int) out_state.health;
 
@@ -227,15 +226,15 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary inputs
     for (int i = 0; i < mario_geometry.numTrianglesUsed; i++)
     {
         godot::Vector3 positions[3];
-        positions[0].z =  mario_geometry.position[9*i+0] / SM64_SCALE_FACTOR;
-        positions[0].y =  mario_geometry.position[9*i+1] / SM64_SCALE_FACTOR;
-        positions[0].x = -mario_geometry.position[9*i+2] / SM64_SCALE_FACTOR;
-        positions[1].z =  mario_geometry.position[9*i+3] / SM64_SCALE_FACTOR;
-        positions[1].y =  mario_geometry.position[9*i+4] / SM64_SCALE_FACTOR;
-        positions[1].x = -mario_geometry.position[9*i+5] / SM64_SCALE_FACTOR;
-        positions[2].z =  mario_geometry.position[9*i+6] / SM64_SCALE_FACTOR;
-        positions[2].y =  mario_geometry.position[9*i+7] / SM64_SCALE_FACTOR;
-        positions[2].x = -mario_geometry.position[9*i+8] / SM64_SCALE_FACTOR;
+        positions[0].z =  mario_geometry.position[9*i+0] / scale_factor;
+        positions[0].y =  mario_geometry.position[9*i+1] / scale_factor;
+        positions[0].x = -mario_geometry.position[9*i+2] / scale_factor;
+        positions[1].z =  mario_geometry.position[9*i+3] / scale_factor;
+        positions[1].y =  mario_geometry.position[9*i+4] / scale_factor;
+        positions[1].x = -mario_geometry.position[9*i+5] / scale_factor;
+        positions[2].z =  mario_geometry.position[9*i+6] / scale_factor;
+        positions[2].y =  mario_geometry.position[9*i+7] / scale_factor;
+        positions[2].x = -mario_geometry.position[9*i+8] / scale_factor;
         mario_position.set(3*i+0, positions[0]);
         mario_position.set(3*i+1, positions[1]);
         mario_position.set(3*i+2, positions[2]);
@@ -285,4 +284,6 @@ void SM64Handler::_register_methods()
     godot::register_method("mario_create", &SM64Handler::mario_create);
     godot::register_method("mario_tick", &SM64Handler::mario_tick);
     godot::register_method("mario_delete", &SM64Handler::mario_delete);
+
+    godot::register_property<SM64Handler, real_t>("scale_factor", &SM64Handler::scale_factor, 50.0);
 }

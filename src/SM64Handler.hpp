@@ -55,6 +55,8 @@ public:
     static void _register_methods();
 
 private:
+    real_t scale_factor = 50.0;
+
     struct SM64MarioGeometryBuffers mario_geometry = {NULL, NULL, NULL, NULL, 0};
 
     godot::PoolVector3Array mario_position;
