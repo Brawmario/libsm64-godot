@@ -2,7 +2,6 @@ extends Spatial
 
 const FPS_30_DELTA = 1.0/30.0
 
-export var rom_filename := "baserom.us.z64"
 export var sm64_handler: Resource
 
 var sm64_mario_id := -1
@@ -16,14 +15,14 @@ onready var camera: Camera = $Camera
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	mario_material.vertex_color_use_as_albedo = true
-	var mario_image: Image = sm64_handler.global_init(rom_filename)
+	sm64_handler.global_init()
+	var mario_image: Image = sm64_handler.mario_image
 	var mario_texture := ImageTexture.new()
 	mario_texture.create_from_image(mario_image)
 	var mario_texture_material := SpatialMaterial.new()
 	mario_texture_material.albedo_texture = mario_texture
 	mario_texture_material.flags_transparent = true
 	mario_material.next_pass = mario_texture_material
-	load_static_sufaces()
 	sm64_mario_id = sm64_handler.mario_create(mario.to_global(mario.translation))
 	if sm64_mario_id < 0:
 		print("Failed to create Mario")

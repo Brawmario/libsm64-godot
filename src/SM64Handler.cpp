@@ -108,7 +108,7 @@ SM64Handler::~SM64Handler()
         ::free(mario_geometry.uv);
 }
 
-godot::Ref<godot::Image> SM64Handler::global_init(godot::String rom_filename)
+void SM64Handler::global_init()
 {
     size_t rom_size;
     uint8_t *rom = utils_read_file_alloc(rom_filename.ascii().get_data(), &rom_size);
@@ -116,7 +116,7 @@ godot::Ref<godot::Image> SM64Handler::global_init(godot::String rom_filename)
     if (rom == NULL)
     {
         godot::Godot::print(godot::String("[SM64Handler] Failed to read ROM file: ") + rom_filename);
-        return nullptr;
+        return;
     }
 
     uint8_t *mario_texture = (uint8_t *) malloc(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
@@ -128,13 +128,14 @@ godot::Ref<godot::Image> SM64Handler::global_init(godot::String rom_filename)
     for (size_t i = 0; i < 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT; i++)
         mario_texure_pool.set(i, mario_texture[i]);
     
-    godot::Ref<godot::Image> mario_image = godot::Image::_new();
-    mario_image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texure_pool);
+    godot::Ref<godot::Image> image = godot::Image::_new();
+    image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texure_pool);
+    mario_image = image;
+
+    is_init = true;
 
     ::free(rom);
     ::free(mario_texture);
-
-    return mario_image;
 }
 
 void SM64Handler::static_surfaces_load(godot::PoolVector3Array vertexes)
@@ -151,6 +152,7 @@ void SM64Handler::static_surfaces_load(godot::PoolVector3Array vertexes)
                 || !check_in_bounds(vertexes[i+2] * scale_factor))
             continue;
 
+        // TODO: export surfaces types to function argument
         surface_array[j].type = 0x0000; // SURFACE_DEFAULT
         surface_array[j].force = 0;
         surface_array[j].terrain = 0x0002; // TERRAIN_SNOW
@@ -177,9 +179,9 @@ int SM64Handler::mario_create(godot::Vector3 vec)
     if (!check_in_bounds(vec))
         return -2;
 
-    int16_t x = (int16_t)(vec.z * scale_factor);
-    int16_t y = (int16_t)(vec.y * scale_factor);
-    int16_t z = (int16_t)(-vec.x * scale_factor);
+    int16_t x = (int16_t) ( vec.z * scale_factor);
+    int16_t y = (int16_t) ( vec.y * scale_factor);
+    int16_t z = (int16_t) (-vec.x * scale_factor);
     return sm64_mario_create(x, y, z);
 }
 
@@ -285,5 +287,10 @@ void SM64Handler::_register_methods()
     godot::register_method("mario_tick", &SM64Handler::mario_tick);
     godot::register_method("mario_delete", &SM64Handler::mario_delete);
 
+    godot::register_property<SM64Handler, bool>("is_init", &SM64Handler::is_init, false);
+    godot::register_property<SM64Handler, godot::Ref<godot::Image>>("mario_image", &SM64Handler::mario_image, nullptr);
+    godot::register_property<SM64Handler, godot::String>("rom_filename", &SM64Handler::rom_filename, "",
+            GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_GLOBAL_FILE,
+            "*.n64,*.z64,");
     godot::register_property<SM64Handler, real_t>("scale_factor", &SM64Handler::scale_factor, 50.0);
 }

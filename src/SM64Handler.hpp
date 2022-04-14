@@ -17,7 +17,7 @@ public:
 
     void _init();
 
-    godot::Ref<godot::Image> global_init(godot::String rom_filename);
+    void global_init();
     void static_surfaces_load(godot::PoolVector3Array vertexes);
 
     int mario_create(godot::Vector3 vec);
@@ -55,6 +55,9 @@ public:
     static void _register_methods();
 
 private:
+    bool is_init = false;
+    godot::Ref<godot::Image> mario_image;
+    godot::String rom_filename;
     real_t scale_factor;
 
     struct SM64MarioGeometryBuffers mario_geometry = {NULL, NULL, NULL, NULL, 0};
