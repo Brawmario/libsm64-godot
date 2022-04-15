@@ -35,3 +35,12 @@ transform = Transform( -0.630811, -0.275008, 0.725567, 0.139099, 0.879859, 0.454
 script = ExtResource( 3 )
 sm64_handler = ExtResource( 2 )
 camera_path = NodePath("../Camera")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+margin_right = 710.0
+margin_bottom = 329.0
+window_title = "Pick Mario 64 Rom"
+resizable = true
+mode = 0
+access = 2
+filters = PoolStringArray( "*.n64", "*.z64" )

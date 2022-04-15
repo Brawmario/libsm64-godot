@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource( 1 )
-rom_filename = "C:/Users/Renato/godot/projects/libsm64-godot/baserom.us.z64"
+rom_filename = ""
 is_init = false
 scale_factor = 50.0

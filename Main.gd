@@ -3,8 +3,14 @@ extends Spatial
 
 export var sm64_handler: Resource
 
+onready var rom_picker: FileDialog = $FileDialog
+
 
 func _ready():
+	rom_picker.popup_centered()
+	yield(rom_picker, "file_selected")
+	sm64_handler.rom_filename = rom_picker.current_path
+	
 	sm64_handler.global_init()
 	load_static_sufaces()
 	for mario in get_tree().get_nodes_in_group("Mario"):
