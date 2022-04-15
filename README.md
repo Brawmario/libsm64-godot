@@ -8,7 +8,7 @@ Addon that binds the libsm64 to godot via GDNative, allowing to integrate mario 
 
 Pull this repo and initialize the submodules.
 
-compile the `godot-ccp` and `libsm64` projects individually.
+compile the `godot-cpp` and `libsm64` projects individually.
 
 run the compilation script in the `addons/libsm64/sm64_handler` folder for the
 desired platform (Windows requires a MinGW instalation).
