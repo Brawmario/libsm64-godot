@@ -1,7 +1,9 @@
 [gd_resource type="Resource" load_steps=2 format=2]
 
-[ext_resource path="res://SM64Handler.gdns" type="Script" id=1]
+[ext_resource path="res://addons/libsm64/sm64_handler/SM64Handler.gdns" type="Script" id=1]
 
 [resource]
 script = ExtResource( 1 )
+rom_filename = "C:/Users/Renato/godot/projects/libsm64-godot/baserom.us.z64"
+is_init = false
 scale_factor = 50.0

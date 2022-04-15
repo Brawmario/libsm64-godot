@@ -1,8 +1,8 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
-[ext_resource path="res://SM64Godot.tscn" type="PackedScene" id=2]
-[ext_resource path="res://SM64Handler.tres" type="Resource" id=3]
+[ext_resource path="res://SM64Handler.tres" type="Resource" id=2]
+[ext_resource path="res://addons/libsm64/mario/Mario.gd" type="Script" id=3]
 
 [sub_resource type="PlaneMesh" id=7]
 size = Vector2( 20, 20 )
@@ -10,18 +10,9 @@ size = Vector2( 20, 20 )
 [sub_resource type="CubeMesh" id=8]
 size = Vector3( 2, 10, 5 )
 
-[sub_resource type="CylinderShape" id=2]
-radius = 0.5
-height = 2.75
-
-[sub_resource type="CapsuleMesh" id=3]
-
-[sub_resource type="SpatialMaterial" id=6]
-
-[sub_resource type="ArrayMesh" id=5]
-
 [node name="Main" type="Spatial"]
 script = ExtResource( 1 )
+sm64_handler = ExtResource( 2 )
 
 [node name="Platform" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
@@ -33,28 +24,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0 )
 mesh = SubResource( 8 )
 material/0 = null
 
-[node name="SM64Godot" parent="." instance=ExtResource( 2 )]
-sm64_handler = ExtResource( 3 )
-
-[node name="Mario" type="KinematicBody" parent="SM64Godot"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
-
-[node name="CollisionShape" type="CollisionShape" parent="SM64Godot/Mario"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.375, 0 )
-shape = SubResource( 2 )
-
-[node name="Cilinder" type="MeshInstance" parent="SM64Godot/Mario"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.375, 0 )
-visible = false
-mesh = SubResource( 3 )
-material/0 = SubResource( 6 )
-
-[node name="MeshArrayInstance" type="MeshInstance" parent="SM64Godot/Mario"]
-mesh = SubResource( 5 )
-
-[node name="Camera" type="Camera" parent="SM64Godot"]
-transform = Transform( 1, 0, 0, 0, 0.935086, 0.354421, 0, -0.354421, 0.935086, 0.290045, 1.71367, 13.2274 )
-
 [node name="SpotLight" type="SpotLight" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5.26036, 0 )
 spot_range = 47.069
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -0.630811, -0.275008, 0.725567, 0.139099, 0.879859, 0.454422, -0.763367, 0.38758, -0.516771, 14.2476, 4.36523, -11.9788 )
+
+[node name="Mario" type="Spatial" parent="." groups=["Mario"]]
+script = ExtResource( 3 )
+sm64_handler = ExtResource( 2 )
+camera_path = NodePath("../Camera")

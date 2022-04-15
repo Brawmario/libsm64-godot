@@ -287,10 +287,12 @@ void SM64Handler::_register_methods()
     godot::register_method("mario_tick", &SM64Handler::mario_tick);
     godot::register_method("mario_delete", &SM64Handler::mario_delete);
 
-    godot::register_property<SM64Handler, bool>("is_init", &SM64Handler::is_init, false);
-    godot::register_property<SM64Handler, godot::Ref<godot::Image>>("mario_image", &SM64Handler::mario_image, nullptr);
     godot::register_property<SM64Handler, godot::String>("rom_filename", &SM64Handler::rom_filename, "",
             GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_GLOBAL_FILE,
             "*.n64,*.z64,");
+    godot::register_property<SM64Handler, bool>("is_init", &SM64Handler::is_init, false,
+            GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_NOEDITOR);
+    godot::register_property<SM64Handler, godot::Ref<godot::Image>>("mario_image", &SM64Handler::mario_image, nullptr,
+            GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_NOEDITOR);
     godot::register_property<SM64Handler, real_t>("scale_factor", &SM64Handler::scale_factor, 50.0);
 }
