@@ -1,10 +1,10 @@
-* libsm64-godot
+# libsm64-godot
 
 Addon that binds the libsm64 to godot via GDNative, allowing to integrate mario into any Godot project
 
-![](https://imgur.com/a/i55F6HN)
+![](https://i.imgur.com/ilo5orj.png)
 
-* How to
+## How to
 
 Pull this repo and initialize the submodules.
 
