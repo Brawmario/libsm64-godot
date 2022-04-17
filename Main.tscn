@@ -4,25 +4,15 @@
 [ext_resource path="res://SM64Handler.tres" type="Resource" id=2]
 [ext_resource path="res://addons/libsm64/mario/Mario.gd" type="Script" id=3]
 
-[sub_resource type="PlaneMesh" id=7]
-size = Vector2( 20, 20 )
-
 [sub_resource type="CubeMesh" id=8]
 size = Vector3( 2, 10, 5 )
+
+[sub_resource type="PlaneMesh" id=7]
+size = Vector2( 20, 20 )
 
 [node name="Main" type="Spatial"]
 script = ExtResource( 1 )
 sm64_handler = ExtResource( 2 )
-
-[node name="Platform" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
-mesh = SubResource( 7 )
-material/0 = null
-
-[node name="Wall" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0 )
-mesh = SubResource( 8 )
-material/0 = null
 
 [node name="SpotLight" type="SpotLight" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5.26036, 0 )
@@ -39,8 +29,21 @@ camera_path = NodePath("../Camera")
 [node name="FileDialog" type="FileDialog" parent="."]
 margin_right = 710.0
 margin_bottom = 329.0
-window_title = "Pick Mario 64 Rom"
 resizable = true
 mode = 0
 access = 2
 filters = PoolStringArray( "*.n64", "*.z64" )
+
+[node name="StaticSurfaces" type="Spatial" parent="."]
+
+[node name="Wall" type="MeshInstance" parent="StaticSurfaces" groups=["static_surfaces"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0 )
+mesh = SubResource( 8 )
+skeleton = NodePath("../..")
+material/0 = null
+
+[node name="Platform" type="MeshInstance" parent="StaticSurfaces" groups=["static_surfaces"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
+mesh = SubResource( 7 )
+skeleton = NodePath("../..")
+material/0 = null

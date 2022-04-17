@@ -18,13 +18,13 @@ func _ready():
 
 
 func load_static_sufaces() -> void:
-	var platform: MeshInstance = $Platform
-	var wall: MeshInstance = $Wall
-	var platform_faces := platform.get_mesh().get_faces()
-	var wall_faces = wall.get_mesh().get_faces()
-	for i in range(wall_faces.size()):
-		wall_faces[i] += wall.global_transform.origin
-	for i in range(platform_faces.size()):
-		platform_faces[i] += platform.global_transform.origin
-	platform_faces.append_array(wall_faces)
-	sm64_handler.static_surfaces_load(platform_faces)
+	var faces := PoolVector3Array()
+	
+	for mesh_instance in get_tree().get_nodes_in_group("static_surfaces"):
+		var mesh_faces: PoolVector3Array = mesh_instance.get_mesh().get_faces()
+		var offset: Vector3 = mesh_instance.global_transform.origin
+		for i in range(mesh_faces.size()):
+			mesh_faces[i] += offset
+		faces.append_array(mesh_faces)
+	
+	sm64_handler.static_surfaces_load(faces)
