@@ -1,14 +1,18 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://SM64Handler.tres" type="Resource" id=2]
 [ext_resource path="res://addons/libsm64/mario/Mario.gd" type="Script" id=3]
 
 [sub_resource type="CubeMesh" id=8]
-size = Vector3( 2, 10, 5 )
+size = Vector3( 5, 10, 5 )
 
 [sub_resource type="PlaneMesh" id=7]
-size = Vector2( 20, 20 )
+size = Vector2( 40, 30 )
+
+[sub_resource type="PrismMesh" id=9]
+left_to_right = 1.0
+size = Vector3( 10, 10, 10 )
 
 [node name="Main" type="Spatial"]
 script = ExtResource( 1 )
@@ -19,7 +23,7 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5.26
 spot_range = 47.069
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( -0.630811, -0.275008, 0.725567, 0.139099, 0.879859, 0.454422, -0.763367, 0.38758, -0.516771, 14.2476, 4.36523, -11.9788 )
+transform = Transform( 1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 20, 20 )
 
 [node name="Mario" type="Spatial" parent="." groups=["Mario"]]
 script = ExtResource( 3 )
@@ -29,21 +33,28 @@ camera_path = NodePath("../Camera")
 [node name="FileDialog" type="FileDialog" parent="."]
 margin_right = 710.0
 margin_bottom = 329.0
+window_title = "Abrir um Arquivo"
 resizable = true
 mode = 0
 access = 2
 filters = PoolStringArray( "*.n64", "*.z64" )
+current_dir = "/Users/Ana/Desktop/Godot/Projetos/libsm64-godot"
+current_path = "/Users/Ana/Desktop/Godot/Projetos/libsm64-godot/"
 
 [node name="StaticSurfaces" type="Spatial" parent="."]
 
 [node name="Wall" type="MeshInstance" parent="StaticSurfaces" groups=["static_surfaces"]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, 0 )
 mesh = SubResource( 8 )
 skeleton = NodePath("../..")
 material/0 = null
 
 [node name="Platform" type="MeshInstance" parent="StaticSurfaces" groups=["static_surfaces"]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
 mesh = SubResource( 7 )
 skeleton = NodePath("../..")
+material/0 = null
+
+[node name="Ramp" type="MeshInstance" parent="StaticSurfaces" groups=["static_surfaces"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 5, -10 )
+mesh = SubResource( 9 )
 material/0 = null
