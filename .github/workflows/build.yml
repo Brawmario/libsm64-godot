@@ -40,12 +40,16 @@ jobs:
           platform: x64
           static: 0
       - name: Install Dependencies
+        shell: bash
         run: |
-           C:\msys64\mingw64\bin\bash pacman -S scons make --noconfirm
+          pip3 install scons
       - name: 'Build project'
+        shell: bash
         run: |
-          C:\msys64\mingw64\bin\bash ./build_mingw64.sh
+          chmod +x ./build_linux64.sh
+          ./build_linux64.sh
       - name: 'Generate artifact archive'
+        shell: bash
         run: |
           7z a -t7z libsm64godot-windows-x64.7z addons/
       - name: 'Export release artifact'
