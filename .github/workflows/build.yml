@@ -1,0 +1,60 @@
+name: CI build
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  linux-build:
+    name: Linux build 🐧
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install Dependencies
+        run: |
+           apt-get update && apt-get install -y scons make
+      - name: Build project
+        run: |
+          ./build_linux64.sh
+      - name: Generate artifact archive
+        run: |
+          tar cvfj libsm64godot-linux-x64.tar.bz2 addons/
+      - name: 'Export release artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-x64-release
+          path: libsm64godot-linux-x64.tar.bz2
+
+  windows-build:
+    name: Windows build 🏁
+    runs-on: windows-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Set up MinGW
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+          static: 0
+      - name: Install Dependencies
+        shell: bash
+        run: |
+           pacman -S scons make --noconfirm
+      - name: 'Build project'
+        shell: bash
+        run: |
+          ./build_mingw64.sh
+      - name: 'Generate artifact archive'
+        shell: bash
+        run: |
+          7z a -t7z libsm64godot-windows-x64.7z addons/
+      - name: 'Export release artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-x64-release
+          path: libsm64godot-windows-x64.7z
