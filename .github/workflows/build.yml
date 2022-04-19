@@ -1,8 +1,5 @@
 name: CI build
-on:
-  push:
-    tags:
-      - 'v*.*.*'
+on: push
 
 jobs:
   linux-build:
@@ -15,7 +12,7 @@ jobs:
           submodules: recursive
       - name: Install Dependencies
         run: |
-           apt-get update && apt-get install -y scons make
+           sudo apt-get update && sudo apt-get install -y scons make
       - name: Build project
         run: |
           ./build_linux64.sh
@@ -44,11 +41,11 @@ jobs:
       - name: Install Dependencies
         shell: bash
         run: |
-           pacman -S scons make --noconfirm
+           C:\msys64\mingw64\bin\bash pacman -S scons make --noconfirm
       - name: 'Build project'
         shell: bash
         run: |
-          ./build_mingw64.sh
+          C:\msys64\mingw64\bin\bash ./build_mingw64.sh
       - name: 'Generate artifact archive'
         shell: bash
         run: |
