@@ -40,16 +40,16 @@ jobs:
           platform: x64
           static: 0
       - name: Install Dependencies
-        shell: bash
+        shell: msys2bash.cmd
         run: |
           pip3 install scons
       - name: 'Build project'
-        shell: bash
+        shell: msys2bash.cmd
         run: |
           chmod +x ./build_linux64.sh
           ./build_linux64.sh
       - name: 'Generate artifact archive'
-        shell: bash
+        shell: msys2bash.cmd
         run: |
           7z a -t7z libsm64godot-windows-x64.7z addons/
       - name: 'Export release artifact'
