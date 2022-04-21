@@ -279,6 +279,77 @@ void SM64Handler::mario_delete(int mario_id)
     sm64_mario_delete(mario_id);
 }
 
+int SM64Handler::surface_object_create(godot::PoolVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation)
+{
+    struct SM64SurfaceObject surface_object;
+    int id;
+    struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes.size() / 3);
+
+    invert_vertex_order(vertexes);
+
+    uint32_t j = 0;
+    for (size_t i = 0; i < vertexes.size(); i += 3)
+    {
+        if (!check_in_bounds(vertexes[i] * scale_factor)
+                || !check_in_bounds(vertexes[i+1] * scale_factor)
+                || !check_in_bounds(vertexes[i+2] * scale_factor))
+            continue;
+
+        // TODO: export surfaces types to function argument
+        surface_array[j].type = 0x0000; // SURFACE_DEFAULT
+        surface_array[j].force = 0;
+        surface_array[j].terrain = 0x0002; // TERRAIN_SNOW
+        surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * scale_factor);
+        surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * scale_factor);
+        surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * scale_factor);
+        surface_array[j].vertices[1][0] = (int16_t) ( vertexes[i+1].z * scale_factor);
+        surface_array[j].vertices[1][1] = (int16_t) ( vertexes[i+1].y * scale_factor);
+        surface_array[j].vertices[1][2] = (int16_t) (-vertexes[i+1].x * scale_factor);
+        surface_array[j].vertices[2][0] = (int16_t) ( vertexes[i+2].z * scale_factor);
+        surface_array[j].vertices[2][1] = (int16_t) ( vertexes[i+2].y * scale_factor);
+        surface_array[j].vertices[2][2] = (int16_t) (-vertexes[i+2].x * scale_factor);
+
+        j++;
+    }
+
+    surface_object.surfaces = surface_array;
+    surface_object.surfaceCount = j;
+
+    surface_object.transform.position[0] =  position.z;
+    surface_object.transform.position[1] =  position.y;
+    surface_object.transform.position[2] = -position.x;
+
+    surface_object.transform.eulerRotation[0] =  rotation.z;
+    surface_object.transform.eulerRotation[1] =  rotation.y;
+    surface_object.transform.eulerRotation[2] = -rotation.x;
+
+    id = sm64_surface_object_create(&surface_object);
+
+    ::free(surface_array);
+
+    return id;
+}
+
+void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation)
+{
+    struct SM64ObjectTransform transform;
+
+    transform.position[0] =  position.z;
+    transform.position[1] =  position.y;
+    transform.position[2] = -position.x;
+
+    transform.eulerRotation[0] =  rotation.z;
+    transform.eulerRotation[1] =  rotation.y;
+    transform.eulerRotation[2] = -rotation.x;
+
+    sm64_surface_object_move(object_id, &transform);
+}
+
+void SM64Handler::surface_object_delete(int object_id)
+{
+    sm64_surface_object_delete(object_id);
+}
+
 void SM64Handler::_register_methods()
 {
     godot::register_method("global_init", &SM64Handler::global_init);
@@ -286,6 +357,9 @@ void SM64Handler::_register_methods()
     godot::register_method("mario_create", &SM64Handler::mario_create);
     godot::register_method("mario_tick", &SM64Handler::mario_tick);
     godot::register_method("mario_delete", &SM64Handler::mario_delete);
+    godot::register_method("surface_object_create", &SM64Handler::surface_object_create);
+    godot::register_method("surface_object_move", &SM64Handler::surface_object_move);
+    godot::register_method("surface_object_delete", &SM64Handler::surface_object_delete);
 
     godot::register_property<SM64Handler, godot::String>("rom_filename", &SM64Handler::rom_filename, "",
             GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_GLOBAL_FILE,

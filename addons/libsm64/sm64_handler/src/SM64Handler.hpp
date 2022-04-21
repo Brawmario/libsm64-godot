@@ -47,10 +47,9 @@ public:
 
     void mario_delete(int mario_id);
 
-    // TODO: implement the following
-    // uint32_t sm64_surface_object_create(const struct SM64SurfaceObject *surfaceObject);
-    // void sm64_surface_object_move(uint32_t objectId, const struct SM64ObjectTransform *transform);
-    // void sm64_surface_object_delete(uint32_t objectId);
+    int surface_object_create(godot::PoolVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation);
+    void surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation);
+    void surface_object_delete(int object_id);
 
     static void _register_methods();
 
