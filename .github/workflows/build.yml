@@ -23,6 +23,7 @@ jobs:
           ./build_linux64.sh
       - name: Generate artifact archive
         run: |
+          rm addons/libsm64/sm64_handler/src/*.o
           tar cvfj libsm64godot-linux-x64.tar.bz2 addons/
       - name: Export release artifact
         uses: actions/upload-artifact@v3
@@ -62,6 +63,7 @@ jobs:
       - name: Generate artifact archive
         shell: bash
         run: |
+          rm addons/libsm64/sm64_handler/src/*.o
           7z a -t7z libsm64godot-windows-x64.7z addons/
       - name: Export release artifact
         uses: actions/upload-artifact@v3
