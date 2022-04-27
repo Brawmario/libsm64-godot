@@ -21,7 +21,7 @@ cd addons/libsm64/sm64_handler
 
 mkdir -p bin/macos64/
 
-cp -u ${PROJECT_ROOT}/libsm64/dist/libsm64.so bin/macos64/
+cp -f ${PROJECT_ROOT}/libsm64/dist/libsm64.so bin/macos64/
 
 c++ -fPIC -o src/init.o        -c src/init.cpp        -g -O3 -std=c++14 -Isrc ${GODOT_INC} ${LIBSM64_INC}
 c++ -fPIC -o src/SM64Handler.o -c src/SM64Handler.cpp -g -O3 -std=c++14 -Isrc ${GODOT_INC} ${LIBSM64_INC}
