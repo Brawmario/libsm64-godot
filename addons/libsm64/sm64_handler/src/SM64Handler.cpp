@@ -319,9 +319,9 @@ int SM64Handler::surface_object_create(godot::PoolVector3Array vertexes, godot::
     surface_object.transform.position[1] =  position.y * scale_factor;
     surface_object.transform.position[2] = -position.x * scale_factor;
 
-    surface_object.transform.eulerRotation[0] =  rotation.z;
-    surface_object.transform.eulerRotation[1] =  rotation.y;
-    surface_object.transform.eulerRotation[2] = -rotation.x;
+    surface_object.transform.eulerRotation[0] = -rotation.z;
+    surface_object.transform.eulerRotation[1] = -rotation.y;
+    surface_object.transform.eulerRotation[2] =  rotation.x;
 
     id = sm64_surface_object_create(&surface_object);
 
@@ -338,9 +338,9 @@ void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, go
     transform.position[1] =  position.y * scale_factor;
     transform.position[2] = -position.x * scale_factor;
 
-    transform.eulerRotation[0] =  rotation.z;
-    transform.eulerRotation[1] =  rotation.y;
-    transform.eulerRotation[2] = -rotation.x;
+    transform.eulerRotation[0] = -rotation.z;
+    transform.eulerRotation[1] = -rotation.y;
+    transform.eulerRotation[2] =  rotation.x;
 
     sm64_surface_object_move(object_id, &transform);
 }
