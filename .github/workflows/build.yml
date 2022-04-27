@@ -1,5 +1,8 @@
 name: CI build
-on: push
+on:
+  push:
+    tags:
+      - 'v*.*.*'
 
 
 jobs:
@@ -75,37 +78,37 @@ jobs:
           asset_name: libsm64godot-${{ github.ref_name }}-windows-x64.7z
           tag: ${{ github.ref }}
 
-  macos-build:
-    name: Macos build 🍎
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Install dependencies
-        shell: bash
-        run: |
-           brew install scons
-      - name: Build project
-        shell: bash
-        run: |
-          chmod +x ./build_macos64.sh
-          ./build_macos64.sh
-      - name: Generate artifact archive
-        shell: bash
-        run: |
-          rm addons/libsm64/sm64_handler/src/*.o
-          7z a -t7z libsm64godot-macos-x64.7z addons/
-      - name: Export release artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: macos-x64-release
-          path: libsm64godot-macos-x64.7z
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: libsm64godot-macos-x64.7z
-          asset_name: libsm64godot-${{ github.ref_name }}-macos-x64.7z
-          tag: ${{ github.ref }}
+#  macos-build:
+#    name: Macos build 🍎
+#    runs-on: macos-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          submodules: recursive
+#      - name: Install dependencies
+#        shell: bash
+#        run: |
+#           brew install scons
+#      - name: Build project
+#        shell: bash
+#        run: |
+#          chmod +x ./build_macos64.sh
+#          ./build_macos64.sh
+#      - name: Generate artifact archive
+#        shell: bash
+#        run: |
+#          rm addons/libsm64/sm64_handler/src/*.o
+#          7z a -t7z libsm64godot-macos-x64.7z addons/
+#      - name: Export release artifact
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: macos-x64-release
+#          path: libsm64godot-macos-x64.7z
+#      - name: Upload binaries to release
+#        uses: svenstaro/upload-release-action@v2
+#        with:
+#          repo_token: ${{ secrets.GITHUB_TOKEN }}
+#          file: libsm64godot-macos-x64.7z
+#          asset_name: libsm64godot-${{ github.ref_name }}-macos-x64.7z
+#          tag: ${{ github.ref }}
