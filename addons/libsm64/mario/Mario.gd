@@ -33,7 +33,7 @@ func _ready() -> void:
 	mesh_instance.mesh = mesh
 
 
-func _physics_process(delta) -> void:
+func _physics_process(delta: float) -> void:
 	time_since_last_tick += delta
 	if time_since_last_tick < FPS_30_DELTA:
 		return
