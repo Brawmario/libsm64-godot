@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://SM64Handler.tres" type="Resource" id=2]
@@ -13,6 +13,65 @@ size = Vector2( 40, 30 )
 [sub_resource type="PrismMesh" id=9]
 left_to_right = 1.0
 size = Vector3( 10, 10, 10 )
+
+[sub_resource type="CubeMesh" id=10]
+size = Vector3( 5, 2, 5 )
+
+[sub_resource type="Animation" id=11]
+resource_name = "Move"
+length = 5.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( -12, 5, 7 ), Vector3( 0, 5, 7 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2.5, 5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 180, 0 ), Vector3( 0, 360, 0 ) ]
+}
+
+[sub_resource type="Animation" id=12]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -12, 5, 7 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, -180 ) ]
+}
 
 [node name="Main" type="Spatial"]
 script = ExtResource( 1 )
@@ -33,13 +92,12 @@ camera_path = NodePath("../Camera")
 [node name="FileDialog" type="FileDialog" parent="."]
 margin_right = 710.0
 margin_bottom = 329.0
-window_title = "Abrir um Arquivo"
+window_title = "Pick ROM File"
 resizable = true
+mode_overrides_title = false
 mode = 0
 access = 2
 filters = PoolStringArray( "*.n64", "*.z64" )
-current_dir = "/Users/Ana/Desktop/Godot/Projetos/libsm64-godot"
-current_path = "/Users/Ana/Desktop/Godot/Projetos/libsm64-godot/"
 
 [node name="StaticSurfaces" type="Spatial" parent="."]
 
@@ -58,3 +116,15 @@ material/0 = null
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 5, -10 )
 mesh = SubResource( 9 )
 material/0 = null
+
+[node name="Objects" type="Spatial" parent="."]
+
+[node name="MovingPlatform" type="MeshInstance" parent="Objects"]
+transform = Transform( -1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, -12, 5, 7 )
+mesh = SubResource( 10 )
+material/0 = null
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Objects/MovingPlatform"]
+playback_process_mode = 0
+anims/Move = SubResource( 11 )
+anims/RESET = SubResource( 12 )
