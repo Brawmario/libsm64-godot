@@ -1,6 +1,6 @@
 #include <Godot.hpp>
 #include <Resource.hpp>
-#include<Image.hpp>
+#include <Image.hpp>
 
 extern "C"
 {
@@ -18,7 +18,7 @@ public:
     void _init();
 
     void global_init();
-    void static_surfaces_load(godot::PoolVector3Array vertexes);
+    void static_surfaces_load(godot::PoolVector3Array vertexes, godot::Array surface_properties_array);
 
     int mario_create(godot::Vector3 vec);
 
@@ -47,7 +47,7 @@ public:
 
     void mario_delete(int mario_id);
 
-    int surface_object_create(godot::PoolVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation);
+    int surface_object_create(godot::PoolVector3Array vertexes, godot::Array surface_properties_array, godot::Vector3 position, godot::Vector3 rotation);
     void surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation);
     void surface_object_delete(int object_id);
 
