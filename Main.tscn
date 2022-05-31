@@ -1,8 +1,10 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://SM64Handler.tres" type="Resource" id=2]
 [ext_resource path="res://addons/libsm64/mario/Mario.gd" type="Script" id=3]
+[ext_resource path="res://addons/libsm64/handlers/StaticSurfacesHandler.gd" type="Script" id=4]
+[ext_resource path="res://addons/libsm64/handlers/SurfaceObjectsHandler.gd" type="Script" id=5]
 
 [sub_resource type="CubeMesh" id=8]
 size = Vector3( 5, 10, 5 )
@@ -101,25 +103,25 @@ filters = PoolStringArray( "*.n64", "*.z64" )
 
 [node name="StaticSurfaces" type="Spatial" parent="."]
 
-[node name="Wall" type="MeshInstance" parent="StaticSurfaces" groups=["static_surfaces"]]
+[node name="Wall" type="MeshInstance" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, 0 )
 mesh = SubResource( 8 )
 skeleton = NodePath("../..")
 material/0 = null
 
-[node name="Platform" type="MeshInstance" parent="StaticSurfaces" groups=["static_surfaces"]]
+[node name="Platform" type="MeshInstance" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
 mesh = SubResource( 7 )
 skeleton = NodePath("../..")
 material/0 = null
 
-[node name="Ramp" type="MeshInstance" parent="StaticSurfaces" groups=["static_surfaces"]]
+[node name="Ramp" type="MeshInstance" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 5, -10 )
 mesh = SubResource( 9 )
 material/0 = null
 
 [node name="Objects" type="Spatial" parent="."]
 
-[node name="MovingPlatform" type="MeshInstance" parent="Objects"]
+[node name="MovingPlatform" type="MeshInstance" parent="Objects" groups=["libsm64_surface_objects"]]
 transform = Transform( -1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, -12, 5, 7 )
 mesh = SubResource( 10 )
 material/0 = null
@@ -128,3 +130,11 @@ material/0 = null
 playback_process_mode = 0
 anims/Move = SubResource( 11 )
 anims/RESET = SubResource( 12 )
+
+[node name="StaticSurfacesHandler" type="Node" parent="."]
+script = ExtResource( 4 )
+sm64_handler = ExtResource( 2 )
+
+[node name="SurfaceObjectsHandler" type="Node" parent="."]
+script = ExtResource( 5 )
+sm64_handler = ExtResource( 2 )
