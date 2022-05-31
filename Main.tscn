@@ -1,10 +1,8 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://SM64Handler.tres" type="Resource" id=2]
 [ext_resource path="res://addons/libsm64/mario/Mario.gd" type="Script" id=3]
-[ext_resource path="res://SM64DefaultSurfaceProperties.tres" type="Resource" id=4]
-[ext_resource path="res://SM64BurningSurfaceProperties.tres" type="Resource" id=5]
 
 [sub_resource type="CubeMesh" id=8]
 size = Vector3( 5, 10, 5 )
@@ -75,17 +73,9 @@ tracks/1/keys = {
 "values": [ Vector3( 0, 0, -180 ) ]
 }
 
-[sub_resource type="PlaneMesh" id=15]
-size = Vector2( 5, 5 )
-
-[sub_resource type="SpatialMaterial" id=14]
-albedo_color = Color( 1, 0, 0, 1 )
-
 [node name="Main" type="Spatial"]
 script = ExtResource( 1 )
 sm64_handler = ExtResource( 2 )
-sm64_static_surface_resource = ExtResource( 4 )
-sm64_fire_patch_surface_resource = ExtResource( 5 )
 
 [node name="SpotLight" type="SpotLight" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5.26036, 0 )
@@ -138,8 +128,3 @@ material/0 = null
 playback_process_mode = 0
 anims/Move = SubResource( 11 )
 anims/RESET = SubResource( 12 )
-
-[node name="FirePatch" type="MeshInstance" parent="Objects"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0.021, 12.5 )
-mesh = SubResource( 15 )
-material/0 = SubResource( 14 )

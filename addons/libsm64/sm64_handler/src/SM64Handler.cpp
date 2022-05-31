@@ -138,7 +138,7 @@ void SM64Handler::global_init()
     ::free(mario_texture);
 }
 
-void SM64Handler::static_surfaces_load(godot::PoolVector3Array vertexes, godot::Array surface_properties_array)
+void SM64Handler::static_surfaces_load(godot::PoolVector3Array vertexes)
 {
     struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes.size() / 3);
 
@@ -152,13 +152,10 @@ void SM64Handler::static_surfaces_load(godot::PoolVector3Array vertexes, godot::
                 || !check_in_bounds(vertexes[i+2] * scale_factor))
             continue;
 
-        godot::Object *surface_properties = surface_properties_array[i/3];
-        if (surface_properties) {
-            surface_array[j].type = surface_properties->get("surface_type");
-            surface_array[j].force = surface_properties->get("force");
-            surface_array[j].terrain = surface_properties->get("terrain_type");
-        }
-
+        // TODO: export surfaces types to function argument
+        surface_array[j].type = 0x0000; // SURFACE_DEFAULT
+        surface_array[j].force = 0;
+        surface_array[j].terrain = 0x0002; // TERRAIN_SNOW
         surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * scale_factor);
         surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * scale_factor);
         surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * scale_factor);
@@ -282,7 +279,7 @@ void SM64Handler::mario_delete(int mario_id)
     sm64_mario_delete(mario_id);
 }
 
-int SM64Handler::surface_object_create(godot::PoolVector3Array vertexes, godot::Array surface_properties_array, godot::Vector3 position, godot::Vector3 rotation)
+int SM64Handler::surface_object_create(godot::PoolVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation)
 {
     struct SM64SurfaceObject surface_object;
     int id;
@@ -298,13 +295,10 @@ int SM64Handler::surface_object_create(godot::PoolVector3Array vertexes, godot::
                 || !check_in_bounds(vertexes[i+2] * scale_factor))
             continue;
 
-        godot::Object *surface_properties = surface_properties_array[i/3];
-        if (surface_properties) {
-            surface_array[j].type = surface_properties->get("surface_type");
-            surface_array[j].force = surface_properties->get("force");
-            surface_array[j].terrain = surface_properties->get("terrain_type");
-        }
-
+        // TODO: export surfaces types to function argument
+        surface_array[j].type = 0x0000; // SURFACE_DEFAULT
+        surface_array[j].force = 0;
+        surface_array[j].terrain = 0x0002; // TERRAIN_SNOW
         surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * scale_factor);
         surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * scale_factor);
         surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * scale_factor);
