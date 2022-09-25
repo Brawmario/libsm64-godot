@@ -3,7 +3,8 @@
 #include <string>
 #include <cstdio>
 
-#include<ArrayMesh.hpp>
+#include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/classes/array_mesh.hpp>
 
 static void SM64DebugPrintFunction(const char *msg)
 {
@@ -72,7 +73,7 @@ static void invert_vertex_order_3d(float *arr, size_t triangle_count)
     }
 }
 
-static void invert_vertex_order(godot::PoolVector3Array &arr)
+static void invert_vertex_order(godot::PackedVector3Array &arr)
 {
     for (size_t i = 0; i < arr.size() / 3; i++)
     {
@@ -83,10 +84,6 @@ static void invert_vertex_order(godot::PoolVector3Array &arr)
 }
 
 SM64Handler::SM64Handler()
-{
-}
-
-void SM64Handler::_init()
 {
     mario_geometry.position = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
     mario_geometry.color    = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
@@ -123,13 +120,13 @@ void SM64Handler::global_init()
 
     sm64_global_init(rom, mario_texture, SM64DebugPrintFunction);
 
-    godot::PoolByteArray mario_texure_pool;
-    mario_texure_pool.resize(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
+    godot::PackedByteArray mario_texture;
+    mario_texture.resize(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
     for (size_t i = 0; i < 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT; i++)
-        mario_texure_pool.set(i, mario_texture[i]);
+        mario_texture.set(i, mario_texture[i]);
     
     godot::Ref<godot::Image> image = godot::Image::_new();
-    image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texure_pool);
+    image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture);
     mario_image = image;
 
     is_init = true;
@@ -138,7 +135,7 @@ void SM64Handler::global_init()
     ::free(mario_texture);
 }
 
-void SM64Handler::static_surfaces_load(godot::PoolVector3Array vertexes)
+void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes)
 {
     struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes.size() / 3);
 
@@ -279,7 +276,7 @@ void SM64Handler::mario_delete(int mario_id)
     sm64_mario_delete(mario_id);
 }
 
-int SM64Handler::surface_object_create(godot::PoolVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation)
+int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation)
 {
     struct SM64SurfaceObject surface_object;
     int id;
@@ -350,23 +347,23 @@ void SM64Handler::surface_object_delete(int object_id)
     sm64_surface_object_delete(object_id);
 }
 
-void SM64Handler::_register_methods()
+void SM64Handler::_bind_methods()
 {
-    godot::register_method("global_init", &SM64Handler::global_init);
-    godot::register_method("static_surfaces_load", &SM64Handler::static_surfaces_load);
-    godot::register_method("mario_create", &SM64Handler::mario_create);
-    godot::register_method("mario_tick", &SM64Handler::mario_tick);
-    godot::register_method("mario_delete", &SM64Handler::mario_delete);
-    godot::register_method("surface_object_create", &SM64Handler::surface_object_create);
-    godot::register_method("surface_object_move", &SM64Handler::surface_object_move);
-    godot::register_method("surface_object_delete", &SM64Handler::surface_object_delete);
+    ClassDB::bind_method(D_METHOD("global_init"), &SM64Handler::global_init);
+    ClassDB::bind_method(D_METHOD("static_surfaces_load", "vertexes"), &SM64Handler::static_surfaces_load);
+    ClassDB::bind_method(D_METHOD("mario_create", "vec"), &SM64Handler::mario_create);
+    ClassDB::bind_method(D_METHOD("mario_tick", "mario_id", "inputs"), &SM64Handler::mario_tick);
+    ClassDB::bind_method(D_METHOD("mario_delete", "mario_id"), &SM64Handler::mario_delete);
+    ClassDB::bind_method(D_METHOD("surface_object_create", "vertexes", "position", "rotation"), &SM64Handler::surface_object_create);
+    ClassDB::bind_method(D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
+    ClassDB::bind_method(D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);
 
-    godot::register_property<SM64Handler, godot::String>("rom_filename", &SM64Handler::rom_filename, "",
-            GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_GLOBAL_FILE,
-            "*.n64,*.z64,");
-    godot::register_property<SM64Handler, bool>("is_init", &SM64Handler::is_init, false,
-            GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_NOEDITOR);
-    godot::register_property<SM64Handler, godot::Ref<godot::Image>>("mario_image", &SM64Handler::mario_image, nullptr,
-            GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_NOEDITOR);
-    godot::register_property<SM64Handler, real_t>("scale_factor", &SM64Handler::scale_factor, 50.0);
+    // godot::register_property<SM64Handler, godot::String>("rom_filename", &SM64Handler::rom_filename, "",
+    //         GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_GLOBAL_FILE,
+    //         "*.n64,*.z64,");
+    // godot::register_property<SM64Handler, bool>("is_init", &SM64Handler::is_init, false,
+    //         GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_NOEDITOR);
+    // godot::register_property<SM64Handler, godot::Ref<godot::Image>>("mario_image", &SM64Handler::mario_image, nullptr,
+    //         GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_NOEDITOR);
+    // godot::register_property<SM64Handler, real_t>("scale_factor", &SM64Handler::scale_factor, 50.0);
 }

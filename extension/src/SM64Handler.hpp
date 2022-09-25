@@ -1,11 +1,15 @@
-#include <Godot.hpp>
-#include <Resource.hpp>
-#include<Image.hpp>
+#include <godot_cpp/classes/resource.hpp>
+#include <godot_cpp/classes/image.hpp>
+
 
 extern "C"
 {
 #include <libsm64.h>
 }
+
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 class SM64Handler : public godot::Resource
 {
@@ -15,10 +19,8 @@ public:
     SM64Handler();
     ~SM64Handler();
 
-    void _init();
-
     void global_init();
-    void static_surfaces_load(godot::PoolVector3Array vertexes);
+    void static_surfaces_load(godot::PackedVector3Array vertexes);
 
     int mario_create(godot::Vector3 vec);
 
@@ -47,11 +49,12 @@ public:
 
     void mario_delete(int mario_id);
 
-    int surface_object_create(godot::PoolVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation);
+    int surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation);
     void surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation);
     void surface_object_delete(int object_id);
 
-    static void _register_methods();
+protected:
+    static void _bind_methods();
 
 private:
     bool is_init = false;
@@ -61,8 +64,8 @@ private:
 
     struct SM64MarioGeometryBuffers mario_geometry = {NULL, NULL, NULL, NULL, 0};
 
-    godot::PoolVector3Array mario_position;
-    godot::PoolVector3Array mario_normal;
-    godot::PoolColorArray mario_color;
-    godot::PoolVector2Array mario_uv;
+    godot::PackedVector3Array mario_position;
+    godot::PackedVector3Array mario_normal;
+    godot::PackedColorArray mario_color;
+    godot::PackedVector2Array mario_uv;
 };
