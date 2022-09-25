@@ -1,140 +1,123 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=3 uid="uid://co4doe2lrdldq"]
 
-[ext_resource path="res://Main.gd" type="Script" id=1]
-[ext_resource path="res://SM64Handler.tres" type="Resource" id=2]
-[ext_resource path="res://addons/libsm64/mario/Mario.gd" type="Script" id=3]
-[ext_resource path="res://addons/libsm64/handlers/StaticSurfacesHandler.gd" type="Script" id=4]
-[ext_resource path="res://addons/libsm64/handlers/SurfaceObjectsHandler.gd" type="Script" id=5]
+[ext_resource type="Script" path="res://Main.gd" id="1"]
+[ext_resource type="Script" path="res://addons/libsm64/mario/Mario.gd" id="3"]
+[ext_resource type="Script" path="res://addons/libsm64/handlers/StaticSurfacesHandler.gd" id="4"]
 
-[sub_resource type="CubeMesh" id=8]
-size = Vector3( 5, 10, 5 )
+[sub_resource type="BoxMesh" id="8"]
+size = Vector3(5, 10, 5)
 
-[sub_resource type="PlaneMesh" id=7]
-size = Vector2( 40, 30 )
+[sub_resource type="PlaneMesh" id="7"]
+size = Vector2(40, 30)
 
-[sub_resource type="PrismMesh" id=9]
+[sub_resource type="PrismMesh" id="9"]
 left_to_right = 1.0
-size = Vector3( 10, 10, 10 )
+size = Vector3(10, 10, 10)
 
-[sub_resource type="CubeMesh" id=10]
-size = Vector3( 5, 2, 5 )
+[sub_resource type="BoxMesh" id="10"]
+size = Vector3(5, 2, 5)
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id="11"]
 resource_name = "Move"
 length = 5.0
-loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath(".:translation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 2.5 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ Vector3( -12, 5, 7 ), Vector3( 0, 5, 7 ) ]
+"values": [Vector3(-12, 5, 7), Vector3(0, 5, 7)]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath(".:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 2.5, 5 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array(0, 2.5, 5),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 180, 0 ), Vector3( 0, 360, 0 ) ]
+"values": [Vector3(0, 0, 0), Vector3(0, 180, 0), Vector3(0, 360, 0)]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id="12"]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath(".:translation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Vector3( -12, 5, 7 ) ]
+"values": [Vector3(-12, 5, 7)]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath(".:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Vector3( 0, 0, -180 ) ]
+"values": [Vector3(0, 0, -180)]
 }
 
-[node name="Main" type="Spatial"]
-script = ExtResource( 1 )
-sm64_handler = ExtResource( 2 )
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ehrq2"]
+_data = {
+"Move": SubResource("11"),
+"RESET": SubResource("12")
+}
 
-[node name="SpotLight" type="SpotLight" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5.26036, 0 )
-spot_range = 47.069
+[node name="Main" type="Node3D"]
+script = ExtResource("1")
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 20, 20 )
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 20, 20)
 
-[node name="Mario" type="Spatial" parent="." groups=["Mario"]]
-script = ExtResource( 3 )
-sm64_handler = ExtResource( 2 )
-camera_path = NodePath("../Camera")
+[node name="Mario" type="Node3D" parent="." groups=["Mario"]]
+script = ExtResource("3")
 
 [node name="FileDialog" type="FileDialog" parent="."]
-margin_right = 710.0
-margin_bottom = 329.0
-window_title = "Pick ROM File"
-resizable = true
 mode_overrides_title = false
-mode = 0
 access = 2
-filters = PoolStringArray( "*.n64", "*.z64" )
+filters = PackedStringArray("*.n64", "*.z64")
 
-[node name="StaticSurfaces" type="Spatial" parent="."]
+[node name="StaticSurfaces" type="Node3D" parent="."]
 
-[node name="Wall" type="MeshInstance" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, 0 )
-mesh = SubResource( 8 )
+[node name="Wall" type="MeshInstance3D" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, 0)
+mesh = SubResource("8")
 skeleton = NodePath("../..")
-material/0 = null
 
-[node name="Platform" type="MeshInstance" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
-mesh = SubResource( 7 )
+[node name="Platform" type="MeshInstance3D" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
+mesh = SubResource("7")
 skeleton = NodePath("../..")
-material/0 = null
 
-[node name="Ramp" type="MeshInstance" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 5, -10 )
-mesh = SubResource( 9 )
-material/0 = null
+[node name="Ramp" type="MeshInstance3D" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 5, -10)
+mesh = SubResource("9")
 
-[node name="Objects" type="Spatial" parent="."]
+[node name="Objects" type="Node3D" parent="."]
 
-[node name="MovingPlatform" type="MeshInstance" parent="Objects" groups=["libsm64_surface_objects"]]
-transform = Transform( -1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, -12, 5, 7 )
-mesh = SubResource( 10 )
-material/0 = null
+[node name="MovingPlatform" type="MeshInstance3D" parent="Objects" groups=["libsm64_surface_objects"]]
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, -12, 5, 7)
+mesh = SubResource("10")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Objects/MovingPlatform"]
 playback_process_mode = 0
-anims/Move = SubResource( 11 )
-anims/RESET = SubResource( 12 )
+libraries = {
+"": SubResource("AnimationLibrary_ehrq2")
+}
 
 [node name="StaticSurfacesHandler" type="Node" parent="."]
-script = ExtResource( 4 )
-sm64_handler = ExtResource( 2 )
-
-[node name="SurfaceObjectsHandler" type="Node" parent="."]
-script = ExtResource( 5 )
-sm64_handler = ExtResource( 2 )
+script = ExtResource("4")
