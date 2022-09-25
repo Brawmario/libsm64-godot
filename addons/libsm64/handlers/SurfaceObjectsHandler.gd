@@ -2,8 +2,8 @@ extends Node
 
 const FPS_30_DELTA = 1.0/30.0
 
-export var sm64_handler: Resource
-export var surface_objects_group := "libsm64_surface_objects"
+@export var sm64_handler: Resource
+@export var surface_objects_group := "libsm64_surface_objects"
 
 var _surface_objects_ids := []
 var _surface_objects_refs := []
@@ -27,15 +27,15 @@ func _update_surface_objects() -> void:
 		sm64_handler.surface_object_move(id, position, rotation)
 
 
-func load_surface_object(mesh_instance: MeshInstance) -> void:
-	var mesh_faces: PoolVector3Array = mesh_instance.get_mesh().get_faces()
+func load_surface_object(mesh_instance: MeshInstance3D) -> void:
+	var mesh_faces: PackedVector3Array = mesh_instance.get_mesh().get_faces()
 	var position: Vector3 = mesh_instance.global_transform.origin
 	var rotation: Vector3 = mesh_instance.rotation_degrees
 	var surface_object_id: int = sm64_handler.surface_object_create(mesh_faces, position, rotation)
 	_surface_objects_ids.push_back(surface_object_id)
 	_surface_objects_refs.push_back(mesh_instance)
-	# Clean up automaticaly if MeshInstance is removed from tree or freed
-	mesh_instance.connect("tree_exiting", self, "delete_surface_object", [mesh_instance], CONNECT_ONESHOT)
+	# Clean up automaticaly if MeshInstance3D is removed from tree or freed
+	mesh_instance.connect("tree_exiting",Callable(self,"delete_surface_object").bind(mesh_instance),CONNECT_ONE_SHOT)
 
 
 func load_all_surface_objects() -> void:
@@ -43,15 +43,15 @@ func load_all_surface_objects() -> void:
 		load_surface_object(mesh_instance)
 
 
-func delete_surface_object(mesh_instance: MeshInstance) -> void:
+func delete_surface_object(mesh_instance: MeshInstance3D) -> void:
 	var index := _surface_objects_refs.find(mesh_instance)
 	if index == -1:
 		return
 
 	var id: int = _surface_objects_ids[index]
 	sm64_handler.surface_object_delete(id)
-	_surface_objects_refs.remove(index)
-	_surface_objects_ids.remove(index)
+	_surface_objects_refs.remove_at(index)
+	_surface_objects_ids.remove_at(index)
 
 
 func delete_all_surface_objects() -> void:
