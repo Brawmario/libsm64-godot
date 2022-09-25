@@ -1,7 +1,7 @@
 [submodule "godot-cpp"]
-	path = godot-cpp
+	path = extention/godot-cpp
 	url = https://github.com/godotengine/godot-cpp
 	branch = 3.4
 [submodule "libsm64"]
-	path = libsm64
+	path = extention/libsm64
 	url = https://github.com/libsm64/libsm64.git
