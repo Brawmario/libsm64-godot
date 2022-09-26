@@ -13,7 +13,7 @@ extern "C"
 
 class SM64Handler : public godot::Resource
 {
-    GODOT_CLASS(SM64Handler, godot::Resource);
+    GDCLASS(SM64Handler, godot::Resource);
 
 public:
     SM64Handler();
