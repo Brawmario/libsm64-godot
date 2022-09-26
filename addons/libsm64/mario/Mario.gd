@@ -4,7 +4,7 @@ extends Node3D
 const FPS_30_DELTA = 1.0/30.0
 
 @export var sm64_handler: Resource
-@export var camera_path: NodePath
+@export var camera: Camera3D
 @export var stick_left := "mario_stick_left"
 @export var stick_right := "mario_stick_right"
 @export var stick_up := "mario_stick_up"
@@ -13,7 +13,6 @@ const FPS_30_DELTA = 1.0/30.0
 @export var input_b := "mario_b"
 @export var input_z := "mario_z"
 
-var camera: Camera3D
 var mesh_instance: MeshInstance3D
 var mesh: ArrayMesh
 var material: StandardMaterial3D
@@ -22,8 +21,6 @@ var time_since_last_tick := 0.0
 
 
 func _ready() -> void:
-	camera = get_node(camera_path)
-
 	mesh_instance = MeshInstance3D.new()
 	add_child(mesh_instance)
 	mesh_instance.set_as_top_level(true)

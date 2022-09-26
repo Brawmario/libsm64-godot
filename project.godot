@@ -17,7 +17,7 @@ config/icon="res://icon.png"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/libsm64/plugin.cfg")
 
 [input]
 
@@ -72,4 +72,3 @@ common/enable_pause_aware_picking=true
 
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
-environment/default_environment="res://default_env.tres"

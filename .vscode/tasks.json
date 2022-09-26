@@ -16,14 +16,20 @@
                 "clear": false
             },
             "options": {
-                "cwd": "extension/godot-cpp"
+                "cwd": "${workspaceFolder}/extension/godot-cpp"
             },
-            "problemMatcher": "$msCompile"
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/extension/godot-cpp"
+                ]
+            }
         },
         {
-            "label": "build-extension",
+            "label": "build-libsm64",
             "type": "shell",
-            "command": "scons target=debug use_mingw=yes",
+            "command": "make",
             "presentation": {
                 "echo": true,
                 "revealProblems": "onProblem",
@@ -33,9 +39,44 @@
                 "clear": false
             },
             "options": {
-                "cwd": "extension"
+                "cwd": "${workspaceFolder}/extension/libsm64"
             },
-            "problemMatcher": "$msCompile"
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/extension/libsm64"
+                ]
+            }
+        },
+        {
+            "label": "build-extension",
+            "type": "shell",
+            "command": "scons target=debug use_mingw=yes build_library=no",
+            "presentation": {
+                "echo": true,
+                "revealProblems": "onProblem",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/extension"
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["relative", "${workspaceFolder}/extension"]
+              }
+        },
+        {
+            "label": "build-all",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "build-godot-cpp",
+                "build-libsm64",
+                "build-extension"
+            ]
         }
     ]
 }
