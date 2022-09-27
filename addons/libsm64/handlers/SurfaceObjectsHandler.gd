@@ -36,7 +36,7 @@ func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	_surface_objects_ids.push_back(surface_object_id)
 	_surface_objects_refs.push_back(mesh_instance)
 	# Clean up automaticaly if MeshInstance3D is removed from tree or freed
-	mesh_instance.connect("tree_exiting",Callable(self,"delete_surface_object").bind(mesh_instance),CONNECT_ONE_SHOT)
+	mesh_instance.tree_exiting.connect(delete_surface_object.bind(mesh_instance), CONNECT_ONE_SHOT)
 
 
 func load_all_surface_objects() -> void:
