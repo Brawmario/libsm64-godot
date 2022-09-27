@@ -135,14 +135,34 @@ void SM64Handler::global_init()
     ::free(mario_texture_raw);
 }
 
-bool SM64Handler::is_init()
+bool SM64Handler::is_init() const
 {
     return init;
 }
 
-godot::Ref<godot::Image> SM64Handler::get_mario_image()
+godot::Ref<godot::Image> SM64Handler::get_mario_image() const
 {
     return mario_image;
+}
+
+void SM64Handler::set_rom_filename(const godot::String &value)
+{
+    rom_filename = value;
+}
+
+godot::String SM64Handler::get_rom_filename() const
+{
+    return rom_filename;
+}
+
+void SM64Handler::set_scale_factor(real_t value)
+{
+    scale_factor = value;
+}
+
+real_t SM64Handler::get_scale_factor() const
+{
+    return scale_factor;
 }
 
 void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes)
@@ -181,14 +201,14 @@ void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes)
     ::free(surface_array);
 }
 
-int SM64Handler::mario_create(godot::Vector3 vec)
+int SM64Handler::mario_create(godot::Vector3 position)
 {
     if (!check_in_bounds(vec))
         return -2;
 
-    int16_t x = (int16_t) ( vec.z * scale_factor);
-    int16_t y = (int16_t) ( vec.y * scale_factor);
-    int16_t z = (int16_t) (-vec.x * scale_factor);
+    int16_t x = (int16_t) ( position.z * scale_factor);
+    int16_t y = (int16_t) ( position.y * scale_factor);
+    int16_t z = (int16_t) (-position.x * scale_factor);
     return sm64_mario_create(x, y, z);
 }
 
@@ -286,7 +306,7 @@ void SM64Handler::mario_delete(int mario_id)
     sm64_mario_delete(mario_id);
 }
 
-int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation)
+int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation_degrees)
 {
     struct SM64SurfaceObject surface_object;
     int id;
@@ -326,9 +346,9 @@ int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot
     surface_object.transform.position[1] =  position.y * scale_factor;
     surface_object.transform.position[2] = -position.x * scale_factor;
 
-    surface_object.transform.eulerRotation[0] = -rotation.z;
-    surface_object.transform.eulerRotation[1] = -rotation.y;
-    surface_object.transform.eulerRotation[2] =  rotation.x;
+    surface_object.transform.eulerRotation[0] = -rotation_degrees.z;
+    surface_object.transform.eulerRotation[1] = -rotation_degrees.y;
+    surface_object.transform.eulerRotation[2] =  rotation_degrees.x;
 
     id = sm64_surface_object_create(&surface_object);
 
@@ -337,7 +357,7 @@ int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot
     return id;
 }
 
-void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation)
+void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation_degrees)
 {
     struct SM64ObjectTransform transform;
 
@@ -345,9 +365,9 @@ void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, go
     transform.position[1] =  position.y * scale_factor;
     transform.position[2] = -position.x * scale_factor;
 
-    transform.eulerRotation[0] = -rotation.z;
-    transform.eulerRotation[1] = -rotation.y;
-    transform.eulerRotation[2] =  rotation.x;
+    transform.eulerRotation[0] = -rotation_degrees.z;
+    transform.eulerRotation[1] = -rotation_degrees.y;
+    transform.eulerRotation[2] =  rotation_degrees.x;
 
     sm64_surface_object_move(object_id, &transform);
 }
@@ -362,16 +382,17 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("global_init"), &SM64Handler::global_init);
     godot::ClassDB::bind_method(godot::D_METHOD("is_init"), &SM64Handler::is_init);
     godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image"), &SM64Handler::get_mario_image);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_rom_filename", "value"), &SM64Handler::set_rom_filename);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_rom_filename"), &SM64Handler::get_rom_filename);
+    ADD_PROPERTY(godot::PropertyInfo(godot::Variant::STRING, "rom_filename", godot::PROPERTY_HINT_GLOBAL_FILE, "*.n64,*.z64,"), "set_rom_filename", "get_rom_filename");
+    godot::ClassDB::bind_method(godot::D_METHOD("set_scale_factor", "value"), &SM64Handler::set_scale_factor);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_scale_factor"), &SM64Handler::get_scale_factor);
+    ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "scale_factor"), "set_scale_factor", "get_scale_factor");
     godot::ClassDB::bind_method(godot::D_METHOD("static_surfaces_load", "vertexes"), &SM64Handler::static_surfaces_load);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "vec"), &SM64Handler::mario_create);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position"), &SM64Handler::mario_create);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "inputs"), &SM64Handler::mario_tick);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &SM64Handler::mario_delete);
-    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation"), &SM64Handler::surface_object_create);
-    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
+    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation_degrees"), &SM64Handler::surface_object_create);
+    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation_degrees"), &SM64Handler::surface_object_move);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);
-
-    // godot::register_property<SM64Handler, godot::String>("rom_filename", &SM64Handler::rom_filename, "",
-    //         GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_GLOBAL_FILE,
-    //         "*.n64,*.z64,");
-    // godot::register_property<SM64Handler, real_t>("scale_factor", &SM64Handler::scale_factor, 50.0);
 }
