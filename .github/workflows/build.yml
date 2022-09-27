@@ -71,7 +71,7 @@ jobs:
           make -j`nproc`
           cd ../..
           mkdir -p addons/libsm64/extension/bin
-          cp extension/libsm64/dist/* addons/libsm64/extension/bin/
+          cp extension/libsm64/dist/* addons/libsm64/extension/bin/ | true
 
       - name: Compile extension
         shell: sh
