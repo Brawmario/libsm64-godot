@@ -126,15 +126,23 @@ void SM64Handler::global_init()
     for (size_t i = 0; i < 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT; i++)
         mario_texture_packed.set(i, mario_texture_raw[i]);
     
-    godot::Ref<godot::Image> image;
-    image.instantiate();
-    image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture_packed);
-    mario_image = image;
+    mario_image.instantiate();
+    mario_image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture_packed);
 
-    is_init = true;
+    init = true;
 
     ::free(rom);
     ::free(mario_texture_raw);
+}
+
+bool SM64Handler::is_init()
+{
+    return init;
+}
+
+godot::Ref<godot::Image> SM64Handler::get_mario_image()
+{
+    return mario_image;
 }
 
 void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes)
@@ -352,6 +360,8 @@ void SM64Handler::surface_object_delete(int object_id)
 void SM64Handler::_bind_methods()
 {
     godot::ClassDB::bind_method(godot::D_METHOD("global_init"), &SM64Handler::global_init);
+    godot::ClassDB::bind_method(godot::D_METHOD("is_init"), &SM64Handler::is_init);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image"), &SM64Handler::get_mario_image);
     godot::ClassDB::bind_method(godot::D_METHOD("static_surfaces_load", "vertexes"), &SM64Handler::static_surfaces_load);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "vec"), &SM64Handler::mario_create);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "inputs"), &SM64Handler::mario_tick);
@@ -363,9 +373,5 @@ void SM64Handler::_bind_methods()
     // godot::register_property<SM64Handler, godot::String>("rom_filename", &SM64Handler::rom_filename, "",
     //         GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_GLOBAL_FILE,
     //         "*.n64,*.z64,");
-    // godot::register_property<SM64Handler, bool>("is_init", &SM64Handler::is_init, false,
-    //         GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_NOEDITOR);
-    // godot::register_property<SM64Handler, godot::Ref<godot::Image>>("mario_image", &SM64Handler::mario_image, nullptr,
-    //         GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_NOEDITOR);
     // godot::register_property<SM64Handler, real_t>("scale_factor", &SM64Handler::scale_factor, 50.0);
 }

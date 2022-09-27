@@ -1,6 +1,6 @@
 #include <godot_cpp/classes/resource.hpp>
 #include <godot_cpp/classes/image.hpp>
-
+#include <godot_cpp/classes/ref.hpp>
 
 extern "C"
 {
@@ -20,6 +20,10 @@ public:
     ~SM64Handler();
 
     void global_init();
+    bool is_init();
+
+    godot::Ref<godot::Image> get_mario_image();
+
     void static_surfaces_load(godot::PackedVector3Array vertexes);
 
     int mario_create(godot::Vector3 vec);
@@ -57,10 +61,10 @@ protected:
     static void _bind_methods();
 
 private:
-    bool is_init = false;
+    bool init = false;
     godot::Ref<godot::Image> mario_image;
-    godot::String rom_filename;
-    real_t scale_factor;
+    godot::String rom_filename = godot::String("Super Mario 64 (USA).z64");
+    real_t scale_factor = 50.0;
 
     struct SM64MarioGeometryBuffers mario_geometry = {NULL, NULL, NULL, NULL, 0};
 

@@ -69,22 +69,21 @@ func _physics_process(delta: float) -> void:
 
 
 func global_init() -> void:
-	if sm64_handler and not sm64_handler.is_init:
+	if sm64_handler and not sm64_handler.is_init():
 		sm64_handler.global_init()
 
 
 func create() -> void:
-	if sm64_handler and sm64_handler.is_init:
+	if sm64_handler and sm64_handler.is_init():
 		id = sm64_handler.mario_create(to_global(position))
 		if id < 0:
 			return
 
-		var texture := ImageTexture.new()
-		texture.create_from_image(sm64_handler.mario_image)
+		var texture := ImageTexture.create_from_image(sm64_handler.get_mario_image())
 
 		var texture_material := StandardMaterial3D.new()
 		texture_material.albedo_texture = texture
-		texture_material.flags_transparent = true
+		texture_material.transparency = true
 
 		material = StandardMaterial3D.new()
 		material.vertex_color_use_as_albedo = true
