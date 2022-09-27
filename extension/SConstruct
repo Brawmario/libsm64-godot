@@ -26,7 +26,6 @@ SOFTWARE.
 #!/usr/bin/env python
 import os
 import sys
-import shutil
 
 env = SConscript("godot-cpp/SConstruct")
 
@@ -43,12 +42,6 @@ env.Append(CPPPATH=["src/"])
 sources = (Glob("src/*.cpp"))
 
 # libsm64 settings (run make on the libsm64 folder before attempting compilation)
-if env["platform"] == "windows":
-    libsm64_orig_name = "sm64.dll"
-else:
-    libsm64_orig_name = "libsm64.so"
-libsm64_new_name = "libsm64.{}.{}.{}{}".format(env["platform"], env["target"], env["arch_suffix"], env["SHLIBSUFFIX"])
-shutil.copy("libsm64/dist/%s" % libsm64_orig_name, "libsm64/dist/%s" % libsm64_new_name)
 env.Append(CPPPATH=["libsm64/dist/include/"])
 env.Append(LIBPATH=["libsm64/dist/"])
 env.Append(LIBS=["libsm64"])
