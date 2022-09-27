@@ -203,7 +203,7 @@ void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes)
 
 int SM64Handler::mario_create(godot::Vector3 position)
 {
-    if (!check_in_bounds(vec))
+    if (!check_in_bounds(position))
         return -2;
 
     int16_t x = (int16_t) ( position.z * scale_factor);
