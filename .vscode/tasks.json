@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build-godot-cpp",
+            "label": "build-godot-cpp-debug",
             "type": "shell",
             "command": "scons target=debug use_mingw=yes generate_bindings=yes",
             "presentation": {
@@ -27,9 +27,32 @@
             }
         },
         {
+            "label": "build-godot-cpp-release",
+            "type": "shell",
+            "command": "scons target=release use_mingw=yes generate_bindings=yes",
+            "presentation": {
+                "echo": true,
+                "revealProblems": "onProblem",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/extension/godot-cpp"
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/extension/godot-cpp"
+                ]
+            }
+        },
+        {
             "label": "build-libsm64",
             "type": "shell",
-            "command": "make",
+            "command": "make -j`nproc`",
             "presentation": {
                 "echo": true,
                 "revealProblems": "onProblem",
@@ -50,9 +73,32 @@
             }
         },
         {
-            "label": "build-extension",
+            "label": "clean-libsm64",
             "type": "shell",
-            "command": "scons target=debug use_mingw=yes build_library=no",
+            "command": "make clean",
+            "presentation": {
+                "echo": true,
+                "revealProblems": "onProblem",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/extension/libsm64"
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/extension/libsm64"
+                ]
+            }
+        },
+        {
+            "label": "build-extension-debug",
+            "type": "shell",
+            "command": "scons target=debug use_mingw=yes generate_bindings=no build_library=no",
             "presentation": {
                 "echo": true,
                 "revealProblems": "onProblem",
@@ -70,13 +116,46 @@
               }
         },
         {
-            "label": "build-all",
+            "label": "build-extension-release",
+            "type": "shell",
+            "command": "scons target=release use_mingw=yes generate_bindings=no build_library=no",
+            "presentation": {
+                "echo": true,
+                "revealProblems": "onProblem",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/extension"
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["relative", "${workspaceFolder}/extension"]
+              }
+        },
+        {
+            "label": "build-all-debug",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "build-godot-cpp",
+                "build-godot-cpp-debug",
+                "clean-libsm64",
                 "build-libsm64",
-                "build-extension"
-            ]
+                "build-extension-debug"
+            ],
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "build-all-release",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "build-godot-cpp-release",
+                "clean-libsm64",
+                "build-libsm64",
+                "build-extension-release"
+            ],
+            "problemMatcher": "$gcc"
         }
     ]
 }
