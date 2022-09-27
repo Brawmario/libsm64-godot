@@ -76,7 +76,9 @@ jobs:
       - name: Compile extension
         shell: sh
         run: |
+          cd extension
           scons target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}' use_mingw=yes
+          cd ..
 
       - name: (Windows) Copy mingw dlls
         if: ${{ startsWith(matrix.identifier, 'windows-') }}
@@ -89,6 +91,7 @@ jobs:
         shell: sh
         run: |
           rm -rf extension
+          rm addons/libsm64/extension/bin/liblib*.a
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
