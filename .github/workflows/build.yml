@@ -91,7 +91,14 @@ jobs:
         shell: sh
         run: |
           rm -rf extension
-          rm addons/libsm64/extension/bin/liblib*.a
+          rm addons/libsm64/extension/bin/liblib*.a | true
+
+      - name: Copy extra files to addon
+        shell: sh
+        run: |
+          for addon in ${{ github.workspace }}/project/addons/libsm64/; do
+            cp --no-clobber '${{ github.workspace }}/README.md' '${{ github.workspace }}/LICENSE' "$addon"
+          done
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
