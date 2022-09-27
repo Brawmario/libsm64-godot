@@ -1,114 +1,98 @@
-name: CI build
+name: 🛠️ Builds
 on:
   push:
-    tags:
-      - 'v*.*.*'
-
+  pull_request:
+  workflow_dispatch:
+#  push:
+#    tags:
+#      - 'v*.*.*'
 
 jobs:
-  linux-build:
-    name: Linux build 🐧
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.runner }}
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - identifier: linux-debug
+            name: Linux Debug
+            runner: ubuntu-18.04
+            target: debug
+            platform: linux
+            arch: x86_64
+          - identifier: linux-release
+            name: Linux Release
+            runner: ubuntu-18.04
+            target: release
+            platform: linux
+            arch: x86_64
+          - identifier: windows-debug
+            name: Windows Debug
+            runner: ubuntu-20.04
+            target: debug
+            platform: windows
+            arch: x86_64
+          - identifier: windows-release
+            name: Windows Release
+            runner: ubuntu-20.04
+            target: release
+            platform: windows
+            arch: x86_64
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: (Windows) Install mingw64
+        if: ${{ startsWith(matrix.identifier, 'windows-') }}
+        shell: sh
+        run: |
+          sudo apt-get install mingw-w64
+          sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
+          sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+
+      - name: Set up SCons
+        shell: bash
+        run: |
+          python -c "import sys; print(sys.version)"
+          python -m pip install scons
+          scons --version
+
+      - name: Checkout project
+        uses: actions/checkout@v2
         with:
           submodules: recursive
-      - name: Install dependencies
-        run: |
-           sudo apt-get update && sudo apt-get install -y scons make
-      - name: Build project
-        run: |
-          chmod +x ./build_linux64.sh
-          ./build_linux64.sh
-      - name: Generate artifact archive
-        run: |
-          rm addons/libsm64/sm64_handler/src/*.o
-          tar cvfj libsm64godot-linux-x64.tar.bz2 addons/
-      - name: Export release artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: linux-x64-release
-          path: libsm64godot-linux-x64.tar.bz2
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: libsm64godot-linux-x64.tar.bz2
-          asset_name: libsm64godot-${{ github.ref_name }}-linux-x64.tar.bz2
-          tag: ${{ github.ref }}
 
-  windows-build:
-    name: Windows build 🏁
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Set up MinGW
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: x64
-          static: 0
-      - name: Install dependencies
-        shell: bash
+      - name: Compile libsm64
+        shell: sh
         run: |
-          pip3 install scons
-      - name: Build project
-        shell: bash
-        run: |
-          chmod +x ./build_mingw64.sh
-          ./build_mingw64.sh
-      - name: Generate artifact archive
-        shell: bash
-        run: |
-          rm addons/libsm64/sm64_handler/src/*.o
-          7z a -t7z libsm64godot-windows-x64.7z addons/
-      - name: Export release artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: windows-x64-release
-          path: libsm64godot-windows-x64.7z
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: libsm64godot-windows-x64.7z
-          asset_name: libsm64godot-${{ github.ref_name }}-windows-x64.7z
-          tag: ${{ github.ref }}
+          cd extension/libsm64
+          make -j`nproc`
+          cd ../..
+          mkdir -p addons/libsm64/extension/bin
+          cp extension/libsm64/dist/* addons/libsm64/extension/bin/
 
-#  macos-build:
-#    name: Macos build 🍎
-#    runs-on: macos-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#        with:
-#          submodules: recursive
-#      - name: Install dependencies
-#        shell: bash
-#        run: |
-#           brew install scons
-#      - name: Build project
-#        shell: bash
-#        run: |
-#          chmod +x ./build_macos64.sh
-#          ./build_macos64.sh
-#      - name: Generate artifact archive
-#        shell: bash
-#        run: |
-#          rm addons/libsm64/sm64_handler/src/*.o
-#          7z a -t7z libsm64godot-macos-x64.7z addons/
-#      - name: Export release artifact
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: macos-x64-release
-#          path: libsm64godot-macos-x64.7z
-#      - name: Upload binaries to release
-#        uses: svenstaro/upload-release-action@v2
-#        with:
-#          repo_token: ${{ secrets.GITHUB_TOKEN }}
-#          file: libsm64godot-macos-x64.7z
-#          asset_name: libsm64godot-${{ github.ref_name }}-macos-x64.7z
-#          tag: ${{ github.ref }}
+      - name: Compile extension
+        shell: sh
+        run: |
+          scons target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}' use_mingw=yes
+
+      - name: (Windows) Copy mingw dlls
+        if: ${{ startsWith(matrix.identifier, 'windows-') }}
+        run: |
+          cp /mingw64/bin/libgcc_s_seh-1.dll   addons/libsm64/extension/bin/
+          cp /mingw64/bin/libstdc++-6.dll      addons/libsm64/extension/bin/
+          cp /mingw64/bin/libwinpthread-1.dll  addons/libsm64/extension/bin/
+
+      - name: Clean extension files
+        shell: sh
+        run: |
+          rm -rf extension
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ github.event.repository.name }}
+          path: |
+            ${{ github.workspace }}
