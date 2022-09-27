@@ -5,3 +5,6 @@ entry_symbol = "libsm64gd_library_init"
 [libraries]
 
 windows.debug.x86_64 = "bin/libsm64gd.windows.debug.x86_64.dll"
+windows.release.x86_64 = "bin/libsm64gd.windows.release.x86_64.dll"
+linux.debug.x86_64 = "bin/libsm64gd.linux.debug.x86_64.so"
+linux.release.x86_64 = "bin/libsm64gd.linux.release.x86_64.so"
