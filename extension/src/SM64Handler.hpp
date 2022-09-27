@@ -20,13 +20,20 @@ public:
     ~SM64Handler();
 
     void global_init();
-    bool is_init();
+    bool is_init() const;
 
-    godot::Ref<godot::Image> get_mario_image();
+    godot::Ref<godot::Image> get_mario_image() const;
+
+    void set_rom_filename(const godot::String &value);
+    godot::String get_rom_filename() const;
+
+    void set_scale_factor(real_t value);
+    real_t get_scale_factor() const;
+
 
     void static_surfaces_load(godot::PackedVector3Array vertexes);
 
-    int mario_create(godot::Vector3 vec);
+    int mario_create(godot::Vector3 position);
 
     /**
      * @brief Tick Mario with the provided ID
@@ -53,8 +60,8 @@ public:
 
     void mario_delete(int mario_id);
 
-    int surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation);
-    void surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation);
+    int surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation_degrees);
+    void surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation_degrees);
     void surface_object_delete(int object_id);
 
 protected:
@@ -63,7 +70,7 @@ protected:
 private:
     bool init = false;
     godot::Ref<godot::Image> mario_image;
-    godot::String rom_filename = godot::String("Super Mario 64 (USA).z64");
+    godot::String rom_filename;
     real_t scale_factor = 50.0;
 
     struct SM64MarioGeometryBuffers mario_geometry = {NULL, NULL, NULL, NULL, 0};

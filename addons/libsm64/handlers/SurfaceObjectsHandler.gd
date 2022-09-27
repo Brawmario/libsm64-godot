@@ -1,6 +1,7 @@
 extends Node
 
-const FPS_30_DELTA = 1.0/30.0
+const FPS_30_DELTA := 1.0/30.0
+const RAD_TO_DEG_FACTOR := 180.0/PI
 
 @export var sm64_handler: Resource
 @export var surface_objects_group := "libsm64_surface_objects"
@@ -23,15 +24,15 @@ func _update_surface_objects() -> void:
 	for i in range(0, _surface_objects_ids.size()):
 		var id: int = _surface_objects_ids[i]
 		var position: Vector3 = _surface_objects_refs[i].global_transform.origin
-		var rotation: Vector3 = _surface_objects_refs[i].rotation_degrees
-		sm64_handler.surface_object_move(id, position, rotation)
+		var rotation_degrees: Vector3 = _surface_objects_refs[i].rotation * RAD_TO_DEG_FACTOR
+		sm64_handler.surface_object_move(id, position, rotation_degrees)
 
 
 func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	var mesh_faces: PackedVector3Array = mesh_instance.get_mesh().get_faces()
 	var position: Vector3 = mesh_instance.global_transform.origin
-	var rotation: Vector3 = mesh_instance.rotation_degrees
-	var surface_object_id: int = sm64_handler.surface_object_create(mesh_faces, position, rotation)
+	var rotation_degrees: Vector3 = mesh_instance.rotation * RAD_TO_DEG_FACTOR
+	var surface_object_id: int = sm64_handler.surface_object_create(mesh_faces, position, rotation_degrees)
 	_surface_objects_ids.push_back(surface_object_id)
 	_surface_objects_refs.push_back(mesh_instance)
 	# Clean up automaticaly if MeshInstance3D is removed from tree or freed
