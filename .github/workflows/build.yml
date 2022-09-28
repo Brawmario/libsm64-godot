@@ -65,7 +65,7 @@ jobs:
         shell: sh
         run: |
           patch extension/libsm64/Makefile < extension/libsm64winmake.patch
-          patch extension/libsm64/src/libsm64.h < extension/libsm64mingw.patch
+          patch extension/godot-cpp/tools/windows.py < extension/godotstaticmingw.patch
 
       - name: Compile libsm64
         shell: sh
