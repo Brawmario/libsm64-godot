@@ -89,7 +89,7 @@ sm64_handler = ExtResource("2_r8jk2")
 transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 20, 20)
 current = true
 
-[node name="Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
+[node name="Mario3D" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 script = ExtResource("3")
 sm64_handler = ExtResource("2_r8jk2")
 camera = NodePath("../Camera3D")

@@ -1,16 +1,28 @@
+class_name Mario3D
 extends Node3D
-
+@icon("res://addons/libsm64/mario/mario-godot.svg")
 
 const FPS_30_DELTA = 1.0/30.0
 
+## SM64Handler instance
 @export var sm64_handler: Resource
+## Camera instance that follows Mario
 @export var camera: Camera3D
+
+@export_group("Input Actions")
+## Action equivalent to pushing the joystick to the left
 @export var stick_left := "mario_stick_left"
+## Action equivalent to pushing the joystick to the right
 @export var stick_right := "mario_stick_right"
+## Action equivalent to pushing the joystick upwards
 @export var stick_up := "mario_stick_up"
+## Action equivalent to pushing the joystick downwards
 @export var stick_down := "mario_stick_down"
+## Action equivalent to pushing the A button
 @export var input_a := "mario_a"
+## Action equivalent to pushing the B button
 @export var input_b := "mario_b"
+## Action equivalent to pushing the Z button
 @export var input_z := "mario_z"
 
 var mesh_instance: MeshInstance3D
@@ -68,11 +80,13 @@ func _physics_process(delta: float) -> void:
 	mesh_instance.set_surface_override_material(0, material)
 
 
+## Globally initialize the libsm64
 func global_init() -> void:
 	if sm64_handler and not sm64_handler.is_init():
 		sm64_handler.global_init()
 
 
+## Create Mario (requires initializing the libsm64 via the global_init function)
 func create() -> void:
 	if sm64_handler and sm64_handler.is_init():
 		id = sm64_handler.mario_create(to_global(position))

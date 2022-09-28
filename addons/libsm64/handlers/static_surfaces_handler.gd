@@ -1,9 +1,13 @@
+class_name StaticSurfaceHandler
 extends Node
 
+## SM64Handler instance
 @export var sm64_handler: Resource
+## Group name that contains the MeshInstance3D that are part of the scene's static surfaces
 @export var static_surfaces_group := "libsm64_static_surfaces"
 
 
+## Load all MeshInstance3D in static_surfaces_group into the SM64Handler instance
 func load_static_sufaces() -> void:
 	var faces := PackedVector3Array()
 

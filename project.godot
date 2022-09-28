@@ -8,6 +8,28 @@
 
 config_version=5
 
+_global_script_classes=[{
+"base": "Node3D",
+"class": &"Mario3D",
+"language": &"GDScript",
+"path": "res://addons/libsm64/mario/mario.gd"
+}, {
+"base": "Node",
+"class": &"StaticSurfaceHandler",
+"language": &"GDScript",
+"path": "res://addons/libsm64/handlers/static_surfaces_handler.gd"
+}, {
+"base": "Node",
+"class": &"SurfaceObjectsHandler",
+"language": &"GDScript",
+"path": "res://addons/libsm64/handlers/surface_objects_handler.gd"
+}]
+_global_script_class_icons={
+"Mario3D": "res://addons/libsm64/mario/mario-godot.svg",
+"StaticSurfaceHandler": "",
+"SurfaceObjectsHandler": ""
+}
+
 [application]
 
 config/name="LibSM64 Godot Demo"
