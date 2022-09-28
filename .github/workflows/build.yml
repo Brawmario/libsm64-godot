@@ -43,17 +43,16 @@ jobs:
     steps:
       - name: (Windows) Set up MinGW
         if: ${{ startsWith(matrix.identifier, 'windows-') }}
-        uses: msys2/setup-msys2@v2
-#        uses: egor-tensin/setup-mingw@v2
-#        with:
-#          platform: x64
-#          static: 0
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+          static: 0
 
       - name: Set up Python
         uses: actions/setup-python@v2
 
       - name: Set up SCons
-        shell: msys2 {0}
+        shell: sh
         run: |
           python -c "import sys; print(sys.version)"
           python -m pip install scons
@@ -65,7 +64,7 @@ jobs:
           submodules: recursive
 
       - name: Compile libsm64
-        shell: msys2 {0}
+        shell: sh
         run: |
           cd extension/libsm64
           make -j`nproc`
@@ -74,7 +73,7 @@ jobs:
           cp extension/libsm64/dist/* addons/libsm64/extension/bin/ | true
 
       - name: Compile extension
-        shell: msys2 {0}
+        shell: sh
         run: |
           cd extension
           scons target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}' use_mingw=yes
@@ -88,13 +87,13 @@ jobs:
 #          cp /mingw64/bin/libwinpthread-1.dll  addons/libsm64/extension/bin/
 
       - name: Clean extension files
-        shell: msys2 {0}
+        shell: sh
         run: |
           rm -rf extension
           rm addons/libsm64/extension/bin/liblib*.a | true
 
       - name: Copy extra files to addon
-        shell: msys2 {0}
+        shell: sh
         run: |
           for addon in ${{ github.workspace }}/addons/libsm64/; do
             cp --no-clobber '${{ github.workspace }}/README.md' '${{ github.workspace }}/LICENSE' "$addon"
