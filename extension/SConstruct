@@ -46,6 +46,9 @@ env.Append(CPPPATH=["libsm64/dist/include/"])
 env.Append(LIBPATH=["libsm64/dist/"])
 env.Append(LIBS=["libsm64"])
 
+# remove --static flag from LINKFLAGS if present
+env["LINKFLAGS"] = [x for x in env["LINKFLAGS"] if "--static" not in x]
+
 if env["platform"] == "macos":
     library = env.SharedLibrary(
         "../addons/libsm64/extension/bin/libsm64gd.{}.{}.framework/libsm64gd.{}.{}".format(
