@@ -29,24 +29,26 @@ jobs:
             arch: x86_64
           - identifier: windows-debug
             name: Windows Debug
-            runner: windows-latest
+            runner: ubuntu-latest
             target: debug
             platform: windows
             arch: x86_64
           - identifier: windows-release
             name: Windows Release
-            runner: windows-latest
+            runner: ubuntu-latest
             target: release
             platform: windows
             arch: x86_64
 
     steps:
-      - name: (Windows) Set up MinGW
+      - name: (Windows) Install mingw64
         if: ${{ startsWith(matrix.identifier, 'windows-') }}
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: x64
-          static: 0
+        shell: sh
+        run: |
+          sudo apt-get install mingw-w64
+          sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
+          sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
+
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -71,6 +73,12 @@ jobs:
           cd ../..
           mkdir -p addons/libsm64/extension/bin
           cp extension/libsm64/dist/* addons/libsm64/extension/bin/ | true
+
+      - name: (Windows)) Rename libsm64
+        if: ${{ startsWith(matrix.identifier, 'windows-') }}
+        shell: sh
+        run: |
+          mv addons/libsm64/extension/bin/libsm64.so addons/libsm64/extension/bin/sm64.dll
 
       - name: Compile extension
         shell: sh
