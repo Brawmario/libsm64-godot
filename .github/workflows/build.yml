@@ -41,14 +41,9 @@ jobs:
             arch: x86_64
 
     steps:
-      - name: (Windows) Install mingw64
+      - name: (Windows) Set up MinGW
         if: ${{ startsWith(matrix.identifier, 'windows-') }}
-        shell: sh
-        run: |
-          sudo apt-get install mingw-w64
-          sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
-          sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
-
+        uses: egor-tensin/setup-mingw@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
