@@ -7,7 +7,11 @@ extends Node
 func load_static_sufaces() -> void:
 	var faces := PackedVector3Array()
 
-	for mesh_instance in get_tree().get_nodes_in_group(static_surfaces_group):
+	for node in get_tree().get_nodes_in_group(static_surfaces_group):
+		var mesh_instance := node as MeshInstance3D
+		if not mesh_instance:
+			push_warning("Non MeshInstance3D in %s group" % static_surfaces_group)
+			continue
 		var mesh_faces: PackedVector3Array = mesh_instance.get_mesh().get_faces()
 		var offset: Vector3 = mesh_instance.global_transform.origin
 		for i in range(mesh_faces.size()):

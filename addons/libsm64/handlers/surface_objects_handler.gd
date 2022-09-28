@@ -6,8 +6,8 @@ const RAD_TO_DEG_FACTOR := 180.0/PI
 @export var sm64_handler: Resource
 @export var surface_objects_group := "libsm64_surface_objects"
 
-var _surface_objects_ids := []
-var _surface_objects_refs := []
+var _surface_objects_ids: Array[int] = []
+var _surface_objects_refs: Array[MeshInstance3D] = []
 var time_since_last_tick := 0.0
 
 
@@ -22,16 +22,16 @@ func _physics_process(delta: float) -> void:
 
 func _update_surface_objects() -> void:
 	for i in range(0, _surface_objects_ids.size()):
-		var id: int = _surface_objects_ids[i]
-		var position: Vector3 = _surface_objects_refs[i].global_transform.origin
-		var rotation_degrees: Vector3 = _surface_objects_refs[i].rotation * RAD_TO_DEG_FACTOR
+		var id := _surface_objects_ids[i]
+		var position := _surface_objects_refs[i].global_transform.origin
+		var rotation_degrees := _surface_objects_refs[i].rotation * RAD_TO_DEG_FACTOR
 		sm64_handler.surface_object_move(id, position, rotation_degrees)
 
 
 func load_surface_object(mesh_instance: MeshInstance3D) -> void:
-	var mesh_faces: PackedVector3Array = mesh_instance.get_mesh().get_faces()
-	var position: Vector3 = mesh_instance.global_transform.origin
-	var rotation_degrees: Vector3 = mesh_instance.rotation * RAD_TO_DEG_FACTOR
+	var mesh_faces := mesh_instance.get_mesh().get_faces()
+	var position := mesh_instance.global_transform.origin
+	var rotation_degrees := mesh_instance.rotation * RAD_TO_DEG_FACTOR
 	var surface_object_id: int = sm64_handler.surface_object_create(mesh_faces, position, rotation_degrees)
 	_surface_objects_ids.push_back(surface_object_id)
 	_surface_objects_refs.push_back(mesh_instance)
@@ -40,7 +40,11 @@ func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 
 
 func load_all_surface_objects() -> void:
-	for mesh_instance in get_tree().get_nodes_in_group(surface_objects_group):
+	for node in get_tree().get_nodes_in_group(surface_objects_group):
+		var mesh_instance := node as MeshInstance3D
+		if not mesh_instance:
+			push_warning("Non MeshInstance3D in %s group" % surface_objects_group)
+			continue
 		load_surface_object(mesh_instance)
 
 
@@ -49,7 +53,7 @@ func delete_surface_object(mesh_instance: MeshInstance3D) -> void:
 	if index == -1:
 		return
 
-	var id: int = _surface_objects_ids[index]
+	var id := _surface_objects_ids[index]
 	sm64_handler.surface_object_delete(id)
 	_surface_objects_refs.remove_at(index)
 	_surface_objects_ids.remove_at(index)
