@@ -79,12 +79,12 @@ jobs:
           scons target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}' use_mingw=yes
           cd ..
 
-      - name: (Windows) Copy mingw dlls
-        if: ${{ startsWith(matrix.identifier, 'windows-') }}
-        run: |
-          cp /mingw64/bin/libgcc_s_seh-1.dll   addons/libsm64/extension/bin/
-          cp /mingw64/bin/libstdc++-6.dll      addons/libsm64/extension/bin/
-          cp /mingw64/bin/libwinpthread-1.dll  addons/libsm64/extension/bin/
+#      - name: (Windows) Copy mingw dlls
+#        if: ${{ startsWith(matrix.identifier, 'windows-') }}
+#        run: |
+#          cp /mingw64/bin/libgcc_s_seh-1.dll   addons/libsm64/extension/bin/
+#          cp /mingw64/bin/libstdc++-6.dll      addons/libsm64/extension/bin/
+#          cp /mingw64/bin/libwinpthread-1.dll  addons/libsm64/extension/bin/
 
       - name: Clean extension files
         shell: sh
@@ -104,4 +104,4 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}
           path: |
-            ${{ github.workspace }}/addons/libsm64
+            ${{ github.workspace }}

@@ -1,10 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://co4doe2lrdldq"]
+[gd_scene load_steps=13 format=3 uid="uid://ckil7mvcywi75"]
 
-[ext_resource type="Script" path="res://Main.gd" id="1"]
+[ext_resource type="Script" path="res://main.gd" id="1"]
 [ext_resource type="SM64Handler" uid="uid://dssuryb827kaq" path="res://sm_64_handler.tres" id="2_r8jk2"]
-[ext_resource type="Script" path="res://addons/libsm64/mario/Mario.gd" id="3"]
-[ext_resource type="Script" path="res://addons/libsm64/handlers/StaticSurfacesHandler.gd" id="4"]
-[ext_resource type="Script" path="res://addons/libsm64/handlers/SurfaceObjectsHandler.gd" id="5_mxbmy"]
+[ext_resource type="Script" path="res://addons/libsm64/mario/mario.gd" id="3"]
+[ext_resource type="Script" path="res://addons/libsm64/handlers/static_surfaces_handler.gd" id="4"]
+[ext_resource type="Script" path="res://addons/libsm64/handlers/surface_objects_handler.gd" id="5_mxbmy"]
 
 [sub_resource type="BoxMesh" id="8"]
 size = Vector3(5, 10, 5)
