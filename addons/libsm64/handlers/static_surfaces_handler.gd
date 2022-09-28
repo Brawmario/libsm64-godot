@@ -12,8 +12,8 @@ func load_static_sufaces() -> void:
 		if not mesh_instance:
 			push_warning("Non MeshInstance3D in %s group" % static_surfaces_group)
 			continue
-		var mesh_faces: PackedVector3Array = mesh_instance.get_mesh().get_faces()
-		var offset: Vector3 = mesh_instance.global_transform.origin
+		var mesh_faces := mesh_instance.get_mesh().get_faces()
+		var offset := mesh_instance.global_transform.origin
 		for i in range(mesh_faces.size()):
 			mesh_faces[i] += offset
 		faces.append_array(mesh_faces)
