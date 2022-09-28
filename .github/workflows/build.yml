@@ -60,11 +60,12 @@ jobs:
         with:
           submodules: recursive
 
-      - name: (Windows) Patch libsm64 make
+      - name: (Windows) Patch libsm64
         if: ${{ startsWith(matrix.identifier, 'windows-') }}
         shell: sh
         run: |
           patch extension/libsm64/Makefile < extension/libsm64winmake.patch
+          patch extension/libsm64/src/libsm64.h < extension/libsm64mingw.patch
 
       - name: Compile libsm64
         shell: sh

@@ -1,0 +1,11 @@
+--- a/src/libsm64.h
++++ b/src/libsm64.h
+@@ -5,7 +5,7 @@
+ #include <stdint.h>
+ #include <stdbool.h>
+
+-#ifdef _WIN32
++#if defined(_WIN32) || defined(__MINGW32__)
+     #ifdef SM64_LIB_EXPORT
+         #define SM64_LIB_FN __declspec(dllexport)
+     #else
