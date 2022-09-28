@@ -1,0 +1,20 @@
+--- extension/libsm64/Makefile	2022-09-27 23:43:01.173434400 -0300
++++ extension/MakefileWin	2022-09-27 23:39:49.733027100 -0300
+@@ -4,7 +4,7 @@
+   CC      := musl-gcc
+   LDFLAGS := -lm -static -shared
+ else
+-  CC      := cc
++  CC      := x86_64-w64-mingw32-gcc
+   LDFLAGS := -lm -shared
+ endif
+ CFLAGS := -g -Wall -fPIC -DSM64_LIB_EXPORT
+@@ -29,7 +29,7 @@
+ TEST_SRCS := test/main.c test/context.c test/level.c
+ TEST_OBJS := $(foreach file,$(TEST_SRCS),$(BUILD_DIR)/$(file:.c=.o))
+ 
+-ifeq ($(OS),Windows_NT)
++ifeq ($(OS),$(OS))
+   LIB_FILE := $(DIST_DIR)/sm64.dll
+ endif
+ 

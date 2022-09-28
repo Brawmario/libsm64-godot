@@ -65,6 +65,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: (Windows) Patch libsm64 make
+        if: ${{ startsWith(matrix.identifier, 'windows-') }}
+        shell: sh
+        run: |
+          patch extension/libsm64/Makefile < extension/libsm64winmake.patch
+
       - name: Compile libsm64
         shell: sh
         run: |
@@ -73,13 +79,6 @@ jobs:
           cd ../..
           mkdir -p addons/libsm64/extension/bin
           cp extension/libsm64/dist/* addons/libsm64/extension/bin/ | true
-
-      - name: (Windows) Rename libsm64
-        if: ${{ startsWith(matrix.identifier, 'windows-') }}
-        shell: sh
-        run: |
-          mv addons/libsm64/extension/bin/libsm64.so addons/libsm64/extension/bin/sm64.dll
-          mv extension/libsm64/dist/libsm64.so extension/libsm64/dist/sm64.dll
 
       - name: Compile extension
         shell: sh
