@@ -17,37 +17,36 @@ jobs:
         include:
           - identifier: linux-debug
             name: Linux Debug
-            runner: ubuntu-18.04
+            runner: ubuntu-latest
             target: debug
             platform: linux
             arch: x86_64
           - identifier: linux-release
             name: Linux Release
-            runner: ubuntu-18.04
+            runner: ubuntu-latest
             target: release
             platform: linux
             arch: x86_64
           - identifier: windows-debug
             name: Windows Debug
-            runner: ubuntu-20.04
+            runner: windows-latest
             target: debug
             platform: windows
             arch: x86_64
           - identifier: windows-release
             name: Windows Release
-            runner: ubuntu-20.04
+            runner: windows-latest
             target: release
             platform: windows
             arch: x86_64
 
     steps:
-      - name: (Windows) Install mingw64
+      - name: (Windows) Set up MinGW
         if: ${{ startsWith(matrix.identifier, 'windows-') }}
-        shell: sh
-        run: |
-          sudo apt-get install mingw-w64
-          sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
-          sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+          static: 0
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -65,7 +64,7 @@ jobs:
           submodules: recursive
 
       - name: Compile libsm64
-        shell: sh
+        shell: bash
         run: |
           cd extension/libsm64
           make -j`nproc`
@@ -74,7 +73,7 @@ jobs:
           cp extension/libsm64/dist/* addons/libsm64/extension/bin/ | true
 
       - name: Compile extension
-        shell: sh
+        shell: bash
         run: |
           cd extension
           scons target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}' use_mingw=yes
@@ -88,13 +87,13 @@ jobs:
           cp /mingw64/bin/libwinpthread-1.dll  addons/libsm64/extension/bin/
 
       - name: Clean extension files
-        shell: sh
+        shell: bash
         run: |
           rm -rf extension
           rm addons/libsm64/extension/bin/liblib*.a | true
 
       - name: Copy extra files to addon
-        shell: sh
+        shell: bash
         run: |
           for addon in ${{ github.workspace }}/addons/libsm64/; do
             cp --no-clobber '${{ github.workspace }}/README.md' '${{ github.workspace }}/LICENSE' "$addon"
