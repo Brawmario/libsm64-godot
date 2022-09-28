@@ -14,7 +14,7 @@ func _ready() -> void:
 	$StaticSurfacesHandler.load_static_sufaces()
 	$SurfaceObjectsHandler.load_all_surface_objects()
 
-	for mario in get_tree().get_nodes_in_group("Mario"):
+	for mario in get_tree().get_nodes_in_group("libsm64_mario"):
 		mario.create()
 
 	$Objects/MovingPlatform/AnimationPlayer.play("Move")
