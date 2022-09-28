@@ -52,7 +52,7 @@ jobs:
         uses: actions/setup-python@v2
 
       - name: Set up SCons
-        shell: bash
+        shell: sh
         run: |
           python -c "import sys; print(sys.version)"
           python -m pip install scons
@@ -64,7 +64,7 @@ jobs:
           submodules: recursive
 
       - name: Compile libsm64
-        shell: bash
+        shell: sh
         run: |
           cd extension/libsm64
           make -j`nproc`
@@ -73,7 +73,7 @@ jobs:
           cp extension/libsm64/dist/* addons/libsm64/extension/bin/ | true
 
       - name: Compile extension
-        shell: bash
+        shell: sh
         run: |
           cd extension
           scons target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}' use_mingw=yes
@@ -87,13 +87,13 @@ jobs:
           cp /mingw64/bin/libwinpthread-1.dll  addons/libsm64/extension/bin/
 
       - name: Clean extension files
-        shell: bash
+        shell: sh
         run: |
           rm -rf extension
           rm addons/libsm64/extension/bin/liblib*.a | true
 
       - name: Copy extra files to addon
-        shell: bash
+        shell: sh
         run: |
           for addon in ${{ github.workspace }}/addons/libsm64/; do
             cp --no-clobber '${{ github.workspace }}/README.md' '${{ github.workspace }}/LICENSE' "$addon"
@@ -104,4 +104,4 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}
           path: |
-            ${{ github.workspace }}
+            ${{ github.workspace }}/addons/libsm64
