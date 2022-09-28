@@ -95,7 +95,7 @@ sm64_handler = ExtResource("2_r8jk2")
 camera = NodePath("../Camera3D")
 
 [node name="FileDialog" type="FileDialog" parent="."]
-title = "Open ROM"
+title = "Pick Super Mario 64 ROM file"
 size = Vector2i(335, 162)
 ok_button_text = "Open"
 mode_overrides_title = false
