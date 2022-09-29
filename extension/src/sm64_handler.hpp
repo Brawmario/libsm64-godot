@@ -5,6 +5,8 @@
 #include <godot_cpp/classes/image.hpp>
 #include <godot_cpp/classes/ref.hpp>
 
+#include <sm64_input.hpp>
+
 extern "C"
 {
 #include <libsm64.h>
@@ -59,7 +61,7 @@ public:
      *     "array_mesh": godot::Ref<godot::ArrayMesh>,
      * }
      */
-    godot::Dictionary mario_tick(int mario_id, godot::Dictionary inputs);
+    godot::Dictionary mario_tick(int mario_id, godot::Ref<SM64Input> input);
 
     void mario_delete(int mario_id);
 

@@ -7,6 +7,7 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/array_mesh.hpp>
 
+
 static void SM64DebugPrintFunction(const char *msg)
 {
     godot::UtilityFunctions::print(godot::String("[libsm64] ") + godot::String(msg) + godot::String("\n"));
@@ -212,26 +213,23 @@ int SM64Handler::mario_create(godot::Vector3 position)
     return sm64_mario_create(x, y, z);
 }
 
-godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary inputs)
+godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Ref<SM64Input> input)
 {
     godot::Dictionary ret;
     godot::Array mesh_array;
     struct SM64MarioState out_state;
 
-    godot::Vector2 cam_look = inputs["cam_look"];
-    godot::Vector2 stick = inputs["stick"];
-    bool a = inputs["a"];
-    bool b = inputs["b"];
-    bool z = inputs["z"];
+    godot::Vector2 cam_look = input->get_cam_look();
+    godot::Vector2 stick = input->get_stick();
 
     struct SM64MarioInputs mario_inputs = {
         cam_look.y, // camLookX
         -cam_look.x, // camLookZ
         stick.x,
         stick.y,
-        (uint8_t) a,
-        (uint8_t) b,
-        (uint8_t) z
+        (uint8_t) input->get_a(),
+        (uint8_t) input->get_b(),
+        (uint8_t) input->get_z()
     };
 
     sm64_mario_tick(mario_id, &mario_inputs, &out_state, &mario_geometry);
@@ -390,7 +388,7 @@ void SM64Handler::_bind_methods()
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "scale_factor"), "set_scale_factor", "get_scale_factor");
     godot::ClassDB::bind_method(godot::D_METHOD("static_surfaces_load", "vertexes"), &SM64Handler::static_surfaces_load);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position"), &SM64Handler::mario_create);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "inputs"), &SM64Handler::mario_tick);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "input"), &SM64Handler::mario_tick);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &SM64Handler::mario_delete);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation_degrees"), &SM64Handler::surface_object_create);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation_degrees"), &SM64Handler::surface_object_move);

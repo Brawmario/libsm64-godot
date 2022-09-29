@@ -30,7 +30,7 @@ var mesh: ArrayMesh
 var material: StandardMaterial3D
 var id := -1
 var time_since_last_tick := 0.0
-
+var _mario_input := SM64Input.new()
 
 func _ready() -> void:
 	mesh_instance = MeshInstance3D.new()
@@ -53,24 +53,16 @@ func _physics_process(delta: float) -> void:
 
 	var stick_x := Input.get_action_strength(stick_left) - Input.get_action_strength(stick_right)
 	var stick_y := Input.get_action_strength(stick_up) - Input.get_action_strength(stick_down)
-	var stick := Vector2(stick_x, stick_y)
+	_mario_input.stick = Vector2(stick_x, stick_y)
 
 	var look_direction := camera.get_global_transform().basis.z
-	var cam_look := Vector2(look_direction.x, look_direction.z)
+	_mario_input.cam_look = Vector2(look_direction.x, look_direction.z)
 
-	var a := Input.is_action_pressed(input_a)
-	var b := Input.is_action_pressed(input_b)
-	var z := Input.is_action_pressed(input_z)
+	_mario_input.a = Input.is_action_pressed(input_a)
+	_mario_input.b = Input.is_action_pressed(input_b)
+	_mario_input.z = Input.is_action_pressed(input_z)
 
-	var inputs := {
-		"cam_look": cam_look,
-		"stick": stick,
-		"a": a,
-		"b": b,
-		"z": z,
-	}
-
-	var tick_output: Dictionary = sm64_handler.mario_tick(id, inputs)
+	var tick_output: Dictionary = sm64_handler.mario_tick(id, _mario_input)
 
 	position = tick_output["position"] as Vector3
 
