@@ -12,6 +12,7 @@
 #include <godot_cpp/godot.hpp>
 
 #include "SM64Handler.hpp"
+#include "sm64_input.hpp"
 
 using namespace godot;
 
@@ -20,6 +21,7 @@ void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
 		return;
 	}
 
+	ClassDB::register_class<SM64Input>();
 	ClassDB::register_class<SM64Handler>();
 }
 
