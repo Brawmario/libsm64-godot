@@ -2,7 +2,6 @@ class_name SurfaceObjectsHandler
 extends Node
 
 const FPS_30_DELTA := 1.0/30.0
-const RAD_TO_DEG_FACTOR := 180.0/PI
 
 ## SM64Handler instance
 @export var sm64_handler: Resource
@@ -27,16 +26,16 @@ func _update_surface_objects() -> void:
 	for i in range(0, _surface_objects_ids.size()):
 		var id := _surface_objects_ids[i]
 		var position := _surface_objects_refs[i].global_transform.origin
-		var rotation_degrees := _surface_objects_refs[i].rotation * RAD_TO_DEG_FACTOR
-		sm64_handler.surface_object_move(id, position, rotation_degrees)
+		var rotation := _surface_objects_refs[i].rotation
+		sm64_handler.surface_object_move(id, position, rotation)
 
 
 ## Load MeshInstance3D into the SM64Handler instance
 func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	var mesh_faces := mesh_instance.get_mesh().get_faces()
 	var position := mesh_instance.global_transform.origin
-	var rotation_degrees := mesh_instance.rotation * RAD_TO_DEG_FACTOR
-	var surface_object_id: int = sm64_handler.surface_object_create(mesh_faces, position, rotation_degrees)
+	var rotation := mesh_instance.rotation
+	var surface_object_id: int = sm64_handler.surface_object_create(mesh_faces, position, rotation)
 	_surface_objects_ids.push_back(surface_object_id)
 	_surface_objects_refs.push_back(mesh_instance)
 	# Clean up automaticaly if MeshInstance3D is removed from tree or freed

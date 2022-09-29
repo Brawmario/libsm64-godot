@@ -65,8 +65,8 @@ public:
 
     void mario_delete(int mario_id);
 
-    int surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation_degrees);
-    void surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation_degrees);
+    int surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation);
+    void surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation);
     void surface_object_delete(int object_id);
 
 protected:

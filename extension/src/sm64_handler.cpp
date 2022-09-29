@@ -4,6 +4,7 @@
 #include <cstdio>
 
 #include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/core/math.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/array_mesh.hpp>
 
@@ -236,7 +237,7 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Ref<SM64Input> in
 
     ret["position"]   = godot::Vector3(-out_state.position[2] / scale_factor, out_state.position[1] / scale_factor, out_state.position[0] / scale_factor);
     ret["velocity"]   = godot::Vector3(-out_state.velocity[2] / scale_factor, out_state.velocity[1] / scale_factor, out_state.velocity[0] / scale_factor);
-    ret["face_angle"] = (real_t) out_state.faceAngle;
+    ret["face_angle"] = (real_t) godot::Math::deg2rad(out_state.faceAngle);
     ret["health"]     = (int) out_state.health;
 
     mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
@@ -304,7 +305,7 @@ void SM64Handler::mario_delete(int mario_id)
     sm64_mario_delete(mario_id);
 }
 
-int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation_degrees)
+int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation)
 {
     struct SM64SurfaceObject surface_object;
     int id;
@@ -344,9 +345,9 @@ int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot
     surface_object.transform.position[1] =  position.y * scale_factor;
     surface_object.transform.position[2] = -position.x * scale_factor;
 
-    surface_object.transform.eulerRotation[0] = -rotation_degrees.z;
-    surface_object.transform.eulerRotation[1] = -rotation_degrees.y;
-    surface_object.transform.eulerRotation[2] =  rotation_degrees.x;
+    surface_object.transform.eulerRotation[0] = -godot::Math::rad2deg(rotation.z);
+    surface_object.transform.eulerRotation[1] = -godot::Math::rad2deg(rotation.y);
+    surface_object.transform.eulerRotation[2] =  godot::Math::rad2deg(rotation.x);
 
     id = sm64_surface_object_create(&surface_object);
 
@@ -355,7 +356,7 @@ int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot
     return id;
 }
 
-void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation_degrees)
+void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation)
 {
     struct SM64ObjectTransform transform;
 
@@ -363,9 +364,9 @@ void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, go
     transform.position[1] =  position.y * scale_factor;
     transform.position[2] = -position.x * scale_factor;
 
-    transform.eulerRotation[0] = -rotation_degrees.z;
-    transform.eulerRotation[1] = -rotation_degrees.y;
-    transform.eulerRotation[2] =  rotation_degrees.x;
+    transform.eulerRotation[0] = -godot::Math::rad2deg(rotation.z);
+    transform.eulerRotation[1] = -godot::Math::rad2deg(rotation.y);
+    transform.eulerRotation[2] =  godot::Math::rad2deg(rotation.x);
 
     sm64_surface_object_move(object_id, &transform);
 }
@@ -390,7 +391,7 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position"), &SM64Handler::mario_create);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "input"), &SM64Handler::mario_tick);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &SM64Handler::mario_delete);
-    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation_degrees"), &SM64Handler::surface_object_create);
-    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation_degrees"), &SM64Handler::surface_object_move);
+    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation"), &SM64Handler::surface_object_create);
+    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);
 }
