@@ -1,4 +1,4 @@
-#include <SM64Handler.hpp>
+#include <sm64_handler.hpp>
 
 #include <string>
 #include <cstdio>

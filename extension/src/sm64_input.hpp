@@ -1,3 +1,6 @@
+#ifndef LIBSM64GD_SM64INPUT_H
+#define LIBSM64GD_SM64INPUT_H
+
 #include <godot_cpp/classes/ref.hpp>
 
 #ifdef WIN32
@@ -36,3 +39,5 @@ private:
     bool b;
     bool z;
 };
+
+#endif // LIBSM64GD_SM64INPUT_H

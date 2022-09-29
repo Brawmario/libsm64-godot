@@ -1,3 +1,6 @@
+#ifndef LIBSM64GD_SM64HANDLER_H
+#define LIBSM64GD_SM64HANDLER_H
+
 #include <godot_cpp/classes/resource.hpp>
 #include <godot_cpp/classes/image.hpp>
 #include <godot_cpp/classes/ref.hpp>
@@ -80,3 +83,5 @@ private:
     godot::PackedColorArray mario_color;
     godot::PackedVector2Array mario_uv;
 };
+
+#endif // LIBSM64GD_SM64HANDLER_H
