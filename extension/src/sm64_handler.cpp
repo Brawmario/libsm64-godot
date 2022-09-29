@@ -240,11 +240,21 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Ref<SM64Input> in
     ret["face_angle"] = (real_t) godot::Math::deg2rad(out_state.faceAngle);
     ret["health"]     = (int) out_state.health;
 
-    mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
-    mario_position.resize(mario_geometry.numTrianglesUsed*3);
-    mario_normal.resize(mario_geometry.numTrianglesUsed*3);
-    mario_color.resize(mario_geometry.numTrianglesUsed*3);
-    mario_uv.resize(mario_geometry.numTrianglesUsed*3);
+    {
+        size_t array_size = mario_geometry.numTrianglesUsed * 3;
+
+        if (mesh_array.size() != godot::ArrayMesh::ARRAY_MAX)
+            mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
+        if (mario_position.size() != array_size)
+            mario_position.resize(array_size);
+        if (mario_normal.size() != array_size)
+            mario_normal.resize(array_size);
+        if (mario_color.size() != array_size)
+            mario_color.resize(array_size);
+        if (mario_uv.size() != array_size)
+            mario_uv.resize(array_size);
+    }
+
 
     invert_vertex_order_3d(mario_geometry.position, mario_geometry.numTrianglesUsed);
     invert_vertex_order_3d(mario_geometry.normal, mario_geometry.numTrianglesUsed);
