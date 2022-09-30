@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var sm64_handler: Resource
+@export var sm64_handler: SM64Handler
 
 @onready var rom_picker: FileDialog = $FileDialog
 

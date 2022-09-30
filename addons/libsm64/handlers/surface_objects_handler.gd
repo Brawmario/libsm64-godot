@@ -1,10 +1,11 @@
 class_name SurfaceObjectsHandler
 extends Node
 
+
 const FPS_30_DELTA := 1.0/30.0
 
 ## SM64Handler instance
-@export var sm64_handler: Resource
+@export var sm64_handler: SM64Handler
 ## Group name that contains the MeshInstance3D that are part of the scene's surface objects
 @export var surface_objects_group := "libsm64_surface_objects"
 

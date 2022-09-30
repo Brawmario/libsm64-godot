@@ -2,10 +2,11 @@ class_name Mario3D
 extends Node3D
 @icon("res://addons/libsm64/mario/mario-godot.svg")
 
+
 const FPS_30_DELTA = 1.0/30.0
 
 ## SM64Handler instance
-@export var sm64_handler: Resource
+@export var sm64_handler: SM64Handler
 ## Camera instance that follows Mario
 @export var camera: Camera3D
 
@@ -34,6 +35,7 @@ var _material: StandardMaterial3D
 var _id := -1
 var _time_since_last_tick := 0.0
 var _mario_input := SM64Input.new()
+
 
 func _ready() -> void:
 	_mesh_instance = MeshInstance3D.new()
@@ -65,7 +67,7 @@ func _physics_process(delta: float) -> void:
 	_mario_input.b = Input.is_action_pressed(input_b)
 	_mario_input.z = Input.is_action_pressed(input_z)
 
-	var tick_output: Dictionary = sm64_handler.mario_tick(_id, _mario_input)
+	var tick_output := sm64_handler.mario_tick(_id, _mario_input)
 
 	position = tick_output["position"] as Vector3
 	velocity = tick_output["velocity"] as Vector3
