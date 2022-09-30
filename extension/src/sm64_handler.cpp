@@ -334,7 +334,7 @@ int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot
         // TODO: export surfaces types to function argument
         surface_array[j].type = 0x0000; // SURFACE_DEFAULT
         surface_array[j].force = 0;
-        surface_array[j].terrain = 0x0002; // TERRAIN_SNOW
+        surface_array[j].terrain = 0x0000; // TERRAIN_GRASS
         surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * scale_factor);
         surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * scale_factor);
         surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * scale_factor);
