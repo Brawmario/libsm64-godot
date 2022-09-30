@@ -3,7 +3,6 @@
 
 #include <godot_cpp/classes/resource.hpp>
 #include <godot_cpp/classes/image.hpp>
-#include <godot_cpp/classes/ref.hpp>
 
 #include <sm64_input.hpp>
 
@@ -44,7 +43,7 @@ public:
      * @brief Tick Mario with the provided ID
      * 
      * @param mario_id Ticked Mario's ID.
-     * @param inputs Mario's inputs. format:
+     * @param input Mario's inputs. format:
      * {
      *     "cam_look": godot::Vector2 (Camera's X and Z coordinates in Godot),
      *     "stick":    godot::Vector2,
