@@ -10,14 +10,14 @@ const FPS_30_DELTA := 1.0/30.0
 
 var _surface_objects_ids: Array[int] = []
 var _surface_objects_refs: Array[MeshInstance3D] = []
-var time_since_last_tick := 0.0
+var _time_since_last_tick := 0.0
 
 
 func _physics_process(delta: float) -> void:
-	time_since_last_tick += delta
-	if time_since_last_tick < FPS_30_DELTA:
+	_time_since_last_tick += delta
+	if _time_since_last_tick < FPS_30_DELTA:
 		return
-	time_since_last_tick -= FPS_30_DELTA
+	_time_since_last_tick -= FPS_30_DELTA
 
 	_update_surface_objects()
 

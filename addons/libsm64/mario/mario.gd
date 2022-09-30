@@ -25,30 +25,33 @@ const FPS_30_DELTA = 1.0/30.0
 ## Action equivalent to pushing the Z button
 @export var input_z := "mario_z"
 
-var mesh_instance: MeshInstance3D
-var mesh: ArrayMesh
-var material: StandardMaterial3D
-var id := -1
-var time_since_last_tick := 0.0
+var velocity := Vector3()
+var health := 0x0880
+
+var _mesh_instance: MeshInstance3D
+var _mesh: ArrayMesh
+var _material: StandardMaterial3D
+var _id := -1
+var _time_since_last_tick := 0.0
 var _mario_input := SM64Input.new()
 
 func _ready() -> void:
-	mesh_instance = MeshInstance3D.new()
-	add_child(mesh_instance)
-	mesh_instance.set_as_top_level(true)
-	mesh_instance.position = Vector3.ZERO
+	_mesh_instance = MeshInstance3D.new()
+	add_child(_mesh_instance)
+	_mesh_instance.set_as_top_level(true)
+	_mesh_instance.position = Vector3.ZERO
 
-	mesh = ArrayMesh.new()
-	mesh_instance.mesh = mesh
+	_mesh = ArrayMesh.new()
+	_mesh_instance.mesh = _mesh
 
 
 func _physics_process(delta: float) -> void:
-	time_since_last_tick += delta
-	if time_since_last_tick < FPS_30_DELTA:
+	_time_since_last_tick += delta
+	if _time_since_last_tick < FPS_30_DELTA:
 		return
-	time_since_last_tick -= FPS_30_DELTA
+	_time_since_last_tick -= FPS_30_DELTA
 
-	if id < 0:
+	if _id < 0:
 		return
 
 	var stick_x := Input.get_action_strength(stick_left) - Input.get_action_strength(stick_right)
@@ -62,14 +65,17 @@ func _physics_process(delta: float) -> void:
 	_mario_input.b = Input.is_action_pressed(input_b)
 	_mario_input.z = Input.is_action_pressed(input_z)
 
-	var tick_output: Dictionary = sm64_handler.mario_tick(id, _mario_input)
+	var tick_output: Dictionary = sm64_handler.mario_tick(_id, _mario_input)
 
 	position = tick_output["position"] as Vector3
+	velocity = tick_output["velocity"] as Vector3
+	rotation.y = tick_output["face_angle"] as float
+	health = tick_output["health"] as float
 
-	var mesh_array: Array = tick_output["mesh_array"]
-	mesh.clear_surfaces()
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_array)
-	mesh_instance.set_surface_override_material(0, material)
+	var mesh_array := tick_output["mesh_array"] as Array
+	_mesh.clear_surfaces()
+	_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_array)
+	_mesh_instance.set_surface_override_material(0, _material)
 
 
 ## Globally initialize the libsm64
@@ -81,8 +87,8 @@ func global_init() -> void:
 ## Create Mario (requires initializing the libsm64 via the global_init function)
 func create() -> void:
 	if sm64_handler and sm64_handler.is_init():
-		id = sm64_handler.mario_create(to_global(position))
-		if id < 0:
+		_id = sm64_handler.mario_create(to_global(position))
+		if _id < 0:
 			return
 
 		var texture := ImageTexture.create_from_image(sm64_handler.get_mario_image())
@@ -91,6 +97,6 @@ func create() -> void:
 		texture_material.albedo_texture = texture
 		texture_material.transparency = true
 
-		material = StandardMaterial3D.new()
-		material.vertex_color_use_as_albedo = true
-		material.next_pass = texture_material
+		_material = StandardMaterial3D.new()
+		_material.vertex_color_use_as_albedo = true
+		_material.next_pass = texture_material
