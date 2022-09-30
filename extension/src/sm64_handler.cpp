@@ -237,7 +237,7 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Ref<SM64Input> in
 
     ret["position"]   = godot::Vector3(-out_state.position[2] / scale_factor, out_state.position[1] / scale_factor, out_state.position[0] / scale_factor);
     ret["velocity"]   = godot::Vector3(-out_state.velocity[2] / scale_factor, out_state.velocity[1] / scale_factor, out_state.velocity[0] / scale_factor);
-    ret["face_angle"] = (real_t) godot::Math::deg2rad(out_state.faceAngle);
+    ret["face_angle"] = (real_t) out_state.faceAngle;
     ret["health"]     = (int) out_state.health;
 
     {
