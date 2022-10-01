@@ -42,6 +42,7 @@ env.Append(CPPPATH=["src/"])
 sources = (Glob("src/*.cpp"))
 
 # libsm64 settings (run make on the libsm64 folder before attempting compilation)
+env.Append(CPPPATH=["./"])
 env.Append(CPPPATH=["libsm64/dist/include/"])
 env.Append(LIBPATH=["libsm64/dist/"])
 env.Append(LIBS=["libsm64"])

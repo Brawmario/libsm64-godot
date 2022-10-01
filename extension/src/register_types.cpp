@@ -8,6 +8,7 @@
 
 #include <sm64_input.hpp>
 #include <sm64_handler.hpp>
+#include <sm64_surface_properties.hpp>
 
 using namespace godot;
 
@@ -18,6 +19,7 @@ void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
 
     ClassDB::register_class<SM64Input>();
     ClassDB::register_class<SM64Handler>();
+    ClassDB::register_class<SM64SurfaceProperties>();
 }
 
 void uninitialize_libsm64gd_module(ModuleInitializationLevel p_level) {
