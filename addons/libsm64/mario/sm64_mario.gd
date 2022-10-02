@@ -1,4 +1,4 @@
-class_name Mario3D
+class_name SM64Mario
 extends Node3D
 @icon("res://addons/libsm64/mario/mario-godot.svg")
 

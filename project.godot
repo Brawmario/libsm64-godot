@@ -10,24 +10,30 @@ config_version=5
 
 _global_script_classes=[{
 "base": "Node3D",
-"class": &"Mario3D",
+"class": &"SM64Mario",
 "language": &"GDScript",
-"path": "res://addons/libsm64/mario/mario.gd"
+"path": "res://addons/libsm64/mario/sm64_mario.gd"
 }, {
 "base": "Node",
-"class": &"StaticSurfaceHandler",
+"class": &"SM64StaticSurfaceHandler",
 "language": &"GDScript",
-"path": "res://addons/libsm64/handlers/static_surfaces_handler.gd"
+"path": "res://addons/libsm64/handlers/sm6_static_surfaces_handler.gd"
 }, {
 "base": "Node",
-"class": &"SurfaceObjectsHandler",
+"class": &"SM64SurfaceObjectsHandler",
 "language": &"GDScript",
-"path": "res://addons/libsm64/handlers/surface_objects_handler.gd"
+"path": "res://addons/libsm64/handlers/sm64_surface_objects_handler.gd"
+}, {
+"base": "Node",
+"class": &"SM64SurfacePropertiesComponent",
+"language": &"GDScript",
+"path": "res://addons/libsm64/components/sm64_surface_properties_component.gd"
 }]
 _global_script_class_icons={
-"Mario3D": "res://addons/libsm64/mario/mario-godot.svg",
-"StaticSurfaceHandler": "",
-"SurfaceObjectsHandler": ""
+"SM64Mario": "res://addons/libsm64/mario/mario-godot.svg",
+"SM64StaticSurfaceHandler": "",
+"SM64SurfaceObjectsHandler": "",
+"SM64SurfacePropertiesComponent": ""
 }
 
 [application]

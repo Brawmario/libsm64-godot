@@ -11,8 +11,8 @@ func _ready() -> void:
 	sm64_handler.rom_filename = rom_picker.current_path
 
 	sm64_handler.global_init()
-	$StaticSurfacesHandler.load_static_sufaces()
-	$SurfaceObjectsHandler.load_all_surface_objects()
+	$SM64StaticSurfacesHandler.load_static_sufaces()
+	$SM64SurfaceObjectsHandler.load_all_surface_objects()
 
 	for mario in get_tree().get_nodes_in_group("libsm64_mario"):
 		mario.create()

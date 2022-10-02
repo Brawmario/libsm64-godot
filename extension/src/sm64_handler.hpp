@@ -5,6 +5,7 @@
 #include <godot_cpp/classes/image.hpp>
 
 #include <sm64_input.hpp>
+#include <sm64_surface_properties.hpp>
 
 extern "C"
 {
@@ -35,13 +36,13 @@ public:
     real_t get_scale_factor() const;
 
 
-    void static_surfaces_load(godot::PackedVector3Array vertexes);
+    void static_surfaces_load(godot::PackedVector3Array vertexes, godot::TypedArray<SM64SurfaceProperties> surface_properties_array);
 
     int mario_create(godot::Vector3 position);
 
     /**
      * @brief Tick Mario with the provided ID
-     * 
+     *
      * @param mario_id Ticked Mario's ID.
      * @param input Mario's inputs. format:
      * {
@@ -64,7 +65,7 @@ public:
 
     void mario_delete(int mario_id);
 
-    int surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation);
+    int surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> suface_properties_array);
     void surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation);
     void surface_object_delete(int object_id);
 

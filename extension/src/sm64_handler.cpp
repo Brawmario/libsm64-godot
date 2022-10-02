@@ -127,7 +127,7 @@ void SM64Handler::global_init()
     mario_texture_packed.resize(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
     for (size_t i = 0; i < 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT; i++)
         mario_texture_packed.set(i, mario_texture_raw[i]);
-    
+
     mario_image.instantiate();
     mario_image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture_packed);
 
@@ -167,9 +167,15 @@ real_t SM64Handler::get_scale_factor() const
     return scale_factor;
 }
 
-void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes)
+void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
 {
     struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes.size() / 3);
+    godot::Ref<SM64SurfaceProperties> default_surface_properties;
+
+    default_surface_properties.instantiate();
+
+    if (surface_properties_array.size() != vertexes.size() / 3)
+        surface_properties_array.resize(vertexes.size() / 3);
 
     invert_vertex_order(vertexes);
 
@@ -181,10 +187,13 @@ void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes)
                 || !check_in_bounds(vertexes[i+2] * scale_factor))
             continue;
 
-        // TODO: export surfaces types to function argument
-        surface_array[j].type = 0x0000; // SURFACE_DEFAULT
-        surface_array[j].force = 0;
-        surface_array[j].terrain = 0x0000; // TERRAIN_GRASS
+        godot::Ref<SM64SurfaceProperties> surface_properties = surface_properties_array[i/3];
+        if (surface_properties.is_null())
+            surface_properties = default_surface_properties;
+
+        surface_array[j].type = (int16_t) surface_properties->get_surface_type();
+        surface_array[j].force = (int16_t) surface_properties->get_force();
+        surface_array[j].terrain = (int16_t) surface_properties->get_terrain_type();
         surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * scale_factor);
         surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * scale_factor);
         surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * scale_factor);
@@ -315,11 +324,17 @@ void SM64Handler::mario_delete(int mario_id)
     sm64_mario_delete(mario_id);
 }
 
-int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation)
+int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
 {
     struct SM64SurfaceObject surface_object;
     int id;
     struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes.size() / 3);
+    godot::Ref<SM64SurfaceProperties> default_surface_properties;
+
+    default_surface_properties.instantiate();
+
+    if (surface_properties_array.size() != vertexes.size() / 3)
+        surface_properties_array.resize(vertexes.size() / 3);
 
     invert_vertex_order(vertexes);
 
@@ -331,10 +346,13 @@ int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot
                 || !check_in_bounds(vertexes[i+2] * scale_factor))
             continue;
 
-        // TODO: export surfaces types to function argument
-        surface_array[j].type = 0x0000; // SURFACE_DEFAULT
-        surface_array[j].force = 0;
-        surface_array[j].terrain = 0x0000; // TERRAIN_GRASS
+        godot::Ref<SM64SurfaceProperties> surface_properties = surface_properties_array[i/3];
+        if (surface_properties.is_null())
+            surface_properties = default_surface_properties;
+
+        surface_array[j].type = (int16_t) surface_properties->get_surface_type();
+        surface_array[j].force = (int16_t) surface_properties->get_force();
+        surface_array[j].terrain = (int16_t) surface_properties->get_terrain_type();
         surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * scale_factor);
         surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * scale_factor);
         surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * scale_factor);
@@ -397,11 +415,11 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_scale_factor", "value"), &SM64Handler::set_scale_factor);
     godot::ClassDB::bind_method(godot::D_METHOD("get_scale_factor"), &SM64Handler::get_scale_factor);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "scale_factor"), "set_scale_factor", "get_scale_factor");
-    godot::ClassDB::bind_method(godot::D_METHOD("static_surfaces_load", "vertexes"), &SM64Handler::static_surfaces_load);
+    godot::ClassDB::bind_method(godot::D_METHOD("static_surfaces_load", "vertexes", "surface_properties_array"), &SM64Handler::static_surfaces_load);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position"), &SM64Handler::mario_create);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "input"), &SM64Handler::mario_tick);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &SM64Handler::mario_delete);
-    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation"), &SM64Handler::surface_object_create);
+    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation", "surface_properties_array"), &SM64Handler::surface_object_create);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);
 }

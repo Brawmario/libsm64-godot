@@ -1,4 +1,4 @@
-class_name SurfaceObjectsHandler
+class_name SM64SurfaceObjectsHandler
 extends Node
 
 
@@ -12,6 +12,7 @@ const FPS_30_DELTA := 1.0/30.0
 var _surface_objects_ids: Array[int] = []
 var _surface_objects_refs: Array[MeshInstance3D] = []
 var _time_since_last_tick := 0.0
+var _default_surface_properties := SM64SurfaceProperties.new()
 
 
 func _physics_process(delta: float) -> void:
@@ -24,7 +25,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _update_surface_objects() -> void:
-	for i in range(0, _surface_objects_ids.size()):
+	for i in range(_surface_objects_ids.size()):
 		var id := _surface_objects_ids[i]
 		var position := _surface_objects_refs[i].global_transform.origin
 		var rotation := _surface_objects_refs[i].rotation
@@ -36,9 +37,17 @@ func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	var mesh_faces := mesh_instance.get_mesh().get_faces()
 	var position := mesh_instance.global_transform.origin
 	var rotation := mesh_instance.rotation
-	var surface_object_id: int = sm64_handler.surface_object_create(mesh_faces, position, rotation)
+
+	var surface_properties := _find_surface_properties(mesh_instance)
+	var surface_properties_array: Array[SM64SurfaceProperties] = []
+	surface_properties_array.resize(mesh_faces.size() / 3)
+	surface_properties_array.fill(surface_properties)
+
+	var surface_object_id := sm64_handler.surface_object_create(mesh_faces, position, rotation, surface_properties_array)
+
 	_surface_objects_ids.push_back(surface_object_id)
 	_surface_objects_refs.push_back(mesh_instance)
+
 	# Clean up automaticaly if MeshInstance3D is removed from tree or freed
 	mesh_instance.tree_exiting.connect(delete_surface_object.bind(mesh_instance), CONNECT_ONE_SHOT)
 
@@ -72,3 +81,11 @@ func delete_all_surface_objects() -> void:
 
 	_surface_objects_refs.clear()
 	_surface_objects_ids.clear()
+
+
+func _find_surface_properties(node: Node) -> SM64SurfaceProperties:
+	for child in node.get_children():
+		if child is SM64SurfacePropertiesComponent:
+			return child.surface_properties
+
+	return _default_surface_properties

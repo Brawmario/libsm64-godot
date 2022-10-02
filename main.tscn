@@ -1,20 +1,34 @@
-[gd_scene load_steps=13 format=3 uid="uid://ckil7mvcywi75"]
+[gd_scene load_steps=19 format=3 uid="uid://rrg4n1a8ovj6"]
 
 [ext_resource type="Script" path="res://main.gd" id="1"]
 [ext_resource type="SM64Handler" uid="uid://dssuryb827kaq" path="res://sm_64_handler.tres" id="2_r8jk2"]
-[ext_resource type="Script" path="res://addons/libsm64/mario/mario.gd" id="3"]
-[ext_resource type="Script" path="res://addons/libsm64/handlers/static_surfaces_handler.gd" id="4"]
-[ext_resource type="Script" path="res://addons/libsm64/handlers/surface_objects_handler.gd" id="5_mxbmy"]
+[ext_resource type="Script" path="res://addons/libsm64/mario/sm64_mario.gd" id="3"]
+[ext_resource type="Script" path="res://addons/libsm64/handlers/sm6_static_surfaces_handler.gd" id="4"]
+[ext_resource type="Script" path="res://addons/libsm64/components/sm64_surface_properties_component.gd" id="4_c4hy1"]
+[ext_resource type="Texture2D" uid="uid://d0ipccf6g5cxx" path="res://icon.svg" id="4_wg8r1"]
+[ext_resource type="SM64SurfaceProperties" uid="uid://bs00vmksj0yos" path="res://burning_sm_64_surface_properties.tres" id="5_p7agb"]
+[ext_resource type="Script" path="res://addons/libsm64/handlers/sm64_surface_objects_handler.gd" id="5_ubqa7"]
 
 [sub_resource type="BoxMesh" id="8"]
 size = Vector3(5, 10, 5)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pcbbo"]
+albedo_texture = ExtResource("4_wg8r1")
+
 [sub_resource type="PlaneMesh" id="7"]
+material = SubResource("StandardMaterial3D_pcbbo")
 size = Vector2(40, 30)
 
 [sub_resource type="PrismMesh" id="9"]
 left_to_right = 1.0
 size = Vector3(10, 10, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lirrq"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ot04n"]
+material = SubResource("StandardMaterial3D_lirrq")
+size = Vector2(5, 5)
 
 [sub_resource type="BoxMesh" id="10"]
 size = Vector3(5, 2, 5)
@@ -89,7 +103,7 @@ sm64_handler = ExtResource("2_r8jk2")
 transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 20, 20)
 current = true
 
-[node name="Mario3D" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
+[node name="SM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 script = ExtResource("3")
 sm64_handler = ExtResource("2_r8jk2")
 camera = NodePath("../Camera3D")
@@ -118,6 +132,15 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 5, -10)
 mesh = SubResource("9")
 
+[node name="FireFloor" type="MeshInstance3D" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 0, 12.5)
+mesh = SubResource("PlaneMesh_ot04n")
+skeleton = NodePath("../..")
+
+[node name="SM64SurfacePropertiesComponent" type="Node" parent="StaticSurfaces/FireFloor"]
+script = ExtResource("4_c4hy1")
+surface_properties = ExtResource("5_p7agb")
+
 [node name="Objects" type="Node3D" parent="."]
 
 [node name="MovingPlatform" type="MeshInstance3D" parent="Objects" groups=["libsm64_surface_objects"]]
@@ -130,15 +153,15 @@ libraries = {
 "": SubResource("AnimationLibrary_ehrq2")
 }
 
-[node name="StaticSurfacesHandler" type="Node" parent="."]
-script = ExtResource("4")
-sm64_handler = ExtResource("2_r8jk2")
-
-[node name="SurfaceObjectsHandler" type="Node" parent="."]
-script = ExtResource("5_mxbmy")
-sm64_handler = ExtResource("2_r8jk2")
-
 [node name="OmniLight3d" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 light_energy = 20.0
 omni_range = 50.0
+
+[node name="SM64StaticSurfacesHandler" type="Node" parent="."]
+script = ExtResource("4")
+sm64_handler = ExtResource("2_r8jk2")
+
+[node name="SM64SurfaceObjectsHandler" type="Node" parent="."]
+script = ExtResource("5_ubqa7")
+sm64_handler = ExtResource("2_r8jk2")
