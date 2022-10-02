@@ -35,6 +35,7 @@ var _material: StandardMaterial3D
 var _id := -1
 var _time_since_last_tick := 0.0
 var _mario_input := SM64Input.new()
+var _mario_image: Image
 
 
 func _ready() -> void:
@@ -93,7 +94,8 @@ func create() -> void:
 		if _id < 0:
 			return
 
-		var texture := ImageTexture.create_from_image(sm64_handler.get_mario_image())
+		_mario_image = sm64_handler.get_mario_image()
+		var texture := ImageTexture.create_from_image(_mario_image)
 
 		var texture_material := StandardMaterial3D.new()
 		texture_material.albedo_texture = texture
