@@ -38,7 +38,7 @@ public:
 
     void static_surfaces_load(godot::PackedVector3Array vertexes, godot::TypedArray<SM64SurfaceProperties> surface_properties_array);
 
-    int mario_create(godot::Vector3 position);
+    int mario_create(godot::Vector3 position, godot::Vector3 rotation);
 
     /**
      * @brief Tick Mario with the provided ID

@@ -9,6 +9,26 @@
 #include <godot_cpp/classes/array_mesh.hpp>
 
 
+static struct SM64TextureAtlasInfo mario_texture_atlas_info = {
+    .offset             = 0x114750,
+    .numUsedTextures    = 11,
+    .atlasWidth         = 11*64,
+    .atlasHeight        = 64,
+    .texInfos = {
+        { .offset = 144, .width = 64, .height = 32, .format = FORMAT_RGBA },
+        { .offset = 4240, .width = 32, .height = 32, .format = FORMAT_RGBA },
+        { .offset = 6288, .width = 32, .height = 32, .format = FORMAT_RGBA },
+        { .offset = 8336, .width = 32, .height = 32, .format = FORMAT_RGBA },
+        { .offset = 10384, .width = 32, .height = 32, .format = FORMAT_RGBA },
+        { .offset = 12432, .width = 32, .height = 32, .format = FORMAT_RGBA },
+        { .offset = 14480, .width = 32, .height = 32, .format = FORMAT_RGBA },
+        { .offset = 16528, .width = 32, .height = 32, .format = FORMAT_RGBA },
+        { .offset = 30864, .width = 32, .height = 32, .format = FORMAT_RGBA },
+        { .offset = 32912, .width = 32, .height = 64, .format = FORMAT_RGBA },
+        { .offset = 37008, .width = 32, .height = 64, .format = FORMAT_RGBA },
+    }
+};
+
 static void SM64DebugPrintFunction(const char *msg)
 {
     godot::UtilityFunctions::print(godot::String("[libsm64] ") + godot::String(msg) + godot::String("\n"));
@@ -121,7 +141,8 @@ void SM64Handler::global_init()
 
     uint8_t *mario_texture_raw = (uint8_t *) malloc(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
 
-    sm64_global_init(rom, mario_texture_raw, SM64DebugPrintFunction);
+    sm64_global_init(rom, SM64DebugPrintFunction);
+    sm64_texture_load(rom, &mario_texture_atlas_info, mario_texture_raw);
 
     godot::PackedByteArray mario_texture_packed;
     mario_texture_packed.resize(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
@@ -193,16 +214,16 @@ void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes, godot
 
         surface_array[j].type = (int16_t) surface_properties->get_surface_type();
         surface_array[j].force = (int16_t) surface_properties->get_force();
-        surface_array[j].terrain = (int16_t) surface_properties->get_terrain_type();
-        surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * scale_factor);
-        surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * scale_factor);
-        surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * scale_factor);
-        surface_array[j].vertices[1][0] = (int16_t) ( vertexes[i+1].z * scale_factor);
-        surface_array[j].vertices[1][1] = (int16_t) ( vertexes[i+1].y * scale_factor);
-        surface_array[j].vertices[1][2] = (int16_t) (-vertexes[i+1].x * scale_factor);
-        surface_array[j].vertices[2][0] = (int16_t) ( vertexes[i+2].z * scale_factor);
-        surface_array[j].vertices[2][1] = (int16_t) ( vertexes[i+2].y * scale_factor);
-        surface_array[j].vertices[2][2] = (int16_t) (-vertexes[i+2].x * scale_factor);
+        surface_array[j].terrain = (uint16_t) surface_properties->get_terrain_type();
+        surface_array[j].vertices[0][0] = (int32_t) ( vertexes[i+0].z * scale_factor);
+        surface_array[j].vertices[0][1] = (int32_t) ( vertexes[i+0].y * scale_factor);
+        surface_array[j].vertices[0][2] = (int32_t) (-vertexes[i+0].x * scale_factor);
+        surface_array[j].vertices[1][0] = (int32_t) ( vertexes[i+1].z * scale_factor);
+        surface_array[j].vertices[1][1] = (int32_t) ( vertexes[i+1].y * scale_factor);
+        surface_array[j].vertices[1][2] = (int32_t) (-vertexes[i+1].x * scale_factor);
+        surface_array[j].vertices[2][0] = (int32_t) ( vertexes[i+2].z * scale_factor);
+        surface_array[j].vertices[2][1] = (int32_t) ( vertexes[i+2].y * scale_factor);
+        surface_array[j].vertices[2][2] = (int32_t) (-vertexes[i+2].x * scale_factor);
 
         j++;
     }
@@ -212,15 +233,19 @@ void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes, godot
     ::free(surface_array);
 }
 
-int SM64Handler::mario_create(godot::Vector3 position)
+int SM64Handler::mario_create(godot::Vector3 position, godot::Vector3 rotation)
 {
     if (!check_in_bounds(position))
         return -2;
 
-    int16_t x = (int16_t) ( position.z * scale_factor);
-    int16_t y = (int16_t) ( position.y * scale_factor);
-    int16_t z = (int16_t) (-position.x * scale_factor);
-    return sm64_mario_create(x, y, z);
+    float x = (float) ( position.z * scale_factor);
+    float y = (float) ( position.y * scale_factor);
+    float z = (float) (-position.x * scale_factor);
+    int16_t rx = (int16_t)  godot::Math::rad2deg(rotation.z);
+    int16_t ry = (int16_t)  godot::Math::rad2deg(rotation.y);
+    int16_t rz = (int16_t) -godot::Math::rad2deg(rotation.x);
+
+    return sm64_mario_create(x, y, z, rx, ry, rz, 0);
 }
 
 godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Ref<SM64Input> input)
@@ -352,16 +377,16 @@ int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot
 
         surface_array[j].type = (int16_t) surface_properties->get_surface_type();
         surface_array[j].force = (int16_t) surface_properties->get_force();
-        surface_array[j].terrain = (int16_t) surface_properties->get_terrain_type();
-        surface_array[j].vertices[0][0] = (int16_t) ( vertexes[i+0].z * scale_factor);
-        surface_array[j].vertices[0][1] = (int16_t) ( vertexes[i+0].y * scale_factor);
-        surface_array[j].vertices[0][2] = (int16_t) (-vertexes[i+0].x * scale_factor);
-        surface_array[j].vertices[1][0] = (int16_t) ( vertexes[i+1].z * scale_factor);
-        surface_array[j].vertices[1][1] = (int16_t) ( vertexes[i+1].y * scale_factor);
-        surface_array[j].vertices[1][2] = (int16_t) (-vertexes[i+1].x * scale_factor);
-        surface_array[j].vertices[2][0] = (int16_t) ( vertexes[i+2].z * scale_factor);
-        surface_array[j].vertices[2][1] = (int16_t) ( vertexes[i+2].y * scale_factor);
-        surface_array[j].vertices[2][2] = (int16_t) (-vertexes[i+2].x * scale_factor);
+        surface_array[j].terrain = (uint16_t) surface_properties->get_terrain_type();
+        surface_array[j].vertices[0][0] = (int32_t) ( vertexes[i+0].z * scale_factor);
+        surface_array[j].vertices[0][1] = (int32_t) ( vertexes[i+0].y * scale_factor);
+        surface_array[j].vertices[0][2] = (int32_t) (-vertexes[i+0].x * scale_factor);
+        surface_array[j].vertices[1][0] = (int32_t) ( vertexes[i+1].z * scale_factor);
+        surface_array[j].vertices[1][1] = (int32_t) ( vertexes[i+1].y * scale_factor);
+        surface_array[j].vertices[1][2] = (int32_t) (-vertexes[i+1].x * scale_factor);
+        surface_array[j].vertices[2][0] = (int32_t) ( vertexes[i+2].z * scale_factor);
+        surface_array[j].vertices[2][1] = (int32_t) ( vertexes[i+2].y * scale_factor);
+        surface_array[j].vertices[2][2] = (int32_t) (-vertexes[i+2].x * scale_factor);
 
         j++;
     }
@@ -416,7 +441,7 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("get_scale_factor"), &SM64Handler::get_scale_factor);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "scale_factor"), "set_scale_factor", "get_scale_factor");
     godot::ClassDB::bind_method(godot::D_METHOD("static_surfaces_load", "vertexes", "surface_properties_array"), &SM64Handler::static_surfaces_load);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position"), &SM64Handler::mario_create);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position", "rotation"), &SM64Handler::mario_create);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "input"), &SM64Handler::mario_tick);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &SM64Handler::mario_delete);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation", "surface_properties_array"), &SM64Handler::surface_object_create);

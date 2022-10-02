@@ -89,7 +89,7 @@ func global_init() -> void:
 ## Create Mario (requires initializing the libsm64 via the global_init function)
 func create() -> void:
 	if sm64_handler and sm64_handler.is_init():
-		_id = sm64_handler.mario_create(to_global(position))
+		_id = sm64_handler.mario_create(to_global(position), Vector3())
 		if _id < 0:
 			return
 
