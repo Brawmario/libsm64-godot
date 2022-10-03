@@ -166,3 +166,28 @@ func set_water_level(value: float) -> void:
 
 	sm64_handler.set_mario_water_level(_id, value)
 	water_level = value
+
+
+## Set Mario's health
+func set_health(value: int) -> void:
+	if _id < 0:
+		return
+
+	sm64_handler.set_mario_health(_id, value)
+	health = value
+
+
+## Make Mario take damage
+func take_damage(damage: int, source_position: Vector3, subtype := 0) -> void:
+	if _id < 0:
+		return
+
+	sm64_handler.mario_take_damage(_id, damage, source_position, subtype)
+
+
+## Heal Mario
+func heal(value: int) -> void:
+	if _id < 0:
+		return
+
+	sm64_handler.mario_heal(_id, value)

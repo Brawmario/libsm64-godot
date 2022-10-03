@@ -386,6 +386,27 @@ void SM64Handler::set_mario_water_level(int mario_id, real_t level)
     sm64_set_mario_water_level(mario_id, level * scale_factor);
 }
 
+void SM64Handler::set_mario_health(int mario_id, int health)
+{
+    sm64_set_mario_health(mario_id, health);
+}
+
+void SM64Handler::mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, int subtype)
+{
+    sm64_mario_take_damage(mario_id,
+                           damage,
+                           subtype,
+                           source_position.z * scale_factor,
+                           source_position.y * scale_factor,
+                           -source_position.x * scale_factor);
+}
+
+void SM64Handler::mario_heal(int mario_id, int heal_counter)
+{
+    sm64_mario_heal(mario_id, heal_counter);
+}
+
+
 int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
 {
     struct SM64SurfaceObject surface_object;
@@ -487,6 +508,9 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_forward_velocity", "mario_id", "velocity"), &SM64Handler::set_mario_forward_velocity);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_invincibility", "mario_id", "timer"), &SM64Handler::set_mario_invincibility);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_water_level", "mario_id", "level"), &SM64Handler::set_mario_water_level);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_health", "mario_id", "health"), &SM64Handler::set_mario_health);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_take_damage", "mario_id", "damage", "source_position", "subtype"), &SM64Handler::mario_take_damage, DEFVAL(0));
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_heal", "mario_id", "heal_counter"), &SM64Handler::mario_heal);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation", "surface_properties_array"), &SM64Handler::surface_object_create);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);

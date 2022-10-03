@@ -74,9 +74,9 @@ public:
     void set_mario_invincibility(int mario_id, int timer);
     void set_mario_water_level(int mario_id, real_t level);
     // void sm64_set_mario_floor_override(int32_t marioId, uint16_t terrain, int16_t floorType, int16_t floorForce);
-    // void sm64_set_mario_health(int32_t marioId, uint16_t health);
-    // void sm64_mario_take_damage(int32_t marioId, uint32_t damage, uint32_t subtype, float x, float y, float z);
-    // void sm64_mario_heal(int32_t marioId, uint8_t healCounter);
+    void set_mario_health(int mario_id, int health);
+    void mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, int subtype = 0);
+    void mario_heal(int mario_id, int heal_counter);
     // void sm64_mario_set_lives(int32_t marioId, int32_t lives);
     // void sm64_mario_interact_cap( int32_t marioId, uint32_t capFlag, uint16_t capTime, uint8_t playMusic );
     // void sm64_mario_extend_cap( int32_t marioId, uint16_t capTime );
