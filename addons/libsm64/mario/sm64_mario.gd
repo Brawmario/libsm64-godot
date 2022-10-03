@@ -130,3 +130,12 @@ func set_face_angle(angle: float) -> void:
 
 	sm64_handler.set_mario_angle(_id, angle)
 	global_rotation.y = angle
+
+
+## Set Mario's velocity in the libsm64 world
+func set_velocity(value: Vector3) -> void:
+	if _id < 0:
+		return
+
+	sm64_handler.set_mario_velocity(_id, value)
+	velocity = value

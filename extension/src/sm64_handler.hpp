@@ -69,7 +69,7 @@ public:
     // void sm64_set_mario_state(int32_t marioId, uint32_t flags);
     void set_mario_position(int mario_id, godot::Vector3 position);
     void set_mario_angle(int mario_id, real_t face_angle);
-    // void sm64_set_mario_velocity(int32_t marioId, float x, float y, float z);
+    void set_mario_velocity(int mario_id, godot::Vector3 velocity);
     // void sm64_set_mario_forward_velocity(int32_t marioId, float vel);
     // void sm64_set_mario_invincibility(int32_t marioId, int16_t timer);
     // void sm64_set_mario_water_level(int32_t marioId, signed int level);
