@@ -352,9 +352,9 @@ void SM64Handler::mario_delete(int mario_id)
 void SM64Handler::set_mario_position(int mario_id, godot::Vector3 position)
 {
     sm64_set_mario_position(mario_id,
-                            position.x * scale_factor,
+                            position.z * scale_factor,
                             position.y * scale_factor,
-                            position.z * scale_factor);
+                            -position.x * scale_factor);
 }
 
 void SM64Handler::set_mario_angle(int mario_id, real_t angle)
