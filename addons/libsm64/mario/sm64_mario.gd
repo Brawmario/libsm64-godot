@@ -41,8 +41,9 @@ var _mario_image: Image
 func _ready() -> void:
 	_mesh_instance = MeshInstance3D.new()
 	add_child(_mesh_instance)
-	_mesh_instance.set_as_top_level(true)
+	_mesh_instance.top_level = true
 	_mesh_instance.position = Vector3.ZERO
+	_mesh_instance.rotation = Vector3.ZERO
 
 	_mesh = ArrayMesh.new()
 	_mesh_instance.mesh = _mesh
