@@ -35,8 +35,8 @@ func _update_surface_objects() -> void:
 ## Load MeshInstance3D into the SM64Handler instance
 func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	var mesh_faces := mesh_instance.get_mesh().get_faces()
-	var position := mesh_instance.global_transform.origin
-	var rotation := mesh_instance.rotation
+	var position := mesh_instance.global_position
+	var rotation := mesh_instance.global_rotation
 
 	var surface_properties := _find_surface_properties(mesh_instance)
 	var surface_properties_array: Array[SM64SurfaceProperties] = []

@@ -61,7 +61,7 @@ func _physics_process(delta: float) -> void:
 	var stick_y := Input.get_action_strength(stick_up) - Input.get_action_strength(stick_down)
 	_mario_input.stick = Vector2(stick_x, stick_y)
 
-	var look_direction := camera.get_global_transform().basis.z
+	var look_direction := camera.global_transform.basis.z
 	_mario_input.cam_look = Vector2(look_direction.x, look_direction.z)
 
 	_mario_input.a = Input.is_action_pressed(input_a)
@@ -70,9 +70,9 @@ func _physics_process(delta: float) -> void:
 
 	var tick_output := sm64_handler.mario_tick(_id, _mario_input)
 
-	position = tick_output["position"] as Vector3
+	global_position = tick_output["position"] as Vector3
 	velocity = tick_output["velocity"] as Vector3
-	rotation.y = tick_output["face_angle"] as float
+	global_rotation.y = tick_output["face_angle"] as float
 	health = tick_output["health"] as float
 
 	var mesh_array := tick_output["mesh_array"] as Array
@@ -90,7 +90,7 @@ func global_init() -> void:
 ## Create Mario (requires initializing the libsm64 via the global_init function)
 func create() -> void:
 	if sm64_handler and sm64_handler.is_init():
-		_id = sm64_handler.mario_create(to_global(position), Vector3())
+		_id = sm64_handler.mario_create(global_position, global_rotation)
 		if _id < 0:
 			return
 
@@ -104,3 +104,29 @@ func create() -> void:
 		_material = StandardMaterial3D.new()
 		_material.vertex_color_use_as_albedo = true
 		_material.next_pass = texture_material
+
+
+## Delete mario inside the libsm64 world
+func delete() -> void:
+	if _id < 0:
+		return
+
+	sm64_handler.mario_delete(_id)
+
+
+## Teleport mario in the libsm64 world
+func teleport(to_global_position: Vector3) -> void:
+	if _id < 0:
+		return
+
+	sm64_handler.set_mario_position(_id, to_global_position)
+	global_position = to_global_position
+
+
+## Set Mario's facing angle
+func set_face_angle(angle: float) -> void:
+	if _id < 0:
+		return
+
+	sm64_handler.set_mario_angle(_id, angle)
+	global_rotation.y = angle

@@ -22,9 +22,8 @@ func load_static_sufaces() -> void:
 			continue
 
 		var mesh_faces := mesh_instance.get_mesh().get_faces()
-		var offset := mesh_instance.global_transform.origin
 		for i in range(mesh_faces.size()):
-			mesh_faces[i] += offset
+			mesh_faces[i] = mesh_instance.global_transform * mesh_faces[i]
 		faces.append_array(mesh_faces)
 
 		var surface_properties := _find_surface_properties(mesh_instance)

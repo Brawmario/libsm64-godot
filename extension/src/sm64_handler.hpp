@@ -65,6 +65,23 @@ public:
 
     void mario_delete(int mario_id);
 
+    // void sm64_set_mario_action(int32_t marioId, uint32_t action);
+    // void sm64_set_mario_state(int32_t marioId, uint32_t flags);
+    void set_mario_position(int mario_id, godot::Vector3 position);
+    void set_mario_angle(int mario_id, real_t face_angle);
+    // void sm64_set_mario_velocity(int32_t marioId, float x, float y, float z);
+    // void sm64_set_mario_forward_velocity(int32_t marioId, float vel);
+    // void sm64_set_mario_invincibility(int32_t marioId, int16_t timer);
+    // void sm64_set_mario_water_level(int32_t marioId, signed int level);
+    // void sm64_set_mario_floor_override(int32_t marioId, uint16_t terrain, int16_t floorType, int16_t floorForce);
+    // void sm64_set_mario_health(int32_t marioId, uint16_t health);
+    // void sm64_mario_take_damage(int32_t marioId, uint32_t damage, uint32_t subtype, float x, float y, float z);
+    // void sm64_mario_heal(int32_t marioId, uint8_t healCounter);
+    // void sm64_mario_set_lives(int32_t marioId, int32_t lives);
+    // void sm64_mario_interact_cap( int32_t marioId, uint32_t capFlag, uint16_t capTime, uint8_t playMusic );
+    // void sm64_mario_extend_cap( int32_t marioId, uint16_t capTime );
+    // bool sm64_mario_attack(int32_t marioId, float x, float y, float z, float hitboxHeight);
+
     int surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> suface_properties_array);
     void surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation);
     void surface_object_delete(int object_id);
