@@ -148,3 +148,11 @@ func set_forward_velocity(value: float) -> void:
 		return
 
 	sm64_handler.set_mario_forward_velocity(_id, value)
+
+
+## Set Mario's invincibility time in seconds
+func set_invincibility(time: float) -> void:
+	if _id < 0:
+		return
+
+	sm64_handler.set_mario_invincibility(_id, time * 30.0)
