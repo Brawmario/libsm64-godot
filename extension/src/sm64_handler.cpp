@@ -269,10 +269,18 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Ref<SM64Input> in
 
     sm64_mario_tick(mario_id, &mario_inputs, &out_state, &mario_geometry);
 
-    ret["position"]   = godot::Vector3(-out_state.position[2] / scale_factor, out_state.position[1] / scale_factor, out_state.position[0] / scale_factor);
-    ret["velocity"]   = godot::Vector3(-out_state.velocity[2] / scale_factor, out_state.velocity[1] / scale_factor, out_state.velocity[0] / scale_factor);
-    ret["face_angle"] = (real_t) out_state.faceAngle;
-    ret["health"]     = (int) out_state.health;
+    ret["position"]       = godot::Vector3(-out_state.position[2] / scale_factor, out_state.position[1] / scale_factor, out_state.position[0] / scale_factor);
+    ret["velocity"]       = godot::Vector3(-out_state.velocity[2] / scale_factor, out_state.velocity[1] / scale_factor, out_state.velocity[0] / scale_factor);
+    ret["face_angle"]     = (real_t) out_state.faceAngle;
+    ret["health"]         = (int) out_state.health;
+    ret["action"]         = (int) out_state.action;
+    ret["flags"]          = (int) out_state.flags;
+    ret["particle_flags"] = (int) out_state.particleFlags;
+    ret["invinc_timer"]   = (int) out_state.invincTimer;
+    ret["hurt_counter"]   = (int) out_state.hurtCounter;
+    ret["num_lives"]      = (int) out_state.numLives;
+    ret["holding_object"] = (bool) out_state.holdingObject;
+    ret["drop_method"]    = (int) out_state.dropMethod;
 
     {
         size_t array_size = mario_geometry.numTrianglesUsed * 3;

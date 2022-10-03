@@ -3,7 +3,8 @@ extends Node3D
 @icon("res://addons/libsm64/mario/mario-godot.svg")
 
 
-const FPS_30_DELTA = 1.0/30.0
+const FPS := 30.0
+const DELTA := 1.0 / FPS
 
 ## SM64Handler instance
 @export var sm64_handler: SM64Handler
@@ -28,6 +29,8 @@ const FPS_30_DELTA = 1.0/30.0
 
 var velocity := Vector3()
 var health := 0x0880
+var invicibility_time := 0.0
+var lives := 4
 var water_level := -100000.0
 
 var _mesh_instance: MeshInstance3D
@@ -52,9 +55,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_time_since_last_tick += delta
-	if _time_since_last_tick < FPS_30_DELTA:
+	if _time_since_last_tick < DELTA:
 		return
-	_time_since_last_tick -= FPS_30_DELTA
+	_time_since_last_tick -= DELTA
 
 	if _id < 0:
 		return
@@ -76,6 +79,8 @@ func _physics_process(delta: float) -> void:
 	velocity = tick_output["velocity"] as Vector3
 	global_rotation.y = tick_output["face_angle"] as float
 	health = tick_output["health"] as float
+	invicibility_time = (tick_output["invinc_timer"] as int) / FPS
+	lives = tick_output["num_lives"] as int
 
 	var mesh_array := tick_output["mesh_array"] as Array
 	_mesh.clear_surfaces()
@@ -156,7 +161,8 @@ func set_invincibility(time: float) -> void:
 	if _id < 0:
 		return
 
-	sm64_handler.set_mario_invincibility(_id, time * 30.0)
+	invicibility_time = time * FPS
+	sm64_handler.set_mario_invincibility(_id, invicibility_time)
 
 
 ## Set Mario's water level
