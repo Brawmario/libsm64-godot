@@ -71,8 +71,8 @@ public:
     void set_mario_angle(int mario_id, real_t face_angle);
     void set_mario_velocity(int mario_id, godot::Vector3 velocity);
     void set_mario_forward_velocity(int mario_id, real_t velocity);
-    void set_mario_invincibility(int32_t mario_id, int timer);
-    // void sm64_set_mario_water_level(int32_t marioId, signed int level);
+    void set_mario_invincibility(int mario_id, int timer);
+    void set_mario_water_level(int mario_id, real_t level);
     // void sm64_set_mario_floor_override(int32_t marioId, uint16_t terrain, int16_t floorType, int16_t floorForce);
     // void sm64_set_mario_health(int32_t marioId, uint16_t health);
     // void sm64_mario_take_damage(int32_t marioId, uint32_t damage, uint32_t subtype, float x, float y, float z);

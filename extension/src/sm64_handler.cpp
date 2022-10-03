@@ -376,9 +376,14 @@ void SM64Handler::set_mario_forward_velocity(int mario_id, real_t velocity)
     sm64_set_mario_forward_velocity(mario_id, velocity * scale_factor);
 }
 
-void SM64Handler::set_mario_invincibility(int32_t mario_id, int timer)
+void SM64Handler::set_mario_invincibility(int mario_id, int timer)
 {
     sm64_set_mario_invincibility(mario_id, timer);
+}
+
+void SM64Handler::set_mario_water_level(int mario_id, real_t level)
+{
+    sm64_set_mario_water_level(mario_id, level * scale_factor);
 }
 
 int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
@@ -481,6 +486,7 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_velocity", "mario_id", "velocity"), &SM64Handler::set_mario_velocity);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_forward_velocity", "mario_id", "velocity"), &SM64Handler::set_mario_forward_velocity);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_invincibility", "mario_id", "timer"), &SM64Handler::set_mario_invincibility);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_water_level", "mario_id", "level"), &SM64Handler::set_mario_water_level);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation", "surface_properties_array"), &SM64Handler::surface_object_create);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);

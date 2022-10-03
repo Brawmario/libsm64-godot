@@ -28,6 +28,7 @@ const FPS_30_DELTA = 1.0/30.0
 
 var velocity := Vector3()
 var health := 0x0880
+var water_level := -100000.0
 
 var _mesh_instance: MeshInstance3D
 var _mesh: ArrayMesh
@@ -156,3 +157,12 @@ func set_invincibility(time: float) -> void:
 		return
 
 	sm64_handler.set_mario_invincibility(_id, time * 30.0)
+
+
+## Set Mario's water level
+func set_water_level(value: float) -> void:
+	if _id < 0:
+		return
+
+	sm64_handler.set_mario_water_level(_id, value)
+	water_level = value
