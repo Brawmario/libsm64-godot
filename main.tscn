@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://rrg4n1a8ovj6"]
+[gd_scene load_steps=22 format=3 uid="uid://rrg4n1a8ovj6"]
 
 [ext_resource type="Script" path="res://main.gd" id="1"]
 [ext_resource type="SM64Handler" uid="uid://dssuryb827kaq" path="res://sm_64_handler.tres" id="2_r8jk2"]
@@ -29,6 +29,17 @@ albedo_color = Color(1, 0, 0, 1)
 [sub_resource type="PlaneMesh" id="PlaneMesh_ot04n"]
 material = SubResource("StandardMaterial3D_lirrq")
 size = Vector2(5, 5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_at2t5"]
+size = Vector2(10, 30)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lu0en"]
+transparency = 1
+albedo_color = Color(0.0588235, 0.407843, 1, 0.360784)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xhgx0"]
+material = SubResource("StandardMaterial3D_lu0en")
+size = Vector2(10, 30)
 
 [sub_resource type="BoxMesh" id="10"]
 size = Vector3(5, 2, 5)
@@ -140,6 +151,20 @@ skeleton = NodePath("../..")
 [node name="SM64SurfacePropertiesComponent" type="Node" parent="StaticSurfaces/FireFloor"]
 script = ExtResource("4_c4hy1")
 surface_properties = ExtResource("5_p7agb")
+
+[node name="Pool" type="Node3D" parent="StaticSurfaces"]
+
+[node name="PoolFloor" type="MeshInstance3D" parent="StaticSurfaces/Pool" groups=["libsm64_static_surfaces"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, -10, 0)
+mesh = SubResource("PlaneMesh_at2t5")
+
+[node name="PoolWall" type="MeshInstance3D" parent="StaticSurfaces/Pool" groups=["libsm64_static_surfaces"]]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -20, -5, 0)
+mesh = SubResource("PlaneMesh_at2t5")
+
+[node name="PoolSurface" type="MeshInstance3D" parent="StaticSurfaces/Pool"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 0)
+mesh = SubResource("PlaneMesh_xhgx0")
 
 [node name="Objects" type="Node3D" parent="."]
 

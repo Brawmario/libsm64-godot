@@ -14,7 +14,12 @@ func _ready() -> void:
 	$SM64StaticSurfacesHandler.load_static_sufaces()
 	$SM64SurfaceObjectsHandler.load_all_surface_objects()
 
-	for mario in get_tree().get_nodes_in_group("libsm64_mario"):
+	for node in get_tree().get_nodes_in_group("libsm64_mario"):
+		var mario := node as SM64Mario
+		if not mario:
+			continue
 		mario.create()
+		mario.set_water_level(0)
+
 
 	$Objects/MovingPlatform/AnimationPlayer.play("Move")
