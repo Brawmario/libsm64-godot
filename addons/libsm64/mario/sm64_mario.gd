@@ -218,10 +218,10 @@ func reset_floor_override() -> void:
 
 
 ## Make Mario take damage
-func take_damage(damage: int, source_position: Vector3, subtype := 0) -> void:
+func take_damage(damage: int, source_position: Vector3, big_knockback := false) -> void:
 	if _id < 0:
 		return
-	sm64_handler.mario_take_damage(_id, damage, source_position, subtype)
+	sm64_handler.mario_take_damage(_id, damage, source_position, big_knockback)
 
 
 ## Heal Mario

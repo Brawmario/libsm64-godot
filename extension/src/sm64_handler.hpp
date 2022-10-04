@@ -88,7 +88,7 @@ public:
     void set_mario_floor_override(int mario_id, godot::Ref<SM64SurfaceProperties> surface_properties);
     void reset_mario_floor_override(int mario_id);
     void set_mario_health(int mario_id, int health);
-    void mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, int subtype = 0);
+    void mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, bool big_knockback = false);
     void mario_heal(int mario_id, int heal_counter);
     void mario_set_lives(int mario_id, int lives);
     void mario_interact_cap(int mario_id, MarioCaps cap, int cap_time = 0, bool play_music = 1);

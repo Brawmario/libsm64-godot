@@ -416,11 +416,11 @@ void SM64Handler::set_mario_health(int mario_id, int health)
     sm64_set_mario_health(mario_id, health);
 }
 
-void SM64Handler::mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, int subtype)
+void SM64Handler::mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, bool big_knockback)
 {
     sm64_mario_take_damage(mario_id,
                            damage,
-                           subtype,
+                           big_knockback ? 0x8 : 0x0,
                            source_position.z * scale_factor,
                            source_position.y * scale_factor,
                            -source_position.x * scale_factor);
@@ -550,7 +550,7 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_floor_override", "mario_id", "surface_properties"), &SM64Handler::set_mario_floor_override);
     godot::ClassDB::bind_method(godot::D_METHOD("reset_mario_floor_override", "mario_id"), &SM64Handler::reset_mario_floor_override);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_health", "mario_id", "health"), &SM64Handler::set_mario_health);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_take_damage", "mario_id", "damage", "source_position", "subtype"), &SM64Handler::mario_take_damage, DEFVAL(0));
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_take_damage", "mario_id", "damage", "source_position", "big_knockback"), &SM64Handler::mario_take_damage, DEFVAL(false));
     godot::ClassDB::bind_method(godot::D_METHOD("mario_heal", "mario_id", "heal_counter"), &SM64Handler::mario_heal);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_set_lives", "mario_id", "lives"), &SM64Handler::mario_set_lives);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_interact_cap", "mario_id", "cap", "cap_time", "play_music"), &SM64Handler::mario_interact_cap, DEFVAL(0), DEFVAL(true));
