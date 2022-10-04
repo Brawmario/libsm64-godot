@@ -203,6 +203,20 @@ func set_forward_velocity(vel: float) -> void:
 	sm64_handler.set_mario_forward_velocity(_id, vel)
 
 
+## Override the floor properties
+func set_floor_override(surface_properties: SM64SurfaceProperties) -> void:
+	if _id < 0:
+		return
+	sm64_handler.set_mario_floor_override(_id, surface_properties)
+
+
+## Reset overriden floor properties
+func reset_floor_override() -> void:
+	if _id < 0:
+		return
+	sm64_handler.reset_mario_floor_override(_id)
+
+
 ## Make Mario take damage
 func take_damage(damage: int, source_position: Vector3, subtype := 0) -> void:
 	if _id < 0:

@@ -85,7 +85,8 @@ public:
     void set_mario_forward_velocity(int mario_id, real_t velocity);
     void set_mario_invincibility(int mario_id, int timer);
     void set_mario_water_level(int mario_id, real_t level);
-    // void sm64_set_mario_floor_override(int32_t marioId, uint16_t terrain, int16_t floorType, int16_t floorForce);
+    void set_mario_floor_override(int mario_id, godot::Ref<SM64SurfaceProperties> surface_properties);
+    void reset_mario_floor_override(int mario_id);
     void set_mario_health(int mario_id, int health);
     void mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, int subtype = 0);
     void mario_heal(int mario_id, int heal_counter);

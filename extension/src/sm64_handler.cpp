@@ -393,6 +393,24 @@ void SM64Handler::set_mario_water_level(int mario_id, real_t level)
     sm64_set_mario_water_level(mario_id, level * scale_factor);
 }
 
+void SM64Handler::set_mario_floor_override(int mario_id, godot::Ref<SM64SurfaceProperties> surface_properties)
+{
+    if (surface_properties.is_null()) {
+        godot::UtilityFunctions::print(godot::String("[SM64Handler] Called set_mario_floor_override with null surface_properties"));
+        return;
+    }
+
+    sm64_set_mario_floor_override(mario_id,
+                                  surface_properties->get_terrain_type(),
+                                  surface_properties->get_surface_type(),
+                                  surface_properties->get_force());
+}
+
+void SM64Handler::reset_mario_floor_override(int mario_id)
+{
+    sm64_set_mario_floor_override(mario_id, 0x7, 0x100, 0);
+}
+
 void SM64Handler::set_mario_health(int mario_id, int health)
 {
     sm64_set_mario_health(mario_id, health);
@@ -529,6 +547,8 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_forward_velocity", "mario_id", "velocity"), &SM64Handler::set_mario_forward_velocity);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_invincibility", "mario_id", "timer"), &SM64Handler::set_mario_invincibility);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_water_level", "mario_id", "level"), &SM64Handler::set_mario_water_level);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_floor_override", "mario_id", "surface_properties"), &SM64Handler::set_mario_floor_override);
+    godot::ClassDB::bind_method(godot::D_METHOD("reset_mario_floor_override", "mario_id"), &SM64Handler::reset_mario_floor_override);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_health", "mario_id", "health"), &SM64Handler::set_mario_health);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_take_damage", "mario_id", "damage", "source_position", "subtype"), &SM64Handler::mario_take_damage, DEFVAL(0));
     godot::ClassDB::bind_method(godot::D_METHOD("mario_heal", "mario_id", "heal_counter"), &SM64Handler::mario_heal);
