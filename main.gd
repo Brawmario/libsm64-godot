@@ -19,7 +19,6 @@ func _ready() -> void:
 		if not mario:
 			continue
 		mario.create()
-		mario.set_water_level(0)
-
+		mario.water_level = 0.0
 
 	$Objects/MovingPlatform/AnimationPlayer.play("Move")

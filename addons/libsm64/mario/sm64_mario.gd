@@ -27,11 +27,53 @@ const DELTA := 1.0 / FPS
 ## Action equivalent to pushing the Z button
 @export var input_z := "mario_z"
 
-var velocity := Vector3()
-var health := 0x0880
-var invicibility_time := 0.0
+var _velocity := Vector3()
+## Set Mario's velocity in the libsm64 world
+var velocity: Vector3:
+	get:
+		return _velocity
+	set(value):
+		if _id < 0:
+			return
+		sm64_handler.set_mario_velocity(_id, value)
+		_velocity = value
+
+var _health := 0x0880
+## Set Mario's health
+var health: int:
+	get:
+		return _health
+	set(value):
+		if _id < 0:
+			return
+		sm64_handler.set_mario_health(_id, value)
+		_health = value
+
+var _invicibility_time := 0.0
+## Set Mario's invincibility time in seconds
+var invicibility_time: float:
+	get:
+		return _invicibility_time
+	set(value):
+		if _id < 0:
+			return
+		sm64_handler.set_mario_invincibility(_id, value * FPS)
+		_invicibility_time = value
+
+var hurt_counter := 0
 var lives := 4
-var water_level := -100000.0
+
+var _water_level := -100000.0
+## Set Mario's water level
+var water_level: float:
+	get:
+		return _water_level
+	set(value):
+		if _id < 0:
+			return
+		sm64_handler.set_mario_water_level(_id, value)
+		_water_level = value
+
 
 var _mesh_instance: MeshInstance3D
 var _mesh: ArrayMesh
@@ -76,10 +118,11 @@ func _physics_process(delta: float) -> void:
 	var tick_output := sm64_handler.mario_tick(_id, _mario_input)
 
 	global_position = tick_output["position"] as Vector3
-	velocity = tick_output["velocity"] as Vector3
+	_velocity = tick_output["velocity"] as Vector3
 	global_rotation.y = tick_output["face_angle"] as float
-	health = tick_output["health"] as float
-	invicibility_time = (tick_output["invinc_timer"] as int) / FPS
+	_health = tick_output["health"] as float
+	_invicibility_time = (tick_output["invinc_timer"] as int) / FPS
+	hurt_counter = tick_output["hurt_counter"] as int
 	lives = tick_output["num_lives"] as int
 
 	var mesh_array := tick_output["mesh_array"] as Array
@@ -117,7 +160,6 @@ func create() -> void:
 func delete() -> void:
 	if _id < 0:
 		return
-
 	sm64_handler.mario_delete(_id)
 
 
@@ -125,7 +167,6 @@ func delete() -> void:
 func teleport(to_global_position: Vector3) -> void:
 	if _id < 0:
 		return
-
 	sm64_handler.set_mario_position(_id, to_global_position)
 	global_position = to_global_position
 
@@ -134,60 +175,21 @@ func teleport(to_global_position: Vector3) -> void:
 func set_face_angle(angle: float) -> void:
 	if _id < 0:
 		return
-
 	sm64_handler.set_mario_angle(_id, angle)
 	global_rotation.y = angle
 
 
-## Set Mario's velocity in the libsm64 world
-func set_velocity(value: Vector3) -> void:
-	if _id < 0:
-		return
-
-	sm64_handler.set_mario_velocity(_id, value)
-	velocity = value
-
-
 ## Set Mario's forward velocity in the libsm64 world
-func set_forward_velocity(value: float) -> void:
+func set_forward_velocity(vel: float) -> void:
 	if _id < 0:
 		return
-
-	sm64_handler.set_mario_forward_velocity(_id, value)
-
-
-## Set Mario's invincibility time in seconds
-func set_invincibility(time: float) -> void:
-	if _id < 0:
-		return
-
-	invicibility_time = time * FPS
-	sm64_handler.set_mario_invincibility(_id, invicibility_time)
-
-
-## Set Mario's water level
-func set_water_level(value: float) -> void:
-	if _id < 0:
-		return
-
-	sm64_handler.set_mario_water_level(_id, value)
-	water_level = value
-
-
-## Set Mario's health
-func set_health(value: int) -> void:
-	if _id < 0:
-		return
-
-	sm64_handler.set_mario_health(_id, value)
-	health = value
+	sm64_handler.set_mario_forward_velocity(_id, vel)
 
 
 ## Make Mario take damage
 func take_damage(damage: int, source_position: Vector3, subtype := 0) -> void:
 	if _id < 0:
 		return
-
 	sm64_handler.mario_take_damage(_id, damage, source_position, subtype)
 
 
@@ -195,5 +197,4 @@ func take_damage(damage: int, source_position: Vector3, subtype := 0) -> void:
 func heal(value: int) -> void:
 	if _id < 0:
 		return
-
 	sm64_handler.mario_heal(_id, value)
