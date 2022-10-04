@@ -153,6 +153,8 @@ func global_init() -> void:
 ## Create Mario (requires initializing the libsm64 via the global_init function)
 func create() -> void:
 	if sm64_handler and sm64_handler.is_init():
+		if _id >= 0:
+			delete()
 		_id = sm64_handler.mario_create(global_position, global_rotation)
 		if _id < 0:
 			return
@@ -174,6 +176,7 @@ func delete() -> void:
 	if _id < 0:
 		return
 	sm64_handler.mario_delete(_id)
+	_id = -1
 
 
 ## Teleport mario in the libsm64 world
