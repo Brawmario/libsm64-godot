@@ -77,7 +77,7 @@ public:
     void set_mario_health(int mario_id, int health);
     void mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, int subtype = 0);
     void mario_heal(int mario_id, int heal_counter);
-    // void sm64_mario_set_lives(int32_t marioId, int32_t lives);
+    void mario_set_lives(int mario_id, int lives);
     // void sm64_mario_interact_cap( int32_t marioId, uint32_t capFlag, uint16_t capTime, uint8_t playMusic );
     // void sm64_mario_extend_cap( int32_t marioId, uint16_t capTime );
     // bool sm64_mario_attack(int32_t marioId, float x, float y, float z, float hitboxHeight);

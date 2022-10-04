@@ -414,6 +414,10 @@ void SM64Handler::mario_heal(int mario_id, int heal_counter)
     sm64_mario_heal(mario_id, heal_counter);
 }
 
+void SM64Handler::mario_set_lives(int mario_id, int lives)
+{
+    sm64_mario_set_lives(mario_id, lives);
+}
 
 int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
 {
@@ -519,6 +523,7 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_health", "mario_id", "health"), &SM64Handler::set_mario_health);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_take_damage", "mario_id", "damage", "source_position", "subtype"), &SM64Handler::mario_take_damage, DEFVAL(0));
     godot::ClassDB::bind_method(godot::D_METHOD("mario_heal", "mario_id", "heal_counter"), &SM64Handler::mario_heal);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_set_lives", "mario_id", "lives"), &SM64Handler::mario_set_lives);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation", "surface_properties_array"), &SM64Handler::surface_object_create);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);

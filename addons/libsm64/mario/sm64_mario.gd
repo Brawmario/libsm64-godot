@@ -49,30 +49,38 @@ var health: int:
 		sm64_handler.set_mario_health(_id, value)
 		_health = value
 
-var _invicibility_time := 0.0
+var _invicibility_time_frames := 0
 ## Set Mario's invincibility time in seconds
 var invicibility_time: float:
 	get:
-		return _invicibility_time
+		return _invicibility_time_frames / FPS
 	set(value):
 		if _id < 0:
 			return
-		sm64_handler.set_mario_invincibility(_id, value * FPS)
-		_invicibility_time = value
+		_invicibility_time_frames = value * FPS
+		sm64_handler.set_mario_invincibility(_id, _invicibility_time_frames)
 
 var hurt_counter := 0
-var lives := 4
 
-var _water_level := -100000.0
-## Set Mario's water level
-var water_level: float:
+var _lives := 4
+var lives: int:
 	get:
-		return _water_level
+		return _lives
+	set(value):
+		if _id < 0:
+			return
+		sm64_handler.mario_set_lives(_id, value)
+		_lives = value
+
+## Set Mario's water level
+var water_level := -100000.0:
+	get:
+		return water_level
 	set(value):
 		if _id < 0:
 			return
 		sm64_handler.set_mario_water_level(_id, value)
-		_water_level = value
+		water_level = value
 
 
 var _mesh_instance: MeshInstance3D
@@ -121,9 +129,9 @@ func _physics_process(delta: float) -> void:
 	_velocity = tick_output["velocity"] as Vector3
 	global_rotation.y = tick_output["face_angle"] as float
 	_health = tick_output["health"] as float
-	_invicibility_time = (tick_output["invinc_timer"] as int) / FPS
+	_invicibility_time_frames = tick_output["invinc_timer"] as int
 	hurt_counter = tick_output["hurt_counter"] as int
-	lives = tick_output["num_lives"] as int
+	_lives = tick_output["num_lives"] as int
 
 	var mesh_array := tick_output["mesh_array"] as Array
 	_mesh.clear_surfaces()
