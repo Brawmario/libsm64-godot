@@ -6,6 +6,12 @@ extends Node3D
 const FPS := 30.0
 const DELTA := 1.0 / FPS
 
+enum Caps {
+	VANISH = SM64Handler.MARIO_CAPS_VANISH,
+	METAL = SM64Handler.MARIO_CAPS_METAL,
+	WING = SM64Handler.MARIO_CAPS_WING,
+}
+
 ## SM64Handler instance
 @export var sm64_handler: SM64Handler
 ## Camera instance that follows Mario
@@ -81,7 +87,6 @@ var water_level := -100000.0:
 			return
 		sm64_handler.set_mario_water_level(_id, value)
 		water_level = value
-
 
 var _mesh_instance: MeshInstance3D
 var _mesh: ArrayMesh
@@ -206,3 +211,17 @@ func heal(value: int) -> void:
 	if _id < 0:
 		return
 	sm64_handler.mario_heal(_id, value)
+
+
+## Equip special cap
+func interact_cap(cap: Caps, cap_time = 0.0, play_music := true) -> void:
+	if _id < 0:
+		return
+	sm64_handler.mario_interact_cap(_id, cap, cap_time * FPS, play_music)
+
+
+## Extend current special cap time
+func extend_cap(cap_time: float) -> void:
+	if _id < 0:
+		return
+	sm64_handler.mario_extend_cap(_id, cap_time * FPS)

@@ -16,6 +16,10 @@ extern "C"
 #include <windows.h>
 #endif
 
+#define MARIO_VANISH_CAP                0x00000002
+#define MARIO_METAL_CAP                 0x00000004
+#define MARIO_WING_CAP                  0x00000008
+
 class SM64Handler : public godot::Resource
 {
     GDCLASS(SM64Handler, godot::Resource);
@@ -23,6 +27,12 @@ class SM64Handler : public godot::Resource
 public:
     SM64Handler();
     ~SM64Handler();
+
+    enum MarioCaps {
+        MARIO_CAPS_VANISH = MARIO_VANISH_CAP,
+        MARIO_CAPS_METAL = MARIO_METAL_CAP,
+        MARIO_CAPS_WING = MARIO_WING_CAP
+    };
 
     void global_init();
     bool is_init() const;
@@ -78,8 +88,8 @@ public:
     void mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, int subtype = 0);
     void mario_heal(int mario_id, int heal_counter);
     void mario_set_lives(int mario_id, int lives);
-    // void sm64_mario_interact_cap( int32_t marioId, uint32_t capFlag, uint16_t capTime, uint8_t playMusic );
-    // void sm64_mario_extend_cap( int32_t marioId, uint16_t capTime );
+    void mario_interact_cap(int mario_id, MarioCaps cap, int cap_time = 0, bool play_music = 1);
+    void mario_extend_cap(int mario_id, int cap_time);
     // bool sm64_mario_attack(int32_t marioId, float x, float y, float z, float hitboxHeight);
 
     int surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> suface_properties_array);
@@ -102,5 +112,7 @@ private:
     godot::PackedColorArray mario_color;
     godot::PackedVector2Array mario_uv;
 };
+
+VARIANT_ENUM_CAST(SM64Handler, MarioCaps);
 
 #endif // LIBSM64GD_SM64HANDLER_H

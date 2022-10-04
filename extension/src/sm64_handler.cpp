@@ -378,7 +378,6 @@ void SM64Handler::set_mario_velocity(int mario_id, godot::Vector3 velocity)
                             -velocity.x * scale_factor);
 }
 
-
 void SM64Handler::set_mario_forward_velocity(int mario_id, real_t velocity)
 {
     sm64_set_mario_forward_velocity(mario_id, velocity * scale_factor);
@@ -417,6 +416,16 @@ void SM64Handler::mario_heal(int mario_id, int heal_counter)
 void SM64Handler::mario_set_lives(int mario_id, int lives)
 {
     sm64_mario_set_lives(mario_id, lives);
+}
+
+void SM64Handler::mario_interact_cap(int mario_id, MarioCaps cap, int cap_time, bool play_music)
+{
+    sm64_mario_interact_cap(mario_id, (uint32_t) cap, cap_time, (uint8_t) play_music);
+}
+
+void SM64Handler::mario_extend_cap(int mario_id, int cap_time)
+{
+    sm64_mario_extend_cap(mario_id, cap_time);
 }
 
 int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
@@ -524,7 +533,13 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("mario_take_damage", "mario_id", "damage", "source_position", "subtype"), &SM64Handler::mario_take_damage, DEFVAL(0));
     godot::ClassDB::bind_method(godot::D_METHOD("mario_heal", "mario_id", "heal_counter"), &SM64Handler::mario_heal);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_set_lives", "mario_id", "lives"), &SM64Handler::mario_set_lives);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_interact_cap", "mario_id", "cap", "cap_time", "play_music"), &SM64Handler::mario_interact_cap, DEFVAL(0), DEFVAL(true));
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_extend_cap", "mario_id", "cap_time"), &SM64Handler::mario_extend_cap);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation", "surface_properties_array"), &SM64Handler::surface_object_create);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);
+
+    BIND_ENUM_CONSTANT(MARIO_CAPS_VANISH);
+    BIND_ENUM_CONSTANT(MARIO_CAPS_METAL);
+    BIND_ENUM_CONSTANT(MARIO_CAPS_WING);
 }
