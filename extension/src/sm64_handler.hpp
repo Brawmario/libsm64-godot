@@ -99,6 +99,8 @@ public:
     void surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation);
     void surface_object_delete(int object_id);
 
+    void set_volume(real_t volume);
+
 protected:
     static void _bind_methods();
 

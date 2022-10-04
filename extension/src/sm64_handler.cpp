@@ -526,6 +526,11 @@ void SM64Handler::surface_object_delete(int object_id)
     sm64_surface_object_delete(object_id);
 }
 
+void SM64Handler::set_volume(real_t volume)
+{
+    sm64_set_volume(volume);
+}
+
 void SM64Handler::_bind_methods()
 {
     godot::ClassDB::bind_method(godot::D_METHOD("global_init"), &SM64Handler::global_init);
@@ -558,6 +563,7 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation", "surface_properties_array"), &SM64Handler::surface_object_create);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_volume", "volume"), &SM64Handler::set_volume);
 
     BIND_ENUM_CONSTANT(MARIO_CAPS_NORMAL);
     BIND_ENUM_CONSTANT(MARIO_CAPS_VANISH);
