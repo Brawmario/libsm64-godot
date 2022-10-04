@@ -539,6 +539,7 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);
 
+    BIND_ENUM_CONSTANT(MARIO_CAPS_NORMAL);
     BIND_ENUM_CONSTANT(MARIO_CAPS_VANISH);
     BIND_ENUM_CONSTANT(MARIO_CAPS_METAL);
     BIND_ENUM_CONSTANT(MARIO_CAPS_WING);

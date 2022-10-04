@@ -16,6 +16,7 @@ extern "C"
 #include <windows.h>
 #endif
 
+#define MARIO_NORMAL_CAP                0x00000001
 #define MARIO_VANISH_CAP                0x00000002
 #define MARIO_METAL_CAP                 0x00000004
 #define MARIO_WING_CAP                  0x00000008
@@ -29,6 +30,7 @@ public:
     ~SM64Handler();
 
     enum MarioCaps {
+        MARIO_CAPS_NORMAL = MARIO_NORMAL_CAP,
         MARIO_CAPS_VANISH = MARIO_VANISH_CAP,
         MARIO_CAPS_METAL = MARIO_METAL_CAP,
         MARIO_CAPS_WING = MARIO_WING_CAP
