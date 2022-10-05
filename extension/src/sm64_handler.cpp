@@ -55,17 +55,6 @@ static uint8_t *utils_read_file_alloc(const char *path, size_t *fileLength)
     return buffer;
 }
 
-static bool check_in_bounds(real_t num)
-{
-    constexpr real_t bounds = 0x7FFF;
-    return (num > -bounds && num < bounds);
-}
-
-static bool check_in_bounds(const godot::Vector3 &vec)
-{
-    return check_in_bounds(vec.x) && check_in_bounds(vec.y) && check_in_bounds(vec.z);
-}
-
 static void invert_vertex_order_2d(float *arr, size_t triangle_count)
 {
     for (size_t i = 0; i < triangle_count * 6; i += 6)
@@ -203,11 +192,6 @@ void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes, godot
     uint32_t j = 0;
     for (size_t i = 0; i < vertexes.size(); i += 3)
     {
-        if (!check_in_bounds(vertexes[i] * scale_factor)
-                || !check_in_bounds(vertexes[i+1] * scale_factor)
-                || !check_in_bounds(vertexes[i+2] * scale_factor))
-            continue;
-
         godot::Ref<SM64SurfaceProperties> surface_properties = surface_properties_array[i/3];
         if (surface_properties.is_null())
             surface_properties = default_surface_properties;
@@ -235,9 +219,6 @@ void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes, godot
 
 int SM64Handler::mario_create(godot::Vector3 position, godot::Vector3 rotation)
 {
-    if (!check_in_bounds(position))
-        return -2;
-
     float x = (float) ( position.z * scale_factor);
     float y = (float) ( position.y * scale_factor);
     float z = (float) (-position.x * scale_factor);
@@ -463,11 +444,6 @@ int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot
     uint32_t j = 0;
     for (size_t i = 0; i < vertexes.size(); i += 3)
     {
-        if (!check_in_bounds(vertexes[i] * scale_factor)
-                || !check_in_bounds(vertexes[i+1] * scale_factor)
-                || !check_in_bounds(vertexes[i+2] * scale_factor))
-            continue;
-
         godot::Ref<SM64SurfaceProperties> surface_properties = surface_properties_array[i/3];
         if (surface_properties.is_null())
             surface_properties = default_surface_properties;
