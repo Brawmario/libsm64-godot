@@ -35,7 +35,7 @@ enum Caps {
 @export var input_z := "mario_z"
 
 var _velocity := Vector3()
-## Set Mario's velocity in the libsm64 world
+## Mario's velocity in the libsm64 world
 var velocity: Vector3:
 	get:
 		return _velocity
@@ -46,7 +46,7 @@ var velocity: Vector3:
 		_velocity = value
 
 var _health := 0x0880
-## Set Mario's health
+## Mario's health
 var health: int:
 	get:
 		return _health
@@ -57,7 +57,7 @@ var health: int:
 		_health = value
 
 var _invicibility_time_frames := 0
-## Set Mario's invincibility time in seconds
+## Mario's invincibility time in seconds
 var invicibility_time: float:
 	get:
 		return _invicibility_time_frames / FPS
@@ -70,6 +70,7 @@ var invicibility_time: float:
 var hurt_counter := 0
 
 var _lives := 4
+## Mario's lives
 var lives: int:
 	get:
 		return _lives
@@ -79,7 +80,7 @@ var lives: int:
 		sm64_handler.mario_set_lives(_id, value)
 		_lives = value
 
-## Set Mario's water level
+## Mario's water level
 var water_level := -100000.0:
 	get:
 		return water_level
@@ -143,12 +144,6 @@ func _physics_process(delta: float) -> void:
 	_mesh.clear_surfaces()
 	_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_array)
 	_mesh_instance.set_surface_override_material(0, _material)
-
-
-## Globally initialize the libsm64
-func global_init() -> void:
-	if sm64_handler and not sm64_handler.is_init():
-		sm64_handler.global_init()
 
 
 ## Create Mario (requires initializing the libsm64 via the global_init function)
