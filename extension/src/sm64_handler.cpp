@@ -8,6 +8,7 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/array_mesh.hpp>
 
+#define CONVERT_RADIANS_TO_SM64(x) ((int16_t)(-(x) / Math_PI * 32768.0))
 
 static struct SM64TextureAtlasInfo mario_texture_atlas_info = {
     .offset             = 0x114750,
@@ -222,9 +223,9 @@ int SM64Handler::mario_create(godot::Vector3 position, godot::Vector3 rotation)
     float x = (float) ( position.z * scale_factor);
     float y = (float) ( position.y * scale_factor);
     float z = (float) (-position.x * scale_factor);
-    int16_t rx = (int16_t)  godot::Math::rad2deg(rotation.z);
-    int16_t ry = (int16_t)  godot::Math::rad2deg(rotation.y);
-    int16_t rz = (int16_t) -godot::Math::rad2deg(rotation.x);
+    int16_t rx = CONVERT_RADIANS_TO_SM64(-rotation.z);
+    int16_t ry = CONVERT_RADIANS_TO_SM64(-rotation.y);
+    int16_t rz = CONVERT_RADIANS_TO_SM64( rotation.x);
 
     return sm64_mario_create(x, y, z, rx, ry, rz, 0);
 }
