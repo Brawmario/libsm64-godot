@@ -108,7 +108,7 @@ private:
     bool init = false;
     godot::Ref<godot::Image> mario_image;
     godot::String rom_filename;
-    real_t scale_factor = 50.0;
+    real_t scale_factor = 75.0;
 
     struct SM64MarioGeometryBuffers mario_geometry = {NULL, NULL, NULL, NULL, 0};
 
