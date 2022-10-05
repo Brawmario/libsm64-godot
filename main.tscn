@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=3 uid="uid://rrg4n1a8ovj6"]
+[gd_scene load_steps=23 format=3 uid="uid://rrg4n1a8ovj6"]
 
 [ext_resource type="Script" path="res://main.gd" id="1"]
 [ext_resource type="SM64Handler" uid="uid://dssuryb827kaq" path="res://sm_64_handler.tres" id="2_r8jk2"]
 [ext_resource type="Script" path="res://addons/libsm64/mario/sm64_mario.gd" id="3"]
 [ext_resource type="Script" path="res://addons/libsm64/handlers/sm6_static_surfaces_handler.gd" id="4"]
 [ext_resource type="Script" path="res://addons/libsm64/components/sm64_surface_properties_component.gd" id="4_c4hy1"]
+[ext_resource type="Script" path="res://third_person_camera.gd" id="4_liwfn"]
 [ext_resource type="Texture2D" uid="uid://d0ipccf6g5cxx" path="res://icon.svg" id="4_wg8r1"]
 [ext_resource type="SM64SurfaceProperties" uid="uid://bs00vmksj0yos" path="res://burning_sm_64_surface_properties.tres" id="5_p7agb"]
 [ext_resource type="Script" path="res://addons/libsm64/handlers/sm64_surface_objects_handler.gd" id="5_ubqa7"]
@@ -110,14 +111,22 @@ _data = {
 script = ExtResource("1")
 sm64_handler = ExtResource("2_r8jk2")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 20, 20)
-current = true
-
 [node name="SM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 script = ExtResource("3")
 sm64_handler = ExtResource("2_r8jk2")
-camera = NodePath("../Camera3D")
+camera = NodePath("ThirdPersonCamera/HorizontalAxis/VerticalAxis/Camera3D")
+
+[node name="ThirdPersonCamera" type="Marker3D" parent="SM64Mario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+script = ExtResource("4_liwfn")
+
+[node name="HorizontalAxis" type="Marker3D" parent="SM64Mario/ThirdPersonCamera"]
+
+[node name="VerticalAxis" type="Marker3D" parent="SM64Mario/ThirdPersonCamera/HorizontalAxis"]
+
+[node name="Camera3D" type="Camera3D" parent="SM64Mario/ThirdPersonCamera/HorizontalAxis/VerticalAxis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.15296)
+current = true
 
 [node name="FileDialog" type="FileDialog" parent="."]
 title = "Pick Super Mario 64 ROM file"

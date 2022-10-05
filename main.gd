@@ -22,3 +22,5 @@ func _ready() -> void:
 		mario.water_level = 0.0
 
 	$Objects/MovingPlatform/AnimationPlayer.play("Move")
+
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
