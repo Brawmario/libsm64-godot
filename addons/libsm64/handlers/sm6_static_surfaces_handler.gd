@@ -5,7 +5,7 @@ extends Node
 ## SM64Handler instance
 @export var sm64_handler: SM64Handler
 ## Group name that contains the MeshInstance3D that are part of the scene's static surfaces
-@export var static_surfaces_group := "libsm64_static_surfaces"
+@export var static_surfaces_group := &"libsm64_static_surfaces"
 
 var _default_surface_properties := SM64SurfaceProperties.new()
 

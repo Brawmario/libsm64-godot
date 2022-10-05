@@ -20,19 +20,19 @@ enum Caps {
 
 @export_group("Input Actions")
 ## Action equivalent to pushing the joystick to the left
-@export var stick_left := "mario_stick_left"
+@export var stick_left := &"mario_stick_left"
 ## Action equivalent to pushing the joystick to the right
-@export var stick_right := "mario_stick_right"
+@export var stick_right := &"mario_stick_right"
 ## Action equivalent to pushing the joystick upwards
-@export var stick_up := "mario_stick_up"
+@export var stick_up := &"mario_stick_up"
 ## Action equivalent to pushing the joystick downwards
-@export var stick_down := "mario_stick_down"
+@export var stick_down := &"mario_stick_down"
 ## Action equivalent to pushing the A button
-@export var input_a := "mario_a"
+@export var input_a := &"mario_a"
 ## Action equivalent to pushing the B button
-@export var input_b := "mario_b"
+@export var input_b := &"mario_b"
 ## Action equivalent to pushing the Z button
-@export var input_z := "mario_z"
+@export var input_z := &"mario_z"
 
 var _velocity := Vector3()
 ## Mario's velocity in the libsm64 world
@@ -44,6 +44,17 @@ var velocity: Vector3:
 			return
 		sm64_handler.set_mario_velocity(_id, value)
 		_velocity = value
+
+var _face_angle := 0.0
+## Mario's facing angle in radians
+var face_angle: float:
+	get:
+		return _face_angle
+	set(value):
+		if _id < 0:
+			return
+		sm64_handler.set_mario_angle(_id, value)
+		_face_angle =value
 
 var _health := 0x0880
 ## Mario's health
@@ -119,8 +130,8 @@ func _physics_process(delta: float) -> void:
 	if _id < 0:
 		return
 
-	var stick_x := Input.get_action_strength(stick_left) - Input.get_action_strength(stick_right)
-	var stick_y := Input.get_action_strength(stick_up) - Input.get_action_strength(stick_down)
+	var stick_x := Input.get_axis(stick_right, stick_left)
+	var stick_y := Input.get_axis(stick_down, stick_up)
 	_mario_input.stick = Vector2(stick_x, stick_y)
 
 	var look_direction := camera.global_transform.basis.z
@@ -134,7 +145,7 @@ func _physics_process(delta: float) -> void:
 
 	global_position = tick_output["position"] as Vector3
 	_velocity = tick_output["velocity"] as Vector3
-	global_rotation.y = tick_output["face_angle"] as float
+	_face_angle = tick_output["face_angle"] as float
 	_health = tick_output["health"] as float
 	_invicibility_time_frames = tick_output["invinc_timer"] as int
 	hurt_counter = tick_output["hurt_counter"] as int
@@ -181,14 +192,6 @@ func teleport(to_global_position: Vector3) -> void:
 		return
 	sm64_handler.set_mario_position(_id, to_global_position)
 	global_position = to_global_position
-
-
-## Set Mario's facing angle
-func set_face_angle(angle: float) -> void:
-	if _id < 0:
-		return
-	sm64_handler.set_mario_angle(_id, angle)
-	global_rotation.y = angle
 
 
 ## Set Mario's forward velocity in the libsm64 world
