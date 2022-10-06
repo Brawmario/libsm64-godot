@@ -1,20 +1,15 @@
-[gd_scene load_steps=23 format=3 uid="uid://rrg4n1a8ovj6"]
+[gd_scene load_steps=18 format=3 uid="uid://cqv1tkr0q2m7i"]
 
-[ext_resource type="Script" path="res://main.gd" id="1"]
-[ext_resource type="SM64Handler" uid="uid://dssuryb827kaq" path="res://sm_64_handler.tres" id="2_r8jk2"]
-[ext_resource type="Script" path="res://addons/libsm64/mario/sm64_mario.gd" id="3"]
-[ext_resource type="Script" path="res://addons/libsm64/handlers/sm6_static_surfaces_handler.gd" id="4"]
-[ext_resource type="Script" path="res://addons/libsm64/components/sm64_surface_properties_component.gd" id="4_c4hy1"]
-[ext_resource type="Script" path="res://third_person_camera.gd" id="4_liwfn"]
-[ext_resource type="Texture2D" uid="uid://d0ipccf6g5cxx" path="res://icon.svg" id="4_wg8r1"]
-[ext_resource type="SM64SurfaceProperties" uid="uid://bs00vmksj0yos" path="res://burning_sm_64_surface_properties.tres" id="5_p7agb"]
-[ext_resource type="Script" path="res://addons/libsm64/handlers/sm64_surface_objects_handler.gd" id="5_ubqa7"]
+[ext_resource type="Texture2D" path="res://icon.svg" id="1_4h8ry"]
+[ext_resource type="Script" path="res://demo/levels/mini_level.gd" id="1_d0u5v"]
+[ext_resource type="Script" path="res://addons/libsm64/components/sm64_surface_properties_component.gd" id="2_s11w2"]
+[ext_resource type="SM64SurfaceProperties" path="res://demo/sm64_resources/burning_sm_64_surface_properties.tres" id="3_luodt"]
 
 [sub_resource type="BoxMesh" id="8"]
 size = Vector3(5, 10, 5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pcbbo"]
-albedo_texture = ExtResource("4_wg8r1")
+albedo_texture = ExtResource("1_4h8ry")
 
 [sub_resource type="PlaneMesh" id="7"]
 material = SubResource("StandardMaterial3D_pcbbo")
@@ -107,46 +102,19 @@ _data = {
 "RESET": SubResource("12")
 }
 
-[node name="Main" type="Node3D"]
-script = ExtResource("1")
-sm64_handler = ExtResource("2_r8jk2")
-
-[node name="SM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
-script = ExtResource("3")
-sm64_handler = ExtResource("2_r8jk2")
-camera = NodePath("ThirdPersonCamera/HorizontalAxis/VerticalAxis/Camera3D")
-
-[node name="ThirdPersonCamera" type="Marker3D" parent="SM64Mario"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-script = ExtResource("4_liwfn")
-
-[node name="HorizontalAxis" type="Marker3D" parent="SM64Mario/ThirdPersonCamera"]
-
-[node name="VerticalAxis" type="Marker3D" parent="SM64Mario/ThirdPersonCamera/HorizontalAxis"]
-
-[node name="Camera3D" type="Camera3D" parent="SM64Mario/ThirdPersonCamera/HorizontalAxis/VerticalAxis"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.15296)
-current = true
-
-[node name="FileDialog" type="FileDialog" parent="."]
-title = "Pick Super Mario 64 ROM file"
-size = Vector2i(335, 162)
-ok_button_text = "Open"
-mode_overrides_title = false
-file_mode = 0
-access = 2
-filters = PackedStringArray("*.n64", "*.z64")
+[node name="MiniLevel" type="Node3D"]
+script = ExtResource("1_d0u5v")
 
 [node name="StaticSurfaces" type="Node3D" parent="."]
 
 [node name="Wall" type="MeshInstance3D" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5, 0)
 mesh = SubResource("8")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 
 [node name="Platform" type="MeshInstance3D" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
 mesh = SubResource("7")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 
 [node name="Ramp" type="MeshInstance3D" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 5, -10)
@@ -155,11 +123,11 @@ mesh = SubResource("9")
 [node name="FireFloor" type="MeshInstance3D" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 0, 12.5)
 mesh = SubResource("PlaneMesh_ot04n")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 
 [node name="SM64SurfacePropertiesComponent" type="Node" parent="StaticSurfaces/FireFloor"]
-script = ExtResource("4_c4hy1")
-surface_properties = ExtResource("5_p7agb")
+script = ExtResource("2_s11w2")
+surface_properties = ExtResource("3_luodt")
 
 [node name="Pool" type="Node3D" parent="StaticSurfaces"]
 
@@ -188,14 +156,6 @@ libraries = {
 }
 
 [node name="OmniLight3d" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
-light_energy = 20.0
-omni_range = 50.0
-
-[node name="SM64StaticSurfacesHandler" type="Node" parent="."]
-script = ExtResource("4")
-sm64_handler = ExtResource("2_r8jk2")
-
-[node name="SM64SurfaceObjectsHandler" type="Node" parent="."]
-script = ExtResource("5_ubqa7")
-sm64_handler = ExtResource("2_r8jk2")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.392, 0)
+light_energy = 10.0
+omni_range = 40.0

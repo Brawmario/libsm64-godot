@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5sgdqypxdpcl"]
+
+[ext_resource type="Script" path="res://demo/shared/third_person_camera.gd" id="1_7wgks"]
+
+[node name="ThirdPersonCamera" type="Marker3D"]
+script = ExtResource("1_7wgks")
+
+[node name="HorizontalAxis" type="Marker3D" parent="."]
+
+[node name="VerticalAxis" type="Marker3D" parent="HorizontalAxis"]
+
+[node name="Camera3D" type="Camera3D" parent="HorizontalAxis/VerticalAxis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+current = true
