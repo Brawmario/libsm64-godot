@@ -6,6 +6,11 @@ extends Node3D
 const FPS := 30.0
 const DELTA := 1.0 / FPS
 
+## Value that represents Mario being at full health
+const FULL_HEALTH := 0x0880
+## Value that represents one health wedge
+const HEALTH_WEDGE := 0x100
+
 enum Caps {
 	NORMAL = SM64Handler.MARIO_CAPS_NORMAL,
 	VANISH = SM64Handler.MARIO_CAPS_VANISH,
@@ -56,8 +61,8 @@ var face_angle: float:
 		sm64_handler.set_mario_angle(_id, value)
 		_face_angle =value
 
-var _health := 0x0880
-## Mario's health
+var _health := FULL_HEALTH
+## Mario's health (2 bytes, upper byte is the number of health wedges, lower byte portion of next wedge)
 var health: int:
 	get:
 		return _health
@@ -66,6 +71,16 @@ var health: int:
 			return
 		sm64_handler.set_mario_health(_id, value)
 		_health = value
+
+## Mario's amount of health wedges
+var health_wedges: int:
+	get:
+		return _health / HEALTH_WEDGE
+	set(value):
+		if _id < 0:
+			return
+		_health = value * HEALTH_WEDGE
+		sm64_handler.set_mario_health(_id, _health)
 
 var _invicibility_time_frames := 0
 ## Mario's invincibility time in seconds
@@ -215,18 +230,18 @@ func reset_floor_override() -> void:
 	sm64_handler.reset_mario_floor_override(_id)
 
 
-## Make Mario take damage
+## Make Mario take damage in amount of health wedges from a source position
 func take_damage(damage: int, source_position: Vector3, big_knockback := false) -> void:
 	if _id < 0:
 		return
 	sm64_handler.mario_take_damage(_id, damage, source_position, big_knockback)
 
 
-## Heal Mario
-func heal(value: int) -> void:
+## Heal Mario a specific amount of wedges
+func heal(wedges: int) -> void:
 	if _id < 0:
 		return
-	sm64_handler.mario_heal(_id, value)
+	sm64_handler.mario_heal(_id, wedges)
 
 
 ## Equip special cap
