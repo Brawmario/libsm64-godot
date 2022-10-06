@@ -100,6 +100,7 @@ public:
     void surface_object_delete(int object_id);
 
     void set_volume(real_t volume);
+    void set_reverb(int reverb);
 
 protected:
     static void _bind_methods();
