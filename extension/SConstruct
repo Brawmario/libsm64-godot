@@ -52,14 +52,14 @@ env["LINKFLAGS"] = [x for x in env["LINKFLAGS"] if "--static" not in x]
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
-        "../addons/libsm64/extension/bin/libsm64gd.{}.{}.framework/libsm64gd.{}.{}".format(
+        "../addons/libsm64-godot/extension/bin/libsm64gd.{}.{}.framework/libsm64gd.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
         source=sources,
     )
 else:
     library = env.SharedLibrary(
-        "../addons/libsm64/extension/bin/libsm64gd.{}.{}.{}{}".format(
+        "../addons/libsm64-godot/extension/bin/libsm64gd.{}.{}.{}{}".format(
             env["platform"], env["target"], env["arch_suffix"], env["SHLIBSUFFIX"]
         ),
         source=sources,

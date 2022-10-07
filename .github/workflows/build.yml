@@ -84,8 +84,8 @@ jobs:
           cd extension/libsm64
           make -j`nproc`
           cd ../..
-          mkdir -p addons/libsm64/extension/bin
-          cp extension/libsm64/dist/* addons/libsm64/extension/bin/ | true
+          mkdir -p addons/libsm64-godot/extension/bin
+          cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
 
       - name: Compile extension
         shell: sh
@@ -108,7 +108,7 @@ jobs:
       - name: Copy extra files to addon
         shell: sh
         run: |
-          for addon in ${{ github.workspace }}/addons/libsm64/; do
+          for addon in ${{ github.workspace }}/addons/libsm64-godot/; do
             cp --no-clobber '${{ github.workspace }}/README.md' '${{ github.workspace }}/LICENSE' "$addon"
           done
 
