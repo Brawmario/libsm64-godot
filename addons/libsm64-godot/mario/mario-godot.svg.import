@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bhiuog3b3iyge"
-path="res://.godot/imported/mario-godot.svg-ce1593df194b58a7942101fe088b0976.ctex"
+path="res://.godot/imported/mario-godot.svg-d5dd6988e4b14c8a515a8138f3b154ec.ctex"
 metadata={
 "editor_dark_theme": true,
 "editor_scale": 1.0,
@@ -13,8 +13,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/libsm64/mario/mario-godot.svg"
-dest_files=["res://.godot/imported/mario-godot.svg-ce1593df194b58a7942101fe088b0976.ctex"]
+source_file="res://addons/libsm64-godot/mario/mario-godot.svg"
+dest_files=["res://.godot/imported/mario-godot.svg-d5dd6988e4b14c8a515a8138f3b154ec.ctex"]
 
 [params]
 

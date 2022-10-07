@@ -1,9 +1,9 @@
 [gd_scene load_steps=18 format=3 uid="uid://cqv1tkr0q2m7i"]
 
-[ext_resource type="Texture2D" path="res://icon.svg" id="1_4h8ry"]
+[ext_resource type="Texture2D" uid="uid://d0ipccf6g5cxx" path="res://icon.svg" id="1_4h8ry"]
 [ext_resource type="Script" path="res://demo/levels/mini_level.gd" id="1_d0u5v"]
-[ext_resource type="Script" path="res://addons/libsm64/components/sm64_surface_properties_component.gd" id="2_s11w2"]
-[ext_resource type="SM64SurfaceProperties" path="res://demo/sm64_resources/burning_sm_64_surface_properties.tres" id="3_luodt"]
+[ext_resource type="Script" path="res://addons/libsm64-godot/components/sm64_surface_properties_component.gd" id="3_6l4ud"]
+[ext_resource type="SM64SurfaceProperties" uid="uid://bs00vmksj0yos" path="res://demo/sm64_resources/burning_sm_64_surface_properties.tres" id="4_uwnwp"]
 
 [sub_resource type="BoxMesh" id="8"]
 size = Vector3(5, 10, 5)
@@ -126,8 +126,8 @@ mesh = SubResource("PlaneMesh_ot04n")
 skeleton = NodePath("../../..")
 
 [node name="SM64SurfacePropertiesComponent" type="Node" parent="StaticSurfaces/FireFloor"]
-script = ExtResource("2_s11w2")
-surface_properties = ExtResource("3_luodt")
+script = ExtResource("3_6l4ud")
+surface_properties = ExtResource("4_uwnwp")
 
 [node name="Pool" type="Node3D" parent="StaticSurfaces"]
 

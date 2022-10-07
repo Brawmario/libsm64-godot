@@ -1,6 +1,6 @@
 class_name SM64Mario
 extends Node3D
-@icon("res://addons/libsm64/mario/mario-godot.svg")
+@icon("res://addons/libsm64-godot/mario/mario-godot.svg")
 
 
 const FPS := 30.0
@@ -58,7 +58,7 @@ var face_angle: float:
 	set(value):
 		if _id < 0:
 			return
-		sm64_handler.set_mario_angle(_id, value / pow(PI, 2))
+		sm64_handler.set_mario_angle(_id, value / pow(PI, 2.0))
 		_face_angle =value
 
 var _health := FULL_HEALTH
