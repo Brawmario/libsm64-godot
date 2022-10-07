@@ -1,26 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://c5v12wshfhact"]
+[gd_scene load_steps=3 format=3 uid="uid://bjw13uwutue3a"]
 
-[ext_resource type="Script" path="res://demo/main.gd" id="1_le5sv"]
-[ext_resource type="SM64Handler" uid="uid://dssuryb827kaq" path="res://demo/sm64_resources/sm_64_handler.tres" id="2_kbqy2"]
-[ext_resource type="PackedScene" uid="uid://cqv1tkr0q2m7i" path="res://demo/levels/mini_level.tscn" id="3_xbtax"]
-[ext_resource type="PackedScene" uid="uid://b5sgdqypxdpcl" path="res://demo/shared/third_person_camera.tscn" id="5_58jju"]
-[ext_resource type="Script" path="res://addons/libsm64-godot/mario/sm64_mario.gd" id="6_34wrr"]
-[ext_resource type="Script" path="res://addons/libsm64-godot/handlers/sm6_static_surfaces_handler.gd" id="6_e5oq8"]
-[ext_resource type="Script" path="res://addons/libsm64-godot/handlers/sm64_surface_objects_handler.gd" id="7_gbfbe"]
+[ext_resource type="Script" path="res://demo/main.gd" id="1_w76b2"]
+[ext_resource type="SM64Handler" uid="uid://dssuryb827kaq" path="res://demo/sm64_resources/sm_64_handler.tres" id="2_88ed3"]
 
-[node name="Main" type="Node3D"]
-script = ExtResource("1_le5sv")
-sm64_handler = ExtResource("2_kbqy2")
-
-[node name="MiniLevel" parent="." instance=ExtResource("3_xbtax")]
-
-[node name="SM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
-script = ExtResource("6_34wrr")
-sm64_handler = ExtResource("2_kbqy2")
-camera = NodePath("ThirdPersonCamera/HorizontalAxis/VerticalAxis/Camera3D")
-
-[node name="ThirdPersonCamera" parent="SM64Mario" instance=ExtResource("5_58jju")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25866, 0)
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_w76b2")
+sm64_handler = ExtResource("2_88ed3")
 
 [node name="FileDialog" type="FileDialog" parent="."]
 title = "Pick Super Mario 64 ROM file"
@@ -31,12 +22,33 @@ file_mode = 0
 access = 2
 filters = PackedStringArray("*.n64", "*.z64")
 
-[node name="SM64StaticSurfacesHandler" type="Node" parent="."]
-script = ExtResource("6_e5oq8")
-sm64_handler = ExtResource("2_kbqy2")
+[node name="AcceptDialog" type="AcceptDialog" parent="."]
+size = Vector2i(378, 100)
+borderless = true
+dialog_text = "Selected file is not a valid Super Mario 64 ROM."
 
-[node name="SM64SurfaceObjectsHandler" type="Node" parent="."]
-script = ExtResource("7_gbfbe")
-sm64_handler = ExtResource("2_kbqy2")
+[node name="DemoSelection" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[editable path="SM64Mario/ThirdPersonCamera"]
+[node name="DemosLabel" type="Label" parent="DemoSelection"]
+offset_right = 227.0
+offset_bottom = 26.0
+text = "Select which scenario to play:"
+
+[node name="InitialScenarioButton" type="Button" parent="DemoSelection"]
+offset_top = 30.0
+offset_right = 227.0
+offset_bottom = 61.0
+text = "Initial Scenario"
+
+[connection signal="pressed" from="DemoSelection/InitialScenarioButton" to="." method="_on_initial_scenario_button_pressed"]

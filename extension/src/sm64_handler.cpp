@@ -142,6 +142,8 @@ void SM64Handler::global_init()
 
     mario_image.instantiate();
     mario_image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture_packed);
+    // HACK: referecence dies sooner than it should
+    mario_image->reference();
 
     init = true;
 
