@@ -58,7 +58,7 @@ var face_angle: float:
 	set(value):
 		if _id < 0:
 			return
-		sm64_handler.set_mario_angle(_id, value)
+		sm64_handler.set_mario_angle(_id, value / pow(PI, 2))
 		_face_angle =value
 
 var _health := FULL_HEALTH
