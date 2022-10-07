@@ -106,7 +106,8 @@ SM64Handler::SM64Handler()
 
 SM64Handler::~SM64Handler()
 {
-    sm64_global_terminate();
+    if (init)
+        global_terminate();
 
     if (mario_geometry.position)
         ::free(mario_geometry.position);
@@ -146,6 +147,12 @@ void SM64Handler::global_init()
 
     ::free(rom);
     ::free(mario_texture_raw);
+}
+
+void SM64Handler::global_terminate()
+{
+    sm64_global_terminate();
+    init = false;
 }
 
 bool SM64Handler::is_init() const
@@ -516,6 +523,7 @@ void SM64Handler::set_reverb(int reverb)
 void SM64Handler::_bind_methods()
 {
     godot::ClassDB::bind_method(godot::D_METHOD("global_init"), &SM64Handler::global_init);
+    godot::ClassDB::bind_method(godot::D_METHOD("global_terminate"), &SM64Handler::global_terminate);
     godot::ClassDB::bind_method(godot::D_METHOD("is_init"), &SM64Handler::is_init);
     godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image"), &SM64Handler::get_mario_image);
     godot::ClassDB::bind_method(godot::D_METHOD("set_rom_filename", "value"), &SM64Handler::set_rom_filename);

@@ -37,6 +37,7 @@ public:
     };
 
     void global_init();
+    void global_terminate();
     bool is_init() const;
 
     godot::Ref<godot::Image> get_mario_image() const;
