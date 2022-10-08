@@ -40,7 +40,7 @@ public:
     void global_terminate();
     bool is_init() const;
 
-    godot::Ref<godot::Image> get_mario_image() const;
+    godot::Ref<godot::Image> get_mario_image();
 
     void set_rom_filename(const godot::String &value);
     godot::String get_rom_filename() const;
