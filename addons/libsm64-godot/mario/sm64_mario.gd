@@ -50,7 +50,10 @@ var velocity: Vector3:
 		sm64_handler.set_mario_velocity(_id, value)
 		_velocity = value
 
-var _face_angle := 0.0
+var _face_angle := 0.0:
+	set(value):
+		global_rotation.y = value
+		_face_angle = value
 ## Mario's facing angle in radians
 var face_angle: float:
 	get:
@@ -58,8 +61,9 @@ var face_angle: float:
 	set(value):
 		if _id < 0:
 			return
+		# HACK: divide by PI^2
 		sm64_handler.set_mario_angle(_id, value / pow(PI, 2.0))
-		_face_angle =value
+		_face_angle = value
 
 var _health := FULL_HEALTH
 ## Mario's health (2 bytes, upper byte is the number of health wedges, lower byte portion of next wedge)
