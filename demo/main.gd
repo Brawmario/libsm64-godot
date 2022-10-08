@@ -34,3 +34,7 @@ func _select_rom_file() -> String:
 
 func _on_initial_scenario_button_pressed() -> void:
 	get_tree().change_scene_to_packed(preload("res://demo/scenarios/initial_scenario.tscn"))
+
+
+func _on_many_marios_button_pressed():
+	get_tree().change_scene_to_packed(preload("res://demo/scenarios/many_marios.tscn"))

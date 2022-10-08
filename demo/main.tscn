@@ -51,4 +51,11 @@ offset_right = 227.0
 offset_bottom = 61.0
 text = "Initial Scenario"
 
+[node name="ManyMariosButton" type="Button" parent="DemoSelection"]
+offset_top = 65.0
+offset_right = 227.0
+offset_bottom = 96.0
+text = "Many Marios"
+
 [connection signal="pressed" from="DemoSelection/InitialScenarioButton" to="." method="_on_initial_scenario_button_pressed"]
+[connection signal="pressed" from="DemoSelection/ManyMariosButton" to="." method="_on_many_marios_button_pressed"]
