@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cqv1tkr0q2m7i"]
+[gd_scene load_steps=21 format=3 uid="uid://cqv1tkr0q2m7i"]
 
 [ext_resource type="Texture2D" uid="uid://d0ipccf6g5cxx" path="res://icon.svg" id="1_4h8ry"]
 [ext_resource type="Script" path="res://demo/levels/mini_level.gd" id="1_d0u5v"]
@@ -102,6 +102,16 @@ _data = {
 "RESET": SubResource("12")
 }
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uesht"]
+
+[sub_resource type="Sky" id="Sky_alybu"]
+sky_material = SubResource("ProceduralSkyMaterial_uesht")
+
+[sub_resource type="Environment" id="Environment_b18jb"]
+background_mode = 2
+sky = SubResource("Sky_alybu")
+ambient_light_source = 3
+
 [node name="MiniLevel" type="Node3D"]
 script = ExtResource("1_d0u5v")
 
@@ -155,7 +165,10 @@ libraries = {
 "": SubResource("AnimationLibrary_ehrq2")
 }
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_b18jb")
+
 [node name="OmniLight3d" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.392, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0)
 light_energy = 10.0
 omni_range = 40.0
