@@ -148,9 +148,7 @@ func _physics_process(delta: float) -> void:
 	if _id < 0:
 		return
 
-	var stick_x := Input.get_axis(stick_right, stick_left)
-	var stick_y := Input.get_axis(stick_down, stick_up)
-	_mario_input.stick = Vector2(stick_x, stick_y)
+	_mario_input.stick = Input.get_vector(stick_left, stick_right, stick_up, stick_down)
 
 	var look_direction := camera.global_transform.basis.z
 	_mario_input.cam_look = Vector2(look_direction.x, look_direction.z)

@@ -249,8 +249,8 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Ref<SM64Input> in
     godot::Vector2 stick = input->get_stick();
 
     struct SM64MarioInputs mario_inputs = {
-        cam_look.y, // camLookX
-        -cam_look.x, // camLookZ
+        -cam_look.y, // camLookX
+        cam_look.x, // camLookZ
         stick.x,
         stick.y,
         (uint8_t) input->get_a(),

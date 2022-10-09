@@ -19,6 +19,18 @@ func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_mouse_lock"):
+		_toggle_mouse_lock()
+
+
+func _toggle_mouse_lock() -> void:
+	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
 func _on_initial_scenario_tree_exiting() -> void:
 	mario.delete()
 	sm64_handler.global_terminate()
