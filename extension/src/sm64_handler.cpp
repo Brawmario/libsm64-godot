@@ -142,6 +142,7 @@ void SM64Handler::global_init()
 
     mario_image.instantiate();
     mario_image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture_packed);
+    mario_image_texture = godot::ImageTexture::create_from_image(mario_image);
 
     init = true;
 
@@ -165,6 +166,13 @@ godot::Ref<godot::Image> SM64Handler::get_mario_image()
     // HACK: referecence dies sooner than it should
     mario_image->reference();
     return mario_image;
+}
+
+godot::Ref<godot::ImageTexture> SM64Handler::get_mario_image_texture()
+{
+    // HACK: referecence dies sooner than it should
+    mario_image_texture->reference();
+    return mario_image_texture;
 }
 
 void SM64Handler::set_rom_filename(const godot::String &value)
@@ -528,6 +536,7 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("global_terminate"), &SM64Handler::global_terminate);
     godot::ClassDB::bind_method(godot::D_METHOD("is_init"), &SM64Handler::is_init);
     godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image"), &SM64Handler::get_mario_image);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image_texture"), &SM64Handler::get_mario_image_texture);
     godot::ClassDB::bind_method(godot::D_METHOD("set_rom_filename", "value"), &SM64Handler::set_rom_filename);
     godot::ClassDB::bind_method(godot::D_METHOD("get_rom_filename"), &SM64Handler::get_rom_filename);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::STRING, "rom_filename", godot::PROPERTY_HINT_GLOBAL_FILE, "*.n64,*.z64,"), "set_rom_filename", "get_rom_filename");

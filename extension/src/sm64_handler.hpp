@@ -3,6 +3,7 @@
 
 #include <godot_cpp/classes/resource.hpp>
 #include <godot_cpp/classes/image.hpp>
+#include <godot_cpp/classes/image_texture.hpp>
 
 #include <sm64_input.hpp>
 #include <sm64_surface_properties.hpp>
@@ -41,6 +42,7 @@ public:
     bool is_init() const;
 
     godot::Ref<godot::Image> get_mario_image();
+    godot::Ref<godot::ImageTexture> get_mario_image_texture();
 
     void set_rom_filename(const godot::String &value);
     godot::String get_rom_filename() const;
@@ -109,6 +111,7 @@ protected:
 private:
     bool init = false;
     godot::Ref<godot::Image> mario_image;
+    godot::Ref<godot::ImageTexture> mario_image_texture;
     godot::String rom_filename;
     real_t scale_factor = 75.0;
 

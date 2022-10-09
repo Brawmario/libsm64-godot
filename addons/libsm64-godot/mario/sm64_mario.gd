@@ -182,13 +182,10 @@ func create() -> void:
 		if _id < 0:
 			return
 
-		var mario_image := sm64_handler.get_mario_image() as Image
-		var texture := ImageTexture.create_from_image(mario_image)
-
 		_material = StandardMaterial3D.new()
 		_material.vertex_color_use_as_albedo = true
 		_material.detail_enabled = true
-		_material.detail_albedo = texture
+		_material.detail_albedo = sm64_handler.get_mario_image_texture() as ImageTexture
 
 
 ## Delete mario inside the libsm64 world
