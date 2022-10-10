@@ -17,7 +17,7 @@ _global_script_classes=[{
 "base": "Node",
 "class": &"SM64StaticSurfaceHandler",
 "language": &"GDScript",
-"path": "res://addons/libsm64-godot/handlers/sm6_static_surfaces_handler.gd"
+"path": "res://addons/libsm64-godot/handlers/sm64_static_surfaces_handler.gd"
 }, {
 "base": "Node",
 "class": &"SM64SurfaceObjectsHandler",
