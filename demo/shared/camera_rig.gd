@@ -10,16 +10,12 @@ const ANGLE_X_MAX := PI / 3
 @export var sensitivity_mouse := Vector2(0.1, 0.1)
 
 @onready var player := get_parent() as SM64Mario
-@onready var _position_start: Vector3 = position
 
 var _input_relative := Vector2.ZERO
 
 
 func _process(delta: float) -> void:
-	global_transform.origin = (
-		player.global_transform.origin
-		+ _position_start
-	)
+	global_transform.origin = player.global_transform.origin
 
 	var look_direction := get_look_direction()
 	var move_direction := get_move_direction()
@@ -52,7 +48,7 @@ func auto_rotate() -> void:
 		player.rotation.y - 2 * PI
 		if offset > PI
 		else player.rotation.y + 2 * PI
-		if offset < -PI 
+		if offset < -PI
 		else player.rotation.y
 	)
 	rotation.y = lerp(rotation.y, target_angle, 0.015)
@@ -68,6 +64,7 @@ func update_rotation(offset: Vector2) -> void:
 # Returns the direction of the camera movement from the player
 static func get_look_direction() -> Vector2:
 	return Vector2(Input.get_axis("camera_right", "camera_left"), Input.get_axis("camera_up", "camera_down")).normalized()
+
 
 # Returns the move direction of the character controlled by the player
 static func get_move_direction() -> Vector3:
