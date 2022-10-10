@@ -38,3 +38,7 @@ func _on_initial_scenario_button_pressed() -> void:
 
 func _on_many_marios_button_pressed():
 	get_tree().change_scene_to_packed(preload("res://demo/scenarios/many_marios.tscn"))
+
+
+func _on_flying_range_button_pressed() -> void:
+	get_tree().change_scene_to_packed(preload("res://demo/scenarios/flying_range.tscn"))

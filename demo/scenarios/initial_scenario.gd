@@ -2,6 +2,7 @@ extends Node3D
 
 
 @export var sm64_handler: SM64Handler
+@export var start_cap := SM64Mario.Caps.NORMAL
 
 @onready var mario := $SM64Mario as SM64Mario
 
@@ -13,6 +14,7 @@ func _ready() -> void:
 
 	mario.create()
 	mario.water_level = 0.0
+	mario.interact_cap(start_cap)
 
 	$HUD.mario = mario
 

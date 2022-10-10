@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://cedir682bcs2s"]
+
+[ext_resource type="Texture2D" uid="uid://d0ipccf6g5cxx" path="res://icon.svg" id="1_pr5n2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l68y1"]
+albedo_texture = ExtResource("1_pr5n2")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qrbky"]
+material = SubResource("StandardMaterial3D_l68y1")
+size = Vector2(100, 100)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xlgjx"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ukkr4"]
+size = Vector3(20, 6, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yfan3"]
+size = Vector3(5, 3, 20)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bdcox"]
+
+[sub_resource type="Sky" id="Sky_alybu"]
+sky_material = SubResource("ProceduralSkyMaterial_bdcox")
+
+[sub_resource type="Environment" id="Environment_bii7b"]
+background_mode = 2
+sky = SubResource("Sky_alybu")
+ambient_light_source = 3
+
+[node name="BigLevel" type="Node3D"]
+
+[node name="Floor" type="MeshInstance3D" parent="." groups=["libsm64_static_surfaces"]]
+mesh = SubResource("PlaneMesh_qrbky")
+
+[node name="Box" type="MeshInstance3D" parent="." groups=["libsm64_static_surfaces"]]
+transform = Transform3D(0.860466, 0, -0.509507, 0, 1, 0, 0.509507, 0, 0.860466, 13.456, 1, -11.395)
+mesh = SubResource("BoxMesh_xlgjx")
+
+[node name="Plaform" type="MeshInstance3D" parent="." groups=["libsm64_static_surfaces"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 40)
+mesh = SubResource("BoxMesh_ukkr4")
+
+[node name="Steps" type="MeshInstance3D" parent="." groups=["libsm64_static_surfaces"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 1.5, 40)
+mesh = SubResource("BoxMesh_yfan3")
+
+[node name="Steps2" type="MeshInstance3D" parent="." groups=["libsm64_static_surfaces"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 1.5, 40)
+mesh = SubResource("BoxMesh_yfan3")
+
+[node name="OmniLight3d" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0)
+light_energy = 10.0
+omni_range = 80.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_bii7b")

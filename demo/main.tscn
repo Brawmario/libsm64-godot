@@ -57,5 +57,12 @@ offset_right = 227.0
 offset_bottom = 96.0
 text = "Many Marios"
 
+[node name="FlyingRangeButton" type="Button" parent="DemoSelection"]
+offset_top = 100.0
+offset_right = 227.0
+offset_bottom = 131.0
+text = "Flying Range"
+
 [connection signal="pressed" from="DemoSelection/InitialScenarioButton" to="." method="_on_initial_scenario_button_pressed"]
 [connection signal="pressed" from="DemoSelection/ManyMariosButton" to="." method="_on_many_marios_button_pressed"]
+[connection signal="pressed" from="DemoSelection/FlyingRangeButton" to="." method="_on_flying_range_button_pressed"]
