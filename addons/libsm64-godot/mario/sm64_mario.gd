@@ -18,6 +18,9 @@ enum Caps {
 	WING = SM64Handler.MARIO_CAPS_WING,
 }
 
+## Special Caps mask
+const MARIO_SPECIAL_CAPS := Caps.VANISH | Caps.METAL | Caps.WING
+
 ## SM64Handler instance
 @export var sm64_handler: SM64Handler
 ## Camera instance that follows Mario
@@ -120,8 +123,15 @@ var water_level := -100000.0:
 		sm64_handler.set_mario_water_level(_id, value)
 		water_level = value
 
+var _action := 0x0
+var _flags := 0x0
+
 var _mesh_instance: MeshInstance3D
 var _mesh: ArrayMesh
+var _default_material := preload("res://addons/libsm64-godot/mario/mario_default_material.tres") as StandardMaterial3D
+var _vanish_material := preload("res://addons/libsm64-godot/mario/mario_vanish_material.tres") as StandardMaterial3D
+var _metal_material := preload("res://addons/libsm64-godot/mario/mario_metal_material.tres") as StandardMaterial3D
+var _wing_material := preload("res://addons/libsm64-godot/mario/mario_wing_material.tres") as StandardMaterial3D
 var _material: StandardMaterial3D
 var _id := -1
 var _time_since_last_tick := 0.0
@@ -163,9 +173,21 @@ func _physics_process(delta: float) -> void:
 	_velocity = tick_output["velocity"] as Vector3
 	_face_angle = tick_output["face_angle"] as float
 	_health = tick_output["health"] as float
+	_action = tick_output["action"] as int
+	_flags = tick_output["flags"] as int
 	_invicibility_time_frames = tick_output["invinc_timer"] as int
 	hurt_counter = tick_output["hurt_counter"] as int
 	_lives = tick_output["num_lives"] as int
+
+	match _flags & MARIO_SPECIAL_CAPS:
+		Caps.VANISH:
+			_material = _vanish_material
+		Caps.METAL:
+			_material = _metal_material
+		Caps.WING:
+			_material = _wing_material
+		_:
+			_material = _default_material
 
 	var mesh_array := tick_output["mesh_array"] as Array
 	_mesh.clear_surfaces()
@@ -182,10 +204,12 @@ func create() -> void:
 		if _id < 0:
 			return
 
-		_material = StandardMaterial3D.new()
-		_material.vertex_color_use_as_albedo = true
-		_material.detail_enabled = true
-		_material.detail_albedo = sm64_handler.get_mario_image_texture() as ImageTexture
+		if not _default_material.detail_albedo:
+			var detail_texture := sm64_handler.get_mario_image_texture() as ImageTexture
+			_default_material.detail_albedo = detail_texture
+			_wing_material.detail_albedo = detail_texture
+			_metal_material.detail_albedo = detail_texture
+			_vanish_material.detail_albedo = detail_texture
 
 
 ## Delete mario inside the libsm64 world

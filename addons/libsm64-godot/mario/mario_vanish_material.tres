@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bkhlgdhhbo5th"]
+
+[resource]
+vertex_color_use_as_albedo = true
+clearcoat = 0.0
+clearcoat_roughness = 1.0
+detail_enabled = true

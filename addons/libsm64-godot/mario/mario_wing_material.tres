@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bp7mh3rcl7ktc"]
+
+[resource]
+cull_mode = 2
+vertex_color_use_as_albedo = true
+detail_enabled = true
