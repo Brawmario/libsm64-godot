@@ -46,7 +46,7 @@ jobs:
         uses: egor-tensin/setup-mingw@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
 
       - name: (Linux) Set up Pulse Audio and ALSA
         if: ${{ startsWith(matrix.identifier, 'linux-') }}
@@ -62,7 +62,7 @@ jobs:
           scons --version
 
       - name: Checkout project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
 
@@ -113,7 +113,7 @@ jobs:
           done
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ github.event.repository.name }}
           path: |
