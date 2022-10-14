@@ -59,9 +59,7 @@ if env["platform"] == "macos":
     )
 else:
     library = env.SharedLibrary(
-        "../addons/libsm64-godot/extension/bin/libsm64gd.{}.{}.{}{}".format(
-            env["platform"], env["target"], env["arch_suffix"], env["SHLIBSUFFIX"]
-        ),
+        "../addons/libsm64-godot/extension/bin/libsm64gd{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=sources,
     )
 

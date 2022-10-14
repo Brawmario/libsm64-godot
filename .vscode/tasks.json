@@ -6,7 +6,7 @@
         {
             "label": "build-godot-cpp-debug",
             "type": "shell",
-            "command": "scons target=debug use_mingw=yes generate_bindings=yes",
+            "command": "scons target=template_debug use_mingw=yes generate_bindings=yes",
             "presentation": {
                 "echo": true,
                 "revealProblems": "onProblem",
@@ -29,7 +29,7 @@
         {
             "label": "build-godot-cpp-release",
             "type": "shell",
-            "command": "scons target=release use_mingw=yes generate_bindings=yes",
+            "command": "scons target=template_release use_mingw=yes generate_bindings=yes",
             "presentation": {
                 "echo": true,
                 "revealProblems": "onProblem",
@@ -98,7 +98,7 @@
         {
             "label": "build-extension-debug",
             "type": "shell",
-            "command": "scons target=debug use_mingw=yes generate_bindings=no build_library=no",
+            "command": "scons target=template_debug use_mingw=yes generate_bindings=no build_library=no",
             "presentation": {
                 "echo": true,
                 "revealProblems": "onProblem",
@@ -118,7 +118,7 @@
         {
             "label": "build-extension-release",
             "type": "shell",
-            "command": "scons target=release use_mingw=yes generate_bindings=no build_library=no",
+            "command": "scons target=template_release use_mingw=yes generate_bindings=no build_library=no",
             "presentation": {
                 "echo": true,
                 "revealProblems": "onProblem",
