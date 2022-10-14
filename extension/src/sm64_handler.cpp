@@ -489,9 +489,9 @@ int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot
     surface_object.transform.position[1] =  position.y * scale_factor;
     surface_object.transform.position[2] = -position.x * scale_factor;
 
-    surface_object.transform.eulerRotation[0] = -godot::Math::rad2deg(rotation.z);
-    surface_object.transform.eulerRotation[1] = -godot::Math::rad2deg(rotation.y);
-    surface_object.transform.eulerRotation[2] =  godot::Math::rad2deg(rotation.x);
+    surface_object.transform.eulerRotation[0] = -godot::Math::rad_to_deg(rotation.z);
+    surface_object.transform.eulerRotation[1] = -godot::Math::rad_to_deg(rotation.y);
+    surface_object.transform.eulerRotation[2] =  godot::Math::rad_to_deg(rotation.x);
 
     id = sm64_surface_object_create(&surface_object);
 
@@ -508,9 +508,9 @@ void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, go
     transform.position[1] =  position.y * scale_factor;
     transform.position[2] = -position.x * scale_factor;
 
-    transform.eulerRotation[0] = -godot::Math::rad2deg(rotation.z);
-    transform.eulerRotation[1] = -godot::Math::rad2deg(rotation.y);
-    transform.eulerRotation[2] =  godot::Math::rad2deg(rotation.x);
+    transform.eulerRotation[0] = -godot::Math::rad_to_deg(rotation.z);
+    transform.eulerRotation[1] = -godot::Math::rad_to_deg(rotation.y);
+    transform.eulerRotation[2] =  godot::Math::rad_to_deg(rotation.x);
 
     sm64_surface_object_move(object_id, &transform);
 }
