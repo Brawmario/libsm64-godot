@@ -5,6 +5,19 @@
 [ext_resource type="Script" path="res://addons/libsm64-godot/components/sm64_surface_properties_component.gd" id="3_6l4ud"]
 [ext_resource type="SM64SurfaceProperties" uid="uid://bs00vmksj0yos" path="res://demo/sm64_resources/burning_sm_64_surface_properties.tres" id="4_uwnwp"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7ddi4"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_fjdmo"]
+sky_material = SubResource("ProceduralSkyMaterial_7ddi4")
+
+[sub_resource type="Environment" id="Environment_m3obt"]
+background_mode = 2
+sky = SubResource("Sky_fjdmo")
+tonemap_mode = 2
+glow_enabled = true
+
 [sub_resource type="BoxMesh" id="8"]
 size = Vector3(5, 10, 5)
 
@@ -102,18 +115,15 @@ _data = {
 "RESET": SubResource("12")
 }
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uesht"]
-
-[sub_resource type="Sky" id="Sky_alybu"]
-sky_material = SubResource("ProceduralSkyMaterial_uesht")
-
-[sub_resource type="Environment" id="Environment_b18jb"]
-background_mode = 2
-sky = SubResource("Sky_alybu")
-ambient_light_source = 3
-
 [node name="MiniLevel" type="Node3D"]
 script = ExtResource("1_d0u5v")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_m3obt")
 
 [node name="StaticSurfaces" type="Node3D" parent="."]
 
@@ -164,11 +174,3 @@ playback_process_mode = 0
 libraries = {
 "": SubResource("AnimationLibrary_ehrq2")
 }
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_b18jb")
-
-[node name="OmniLight3d" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0)
-light_energy = 10.0
-omni_range = 40.0
