@@ -2,7 +2,7 @@
 
 Addon that binds the libsm64 to godot via GDExtention, allowing to integrate mario into any Godot 4 project.
 
-![](https://i.imgur.com/ilo5orj.png)
+![](https://i.imgur.com/l8qOnad.png)
 
 ## Current Godot Compatibility
 
