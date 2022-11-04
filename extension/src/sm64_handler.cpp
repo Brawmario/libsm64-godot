@@ -140,8 +140,7 @@ void SM64Handler::global_init()
     for (size_t i = 0; i < 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT; i++)
         mario_texture_packed.set(i, mario_texture_raw[i]);
 
-    mario_image.instantiate();
-    mario_image->create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture_packed);
+    mario_image = godot::Image::create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture_packed);
     mario_image_texture = godot::ImageTexture::create_from_image(mario_image);
 
     init = true;
