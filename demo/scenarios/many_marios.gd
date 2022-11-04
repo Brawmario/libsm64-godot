@@ -6,7 +6,7 @@ extends Node3D
 
 func _ready() -> void:
 	sm64_handler.global_init()
-	$SM64StaticSurfacesHandler.load_static_sufaces()
+	$SM64StaticSurfacesHandler.load_static_surfaces()
 	$SM64SurfaceObjectsHandler.load_all_surface_objects()
 
 	for node in get_tree().get_nodes_in_group("libsm64_mario"):

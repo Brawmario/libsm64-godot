@@ -26,5 +26,5 @@ Simple steps for basic use:
 2. Feed *SM64Mario.sm64_handler* the filepath to the Super Mario 64 ROM file (for legal reasons, steps to get a ROM will not be disclosed).
 3. Call the `SM64Mario.sm64_handler.global_init()` function.
 4. Add the meshes that compose the world to the `libsm64_static_surfaces` group (NOTICE: use simple, low-polycount meshes for best results).
-5. Add a *SM64StaticSurfaceHandler* node to the scene and call `StaticSurfaceHandler.load_static_sufaces()` (no, this is not a typo; will probably be fixed).
+5. Add a *SM64StaticSurfaceHandler* node to the scene and call `StaticSurfaceHandler.load_static_surfaces()`.
 6. Add a *SM64Mario* (or as many as you want) and call `Mario3D.create()` (Set the actions in the "Input Actions" export group in order to control Mario).

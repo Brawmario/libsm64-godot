@@ -11,7 +11,7 @@ var _default_surface_properties := SM64SurfaceProperties.new()
 
 
 ## Load all MeshInstance3D in static_surfaces_group into the SM64Handler instance
-func load_static_sufaces() -> void:
+func load_static_surfaces() -> void:
 	var faces := PackedVector3Array()
 	var surface_properties_array: Array[SM64SurfaceProperties] = []
 
