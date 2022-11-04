@@ -6,7 +6,7 @@ Addon that binds the libsm64 to godot via GDExtention, allowing to integrate mar
 
 ## Current Godot Compatibility
 
-Currently compatible with Godot 4.0 beta 1 - 3, with binaries compiled for Windows and Linux 64 bits. Check the [https://github.com/Brawmario/libsm64-godot/releases](releases) for the files.
+Currently compatible with Godot 4.0 beta 4, with binaries compiled for Windows and Linux 64 bits. Check the [https://github.com/Brawmario/libsm64-godot/releases](releases) for the files.
 
 ## How to
 
