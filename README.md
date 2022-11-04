@@ -17,14 +17,18 @@ This add-on consists of two main components:
 
 It also adds two helper nodes:
 
-- *StaticSurfaceHandler*: Extends Node; provides C to load all the meshes under the `libsm64_static_surfaces` group.
+- *StaticSurfaceHandler*: Extends Node; provides helper functions to load all the meshes under the `libsm64_static_surfaces` group.
 - *SurfaceObjectsHandler*: Extends Node; provides helper functions for adding moving objects the libsm64 world.
+
+This add-on requires a Super Mario 64 (USA) ROM file (for legal reasons, steps to get a ROM will not be disclosed). For the included demo project, make sure the ROM file has the following SHA256 hash:
+
+>17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91
 
 Simple steps for basic use:
 
-1. Add one instance of a *SM64Mario* into the scene tree.
-2. Feed *SM64Mario.sm64_handler* the filepath to the Super Mario 64 ROM file (for legal reasons, steps to get a ROM will not be disclosed).
-3. Call the `SM64Mario.sm64_handler.global_init()` function.
+1. Create one instance of *SM64Handler* in the project's filesystem.
+2. Feed *SM64Handler* the filepath to the Super Mario 64 ROM file.
+3. Call the `SM64Handler.global_init()` function.
 4. Add the meshes that compose the world to the `libsm64_static_surfaces` group (NOTICE: use simple, low-polycount meshes for best results).
 5. Add a *SM64StaticSurfaceHandler* node to the scene and call `StaticSurfaceHandler.load_static_surfaces()`.
-6. Add a *SM64Mario* (or as many as you want) and call `Mario3D.create()` (Set the actions in the "Input Actions" export group in order to control Mario).
+6. Add a *SM64Mario* (or as many as you want) and call `SM64Mario.create()` (Set the actions in the "Input Actions" export group in order to control Mario).
