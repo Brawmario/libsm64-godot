@@ -1,10 +1,13 @@
 extends PanelContainer
 
 
-const MARIO_INFO_FORMAT := "Lives: %d
+const MARIO_INFO_FORMAT := """\
+Action: %s
+Lives: %d
 Health wedges: %d
 Invicibility Time: %.2f
-Face angle: %dº"
+Face angle: %dº
+"""
 
 var mario: SM64Mario
 
@@ -13,7 +16,9 @@ var mario: SM64Mario
 
 func _process(_delta: float) -> void:
 	if mario:
-		mario_info_label.text = MARIO_INFO_FORMAT % [mario.lives,
+		mario_info_label.text = MARIO_INFO_FORMAT % [
+				mario.get_action_name(),
+				mario.lives,
 				mario.health_wedges,
 				mario.invicibility_time,
 				rad_to_deg(mario.face_angle)]

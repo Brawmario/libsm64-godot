@@ -240,6 +240,11 @@ func delete() -> void:
 	_id = -1
 
 
+## Get the current action name
+func get_action_name() -> StringName:
+	return SM64MarioAction.to_action_name(_action)
+
+
 ## Teleport mario in the libsm64 world
 func teleport(to_global_position: Vector3) -> void:
 	if _id < 0:
@@ -249,10 +254,10 @@ func teleport(to_global_position: Vector3) -> void:
 
 
 ## Set Mario's forward velocity in the libsm64 world
-func set_forward_velocity(vel: float) -> void:
+func set_forward_velocity(velocity: float) -> void:
 	if _id < 0:
 		return
-	sm64_handler.set_mario_forward_velocity(_id, vel)
+	sm64_handler.set_mario_forward_velocity(_id, velocity)
 
 
 ## Override the floor properties
