@@ -80,8 +80,8 @@ public:
 
     void mario_delete(int mario_id);
 
-    // void sm64_set_mario_action(int32_t marioId, uint32_t action);
-    // void sm64_set_mario_state(int32_t marioId, uint32_t flags);
+    void set_mario_action(int mario_id, int action);
+    void set_mario_state(int mario_id, int flags);
     void set_mario_position(int mario_id, godot::Vector3 position);
     void set_mario_angle(int mario_id, real_t face_angle);
     void set_mario_velocity(int mario_id, godot::Vector3 velocity);

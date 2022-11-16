@@ -42,6 +42,29 @@ const MARIO_SPECIAL_CAPS := Caps.VANISH | Caps.METAL | Caps.WING
 ## Action equivalent to pushing the Z button
 @export var input_z := &"mario_z"
 
+
+var _action := 0x0
+## Mario's action flags
+var action: int:
+	get:
+		return _action
+	set(value):
+		if _id < 0:
+			return
+		sm64_handler.set_mario_action(_id, value)
+		_action = value
+
+var _flags := 0x0
+## Mario's state flags
+var flags: int:
+	get:
+		return _flags
+	set(value):
+		if _id < 0:
+			return
+		sm64_handler.set_mario_state(_id, value)
+		_flags = value
+
 var _velocity := Vector3()
 ## Mario's velocity in the libsm64 world
 var velocity: Vector3:
@@ -122,9 +145,6 @@ var water_level := -100000.0:
 			return
 		sm64_handler.set_mario_water_level(_id, value)
 		water_level = value
-
-var _action := 0x0
-var _flags := 0x0
 
 var _mesh_instance: MeshInstance3D
 var _mesh: ArrayMesh

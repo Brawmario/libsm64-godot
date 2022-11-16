@@ -355,6 +355,16 @@ void SM64Handler::mario_delete(int mario_id)
     sm64_mario_delete(mario_id);
 }
 
+void SM64Handler::set_mario_action(int mario_id, int action)
+{
+    sm64_set_mario_action(mario_id, (uint32_t) action);
+}
+
+void SM64Handler::set_mario_state(int mario_id, int flags)
+{
+    sm64_set_mario_state(mario_id, (uint32_t) flags);
+}
+
 void SM64Handler::set_mario_position(int mario_id, godot::Vector3 position)
 {
     sm64_set_mario_position(mario_id,
@@ -546,6 +556,8 @@ void SM64Handler::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position", "rotation"), &SM64Handler::mario_create);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "input"), &SM64Handler::mario_tick);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &SM64Handler::mario_delete);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_action", "mario_id", "action"), &SM64Handler::set_mario_action);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_state", "mario_id", "flags"), &SM64Handler::set_mario_state);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_position", "mario_id", "position"), &SM64Handler::set_mario_position);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_angle", "mario_id", "angle"), &SM64Handler::set_mario_angle);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_velocity", "mario_id", "velocity"), &SM64Handler::set_mario_velocity);
