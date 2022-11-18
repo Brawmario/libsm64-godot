@@ -21,6 +21,12 @@ enum Caps {
 ## Special Caps mask
 const MARIO_SPECIAL_CAPS := Caps.VANISH | Caps.METAL | Caps.WING
 
+signal action_changed(action: int)
+signal flags_changed(flags: int)
+signal health_changed(health: int)
+signal health_wedges_changed(health_wedges: int)
+signal lives_changed(lives: int)
+
 ## SM64Handler instance
 @export var sm64_handler: SM64Handler
 ## Camera instance that follows Mario
@@ -42,8 +48,10 @@ const MARIO_SPECIAL_CAPS := Caps.VANISH | Caps.METAL | Caps.WING
 ## Action equivalent to pushing the Z button
 @export var input_z := &"mario_z"
 
-
-var _action := 0x0
+var _action := 0x0:
+	set(value):
+		_action = value
+		action_changed.emit(_action)
 ## Mario's action flags
 var action: int:
 	get:
@@ -54,7 +62,10 @@ var action: int:
 		sm64_handler.set_mario_action(_id, value)
 		_action = value
 
-var _flags := 0x0
+var _flags := 0x0:
+	set(value):
+		_flags = value
+		flags_changed.emit(_flags)
 ## Mario's state flags
 var flags: int:
 	get:
@@ -91,7 +102,11 @@ var face_angle: float:
 		sm64_handler.set_mario_angle(_id, value / pow(PI, 2.0))
 		_face_angle = value
 
-var _health := FULL_HEALTH
+var _health := FULL_HEALTH:
+	set(value):
+		_health = value
+		health_changed.emit(_health)
+		health_wedges_changed.emit(health_wedges)
 ## Mario's health (2 bytes, upper byte is the number of health wedges, lower byte portion of next wedge)
 var health: int:
 	get:
@@ -105,12 +120,13 @@ var health: int:
 ## Mario's amount of health wedges
 var health_wedges: int:
 	get:
-		return _health / HEALTH_WEDGE
+		return _health >> 0x8 if _health > 0 else 0x0
 	set(value):
 		if _id < 0:
 			return
-		_health = value * HEALTH_WEDGE
-		sm64_handler.set_mario_health(_id, _health)
+		var new_health := value << 0x8 if value > 0 else 0x0
+		sm64_handler.set_mario_health(_id, new_health)
+		_health = new_health
 
 var _invicibility_time_frames := 0
 ## Mario's invincibility time in seconds
@@ -125,7 +141,10 @@ var invicibility_time: float:
 
 var hurt_counter := 0
 
-var _lives := 4
+var _lives := 4:
+	set(value):
+		_lives = value
+		lives_changed.emit(_lives)
 ## Mario's lives
 var lives: int:
 	get:
@@ -192,12 +211,25 @@ func _physics_process(delta: float) -> void:
 	global_position = tick_output["position"] as Vector3
 	_velocity = tick_output["velocity"] as Vector3
 	_face_angle = tick_output["face_angle"] as float
-	_health = tick_output["health"] as float
-	_action = tick_output["action"] as int
-	_flags = tick_output["flags"] as int
+
+	var new_health := tick_output["health"] as float
+	if new_health != _health:
+		_health = new_health
+
+	var new_action := tick_output["action"] as int
+	if new_action != _action:
+		_action = new_action
+
+	var new_flags := tick_output["flags"] as int
+	if new_flags != _flags:
+		_flags = new_flags
+
 	_invicibility_time_frames = tick_output["invinc_timer"] as int
 	hurt_counter = tick_output["hurt_counter"] as int
-	_lives = tick_output["num_lives"] as int
+
+	var new_lives := tick_output["num_lives"] as int
+	if new_lives != _lives:
+		_lives = new_lives
 
 	match _flags & MARIO_SPECIAL_CAPS:
 		Caps.VANISH:
