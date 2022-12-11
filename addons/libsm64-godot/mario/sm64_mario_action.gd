@@ -763,5 +763,5 @@ static func to_action_name(action: int) -> StringName:
 			return &"HOLDING_BOWSER"
 		RELEASING_BOWSER:
 			return &"RELEASING_BOWSER"
-		_:
-			return &"UNKNOWN"
+
+	return &"UNKNOWN"
