@@ -8,22 +8,18 @@ offset_bottom = 104.0
 script = ExtResource("1_gwlej")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-offset_right = 173.0
-offset_bottom = 139.0
+layout_mode = 2
 
 [node name="MarioInfoLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
-offset_right = 173.0
-offset_bottom = 104.0
+layout_mode = 2
 text = "Lives: %d
 Health wedges: %d
 Invicibility Time: %.2f
 Face angle: %dº"
 
 [node name="ReturnButton" type="Button" parent="VBoxContainer"]
-offset_top = 108.0
-offset_right = 173.0
-offset_bottom = 139.0
+layout_mode = 2
 text = "Return to Main Menu"
 
 [connection signal="pressed" from="VBoxContainer/ReturnButton" to="." method="_on_return_button_pressed"]
