@@ -27,6 +27,8 @@ jobs:
             target: template_release
             platform: linux
             arch: x86_64
+            export_preset: Linux/X11
+            export_filename: godot-wordle.x86_64
           - identifier: windows-debug
             name: Windows Debug
             runner: ubuntu-latest
@@ -39,6 +41,8 @@ jobs:
             target: template_release
             platform: windows
             arch: x86_64
+            export_preset: Windows Desktop
+            export_filename: godot-wordle.exe
 
     steps:
       - name: (Windows) Set up MinGW
@@ -112,9 +116,28 @@ jobs:
             cp --no-clobber '${{ github.workspace }}/README.md' '${{ github.workspace }}/LICENSE' "$addon"
           done
 
-      - name: Upload artifact
+      - name: Upload demo project
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}
-          path: |
-            ${{ github.workspace }}
+          name: ${{ github.event.repository.name }}-project
+          path: ${{ github.workspace }}
+
+      - name: Upload addon
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-project
+          path: ${{ github.workspace }}/addons/${{ github.event.repository.name }}
+
+      - name: Export demo
+        shell: sh
+        if: ${{ endsWith(matrix.identifier, '-release') }}
+        run: |
+          mkdir -v -p build/${{ matrix.platform }}
+          godot -v --export "${{ matrix.export_preset }}" build/${{ matrix.platform }}/${{ matrix.export_filename }}
+
+      - name: Upload demo
+        if: ${{ endsWith(matrix.identifier, '-release') }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.${{ matrix.platform }}
+          path: build/${{ matrix.platform }}
