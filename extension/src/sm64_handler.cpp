@@ -162,15 +162,11 @@ bool SM64Handler::is_init() const
 
 godot::Ref<godot::Image> SM64Handler::get_mario_image()
 {
-    // HACK: referecence dies sooner than it should
-    mario_image->reference();
     return mario_image;
 }
 
 godot::Ref<godot::ImageTexture> SM64Handler::get_mario_image_texture()
 {
-    // HACK: referecence dies sooner than it should
-    mario_image_texture->reference();
     return mario_image_texture;
 }
 
@@ -246,23 +242,26 @@ int SM64Handler::mario_create(godot::Vector3 position, godot::Vector3 rotation)
     return sm64_mario_create(x, y, z, rx, ry, rz, 0);
 }
 
-godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Ref<SM64Input> input)
+godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary input)
 {
     godot::Dictionary ret;
     godot::Array mesh_array;
     struct SM64MarioState out_state;
 
-    godot::Vector2 cam_look = input->get_cam_look();
-    godot::Vector2 stick = input->get_stick();
+    godot::Vector2 cam_look = input["cam_look"];
+    godot::Vector2 stick = input["stick"];
+    bool a = input["a"];
+    bool b = input["b"];
+    bool z = input["z"];
 
     struct SM64MarioInputs mario_inputs = {
         -cam_look.y, // camLookX
         cam_look.x, // camLookZ
         stick.x,
         stick.y,
-        (uint8_t) input->get_a(),
-        (uint8_t) input->get_b(),
-        (uint8_t) input->get_z()
+        (uint8_t) a,
+        (uint8_t) b,
+        (uint8_t) z
     };
 
     sm64_mario_tick(mario_id, &mario_inputs, &out_state, &mario_geometry);

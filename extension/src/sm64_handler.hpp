@@ -76,7 +76,7 @@ public:
      *     "array_mesh": godot::Ref<godot::ArrayMesh>,
      * }
      */
-    godot::Dictionary mario_tick(int mario_id, godot::Ref<SM64Input> input);
+    godot::Dictionary mario_tick(int mario_id, godot::Dictionary input);
 
     void mario_delete(int mario_id);
 

@@ -35,9 +35,9 @@ protected:
 private:
     godot::Vector2 cam_look;
     godot::Vector2 stick;
-    bool a;
-    bool b;
-    bool z;
+    bool a = false;
+    bool b = false;
+    bool z = false;
 };
 
 #endif // LIBSM64GD_SM64INPUT_H

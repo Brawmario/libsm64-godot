@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bjw13uwutue3a"]
 
 [ext_resource type="Script" path="res://demo/main.gd" id="1_w76b2"]
-[ext_resource type="MissingResource" uid="uid://dssuryb827kaq" path="res://demo/sm64_resources/sm_64_handler.tres" id="2_88ed3"]
+[ext_resource type="SM64Handler" uid="uid://dssuryb827kaq" path="res://demo/sm64_resources/sm_64_handler.tres" id="2_88ed3"]
 
 [node name="Main" type="Control"]
 layout_mode = 3

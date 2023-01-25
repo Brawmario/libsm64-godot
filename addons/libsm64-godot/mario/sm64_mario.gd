@@ -1,6 +1,6 @@
+@icon("res://addons/libsm64-godot/mario/mario-godot.svg")
 class_name SM64Mario
 extends Node3D
-@icon("res://addons/libsm64-godot/mario/mario-godot.svg")
 
 
 const FPS := 30.0
@@ -174,7 +174,8 @@ var _wing_material := preload("res://addons/libsm64-godot/mario/mario_wing_mater
 var _material: StandardMaterial3D
 var _id := -1
 var _time_since_last_tick := 0.0
-var _mario_input := SM64Input.new()
+# FIXME: SM64Input stopped working in beta 15
+var _mario_input := {}
 
 
 func _ready() -> void:
@@ -208,26 +209,26 @@ func _physics_process(delta: float) -> void:
 
 	var tick_output := sm64_handler.mario_tick(_id, _mario_input)
 
-	global_position = tick_output["position"] as Vector3
-	_velocity = tick_output["velocity"] as Vector3
-	_face_angle = tick_output["face_angle"] as float
+	global_position = tick_output.position as Vector3
+	_velocity = tick_output.velocity as Vector3
+	_face_angle = tick_output.face_angle as float
 
-	var new_health := tick_output["health"] as float
+	var new_health := tick_output.health as float
 	if new_health != _health:
 		_health = new_health
 
-	var new_action := tick_output["action"] as int
+	var new_action := tick_output.action as int
 	if new_action != _action:
 		_action = new_action
 
-	var new_flags := tick_output["flags"] as int
+	var new_flags := tick_output.flags as int
 	if new_flags != _flags:
 		_flags = new_flags
 
-	_invicibility_time_frames = tick_output["invinc_timer"] as int
-	hurt_counter = tick_output["hurt_counter"] as int
+	_invicibility_time_frames = tick_output.invinc_timer as int
+	hurt_counter = tick_output.hurt_counter as int
 
-	var new_lives := tick_output["num_lives"] as int
+	var new_lives := tick_output.num_lives as int
 	if new_lives != _lives:
 		_lives = new_lives
 
@@ -241,7 +242,7 @@ func _physics_process(delta: float) -> void:
 		_:
 			_material = _default_material
 
-	var mesh_array := tick_output["mesh_array"] as Array
+	var mesh_array := tick_output.mesh_array as Array
 	_mesh.clear_surfaces()
 	_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_array)
 	_mesh_instance.set_surface_override_material(0, _material)
