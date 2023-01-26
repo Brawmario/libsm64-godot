@@ -130,7 +130,7 @@ jobs:
 
       - name: Export demo
         # Only one matrix needs to run this
-        if: matrix.platform == "linux-release"
+        if: matrix.identifier == 'linux-release'
         id: export
         uses: firebelley/godot-export@v4.6.0
         with:
