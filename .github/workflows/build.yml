@@ -148,7 +148,7 @@ jobs:
         if: ${{ endsWith(matrix.identifier, '-release') }}
         run: |
           mkdir -v -p export/${{ matrix.platform }}
-          ./${GODOT_EXE} -v --export-release "${{ matrix.export_preset }}" export/${{ matrix.platform }}/${{ matrix.export_filename }}
+          ./${GODOT_EXE} -v --headless --export-release "${{ matrix.export_preset }}" export/${{ matrix.platform }}/${{ matrix.export_filename }}
 
       - name: Upload demo
         if: ${{ endsWith(matrix.identifier, '-release') }}
