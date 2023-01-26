@@ -125,19 +125,25 @@ jobs:
       - name: Upload addon
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-project
+          name: ${{ github.event.repository.name }}-addon
           path: ${{ github.workspace }}/addons/${{ github.event.repository.name }}
 
       - name: Export demo
-        shell: sh
-        if: ${{ endsWith(matrix.identifier, '-release') }}
-        run: |
-          mkdir -v -p build/${{ matrix.platform }}
-          godot -v --export "${{ matrix.export_preset }}" build/${{ matrix.platform }}/${{ matrix.export_filename }}
+        # Only one matrix needs to run this
+        if: matrix.platform == "linux-release"
+        id: export
+        uses: firebelley/godot-export@v4.6.0
+        with:
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.0/beta15/Godot_v4.0-beta15_linux.x86_64.zip
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.0/beta15/Godot_v4.0-beta15_export_templates.tpz
+          relative_project_path: ${{ github.workspace }}
+          archive_output: true
+          use_godot_4: true
 
       - name: Upload demo
-        if: ${{ endsWith(matrix.identifier, '-release') }}
+        # Only one matrix needs to run this
+        if: matrix.platform == "linux-release"
         uses: actions/upload-artifact@v3
         with:
           name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.${{ matrix.platform }}
-          path: build/${{ matrix.platform }}
+          path: ${{ steps.export.outputs.archive_directory }}
