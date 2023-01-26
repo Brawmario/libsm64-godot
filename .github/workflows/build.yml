@@ -142,7 +142,7 @@ jobs:
 
       - name: Upload demo
         # Only one matrix needs to run this
-        if: matrix.platform == "linux-release"
+        if: matrix.identifier == 'linux-release'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.${{ matrix.platform }}
