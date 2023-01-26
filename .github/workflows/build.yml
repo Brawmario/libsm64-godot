@@ -7,6 +7,12 @@ on:
 #    tags:
 #      - 'v*.*.*'
 
+env:
+  GODOT_EXE_LINK: https://downloads.tuxfamily.org/godotengine/4.0/beta15/Godot_v4.0-beta15_linux.x86_64.zip
+  GODOT_TEMPLATES_LINK: https://downloads.tuxfamily.org/godotengine/4.0/beta15/Godot_v4.0-beta15_export_templates.tpz
+  GODOT_EXE: Godot_v4.0-beta15_linux.x86_64
+  GODOT_TEMPLATES: Godot_v4.0-beta15_export_templates.tpz
+
 jobs:
   build:
     runs-on: ${{ matrix.runner }}
@@ -56,7 +62,7 @@ jobs:
         if: ${{ startsWith(matrix.identifier, 'linux-') }}
         shell: sh
         run: |
-          sudo apt-get install libpulse-dev libasound2-dev
+          apt-get install libpulse-dev libasound2-dev
 
       - name: Set up SCons
         shell: sh
@@ -119,31 +125,33 @@ jobs:
       - name: Upload demo project
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-project
+          name: ${{ github.event.repository.name }}-project.${{ github.ref_name }}
           path: ${{ github.workspace }}
 
       - name: Upload addon
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-addon
-          path: ${{ github.workspace }}/addons/${{ github.event.repository.name }}
+          name: ${{ github.event.repository.name }}-addon.${{ github.ref_name }}
+          path: ${{ github.workspace }}/addons
+
+      - name: Setup demo export
+        if: ${{ endsWith(matrix.identifier, '-release') }}
+        run: |
+          apt-get install unzip wget
+          wget ${GODOT_EXE_LINK}
+          unzip ${GODOT_EXE}
+          wget ${GODOT_TEMPLATES_LINK}
+          unzip ${GODOT_TEMPLATES} ~/.local/share/godot
 
       - name: Export demo
-        # Only one matrix needs to run this
-        if: matrix.identifier == 'linux-release'
-        id: export
-        uses: firebelley/godot-export@v4.6.0
-        with:
-          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.0/beta15/Godot_v4.0-beta15_linux.x86_64.zip
-          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.0/beta15/Godot_v4.0-beta15_export_templates.tpz
-          relative_project_path: ${{ github.workspace }}
-          archive_output: true
-          use_godot_4: true
+        if: ${{ endsWith(matrix.identifier, '-release') }}
+        run: |
+          mkdir -v -p export/${{ matrix.platform }}
+          ./${GODOT_EXE} -v --export-release "${{ matrix.export_preset }}" export/${{ matrix.platform }}/${{ matrix.export_filename }}
 
       - name: Upload demo
-        # Only one matrix needs to run this
-        if: matrix.identifier == 'linux-release'
-        uses: actions/upload-artifact@v3
+        if: ${{ endsWith(matrix.identifier, '-release') }}
+        uses: actions/upload-artifact@v1
         with:
-          name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.${{ matrix.platform }}
-          path: ${{ steps.export.outputs.archive_directory }}
+          name: ${{ github.event.repository.name }}.${{ github.ref_name }}.${{ matrix.platform }}
+          path: export/${{ matrix.platform }}
