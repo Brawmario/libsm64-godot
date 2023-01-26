@@ -140,8 +140,9 @@ jobs:
           wget -nv ${GODOT_EXE_LINK}
           unzip ${GODOT_EXE}
           wget -nv ${GODOT_TEMPLATES_LINK}
-          mkdir -v -p ~/.local/share/godot
-          unzip ${GODOT_TEMPLATES} ~/.local/share/godot
+          unzip ${GODOT_TEMPLATES}
+          mkdir -v -p ~/.local/share/godot/export_templates
+          mv templates/* ~/.local/share/godot/export_templates
 
       - name: Export demo
         if: ${{ endsWith(matrix.identifier, '-release') }}
