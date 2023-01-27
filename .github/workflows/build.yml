@@ -76,22 +76,16 @@ jobs:
         with:
           submodules: recursive
 
-      - name: (Linux) Compile libsm64
-        if: ${{ startsWith(matrix.identifier, 'linux-') }}
-        shell: sh
-        run: |
-          cd extension/libsm64
-          make -j`nproc`
-          cd ../..
-          mkdir -p addons/libsm64-godot/extension/bin
-          cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
-
-      - name: (Windows) Compile libsm64
+      - name: (Windows) Prepare cross compilation
         if: ${{ startsWith(matrix.identifier, 'windows-') }}
         shell: sh
         run: |
+          echo "OS=Windows_NT" >> $GITHUB_ENV
+
+      - name: Compile libsm64
+        shell: sh
+        run: |
           cd extension/libsm64
-          export OS=Windows_NT
           make -j`nproc`
           cd ../..
           mkdir -p addons/libsm64-godot/extension/bin
