@@ -80,7 +80,7 @@ jobs:
         if: ${{ startsWith(matrix.identifier, 'windows-') }}
         shell: sh
         run: |
-          export OS=Windows_NT
+          echo "OS=Windows_NT" >> $GITHUB_ENV
 
       - name: Compile libsm64
         shell: sh
