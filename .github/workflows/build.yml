@@ -76,17 +76,11 @@ jobs:
         with:
           submodules: recursive
 
-      - name: (Windows) Patch libsm64
+      - name: (Windows) Prepare cross compilation
         if: ${{ startsWith(matrix.identifier, 'windows-') }}
         shell: sh
         run: |
-          patch extension/libsm64/Makefile < extension/libsm64winmake.patch
-
-      - name: (Linux) Patch libsm64
-        if: ${{ startsWith(matrix.identifier, 'linux-') }}
-        shell: sh
-        run: |
-          patch extension/libsm64/src/decomp/pc/audio/audio_pulse.c < extension/libsm64linux.patch
+          export OS=Windows_NT
 
       - name: Compile libsm64
         shell: sh

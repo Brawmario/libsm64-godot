@@ -3,4 +3,4 @@
 	url = https://github.com/godotengine/godot-cpp
 [submodule "extension/libsm64"]
 	path = extension/libsm64
-	url = https://github.com/ckosmic/libsm64.git
+	url = https://github.com/Brawmario/libsm64
