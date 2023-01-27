@@ -91,7 +91,8 @@ jobs:
         shell: sh
         run: |
           cd extension/libsm64
-          make -j`nproc` OS=Windows_NT
+          export OS=Windows_NT
+          make -j`nproc`
           cd ../..
           mkdir -p addons/libsm64-godot/extension/bin
           cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
