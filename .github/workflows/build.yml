@@ -76,17 +76,22 @@ jobs:
         with:
           submodules: recursive
 
-      - name: (Windows) Prepare cross compilation
-        if: ${{ startsWith(matrix.identifier, 'windows-') }}
-        shell: sh
-        run: |
-          echo "OS=Windows_NT" >> $GITHUB_ENV
-
-      - name: Compile libsm64
+      - name: (Linux) Compile libsm64
+        if: ${{ startsWith(matrix.identifier, 'linux-') }}
         shell: sh
         run: |
           cd extension/libsm64
           make -j`nproc`
+          cd ../..
+          mkdir -p addons/libsm64-godot/extension/bin
+          cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
+
+      - name: (Windows) Compile libsm64
+        if: ${{ startsWith(matrix.identifier, 'windows-') }}
+        shell: sh
+        run: |
+          cd extension/libsm64
+          make -j`nproc` OS=Windows_NT
           cd ../..
           mkdir -p addons/libsm64-godot/extension/bin
           cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
@@ -130,6 +135,7 @@ jobs:
 
 #      - name: (Release only) Setup demo export
 #        if: ${{ endsWith(matrix.identifier, '-release') }}
+#        shell: sh
 #        run: |
 #          wget -nv ${GODOT_EXE_LINK}
 #          unzip ${GODOT_EXE}
@@ -140,6 +146,7 @@ jobs:
 #
 #      - name: (Release only) Export demo
 #        if: ${{ endsWith(matrix.identifier, '-release') }}
+#        shell: sh
 #        run: |
 #          mkdir -v -p export/${{ matrix.platform }}
 #          ./${GODOT_EXE} -v --headless --export-release "${{ matrix.export_preset }}" export/${{ matrix.platform }}/${{ matrix.export_filename }}
