@@ -1,6 +1,7 @@
 #include <sm64_handler.hpp>
 
 #include <cstdlib>
+#include <cstring>
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/math.hpp>
@@ -67,11 +68,14 @@ static void invert_vertex_order_3d(float *arr, size_t triangle_count)
 
 static void invert_vertex_order(godot::PackedVector3Array &arr)
 {
-    for (size_t i = 0; i < arr.size() / 3; i++)
+    godot::Vector3 *arr_ptr = arr.ptrw();
+    int64_t arr_size = arr.size();
+
+    for (int64_t i = 0; i < arr_size / 3; i++)
     {
-        godot::Vector3 temp = arr[3*i+0];
-        arr.set(3*i+0, arr[3*i+1]);
-        arr.set(3*i+1, temp);
+        godot::Vector3 temp = arr_ptr[3*i+0];
+        arr_ptr[3*i+0] = arr[3*i+1];
+        arr_ptr[3*i+1] = temp;
     }
 }
 
@@ -122,8 +126,7 @@ void SM64Handler::global_init()
 
     godot::PackedByteArray mario_texture_packed;
     mario_texture_packed.resize(mario_texture_size);
-    for (int64_t i = 0; i < mario_texture_size; i++)
-        mario_texture_packed.set(i, mario_texture_raw[i]);
+    memcpy(mario_texture_packed.ptrw(), mario_texture_raw, mario_texture_size);
 
     mario_image = godot::Image::create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture_packed);
     mario_image_texture = godot::ImageTexture::create_from_image(mario_image);
