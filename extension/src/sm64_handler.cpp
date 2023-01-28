@@ -1,11 +1,11 @@
 #include <sm64_handler.hpp>
 
-#include <string>
-#include <cstdio>
+#include <cstdlib>
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/math.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/classes/file_access.hpp>
 #include <godot_cpp/classes/array_mesh.hpp>
 
 #define CONVERT_RADIANS_TO_SM64(x) ((int16_t)(-(x) / Math_PI * 32768.0))
@@ -33,27 +33,6 @@ static struct SM64TextureAtlasInfo mario_texture_atlas_info = {
 static void SM64DebugPrintFunction(const char *msg)
 {
     godot::UtilityFunctions::print(godot::String("[libsm64] ") + godot::String(msg) + godot::String("\n"));
-}
-
-static uint8_t *utils_read_file_alloc(const char *path, size_t *fileLength)
-{
-    FILE *f = fopen(path, "rb");
-
-    if (!f)
-        return NULL;
-
-    fseek(f, 0, SEEK_END);
-    size_t length = (size_t)ftell(f);
-    rewind(f);
-    uint8_t *buffer = (uint8_t *)malloc(length + 1);
-    fread(buffer, 1, length, f);
-    buffer[length] = 0;
-    fclose(f);
-
-    if (fileLength)
-        *fileLength = length;
-
-    return buffer;
 }
 
 static void invert_vertex_order_2d(float *arr, size_t triangle_count)
@@ -121,23 +100,29 @@ SM64Handler::~SM64Handler()
 
 void SM64Handler::global_init()
 {
-    size_t rom_size;
-    uint8_t *rom = utils_read_file_alloc(rom_filename.ascii().get_data(), &rom_size);
+    const godot::String rom_expected_sha256 = "17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91";
+    if (rom_expected_sha256 != godot::FileAccess::get_sha256(rom_filename))
+    {
+        godot::UtilityFunctions::print(godot::String("[SM64Handler] ROM file doesnt have expected SHA256: ") + rom_filename);
+        return;
+    }
 
-    if (rom == NULL)
+    godot::PackedByteArray rom = godot::FileAccess::get_file_as_bytes(rom_filename);
+    if (rom.is_empty())
     {
         godot::UtilityFunctions::print(godot::String("[SM64Handler] Failed to read ROM file: ") + rom_filename);
         return;
     }
 
-    uint8_t *mario_texture_raw = (uint8_t *) malloc(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
+    constexpr int64_t mario_texture_size = 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT;
+    uint8_t *mario_texture_raw = (uint8_t *) malloc(mario_texture_size);
 
-    sm64_global_init(rom, SM64DebugPrintFunction);
-    sm64_texture_load(rom, &mario_texture_atlas_info, mario_texture_raw);
+    sm64_global_init(rom.ptrw(), SM64DebugPrintFunction);
+    sm64_texture_load(rom.ptrw(), &mario_texture_atlas_info, mario_texture_raw);
 
     godot::PackedByteArray mario_texture_packed;
-    mario_texture_packed.resize(4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT);
-    for (size_t i = 0; i < 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT; i++)
+    mario_texture_packed.resize(mario_texture_size);
+    for (int64_t i = 0; i < mario_texture_size; i++)
         mario_texture_packed.set(i, mario_texture_raw[i]);
 
     mario_image = godot::Image::create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture_packed);
@@ -145,7 +130,6 @@ void SM64Handler::global_init()
 
     init = true;
 
-    ::free(rom);
     ::free(mario_texture_raw);
 }
 
