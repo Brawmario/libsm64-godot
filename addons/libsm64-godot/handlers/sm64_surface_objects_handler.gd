@@ -27,8 +27,8 @@ func _physics_process(delta: float) -> void:
 func _update_surface_objects() -> void:
 	for i in range(_surface_objects_ids.size()):
 		var id := _surface_objects_ids[i]
-		var position := _surface_objects_refs[i].global_transform.origin
-		var rotation := _surface_objects_refs[i].rotation
+		var position := _surface_objects_refs[i].global_position
+		var rotation := _surface_objects_refs[i].global_rotation
 		sm64_handler.surface_object_move(id, position, rotation)
 
 
