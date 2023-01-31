@@ -22,13 +22,17 @@ extern "C"
 #define MARIO_METAL_CAP                 0x00000004
 #define MARIO_WING_CAP                  0x00000008
 
-class SM64Handler : public godot::Resource
+class LibSM64 : public godot::Object
 {
-    GDCLASS(SM64Handler, godot::Resource);
+    GDCLASS(LibSM64, godot::Object);
+
+    inline static LibSM64 *singleton = nullptr;
 
 public:
-    SM64Handler();
-    ~SM64Handler();
+    LibSM64();
+    ~LibSM64();
+
+    static LibSM64 *get_singleton();
 
     enum MarioCaps {
         MARIO_CAPS_NORMAL = MARIO_NORMAL_CAP,
@@ -49,7 +53,6 @@ public:
 
     void set_scale_factor(real_t value);
     real_t get_scale_factor() const;
-
 
     void static_surfaces_load(godot::PackedVector3Array vertexes, godot::TypedArray<SM64SurfaceProperties> surface_properties_array);
 
@@ -123,6 +126,6 @@ private:
     godot::PackedVector2Array mario_uv;
 };
 
-VARIANT_ENUM_CAST(SM64Handler, MarioCaps);
+VARIANT_ENUM_CAST(LibSM64, MarioCaps);
 
 #endif // LIBSM64GD_SM64HANDLER_H

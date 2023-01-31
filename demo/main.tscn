@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bjw13uwutue3a"]
+[gd_scene load_steps=2 format=3 uid="uid://bjw13uwutue3a"]
 
 [ext_resource type="Script" path="res://demo/main.gd" id="1_w76b2"]
-[ext_resource type="SM64Handler" uid="uid://dssuryb827kaq" path="res://demo/sm64_resources/sm_64_handler.tres" id="2_6k4fl"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -11,7 +10,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_w76b2")
-sm64_handler = ExtResource("2_6k4fl")
 
 [node name="RomPickerDialog" type="FileDialog" parent="."]
 title = "Pick Super Mario 64 ROM file"

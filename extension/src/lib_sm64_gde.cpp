@@ -1,4 +1,4 @@
-#include <sm64_handler.hpp>
+#include <lib_sm64_gde.hpp>
 
 #include <cstdlib>
 #include <cstring>
@@ -9,7 +9,7 @@
 #include <godot_cpp/classes/file_access.hpp>
 #include <godot_cpp/classes/array_mesh.hpp>
 
-#define CONVERT_RADIANS_TO_SM64(x) ((int16_t)(-(x) / Math_PI * 32768.0))
+#define CONVERT_RADIANS_TO_SM64(x) (-(x) / Math_PI * 32768.0)
 
 static struct SM64TextureAtlasInfo mario_texture_atlas_info = {
     .offset             = 0x114750,
@@ -68,29 +68,34 @@ static void invert_vertex_order_3d(float *arr, size_t triangle_count)
 
 static void invert_vertex_order(godot::PackedVector3Array &arr)
 {
-    godot::Vector3 *arr_ptr = arr.ptrw();
+    godot::Vector3 *arr_ptrw = arr.ptrw();
     int64_t arr_size = arr.size();
 
-    for (int64_t i = 0; i < arr_size / 3; i++)
+    for (int64_t i = 0; i < arr_size; i += 3)
     {
-        godot::Vector3 temp = arr_ptr[3*i+0];
-        arr_ptr[3*i+0] = arr[3*i+1];
-        arr_ptr[3*i+1] = temp;
+        godot::Vector3 temp = arr_ptrw[i+0];
+        arr_ptrw[i+0] = arr[i+1];
+        arr_ptrw[i+1] = temp;
     }
 }
 
-SM64Handler::SM64Handler()
+LibSM64::LibSM64()
 {
+    ERR_FAIL_COND(singleton != nullptr);
+    singleton = this;
+
     mario_geometry.position = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
     mario_geometry.color    = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
     mario_geometry.normal   = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
     mario_geometry.uv       = (float*) malloc(sizeof(float) * 6 * SM64_GEO_MAX_TRIANGLES);
 }
 
-SM64Handler::~SM64Handler()
+LibSM64::~LibSM64()
 {
-    if (init)
-        global_terminate();
+    ERR_FAIL_COND(singleton != this);
+    singleton = nullptr;
+
+    global_terminate();
 
     if (mario_geometry.position)
         ::free(mario_geometry.position);
@@ -102,19 +107,24 @@ SM64Handler::~SM64Handler()
         ::free(mario_geometry.uv);
 }
 
-void SM64Handler::global_init()
+LibSM64 *LibSM64::get_singleton()
+{
+    return singleton;
+}
+
+void LibSM64::global_init()
 {
     const godot::String rom_expected_sha256 = "17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91";
     if (rom_expected_sha256 != godot::FileAccess::get_sha256(rom_filename))
     {
-        godot::UtilityFunctions::print(godot::String("[SM64Handler] ROM file doesnt have expected SHA256: ") + rom_filename);
+        godot::UtilityFunctions::print(godot::String("[LibSM64] ROM file doesnt have expected SHA256: ") + rom_filename);
         return;
     }
 
     godot::PackedByteArray rom = godot::FileAccess::get_file_as_bytes(rom_filename);
     if (rom.is_empty())
     {
-        godot::UtilityFunctions::print(godot::String("[SM64Handler] Failed to read ROM file: ") + rom_filename);
+        godot::UtilityFunctions::print(godot::String("[LibSM64] Failed to read ROM file: ") + rom_filename);
         return;
     }
 
@@ -136,48 +146,48 @@ void SM64Handler::global_init()
     ::free(mario_texture_raw);
 }
 
-void SM64Handler::global_terminate()
+void LibSM64::global_terminate()
 {
     sm64_global_terminate();
     init = false;
 }
 
-bool SM64Handler::is_init() const
+bool LibSM64::is_init() const
 {
     return init;
 }
 
-godot::Ref<godot::Image> SM64Handler::get_mario_image()
+godot::Ref<godot::Image> LibSM64::get_mario_image()
 {
     return mario_image;
 }
 
-godot::Ref<godot::ImageTexture> SM64Handler::get_mario_image_texture()
+godot::Ref<godot::ImageTexture> LibSM64::get_mario_image_texture()
 {
     return mario_image_texture;
 }
 
-void SM64Handler::set_rom_filename(const godot::String &value)
+void LibSM64::set_rom_filename(const godot::String &value)
 {
     rom_filename = value;
 }
 
-godot::String SM64Handler::get_rom_filename() const
+godot::String LibSM64::get_rom_filename() const
 {
     return rom_filename;
 }
 
-void SM64Handler::set_scale_factor(real_t value)
+void LibSM64::set_scale_factor(real_t value)
 {
     scale_factor = value;
 }
 
-real_t SM64Handler::get_scale_factor() const
+real_t LibSM64::get_scale_factor() const
 {
     return scale_factor;
 }
 
-void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
+void LibSM64::static_surfaces_load(godot::PackedVector3Array vertexes, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
 {
     struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes.size() / 3);
     godot::Ref<SM64SurfaceProperties> default_surface_properties;
@@ -217,19 +227,19 @@ void SM64Handler::static_surfaces_load(godot::PackedVector3Array vertexes, godot
     ::free(surface_array);
 }
 
-int SM64Handler::mario_create(godot::Vector3 position, godot::Vector3 rotation)
+int LibSM64::mario_create(godot::Vector3 position, godot::Vector3 rotation)
 {
     float x = (float) ( position.z * scale_factor);
     float y = (float) ( position.y * scale_factor);
     float z = (float) (-position.x * scale_factor);
-    int16_t rx = CONVERT_RADIANS_TO_SM64(-rotation.z);
-    int16_t ry = CONVERT_RADIANS_TO_SM64(-rotation.y);
-    int16_t rz = CONVERT_RADIANS_TO_SM64( rotation.x);
+    int16_t rx = (int16_t) CONVERT_RADIANS_TO_SM64(-rotation.z);
+    int16_t ry = (int16_t) CONVERT_RADIANS_TO_SM64(-rotation.y);
+    int16_t rz = (int16_t) CONVERT_RADIANS_TO_SM64( rotation.x);
 
     return sm64_mario_create(x, y, z, rx, ry, rz, 0);
 }
 
-godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary input)
+godot::Dictionary LibSM64::mario_tick(int mario_id, godot::Dictionary input)
 {
     godot::Dictionary ret;
     godot::Array mesh_array;
@@ -336,22 +346,22 @@ godot::Dictionary SM64Handler::mario_tick(int mario_id, godot::Dictionary input)
     return ret;
 }
 
-void SM64Handler::mario_delete(int mario_id)
+void LibSM64::mario_delete(int mario_id)
 {
     sm64_mario_delete(mario_id);
 }
 
-void SM64Handler::set_mario_action(int mario_id, int action)
+void LibSM64::set_mario_action(int mario_id, int action)
 {
     sm64_set_mario_action(mario_id, (uint32_t) action);
 }
 
-void SM64Handler::set_mario_state(int mario_id, int flags)
+void LibSM64::set_mario_state(int mario_id, int flags)
 {
     sm64_set_mario_state(mario_id, (uint32_t) flags);
 }
 
-void SM64Handler::set_mario_position(int mario_id, godot::Vector3 position)
+void LibSM64::set_mario_position(int mario_id, godot::Vector3 position)
 {
     sm64_set_mario_position(mario_id,
                             position.z * scale_factor,
@@ -359,12 +369,12 @@ void SM64Handler::set_mario_position(int mario_id, godot::Vector3 position)
                             -position.x * scale_factor);
 }
 
-void SM64Handler::set_mario_angle(int mario_id, real_t angle)
+void LibSM64::set_mario_angle(int mario_id, real_t angle)
 {
     sm64_set_mario_angle(mario_id, angle);
 }
 
-void SM64Handler::set_mario_velocity(int mario_id, godot::Vector3 velocity)
+void LibSM64::set_mario_velocity(int mario_id, godot::Vector3 velocity)
 {
     sm64_set_mario_velocity(mario_id,
                             velocity.z * scale_factor,
@@ -372,25 +382,26 @@ void SM64Handler::set_mario_velocity(int mario_id, godot::Vector3 velocity)
                             -velocity.x * scale_factor);
 }
 
-void SM64Handler::set_mario_forward_velocity(int mario_id, real_t velocity)
+void LibSM64::set_mario_forward_velocity(int mario_id, real_t velocity)
 {
     sm64_set_mario_forward_velocity(mario_id, velocity * scale_factor);
 }
 
-void SM64Handler::set_mario_invincibility(int mario_id, int timer)
+void LibSM64::set_mario_invincibility(int mario_id, int timer)
 {
     sm64_set_mario_invincibility(mario_id, timer);
 }
 
-void SM64Handler::set_mario_water_level(int mario_id, real_t level)
+void LibSM64::set_mario_water_level(int mario_id, real_t level)
 {
     sm64_set_mario_water_level(mario_id, level * scale_factor);
 }
 
-void SM64Handler::set_mario_floor_override(int mario_id, godot::Ref<SM64SurfaceProperties> surface_properties)
+void LibSM64::set_mario_floor_override(int mario_id, godot::Ref<SM64SurfaceProperties> surface_properties)
 {
-    if (surface_properties.is_null()) {
-        godot::UtilityFunctions::print(godot::String("[SM64Handler] Called set_mario_floor_override with null surface_properties"));
+    if (surface_properties.is_null())
+    {
+        godot::UtilityFunctions::print(godot::String("[LibSM64] Called set_mario_floor_override with null surface_properties"));
         return;
     }
 
@@ -400,17 +411,17 @@ void SM64Handler::set_mario_floor_override(int mario_id, godot::Ref<SM64SurfaceP
                                   surface_properties->get_force());
 }
 
-void SM64Handler::reset_mario_floor_override(int mario_id)
+void LibSM64::reset_mario_floor_override(int mario_id)
 {
     sm64_set_mario_floor_override(mario_id, 0x7, 0x100, 0);
 }
 
-void SM64Handler::set_mario_health(int mario_id, int health)
+void LibSM64::set_mario_health(int mario_id, int health)
 {
     sm64_set_mario_health(mario_id, health);
 }
 
-void SM64Handler::mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, bool big_knockback)
+void LibSM64::mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, bool big_knockback)
 {
     sm64_mario_take_damage(mario_id,
                            damage,
@@ -420,27 +431,27 @@ void SM64Handler::mario_take_damage(int mario_id, int damage, godot::Vector3 sou
                            -source_position.x * scale_factor);
 }
 
-void SM64Handler::mario_heal(int mario_id, int heal_counter)
+void LibSM64::mario_heal(int mario_id, int heal_counter)
 {
     sm64_mario_heal(mario_id, heal_counter);
 }
 
-void SM64Handler::mario_set_lives(int mario_id, int lives)
+void LibSM64::mario_set_lives(int mario_id, int lives)
 {
     sm64_mario_set_lives(mario_id, lives);
 }
 
-void SM64Handler::mario_interact_cap(int mario_id, MarioCaps cap, int cap_time, bool play_music)
+void LibSM64::mario_interact_cap(int mario_id, MarioCaps cap, int cap_time, bool play_music)
 {
     sm64_mario_interact_cap(mario_id, (uint32_t) cap, cap_time, (uint8_t) play_music);
 }
 
-void SM64Handler::mario_extend_cap(int mario_id, int cap_time)
+void LibSM64::mario_extend_cap(int mario_id, int cap_time)
 {
     sm64_mario_extend_cap(mario_id, cap_time);
 }
 
-int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
+int LibSM64::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
 {
     struct SM64SurfaceObject surface_object;
     int id;
@@ -495,7 +506,7 @@ int SM64Handler::surface_object_create(godot::PackedVector3Array vertexes, godot
     return id;
 }
 
-void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation)
+void LibSM64::surface_object_move(int object_id, godot::Vector3 position, godot::Vector3 rotation)
 {
     struct SM64ObjectTransform transform;
 
@@ -510,59 +521,59 @@ void SM64Handler::surface_object_move(int object_id, godot::Vector3 position, go
     sm64_surface_object_move(object_id, &transform);
 }
 
-void SM64Handler::surface_object_delete(int object_id)
+void LibSM64::surface_object_delete(int object_id)
 {
     sm64_surface_object_delete(object_id);
 }
 
-void SM64Handler::set_volume(real_t volume)
+void LibSM64::set_volume(real_t volume)
 {
     sm64_set_volume(volume);
 }
 
-void SM64Handler::set_reverb(int reverb)
+void LibSM64::set_reverb(int reverb)
 {
     sm64_set_reverb((uint8_t) reverb);
 }
 
-void SM64Handler::_bind_methods()
+void LibSM64::_bind_methods()
 {
-    godot::ClassDB::bind_method(godot::D_METHOD("global_init"), &SM64Handler::global_init);
-    godot::ClassDB::bind_method(godot::D_METHOD("global_terminate"), &SM64Handler::global_terminate);
-    godot::ClassDB::bind_method(godot::D_METHOD("is_init"), &SM64Handler::is_init);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image"), &SM64Handler::get_mario_image);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image_texture"), &SM64Handler::get_mario_image_texture);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_rom_filename", "value"), &SM64Handler::set_rom_filename);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_rom_filename"), &SM64Handler::get_rom_filename);
+    godot::ClassDB::bind_method(godot::D_METHOD("global_init"), &LibSM64::global_init);
+    godot::ClassDB::bind_method(godot::D_METHOD("global_terminate"), &LibSM64::global_terminate);
+    godot::ClassDB::bind_method(godot::D_METHOD("is_init"), &LibSM64::is_init);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image"), &LibSM64::get_mario_image);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image_texture"), &LibSM64::get_mario_image_texture);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_rom_filename", "value"), &LibSM64::set_rom_filename);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_rom_filename"), &LibSM64::get_rom_filename);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::STRING, "rom_filename", godot::PROPERTY_HINT_GLOBAL_FILE, "*.n64,*.z64,"), "set_rom_filename", "get_rom_filename");
-    godot::ClassDB::bind_method(godot::D_METHOD("set_scale_factor", "value"), &SM64Handler::set_scale_factor);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_scale_factor"), &SM64Handler::get_scale_factor);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_scale_factor", "value"), &LibSM64::set_scale_factor);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_scale_factor"), &LibSM64::get_scale_factor);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "scale_factor"), "set_scale_factor", "get_scale_factor");
-    godot::ClassDB::bind_method(godot::D_METHOD("static_surfaces_load", "vertexes", "surface_properties_array"), &SM64Handler::static_surfaces_load);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position", "rotation"), &SM64Handler::mario_create);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "input"), &SM64Handler::mario_tick);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &SM64Handler::mario_delete);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_action", "mario_id", "action"), &SM64Handler::set_mario_action);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_state", "mario_id", "flags"), &SM64Handler::set_mario_state);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_position", "mario_id", "position"), &SM64Handler::set_mario_position);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_angle", "mario_id", "angle"), &SM64Handler::set_mario_angle);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_velocity", "mario_id", "velocity"), &SM64Handler::set_mario_velocity);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_forward_velocity", "mario_id", "velocity"), &SM64Handler::set_mario_forward_velocity);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_invincibility", "mario_id", "timer"), &SM64Handler::set_mario_invincibility);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_water_level", "mario_id", "level"), &SM64Handler::set_mario_water_level);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_floor_override", "mario_id", "surface_properties"), &SM64Handler::set_mario_floor_override);
-    godot::ClassDB::bind_method(godot::D_METHOD("reset_mario_floor_override", "mario_id"), &SM64Handler::reset_mario_floor_override);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_health", "mario_id", "health"), &SM64Handler::set_mario_health);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_take_damage", "mario_id", "damage", "source_position", "big_knockback"), &SM64Handler::mario_take_damage, DEFVAL(false));
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_heal", "mario_id", "heal_counter"), &SM64Handler::mario_heal);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_set_lives", "mario_id", "lives"), &SM64Handler::mario_set_lives);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_interact_cap", "mario_id", "cap", "cap_time", "play_music"), &SM64Handler::mario_interact_cap, DEFVAL(0), DEFVAL(true));
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_extend_cap", "mario_id", "cap_time"), &SM64Handler::mario_extend_cap);
-    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation", "surface_properties_array"), &SM64Handler::surface_object_create);
-    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &SM64Handler::surface_object_move);
-    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &SM64Handler::surface_object_delete);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_volume", "volume"), &SM64Handler::set_volume);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_reverb", "reverb"), &SM64Handler::set_reverb);
+    godot::ClassDB::bind_method(godot::D_METHOD("static_surfaces_load", "vertexes", "surface_properties_array"), &LibSM64::static_surfaces_load);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position", "rotation"), &LibSM64::mario_create);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "input"), &LibSM64::mario_tick);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &LibSM64::mario_delete);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_action", "mario_id", "action"), &LibSM64::set_mario_action);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_state", "mario_id", "flags"), &LibSM64::set_mario_state);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_position", "mario_id", "position"), &LibSM64::set_mario_position);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_angle", "mario_id", "angle"), &LibSM64::set_mario_angle);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_velocity", "mario_id", "velocity"), &LibSM64::set_mario_velocity);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_forward_velocity", "mario_id", "velocity"), &LibSM64::set_mario_forward_velocity);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_invincibility", "mario_id", "timer"), &LibSM64::set_mario_invincibility);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_water_level", "mario_id", "level"), &LibSM64::set_mario_water_level);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_floor_override", "mario_id", "surface_properties"), &LibSM64::set_mario_floor_override);
+    godot::ClassDB::bind_method(godot::D_METHOD("reset_mario_floor_override", "mario_id"), &LibSM64::reset_mario_floor_override);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_mario_health", "mario_id", "health"), &LibSM64::set_mario_health);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_take_damage", "mario_id", "damage", "source_position", "big_knockback"), &LibSM64::mario_take_damage, DEFVAL(false));
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_heal", "mario_id", "heal_counter"), &LibSM64::mario_heal);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_set_lives", "mario_id", "lives"), &LibSM64::mario_set_lives);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_interact_cap", "mario_id", "cap", "cap_time", "play_music"), &LibSM64::mario_interact_cap, DEFVAL(0), DEFVAL(true));
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_extend_cap", "mario_id", "cap_time"), &LibSM64::mario_extend_cap);
+    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "vertexes", "position", "rotation", "surface_properties_array"), &LibSM64::surface_object_create);
+    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &LibSM64::surface_object_move);
+    godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &LibSM64::surface_object_delete);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_volume", "volume"), &LibSM64::set_volume);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_reverb", "reverb"), &LibSM64::set_reverb);
 
     BIND_ENUM_CONSTANT(MARIO_CAPS_NORMAL);
     BIND_ENUM_CONSTANT(MARIO_CAPS_VANISH);

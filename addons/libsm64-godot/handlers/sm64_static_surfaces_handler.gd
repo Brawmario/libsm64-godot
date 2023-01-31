@@ -2,15 +2,13 @@ class_name SM64StaticSurfaceHandler
 extends Node
 
 
-## SM64Handler instance
-@export var sm64_handler: SM64Handler
 ## Group name that contains the MeshInstance3D that are part of the scene's static surfaces
 @export var static_surfaces_group := &"libsm64_static_surfaces"
 
 var _default_surface_properties := SM64SurfaceProperties.new()
 
 
-## Load all MeshInstance3D in static_surfaces_group into the SM64Handler instance
+## Load all MeshInstance3D in static_surfaces_group into LibSM64
 func load_static_surfaces() -> void:
 	var faces := PackedVector3Array()
 	var surface_properties_array: Array[SM64SurfaceProperties] = []
@@ -32,7 +30,7 @@ func load_static_surfaces() -> void:
 		array.fill(surface_properties)
 		surface_properties_array.append_array(array)
 
-	sm64_handler.static_surfaces_load(faces, surface_properties_array)
+	LibSM64.static_surfaces_load(faces, surface_properties_array)
 
 
 func _find_surface_properties(node: Node) -> SM64SurfaceProperties:

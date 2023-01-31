@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://btpew2m8io0tm"]
+[gd_scene load_steps=8 format=3 uid="uid://btpew2m8io0tm"]
 
 [ext_resource type="Script" path="res://demo/scenarios/initial_scenario.gd" id="1_xr27b"]
-[ext_resource type="SM64Handler" uid="uid://dssuryb827kaq" path="res://demo/sm64_resources/sm_64_handler.tres" id="2_ne7vb"]
 [ext_resource type="PackedScene" uid="uid://cqv1tkr0q2m7i" path="res://demo/levels/mini_level.tscn" id="3_j27lm"]
 [ext_resource type="Script" path="res://addons/libsm64-godot/mario/sm64_mario.gd" id="4_umvy3"]
 [ext_resource type="PackedScene" uid="uid://yt8kbrfd41gi" path="res://demo/shared/camera_rig.tscn" id="5_uu7a6"]
@@ -11,24 +10,20 @@
 
 [node name="InitialScenario" type="Node3D"]
 script = ExtResource("1_xr27b")
-sm64_handler = ExtResource("2_ne7vb")
 
 [node name="MiniLevel" parent="." instance=ExtResource("3_j27lm")]
 
 [node name="SM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 script = ExtResource("4_umvy3")
-sm64_handler = ExtResource("2_ne7vb")
 camera = NodePath("CameraRig/Camera3D")
 
 [node name="CameraRig" parent="SM64Mario" instance=ExtResource("5_uu7a6")]
 
 [node name="SM64StaticSurfacesHandler" type="Node" parent="."]
 script = ExtResource("6_41tpo")
-sm64_handler = ExtResource("2_ne7vb")
 
 [node name="SM64SurfaceObjectsHandler" type="Node" parent="."]
 script = ExtResource("7_ju0gc")
-sm64_handler = ExtResource("2_ne7vb")
 
 [node name="HUD" parent="." instance=ExtResource("8_f016e")]
 
