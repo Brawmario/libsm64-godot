@@ -441,7 +441,7 @@ void LibSM64::mario_set_lives(int mario_id, int lives)
     sm64_mario_set_lives(mario_id, lives);
 }
 
-void LibSM64::mario_interact_cap(int mario_id, MarioCaps cap, int cap_time, bool play_music)
+void LibSM64::mario_interact_cap(int mario_id, int cap, int cap_time, bool play_music)
 {
     sm64_mario_interact_cap(mario_id, (uint32_t) cap, cap_time, (uint8_t) play_music);
 }
@@ -574,9 +574,4 @@ void LibSM64::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &LibSM64::surface_object_delete);
     godot::ClassDB::bind_method(godot::D_METHOD("set_volume", "volume"), &LibSM64::set_volume);
     godot::ClassDB::bind_method(godot::D_METHOD("set_reverb", "reverb"), &LibSM64::set_reverb);
-
-    BIND_ENUM_CONSTANT(MARIO_CAPS_NORMAL);
-    BIND_ENUM_CONSTANT(MARIO_CAPS_VANISH);
-    BIND_ENUM_CONSTANT(MARIO_CAPS_METAL);
-    BIND_ENUM_CONSTANT(MARIO_CAPS_WING);
 }

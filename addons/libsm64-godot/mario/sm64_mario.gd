@@ -7,19 +7,18 @@ const FPS := 30.0
 const DELTA := 1.0 / FPS
 
 ## Value that represents Mario being at full health
-const FULL_HEALTH := 0x0880
+const FULL_HEALTH = 0x0880
 ## Value that represents one health wedge
-const HEALTH_WEDGE := 0x100
+const HEALTH_WEDGE = 0x0100
+## Special Caps mask
+const SPECIAL_CAPS = SM64Mario.Caps.VANISH | SM64Mario.Caps.METAL | SM64Mario.Caps.WING
 
 enum Caps {
-	NORMAL = LibSM64.MARIO_CAPS_NORMAL,
-	VANISH = LibSM64.MARIO_CAPS_VANISH,
-	METAL = LibSM64.MARIO_CAPS_METAL,
-	WING = LibSM64.MARIO_CAPS_WING,
+	NORMAL = 0x1,
+	VANISH = 0x2,
+	METAL  = 0x4,
+	WING   = 0x8,
 }
-
-## Special Caps mask
-const MARIO_SPECIAL_CAPS := Caps.VANISH | Caps.METAL | Caps.WING
 
 signal action_changed(action: int)
 signal flags_changed(flags: int)
@@ -229,12 +228,12 @@ func _physics_process(delta: float) -> void:
 	if new_lives != _lives:
 		_lives = new_lives
 
-	match _flags & MARIO_SPECIAL_CAPS:
-		Caps.VANISH:
+	match _flags & SPECIAL_CAPS:
+		SM64Mario.Caps.VANISH:
 			_material = _vanish_material
-		Caps.METAL:
+		SM64Mario.Caps.METAL:
 			_material = _metal_material
-		Caps.WING:
+		SM64Mario.Caps.WING:
 			_material = _wing_material
 		_:
 			_material = _default_material
@@ -318,7 +317,7 @@ func heal(wedges: int) -> void:
 	LibSM64.mario_heal(_id, wedges)
 
 
-## Equip special cap
+## Equip special cap (see SM64Mario.Caps for values)
 func interact_cap(cap: Caps, cap_time = 0.0, play_music := true) -> void:
 	if _id < 0:
 		return

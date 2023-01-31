@@ -1,5 +1,5 @@
-#ifndef LIBSM64GD_SM64HANDLER_H
-#define LIBSM64GD_SM64HANDLER_H
+#ifndef LIBSM64GD_LIBSM64_H
+#define LIBSM64GD_LIBSM64_H
 
 #include <godot_cpp/classes/resource.hpp>
 #include <godot_cpp/classes/image.hpp>
@@ -17,11 +17,6 @@ extern "C"
 #include <windows.h>
 #endif
 
-#define MARIO_NORMAL_CAP                0x00000001
-#define MARIO_VANISH_CAP                0x00000002
-#define MARIO_METAL_CAP                 0x00000004
-#define MARIO_WING_CAP                  0x00000008
-
 class LibSM64 : public godot::Object
 {
     GDCLASS(LibSM64, godot::Object);
@@ -33,13 +28,6 @@ public:
     ~LibSM64();
 
     static LibSM64 *get_singleton();
-
-    enum MarioCaps {
-        MARIO_CAPS_NORMAL = MARIO_NORMAL_CAP,
-        MARIO_CAPS_VANISH = MARIO_VANISH_CAP,
-        MARIO_CAPS_METAL = MARIO_METAL_CAP,
-        MARIO_CAPS_WING = MARIO_WING_CAP
-    };
 
     void global_init();
     void global_terminate();
@@ -97,7 +85,7 @@ public:
     void mario_take_damage(int mario_id, int damage, godot::Vector3 source_position, bool big_knockback = false);
     void mario_heal(int mario_id, int heal_counter);
     void mario_set_lives(int mario_id, int lives);
-    void mario_interact_cap(int mario_id, MarioCaps cap, int cap_time = 0, bool play_music = 1);
+    void mario_interact_cap(int mario_id, int cap, int cap_time = 0, bool play_music = 1);
     void mario_extend_cap(int mario_id, int cap_time);
     // bool sm64_mario_attack(int32_t marioId, float x, float y, float z, float hitboxHeight);
 
@@ -126,6 +114,4 @@ private:
     godot::PackedVector2Array mario_uv;
 };
 
-VARIANT_ENUM_CAST(LibSM64, MarioCaps);
-
-#endif // LIBSM64GD_SM64HANDLER_H
+#endif // LIBSM64GD_LIBSM64_H
