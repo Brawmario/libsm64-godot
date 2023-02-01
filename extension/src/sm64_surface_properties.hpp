@@ -196,7 +196,7 @@ private:
     int force = 0;
 };
 
-VARIANT_ENUM_CAST(SM64SurfaceProperties, SurfaceType);
-VARIANT_ENUM_CAST(SM64SurfaceProperties, TerrainType);
+VARIANT_ENUM_CAST(SM64SurfaceProperties::SurfaceType);
+VARIANT_ENUM_CAST(SM64SurfaceProperties::TerrainType);
 
 #endif // LIBSM64GD_SM64SURFACEPROPERTIES_H
