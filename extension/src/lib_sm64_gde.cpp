@@ -189,35 +189,37 @@ real_t LibSM64::get_scale_factor() const
 
 void LibSM64::static_surfaces_load(godot::PackedVector3Array vertexes, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
 {
-    struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes.size() / 3);
+    const int64_t vertexes_size = vertexes.size();
+    struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes_size / 3);
     godot::Ref<SM64SurfaceProperties> default_surface_properties;
 
     default_surface_properties.instantiate();
 
-    if (surface_properties_array.size() != vertexes.size() / 3)
-        surface_properties_array.resize(vertexes.size() / 3);
+    if (surface_properties_array.size() != vertexes_size / 3)
+        surface_properties_array.resize(vertexes_size / 3);
 
     invert_vertex_order(vertexes);
 
+    const godot::Vector3 *vertexes_ptr = vertexes.ptr();
     uint32_t j = 0;
-    for (size_t i = 0; i < vertexes.size(); i += 3)
+    for (int64_t i = 0; i < vertexes_size; i += 3)
     {
-        godot::Ref<SM64SurfaceProperties> surface_properties = surface_properties_array[i/3];
+        godot::Ref<SM64SurfaceProperties> surface_properties = surface_properties_array[j];
         if (surface_properties.is_null())
             surface_properties = default_surface_properties;
 
         surface_array[j].type = (int16_t) surface_properties->get_surface_type();
         surface_array[j].force = (int16_t) surface_properties->get_force();
         surface_array[j].terrain = (uint16_t) surface_properties->get_terrain_type();
-        surface_array[j].vertices[0][0] = (int32_t) ( vertexes[i+0].z * scale_factor);
-        surface_array[j].vertices[0][1] = (int32_t) ( vertexes[i+0].y * scale_factor);
-        surface_array[j].vertices[0][2] = (int32_t) (-vertexes[i+0].x * scale_factor);
-        surface_array[j].vertices[1][0] = (int32_t) ( vertexes[i+1].z * scale_factor);
-        surface_array[j].vertices[1][1] = (int32_t) ( vertexes[i+1].y * scale_factor);
-        surface_array[j].vertices[1][2] = (int32_t) (-vertexes[i+1].x * scale_factor);
-        surface_array[j].vertices[2][0] = (int32_t) ( vertexes[i+2].z * scale_factor);
-        surface_array[j].vertices[2][1] = (int32_t) ( vertexes[i+2].y * scale_factor);
-        surface_array[j].vertices[2][2] = (int32_t) (-vertexes[i+2].x * scale_factor);
+        surface_array[j].vertices[0][0] = (int32_t) ( vertexes_ptr[i+0].z * scale_factor);
+        surface_array[j].vertices[0][1] = (int32_t) ( vertexes_ptr[i+0].y * scale_factor);
+        surface_array[j].vertices[0][2] = (int32_t) (-vertexes_ptr[i+0].x * scale_factor);
+        surface_array[j].vertices[1][0] = (int32_t) ( vertexes_ptr[i+1].z * scale_factor);
+        surface_array[j].vertices[1][1] = (int32_t) ( vertexes_ptr[i+1].y * scale_factor);
+        surface_array[j].vertices[1][2] = (int32_t) (-vertexes_ptr[i+1].x * scale_factor);
+        surface_array[j].vertices[2][0] = (int32_t) ( vertexes_ptr[i+2].z * scale_factor);
+        surface_array[j].vertices[2][1] = (int32_t) ( vertexes_ptr[i+2].y * scale_factor);
+        surface_array[j].vertices[2][2] = (int32_t) (-vertexes_ptr[i+2].x * scale_factor);
 
         j++;
     }
@@ -276,69 +278,61 @@ godot::Dictionary LibSM64::mario_tick(int mario_id, godot::Dictionary input)
     ret["holding_object"] = (bool) out_state.holdingObject;
     ret["drop_method"]    = (int) out_state.dropMethod;
 
-    {
-        size_t array_size = mario_geometry.numTrianglesUsed * 3;
-
-        if (mesh_array.size() != godot::ArrayMesh::ARRAY_MAX)
-            mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
-        if (mario_position.size() != array_size)
-            mario_position.resize(array_size);
-        if (mario_normal.size() != array_size)
-            mario_normal.resize(array_size);
-        if (mario_color.size() != array_size)
-            mario_color.resize(array_size);
-        if (mario_uv.size() != array_size)
-            mario_uv.resize(array_size);
-    }
-
+    const int vertex_count = mario_geometry.numTrianglesUsed * 3;
+    if (mesh_array.size() != godot::ArrayMesh::ARRAY_MAX)
+        mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
+    if (mario_position.size() != vertex_count)
+        mario_position.resize(vertex_count);
+    if (mario_normal.size() != vertex_count)
+        mario_normal.resize(vertex_count);
+    if (mario_color.size() != vertex_count)
+        mario_color.resize(vertex_count);
+    if (mario_uv.size() != vertex_count)
+        mario_uv.resize(vertex_count);
 
     invert_vertex_order_3d(mario_geometry.position, mario_geometry.numTrianglesUsed);
-    invert_vertex_order_3d(mario_geometry.normal, mario_geometry.numTrianglesUsed);
-    invert_vertex_order_3d(mario_geometry.color, mario_geometry.numTrianglesUsed);
-    invert_vertex_order_2d(mario_geometry.uv, mario_geometry.numTrianglesUsed);
+    invert_vertex_order_3d(mario_geometry.normal,   mario_geometry.numTrianglesUsed);
+    invert_vertex_order_3d(mario_geometry.color,    mario_geometry.numTrianglesUsed);
+    invert_vertex_order_2d(mario_geometry.uv,       mario_geometry.numTrianglesUsed);
 
-    for (int i = 0; i < mario_geometry.numTrianglesUsed; i++)
+    godot::Vector3 *mario_position_ptrw = mario_position.ptrw();
+    godot::Vector3 *mario_normal_ptrw   = mario_normal.ptrw();
+    godot::Color   *mario_color_ptrw    = mario_color.ptrw();
+    godot::Vector2 *mario_uv_ptrw       = mario_uv.ptrw();
+    for (int i = 0; i < vertex_count; i += 3)
     {
-        godot::Vector3 positions[3];
-        positions[0].z =  mario_geometry.position[9*i+0] / scale_factor;
-        positions[0].y =  mario_geometry.position[9*i+1] / scale_factor;
-        positions[0].x = -mario_geometry.position[9*i+2] / scale_factor;
-        positions[1].z =  mario_geometry.position[9*i+3] / scale_factor;
-        positions[1].y =  mario_geometry.position[9*i+4] / scale_factor;
-        positions[1].x = -mario_geometry.position[9*i+5] / scale_factor;
-        positions[2].z =  mario_geometry.position[9*i+6] / scale_factor;
-        positions[2].y =  mario_geometry.position[9*i+7] / scale_factor;
-        positions[2].x = -mario_geometry.position[9*i+8] / scale_factor;
-        mario_position.set(3*i+0, positions[0]);
-        mario_position.set(3*i+1, positions[1]);
-        mario_position.set(3*i+2, positions[2]);
+        mario_position_ptrw[i+0].z =  mario_geometry.position[3*i+0] / scale_factor;
+        mario_position_ptrw[i+0].y =  mario_geometry.position[3*i+1] / scale_factor;
+        mario_position_ptrw[i+0].x = -mario_geometry.position[3*i+2] / scale_factor;
+        mario_position_ptrw[i+1].z =  mario_geometry.position[3*i+3] / scale_factor;
+        mario_position_ptrw[i+1].y =  mario_geometry.position[3*i+4] / scale_factor;
+        mario_position_ptrw[i+1].x = -mario_geometry.position[3*i+5] / scale_factor;
+        mario_position_ptrw[i+2].z =  mario_geometry.position[3*i+6] / scale_factor;
+        mario_position_ptrw[i+2].y =  mario_geometry.position[3*i+7] / scale_factor;
+        mario_position_ptrw[i+2].x = -mario_geometry.position[3*i+8] / scale_factor;
 
-        godot::Vector3 normals[3];
-        normals[0].z =  mario_geometry.normal[9*i+0];
-        normals[0].y =  mario_geometry.normal[9*i+1];
-        normals[0].x = -mario_geometry.normal[9*i+2];
-        normals[1].z =  mario_geometry.normal[9*i+3];
-        normals[1].y =  mario_geometry.normal[9*i+4];
-        normals[1].x = -mario_geometry.normal[9*i+5];
-        normals[2].z =  mario_geometry.normal[9*i+6];
-        normals[2].y =  mario_geometry.normal[9*i+7];
-        normals[2].x = -mario_geometry.normal[9*i+8];
-        mario_normal.set(3*i+0, normals[0]);
-        mario_normal.set(3*i+1, normals[1]);
-        mario_normal.set(3*i+2, normals[2]);
+        mario_normal_ptrw[i+0].z =  mario_geometry.normal[3*i+0];
+        mario_normal_ptrw[i+0].y =  mario_geometry.normal[3*i+1];
+        mario_normal_ptrw[i+0].x = -mario_geometry.normal[3*i+2];
+        mario_normal_ptrw[i+1].z =  mario_geometry.normal[3*i+3];
+        mario_normal_ptrw[i+1].y =  mario_geometry.normal[3*i+4];
+        mario_normal_ptrw[i+1].x = -mario_geometry.normal[3*i+5];
+        mario_normal_ptrw[i+2].z =  mario_geometry.normal[3*i+6];
+        mario_normal_ptrw[i+2].y =  mario_geometry.normal[3*i+7];
+        mario_normal_ptrw[i+2].x = -mario_geometry.normal[3*i+8];
 
-        mario_color.set(3*i+0, godot::Color(mario_geometry.color[9*i+0], mario_geometry.color[9*i+1], mario_geometry.color[9*i+2]));
-        mario_color.set(3*i+1, godot::Color(mario_geometry.color[9*i+3], mario_geometry.color[9*i+4], mario_geometry.color[9*i+5]));
-        mario_color.set(3*i+2, godot::Color(mario_geometry.color[9*i+6], mario_geometry.color[9*i+7], mario_geometry.color[9*i+8]));
+        mario_color_ptrw[i+0] = godot::Color(mario_geometry.color[3*i+0], mario_geometry.color[3*i+1], mario_geometry.color[3*i+2]);
+        mario_color_ptrw[i+1] = godot::Color(mario_geometry.color[3*i+3], mario_geometry.color[3*i+4], mario_geometry.color[3*i+5]);
+        mario_color_ptrw[i+2] = godot::Color(mario_geometry.color[3*i+6], mario_geometry.color[3*i+7], mario_geometry.color[3*i+8]);
 
-        mario_uv.set(3*i+0, godot::Vector2(mario_geometry.uv[6*i+0], mario_geometry.uv[6*i+1]));
-        mario_uv.set(3*i+1, godot::Vector2(mario_geometry.uv[6*i+2], mario_geometry.uv[6*i+3]));
-        mario_uv.set(3*i+2, godot::Vector2(mario_geometry.uv[6*i+4], mario_geometry.uv[6*i+5]));
+        mario_uv_ptrw[i+0] = godot::Vector2(mario_geometry.uv[2*i+0], mario_geometry.uv[2*i+1]);
+        mario_uv_ptrw[i+1] = godot::Vector2(mario_geometry.uv[2*i+2], mario_geometry.uv[2*i+3]);
+        mario_uv_ptrw[i+2] = godot::Vector2(mario_geometry.uv[2*i+4], mario_geometry.uv[2*i+5]);
     }
 
     mesh_array[godot::ArrayMesh::ARRAY_VERTEX] = mario_position;
     mesh_array[godot::ArrayMesh::ARRAY_NORMAL] = mario_normal;
-    mesh_array[godot::ArrayMesh::ARRAY_COLOR] = mario_color;
+    mesh_array[godot::ArrayMesh::ARRAY_COLOR]  = mario_color;
     mesh_array[godot::ArrayMesh::ARRAY_TEX_UV] = mario_uv;
 
     ret["mesh_array"] = mesh_array;
@@ -453,37 +447,39 @@ void LibSM64::mario_extend_cap(int mario_id, int cap_time)
 
 int LibSM64::surface_object_create(godot::PackedVector3Array vertexes, godot::Vector3 position, godot::Vector3 rotation, godot::TypedArray<SM64SurfaceProperties> surface_properties_array)
 {
+    const int64_t vertexes_size = vertexes.size();
     struct SM64SurfaceObject surface_object;
     int id;
-    struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes.size() / 3);
+    struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes_size / 3);
     godot::Ref<SM64SurfaceProperties> default_surface_properties;
 
     default_surface_properties.instantiate();
 
-    if (surface_properties_array.size() != vertexes.size() / 3)
-        surface_properties_array.resize(vertexes.size() / 3);
+    if (surface_properties_array.size() != vertexes_size / 3)
+        surface_properties_array.resize(vertexes_size / 3);
 
     invert_vertex_order(vertexes);
 
+    const godot::Vector3 *vertexes_ptr = vertexes.ptr();
     uint32_t j = 0;
-    for (size_t i = 0; i < vertexes.size(); i += 3)
+    for (int64_t i = 0; i < vertexes_size; i += 3)
     {
-        godot::Ref<SM64SurfaceProperties> surface_properties = surface_properties_array[i/3];
+        godot::Ref<SM64SurfaceProperties> surface_properties = surface_properties_array[j];
         if (surface_properties.is_null())
             surface_properties = default_surface_properties;
 
         surface_array[j].type = (int16_t) surface_properties->get_surface_type();
         surface_array[j].force = (int16_t) surface_properties->get_force();
         surface_array[j].terrain = (uint16_t) surface_properties->get_terrain_type();
-        surface_array[j].vertices[0][0] = (int32_t) ( vertexes[i+0].z * scale_factor);
-        surface_array[j].vertices[0][1] = (int32_t) ( vertexes[i+0].y * scale_factor);
-        surface_array[j].vertices[0][2] = (int32_t) (-vertexes[i+0].x * scale_factor);
-        surface_array[j].vertices[1][0] = (int32_t) ( vertexes[i+1].z * scale_factor);
-        surface_array[j].vertices[1][1] = (int32_t) ( vertexes[i+1].y * scale_factor);
-        surface_array[j].vertices[1][2] = (int32_t) (-vertexes[i+1].x * scale_factor);
-        surface_array[j].vertices[2][0] = (int32_t) ( vertexes[i+2].z * scale_factor);
-        surface_array[j].vertices[2][1] = (int32_t) ( vertexes[i+2].y * scale_factor);
-        surface_array[j].vertices[2][2] = (int32_t) (-vertexes[i+2].x * scale_factor);
+        surface_array[j].vertices[0][0] = (int32_t) ( vertexes_ptr[i+0].z * scale_factor);
+        surface_array[j].vertices[0][1] = (int32_t) ( vertexes_ptr[i+0].y * scale_factor);
+        surface_array[j].vertices[0][2] = (int32_t) (-vertexes_ptr[i+0].x * scale_factor);
+        surface_array[j].vertices[1][0] = (int32_t) ( vertexes_ptr[i+1].z * scale_factor);
+        surface_array[j].vertices[1][1] = (int32_t) ( vertexes_ptr[i+1].y * scale_factor);
+        surface_array[j].vertices[1][2] = (int32_t) (-vertexes_ptr[i+1].x * scale_factor);
+        surface_array[j].vertices[2][0] = (int32_t) ( vertexes_ptr[i+2].z * scale_factor);
+        surface_array[j].vertices[2][1] = (int32_t) ( vertexes_ptr[i+2].y * scale_factor);
+        surface_array[j].vertices[2][2] = (int32_t) (-vertexes_ptr[i+2].x * scale_factor);
 
         j++;
     }
