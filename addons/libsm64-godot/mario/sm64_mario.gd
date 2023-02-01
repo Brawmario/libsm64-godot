@@ -318,7 +318,7 @@ func heal(wedges: int) -> void:
 
 
 ## Equip special cap (see SM64Mario.Caps for values)
-func interact_cap(cap: Caps, cap_time = 0.0, play_music := true) -> void:
+func interact_cap(cap: Caps, cap_time := 0.0, play_music := true) -> void:
 	if _id < 0:
 		return
 	LibSM64.mario_interact_cap(_id, cap, cap_time * FPS, play_music)
