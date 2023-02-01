@@ -8,7 +8,7 @@ const ROM_SHA256 := "17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb
 
 
 func _ready() -> void:
-	if LibSM64.rom_filepath == "":
+	if SM64.rom_filepath == "":
 		rom_picker_dialog.popup_centered_ratio()
 
 
@@ -19,7 +19,7 @@ func _on_rom_picker_dialog_file_selected(path: String) -> void:
 		invalid_rom_dialog.popup_centered()
 		return
 
-	LibSM64.rom_filepath = path
+	SM64.rom_filepath = path
 
 
 func _on_invalid_rom_dialog_confirmed() -> void:

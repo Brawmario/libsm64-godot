@@ -17,17 +17,17 @@ extern "C"
 #include <windows.h>
 #endif
 
-class LibSM64 : public godot::Object
+class SM64 : public godot::Object
 {
-    GDCLASS(LibSM64, godot::Object);
+    GDCLASS(SM64, godot::Object);
 
-    inline static LibSM64 *singleton = nullptr;
+    inline static SM64 *singleton = nullptr;
 
 public:
-    LibSM64();
-    ~LibSM64();
+    SM64();
+    ~SM64();
 
-    static LibSM64 *get_singleton();
+    static SM64 *get_singleton();
 
     void global_init();
     void global_terminate();

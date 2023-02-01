@@ -8,7 +8,7 @@ extends Node
 var _default_surface_properties := SM64SurfaceProperties.new()
 
 
-## Load all MeshInstance3D in static_surfaces_group into LibSM64
+## Load all MeshInstance3D in static_surfaces_group into SM64
 func load_static_surfaces() -> void:
 	var faces := PackedVector3Array()
 	var surface_properties_array: Array[SM64SurfaceProperties] = []
@@ -30,7 +30,7 @@ func load_static_surfaces() -> void:
 		array.fill(surface_properties)
 		surface_properties_array.append_array(array)
 
-	LibSM64.static_surfaces_load(faces, surface_properties_array)
+	SM64.static_surfaces_load(faces, surface_properties_array)
 
 
 func _find_surface_properties(node: Node) -> SM64SurfaceProperties:

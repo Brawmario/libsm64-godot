@@ -7,25 +7,25 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/godot.hpp>
 
+#include <libsm64gde.hpp>
 #include <sm64_input.hpp>
 #include <sm64_surface_properties.hpp>
-#include <lib_sm64_gde.hpp>
 
 using namespace godot;
 
-static LibSM64 *_lib_sm64;
+static SM64 *_sm64;
 
 void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
     }
 
+    ClassDB::register_class<SM64>();
     ClassDB::register_class<SM64Input>();
     ClassDB::register_class<SM64SurfaceProperties>();
-    ClassDB::register_class<LibSM64>();
 
-    _lib_sm64 = memnew(LibSM64);
-    Engine::get_singleton()->register_singleton("LibSM64", LibSM64::get_singleton());
+    _sm64 = memnew(SM64);
+    Engine::get_singleton()->register_singleton("SM64", SM64::get_singleton());
 }
 
 void uninitialize_libsm64gd_module(ModuleInitializationLevel p_level) {
@@ -33,8 +33,8 @@ void uninitialize_libsm64gd_module(ModuleInitializationLevel p_level) {
         return;
     }
 
-    Engine::get_singleton()->unregister_singleton("LibSM64");
-    memdelete(_lib_sm64);
+    Engine::get_singleton()->unregister_singleton("SM64");
+    memdelete(_sm64);
 }
 
 extern "C" {

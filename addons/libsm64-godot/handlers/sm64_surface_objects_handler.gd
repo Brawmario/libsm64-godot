@@ -27,10 +27,10 @@ func _update_surface_objects() -> void:
 		var id := _surface_objects_ids[i]
 		var position := _surface_objects_refs[i].global_position
 		var rotation := _surface_objects_refs[i].global_rotation
-		LibSM64.surface_object_move(id, position, rotation)
+		SM64.surface_object_move(id, position, rotation)
 
 
-## Load MeshInstance3D into LibSM64
+## Load MeshInstance3D into SM64
 func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	var mesh_faces := mesh_instance.get_mesh().get_faces()
 	var position := mesh_instance.global_position
@@ -41,7 +41,7 @@ func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	surface_properties_array.resize(mesh_faces.size() / 3)
 	surface_properties_array.fill(surface_properties)
 
-	var surface_object_id := LibSM64.surface_object_create(mesh_faces, position, rotation, surface_properties_array)
+	var surface_object_id := SM64.surface_object_create(mesh_faces, position, rotation, surface_properties_array)
 
 	_surface_objects_ids.push_back(surface_object_id)
 	_surface_objects_refs.push_back(mesh_instance)
@@ -50,7 +50,7 @@ func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	mesh_instance.tree_exiting.connect(delete_surface_object.bind(mesh_instance), CONNECT_ONE_SHOT)
 
 
-## Load all MeshInstance3D in surface_objects_group into LibSM64
+## Load all MeshInstance3D in surface_objects_group into SM64
 func load_all_surface_objects() -> void:
 	for node in get_tree().get_nodes_in_group(surface_objects_group):
 		var mesh_instance := node as MeshInstance3D
@@ -60,22 +60,22 @@ func load_all_surface_objects() -> void:
 		load_surface_object(mesh_instance)
 
 
-## Delete MeshInstance3D from LibSM64 if present
+## Delete MeshInstance3D from SM64 if present
 func delete_surface_object(mesh_instance: MeshInstance3D) -> void:
 	var index := _surface_objects_refs.find(mesh_instance)
 	if index == -1:
 		return
 
 	var id := _surface_objects_ids[index]
-	LibSM64.surface_object_delete(id)
+	SM64.surface_object_delete(id)
 	_surface_objects_refs.remove_at(index)
 	_surface_objects_ids.remove_at(index)
 
 
-## Delete all MeshInstance3D from LibSM64
+## Delete all MeshInstance3D from SM64
 func delete_all_surface_objects() -> void:
 	for id in _surface_objects_ids:
-		LibSM64.surface_object_delete(id)
+		SM64.surface_object_delete(id)
 
 	_surface_objects_refs.clear()
 	_surface_objects_ids.clear()
