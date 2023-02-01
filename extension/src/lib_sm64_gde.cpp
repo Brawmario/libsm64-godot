@@ -115,16 +115,16 @@ LibSM64 *LibSM64::get_singleton()
 void LibSM64::global_init()
 {
     const godot::String rom_expected_sha256 = "17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91";
-    if (rom_expected_sha256 != godot::FileAccess::get_sha256(rom_filename))
+    if (rom_expected_sha256 != godot::FileAccess::get_sha256(rom_filepath))
     {
-        godot::UtilityFunctions::print(godot::String("[LibSM64] ROM file doesnt have expected SHA256: ") + rom_filename);
+        godot::UtilityFunctions::print(godot::String("[LibSM64] ROM file doesnt have expected SHA256: ") + rom_filepath);
         return;
     }
 
-    godot::PackedByteArray rom = godot::FileAccess::get_file_as_bytes(rom_filename);
+    godot::PackedByteArray rom = godot::FileAccess::get_file_as_bytes(rom_filepath);
     if (rom.is_empty())
     {
-        godot::UtilityFunctions::print(godot::String("[LibSM64] Failed to read ROM file: ") + rom_filename);
+        godot::UtilityFunctions::print(godot::String("[LibSM64] Failed to read ROM file: ") + rom_filepath);
         return;
     }
 
@@ -167,14 +167,14 @@ godot::Ref<godot::ImageTexture> LibSM64::get_mario_image_texture()
     return mario_image_texture;
 }
 
-void LibSM64::set_rom_filename(const godot::String &value)
+void LibSM64::set_rom_filepath(const godot::String &value)
 {
-    rom_filename = value;
+    rom_filepath = value;
 }
 
-godot::String LibSM64::get_rom_filename() const
+godot::String LibSM64::get_rom_filepath() const
 {
-    return rom_filename;
+    return rom_filepath;
 }
 
 void LibSM64::set_scale_factor(real_t value)
@@ -539,9 +539,9 @@ void LibSM64::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("is_init"), &LibSM64::is_init);
     godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image"), &LibSM64::get_mario_image);
     godot::ClassDB::bind_method(godot::D_METHOD("get_mario_image_texture"), &LibSM64::get_mario_image_texture);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_rom_filename", "value"), &LibSM64::set_rom_filename);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_rom_filename"), &LibSM64::get_rom_filename);
-    ADD_PROPERTY(godot::PropertyInfo(godot::Variant::STRING, "rom_filename", godot::PROPERTY_HINT_GLOBAL_FILE, "*.n64,*.z64,"), "set_rom_filename", "get_rom_filename");
+    godot::ClassDB::bind_method(godot::D_METHOD("set_rom_filepath", "value"), &LibSM64::set_rom_filepath);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_rom_filepath"), &LibSM64::get_rom_filepath);
+    ADD_PROPERTY(godot::PropertyInfo(godot::Variant::STRING, "rom_filepath", godot::PROPERTY_HINT_GLOBAL_FILE, "*.n64,*.z64,"), "set_rom_filepath", "get_rom_filepath");
     godot::ClassDB::bind_method(godot::D_METHOD("set_scale_factor", "value"), &LibSM64::set_scale_factor);
     godot::ClassDB::bind_method(godot::D_METHOD("get_scale_factor"), &LibSM64::get_scale_factor);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "scale_factor"), "set_scale_factor", "get_scale_factor");

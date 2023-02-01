@@ -36,8 +36,8 @@ public:
     godot::Ref<godot::Image> get_mario_image();
     godot::Ref<godot::ImageTexture> get_mario_image_texture();
 
-    void set_rom_filename(const godot::String &value);
-    godot::String get_rom_filename() const;
+    void set_rom_filepath(const godot::String &value);
+    godot::String get_rom_filepath() const;
 
     void set_scale_factor(real_t value);
     real_t get_scale_factor() const;
@@ -103,7 +103,7 @@ private:
     bool init = false;
     godot::Ref<godot::Image> mario_image = nullptr;
     godot::Ref<godot::ImageTexture> mario_image_texture = nullptr;
-    godot::String rom_filename = "";
+    godot::String rom_filepath = "";
     real_t scale_factor = 75.0;
 
     struct SM64MarioGeometryBuffers mario_geometry = {NULL, NULL, NULL, NULL, 0};

@@ -34,7 +34,7 @@ When creating the scene:
 
 Then do the following on the scene's main script:
 
-1. Feed the *LibSM64* singleton the filepath to the Super Mario 64 ROM file (`LibSM64.rom_filename = <path-to-rom>`).
+1. Feed the *LibSM64* singleton the file path to the Super Mario 64 ROM file (`LibSM64.rom_filepath = <path-to-rom>`).
 2. Call the `LibSM64.global_init()` function.
 3. Call `StaticSurfaceHandler.load_static_surfaces()` on your *SM64StaticSurfaceHandler* node.
 4. Call `SM64Mario.create()` on your *SM64Mario* node(s).
