@@ -12,6 +12,8 @@ public:
     SM64MarioGeometry();
     SM64MarioGeometry(const SM64MarioGeometry &other);
 
+    SM64MarioGeometry &operator=(const SM64MarioGeometry &other);
+
     struct SM64MarioGeometryBuffers &c_handle();
 
     void lerp(const SM64MarioGeometry &previous, float amount);
