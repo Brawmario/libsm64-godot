@@ -17,6 +17,21 @@ SM64MarioGeometry::SM64MarioGeometry()
     geometry.numTrianglesUsed = 0;
 }
 
+SM64MarioGeometry::SM64MarioGeometry(const SM64MarioGeometry &other)
+{
+    memcpy(position, other.position, sizeof(position));
+    memcpy(normal,   other.normal,   sizeof(normal));
+    memcpy(color,    other.color,    sizeof(color));
+    memcpy(uv,       other.uv,       sizeof(uv));
+
+    geometry.position = position;
+    geometry.normal   = normal;
+    geometry.color    = color;
+    geometry.uv       = uv;
+
+    geometry.numTrianglesUsed = other.geometry.numTrianglesUsed;
+}
+
 struct SM64MarioGeometryBuffers &SM64MarioGeometry::c_handle()
 {
     return geometry;

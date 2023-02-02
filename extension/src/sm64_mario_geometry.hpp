@@ -10,6 +10,7 @@ class SM64MarioGeometry
 {
 public:
     SM64MarioGeometry();
+    SM64MarioGeometry(const SM64MarioGeometry &other);
 
     struct SM64MarioGeometryBuffers &c_handle();
 
