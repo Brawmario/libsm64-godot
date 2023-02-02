@@ -24,13 +24,13 @@ public:
 
     void lerp(const SM64MarioGeometry &previous, float amount);
 
-private:
-    struct SM64MarioGeometryBuffers geometry;
-
     float position[9 * SM64_GEO_MAX_TRIANGLES];
     float normal[9 * SM64_GEO_MAX_TRIANGLES];
     float color[9 * SM64_GEO_MAX_TRIANGLES];
     float uv[6 * SM64_GEO_MAX_TRIANGLES];
+
+private:
+    struct SM64MarioGeometryBuffers geometry;
 };
 
 #endif // LIBSM64GD_SM64MARIOGEOMETRY_H
