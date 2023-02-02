@@ -2,6 +2,11 @@
 
 #include <string.h>
 
+static float lerp(float a, float b, float amount)
+{
+    return a + (b - a) * amount;
+}
+
 SM64MarioGeometry::SM64MarioGeometry()
 {
     memset(position, 0, sizeof(position));
@@ -35,4 +40,20 @@ SM64MarioGeometry::SM64MarioGeometry(const SM64MarioGeometry &other)
 struct SM64MarioGeometryBuffers &SM64MarioGeometry::c_handle()
 {
     return geometry;
+}
+
+void SM64MarioGeometry::lerp(const SM64MarioGeometry &previous, float amount)
+{
+    for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
+        position[i] = ::lerp(position[i], previous.position[i], amount);
+
+    for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
+        normal[i] = ::lerp(normal[i], previous.normal[i], amount);
+
+    // Mario's colors seems to be always constant, no need to interpolate.
+    // for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
+    //     color[i] = ::lerp(color[i], previous.color[i], amount);
+
+    for (int i = 0; i < 6 * geometry.numTrianglesUsed; i++)
+        uv[i] = ::lerp(uv[i], previous.uv[i], amount);
 }
