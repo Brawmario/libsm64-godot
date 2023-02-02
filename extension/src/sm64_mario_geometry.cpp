@@ -49,7 +49,23 @@ SM64MarioGeometry &SM64MarioGeometry::operator=(const SM64MarioGeometry &other)
     return *this;
 }
 
-void SM64MarioGeometry::lerp(const SM64MarioGeometry &previous, float amount)
+void SM64MarioGeometry::lerp(const SM64MarioGeometry &current, const SM64MarioGeometry &previous, float amount)
+{
+    for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
+        position[i] = ::lerp(current.position[i], previous.position[i], amount);
+
+    for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
+        normal[i] = ::lerp(current.normal[i], previous.normal[i], amount);
+
+    // Mario's colors seems to be always constant, no need to interpolate.
+    // for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
+    //     color[i] = ::lerp(current.color[i], previous.color[i], amount);
+
+    for (int i = 0; i < 6 * geometry.numTrianglesUsed; i++)
+        uv[i] = ::lerp(current.uv[i], previous.uv[i], amount);
+}
+
+void SM64MarioGeometry::lerp_inplace(const SM64MarioGeometry &previous, float amount)
 {
     for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
         position[i] = ::lerp(position[i], previous.position[i], amount);
