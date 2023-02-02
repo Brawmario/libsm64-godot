@@ -1,6 +1,8 @@
 #ifndef LIBSM64GD_SM64MARIOGEOMETRY_H
 #define LIBSM64GD_SM64MARIOGEOMETRY_H
 
+#include <godot_cpp/core/defs.hpp>
+
 extern "C"
 {
 #include <libsm64.h>
@@ -14,7 +16,11 @@ public:
 
     SM64MarioGeometry &operator=(const SM64MarioGeometry &other);
 
-    struct SM64MarioGeometryBuffers &c_handle();
+    _FORCE_INLINE_ const struct SM64MarioGeometryBuffers &c_handle() const { return geometry; }
+    _FORCE_INLINE_ struct SM64MarioGeometryBuffers &c_handle() { return geometry; }
+
+    _FORCE_INLINE_ uint16_t triangles_used() const { return geometry.numTrianglesUsed; }
+    _FORCE_INLINE_ uint16_t &triangles_used() { return geometry.numTrianglesUsed; }
 
     void lerp(const SM64MarioGeometry &previous, float amount);
 

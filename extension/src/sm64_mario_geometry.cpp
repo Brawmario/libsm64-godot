@@ -49,11 +49,6 @@ SM64MarioGeometry &SM64MarioGeometry::operator=(const SM64MarioGeometry &other)
     return *this;
 }
 
-struct SM64MarioGeometryBuffers &SM64MarioGeometry::c_handle()
-{
-    return geometry;
-}
-
 void SM64MarioGeometry::lerp(const SM64MarioGeometry &previous, float amount)
 {
     for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
