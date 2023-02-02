@@ -8,6 +8,8 @@
 #include <sm64_input.hpp>
 #include <sm64_surface_properties.hpp>
 
+#include<sm64_mario_geometry.hpp>
+
 extern "C"
 {
 #include <libsm64.h>
@@ -106,7 +108,7 @@ private:
     godot::String rom_filepath = "";
     real_t scale_factor = 75.0;
 
-    struct SM64MarioGeometryBuffers mario_geometry = {NULL, NULL, NULL, NULL, 0};
+    SM64MarioGeometry mario_geometry_cpp;
 
     godot::PackedVector3Array mario_position;
     godot::PackedVector3Array mario_normal;

@@ -83,11 +83,6 @@ SM64::SM64()
 {
     ERR_FAIL_COND(singleton != nullptr);
     singleton = this;
-
-    mario_geometry.position = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
-    mario_geometry.color    = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
-    mario_geometry.normal   = (float*) malloc(sizeof(float) * 9 * SM64_GEO_MAX_TRIANGLES);
-    mario_geometry.uv       = (float*) malloc(sizeof(float) * 6 * SM64_GEO_MAX_TRIANGLES);
 }
 
 SM64::~SM64()
@@ -96,15 +91,6 @@ SM64::~SM64()
     singleton = nullptr;
 
     global_terminate();
-
-    if (mario_geometry.position)
-        ::free(mario_geometry.position);
-    if (mario_geometry.color)
-        ::free(mario_geometry.color);
-    if (mario_geometry.normal)
-        ::free(mario_geometry.normal);
-    if (mario_geometry.uv)
-        ::free(mario_geometry.uv);
 }
 
 SM64 *SM64::get_singleton()
@@ -246,6 +232,7 @@ godot::Dictionary SM64::mario_tick(int mario_id, godot::Dictionary input)
     godot::Dictionary ret;
     godot::Array mesh_array;
     struct SM64MarioState out_state;
+    struct SM64MarioGeometryBuffers &mario_geometry = mario_geometry_cpp.c_handle();
 
     godot::Vector2 cam_look = input["cam_look"];
     godot::Vector2 stick = input["stick"];
