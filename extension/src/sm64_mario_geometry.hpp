@@ -16,14 +16,11 @@ public:
 
     SM64MarioGeometry &operator=(const SM64MarioGeometry &other);
 
-    _FORCE_INLINE_ const struct SM64MarioGeometryBuffers &c_handle() const { return geometry; }
-    _FORCE_INLINE_ struct SM64MarioGeometryBuffers &c_handle() { return geometry; }
+    _FORCE_INLINE_ struct SM64MarioGeometryBuffers *c_handle() { return &geometry; }
 
     _FORCE_INLINE_ uint16_t triangles_used() const { return geometry.numTrianglesUsed; }
-    _FORCE_INLINE_ uint16_t &triangles_used() { return geometry.numTrianglesUsed; }
 
-    void lerp(const SM64MarioGeometry &current, const SM64MarioGeometry &previous, float amount);
-    void lerp_inplace(const SM64MarioGeometry &previous, float amount);
+    void lerp(const SM64MarioGeometry &last, const SM64MarioGeometry &current, float amount);
 
     float position[9 * SM64_GEO_MAX_TRIANGLES];
     float normal[9 * SM64_GEO_MAX_TRIANGLES];

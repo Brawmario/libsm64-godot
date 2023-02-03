@@ -108,7 +108,7 @@ private:
     godot::String rom_filepath = "";
     real_t scale_factor = 75.0;
 
-    SM64MarioGeometry mario_geometry_cpp;
+    SM64MarioGeometry mario_geometry;
 
     godot::PackedVector3Array mario_position;
     godot::PackedVector3Array mario_normal;

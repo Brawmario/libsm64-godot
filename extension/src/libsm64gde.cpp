@@ -232,7 +232,6 @@ godot::Dictionary SM64::mario_tick(int mario_id, godot::Dictionary input)
     godot::Dictionary ret;
     godot::Array mesh_array;
     struct SM64MarioState out_state;
-    struct SM64MarioGeometryBuffers &mario_geometry = mario_geometry_cpp.c_handle();
 
     godot::Vector2 cam_look = input["cam_look"];
     godot::Vector2 stick = input["stick"];
@@ -250,7 +249,7 @@ godot::Dictionary SM64::mario_tick(int mario_id, godot::Dictionary input)
         (uint8_t) z
     };
 
-    sm64_mario_tick(mario_id, &mario_inputs, &out_state, &mario_geometry);
+    sm64_mario_tick(mario_id, &mario_inputs, &out_state, mario_geometry.c_handle());
 
     ret["position"]       = godot::Vector3(-out_state.position[2] / scale_factor, out_state.position[1] / scale_factor, out_state.position[0] / scale_factor);
     ret["velocity"]       = godot::Vector3(-out_state.velocity[2] / scale_factor, out_state.velocity[1] / scale_factor, out_state.velocity[0] / scale_factor);
@@ -265,7 +264,7 @@ godot::Dictionary SM64::mario_tick(int mario_id, godot::Dictionary input)
     ret["holding_object"] = (bool) out_state.holdingObject;
     ret["drop_method"]    = (int) out_state.dropMethod;
 
-    const int vertex_count = mario_geometry.numTrianglesUsed * 3;
+    const int vertex_count = mario_geometry.triangles_used() * 3;
     if (mesh_array.size() != godot::ArrayMesh::ARRAY_MAX)
         mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
     if (mario_position.size() != vertex_count)
@@ -277,10 +276,10 @@ godot::Dictionary SM64::mario_tick(int mario_id, godot::Dictionary input)
     if (mario_uv.size() != vertex_count)
         mario_uv.resize(vertex_count);
 
-    invert_vertex_order_3d(mario_geometry.position, mario_geometry.numTrianglesUsed);
-    invert_vertex_order_3d(mario_geometry.normal,   mario_geometry.numTrianglesUsed);
-    invert_vertex_order_3d(mario_geometry.color,    mario_geometry.numTrianglesUsed);
-    invert_vertex_order_2d(mario_geometry.uv,       mario_geometry.numTrianglesUsed);
+    invert_vertex_order_3d(mario_geometry.position, mario_geometry.triangles_used());
+    invert_vertex_order_3d(mario_geometry.normal,   mario_geometry.triangles_used());
+    invert_vertex_order_3d(mario_geometry.color,    mario_geometry.triangles_used());
+    invert_vertex_order_2d(mario_geometry.uv,       mario_geometry.triangles_used());
 
     godot::Vector3 *mario_position_ptrw = mario_position.ptrw();
     godot::Vector3 *mario_normal_ptrw   = mario_normal.ptrw();
