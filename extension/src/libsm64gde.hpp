@@ -69,7 +69,7 @@ public:
      *     "array_mesh": godot::Ref<godot::ArrayMesh>,
      * }
      */
-    godot::Dictionary mario_tick(int mario_id, godot::Dictionary input, real_t delta);
+    godot::Dictionary mario_tick(int mario_id, godot::Dictionary input);
 
     void mario_delete(int mario_id);
 
@@ -108,20 +108,12 @@ private:
     godot::String rom_filepath = "";
     real_t scale_factor = 75.0;
 
-    struct SM64MarioState out_state;
-    struct SM64MarioState out_state_current;
-    struct SM64MarioState out_state_last;
-
-    SM64MarioGeometry mario_geometry;
-    SM64MarioGeometry mario_geometry_current;
-    SM64MarioGeometry mario_geometry_last;
+    SM64MarioGeometry mario_geometry_cpp;
 
     godot::PackedVector3Array mario_position;
     godot::PackedVector3Array mario_normal;
     godot::PackedColorArray mario_color;
     godot::PackedVector2Array mario_uv;
-
-    real_t time_since_last_tick = 0.0;
 };
 
 #endif // LIBSM64GD_LIBSM64_H

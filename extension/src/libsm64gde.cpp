@@ -11,8 +11,6 @@
 
 #define CONVERT_RADIANS_TO_SM64(x) (-(x) / Math_PI * 32768.0)
 
-constexpr real_t g_sm64_fps = 1.0/30.0;
-
 static struct SM64TextureAtlasInfo mario_texture_atlas_info = {
     .offset             = 0x114750,
     .numUsedTextures    = 11,
@@ -51,6 +49,7 @@ static void invert_vertex_order_2d(float *arr, size_t triangle_count)
     }
 }
 
+
 static void invert_vertex_order_3d(float *arr, size_t triangle_count)
 {
     for (size_t i = 0; i < triangle_count * 9; i += 9)
@@ -78,22 +77,6 @@ static void invert_vertex_order(godot::PackedVector3Array &arr)
         arr_ptrw[i+0] = arr[i+1];
         arr_ptrw[i+1] = temp;
     }
-}
-
-static float lerp(float a, float b, float amount)
-{
-    return a + (b - a) * amount;
-}
-
-static void lerp(struct SM64MarioState &out, const struct SM64MarioState &last, const struct SM64MarioState &current, float amount)
-{
-    out = current;
-
-    for (int i = 0; i < 3; i++)
-        out.position[i] = lerp(last.position[i], current.position[i], amount);
-    for (int i = 0; i < 3; i++)
-        out.velocity[i] = lerp(last.velocity[i], current.velocity[i], amount);
-    out.faceAngle= lerp(last.faceAngle, current.faceAngle, amount);
 }
 
 SM64::SM64()
@@ -244,10 +227,12 @@ int SM64::mario_create(godot::Vector3 position, godot::Vector3 rotation)
     return sm64_mario_create(x, y, z, rx, ry, rz, 0);
 }
 
-godot::Dictionary SM64::mario_tick(int mario_id, godot::Dictionary input, real_t delta)
+godot::Dictionary SM64::mario_tick(int mario_id, godot::Dictionary input)
 {
     godot::Dictionary ret;
     godot::Array mesh_array;
+    struct SM64MarioState out_state;
+    struct SM64MarioGeometryBuffers &mario_geometry = mario_geometry_cpp.c_handle();
 
     godot::Vector2 cam_look = input["cam_look"];
     godot::Vector2 stick = input["stick"];
@@ -265,33 +250,7 @@ godot::Dictionary SM64::mario_tick(int mario_id, godot::Dictionary input, real_t
         (uint8_t) z
     };
 
-    // First call will always trigger a tick
-    static bool s_first_call = true;
-    if (unlikely(s_first_call))
-    {
-        sm64_mario_tick(mario_id, &mario_inputs, &out_state_current, &mario_geometry_current.c_handle());
-        out_state_last = out_state_current;
-        mario_geometry_last = mario_geometry_current;
-
-        s_first_call = false;
-    }
-    else
-    {
-        time_since_last_tick += delta;
-        while (time_since_last_tick >= g_sm64_fps)
-        {
-            out_state_last = out_state_current;
-            mario_geometry_last = mario_geometry_current;
-
-            sm64_mario_tick(mario_id, &mario_inputs, &out_state_current, &mario_geometry_current.c_handle());
-
-            time_since_last_tick -= g_sm64_fps;
-        }
-    }
-
-    // Interpolation
-    lerp(out_state, out_state_last, out_state_current, time_since_last_tick / g_sm64_fps);
-    mario_geometry.lerp(mario_geometry_last, mario_geometry_current, time_since_last_tick / g_sm64_fps);
+    sm64_mario_tick(mario_id, &mario_inputs, &out_state, &mario_geometry);
 
     ret["position"]       = godot::Vector3(-out_state.position[2] / scale_factor, out_state.position[1] / scale_factor, out_state.position[0] / scale_factor);
     ret["velocity"]       = godot::Vector3(-out_state.velocity[2] / scale_factor, out_state.velocity[1] / scale_factor, out_state.velocity[0] / scale_factor);
@@ -306,7 +265,7 @@ godot::Dictionary SM64::mario_tick(int mario_id, godot::Dictionary input, real_t
     ret["holding_object"] = (bool) out_state.holdingObject;
     ret["drop_method"]    = (int) out_state.dropMethod;
 
-    const int vertex_count = mario_geometry.triangles_used() * 3;
+    const int vertex_count = mario_geometry.numTrianglesUsed * 3;
     if (mesh_array.size() != godot::ArrayMesh::ARRAY_MAX)
         mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
     if (mario_position.size() != vertex_count)
@@ -318,10 +277,10 @@ godot::Dictionary SM64::mario_tick(int mario_id, godot::Dictionary input, real_t
     if (mario_uv.size() != vertex_count)
         mario_uv.resize(vertex_count);
 
-    invert_vertex_order_3d(mario_geometry.position, mario_geometry.triangles_used());
-    invert_vertex_order_3d(mario_geometry.normal,   mario_geometry.triangles_used());
-    invert_vertex_order_3d(mario_geometry.color,    mario_geometry.triangles_used());
-    invert_vertex_order_2d(mario_geometry.uv,       mario_geometry.triangles_used());
+    invert_vertex_order_3d(mario_geometry.position, mario_geometry.numTrianglesUsed);
+    invert_vertex_order_3d(mario_geometry.normal,   mario_geometry.numTrianglesUsed);
+    invert_vertex_order_3d(mario_geometry.color,    mario_geometry.numTrianglesUsed);
+    invert_vertex_order_2d(mario_geometry.uv,       mario_geometry.numTrianglesUsed);
 
     godot::Vector3 *mario_position_ptrw = mario_position.ptrw();
     godot::Vector3 *mario_normal_ptrw   = mario_normal.ptrw();
@@ -575,7 +534,7 @@ void SM64::_bind_methods()
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "scale_factor"), "set_scale_factor", "get_scale_factor");
     godot::ClassDB::bind_method(godot::D_METHOD("static_surfaces_load", "vertexes", "surface_properties_array"), &SM64::static_surfaces_load);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position", "rotation"), &SM64::mario_create);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "input", "delta"), &SM64::mario_tick);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "input"), &SM64::mario_tick);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &SM64::mario_delete);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_action", "mario_id", "action"), &SM64::set_mario_action);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_state", "mario_id", "flags"), &SM64::set_mario_state);
