@@ -100,19 +100,18 @@ SM64 *SM64::get_singleton()
 
 void SM64::global_init()
 {
-    const godot::String rom_expected_sha256 = "17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91";
-    if (rom_expected_sha256 != godot::FileAccess::get_sha256(rom_filepath))
-    {
-        godot::UtilityFunctions::print(godot::String("[SM64] ROM file doesnt have expected SHA256: ") + rom_filepath);
-        return;
-    }
+    ERR_FAIL_COND_MSG(rom_filepath.is_empty(), "[libsm64-godot] Called init without suppling ROM file.");
+    ERR_FAIL_COND_MSG(!godot::FileAccess::file_exists(rom_filepath), "[libsm64-godot] ROM file not found.");
+
+    const godot::String file_expected_sha256 = "17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91";
+    godot::String file_sha256 = godot::FileAccess::get_sha256(rom_filepath);
+
+    ERR_FAIL_COND_MSG(file_sha256.is_empty(), "[libsm64-godot] Failed to get ROM file's SHA256.");
+    ERR_FAIL_COND_MSG(file_sha256 != file_expected_sha256, "[libsm64-godot] ROM file doesnt have expected SHA256.");
 
     godot::PackedByteArray rom = godot::FileAccess::get_file_as_bytes(rom_filepath);
-    if (rom.is_empty())
-    {
-        godot::UtilityFunctions::print(godot::String("[SM64] Failed to read ROM file: ") + rom_filepath);
-        return;
-    }
+
+    ERR_FAIL_COND_MSG(rom.is_empty(), "[libsm64-godot] Failed to read ROM file.");
 
     constexpr int64_t mario_texture_size = 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT;
     uint8_t *mario_texture_raw = (uint8_t *) malloc(mario_texture_size);
@@ -379,11 +378,7 @@ void SM64::set_mario_water_level(int mario_id, real_t level)
 
 void SM64::set_mario_floor_override(int mario_id, godot::Ref<SM64SurfaceProperties> surface_properties)
 {
-    if (surface_properties.is_null())
-    {
-        godot::UtilityFunctions::print(godot::String("[SM64] Called set_mario_floor_override with null surface_properties"));
-        return;
-    }
+    ERR_FAIL_COND_MSG(surface_properties.is_null(), "[libsm64-godot] Called set_mario_floor_override with null surface_properties.");
 
     sm64_set_mario_floor_override(mario_id,
                                   surface_properties->get_terrain_type(),
