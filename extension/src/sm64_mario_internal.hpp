@@ -46,7 +46,7 @@ public:
      *     "array_mesh": godot::Ref<godot::ArrayMesh>,
      * }
      */
-    godot::Dictionary tick(godot::Dictionary p_input);
+    godot::Dictionary tick(real_t delta, godot::Dictionary p_input);
 
     void mario_delete();
 
@@ -74,7 +74,17 @@ protected:
 private:
     int m_id = -1;
 
+    bool m_first_tick = true;
+    real_t m_time_since_last_tick = 0.0;
+
+    int m_current_index = 0;
+    int m_last_index = 1;
+
+    struct SM64MarioState m_out_state;
+    struct SM64MarioState m_out_state_hard_tick[2];
+
     SM64MarioGeometry m_geometry;
+    SM64MarioGeometry m_geometry_hard_tick[2];
 
     godot::PackedVector3Array m_position;
     godot::PackedVector3Array m_normal;

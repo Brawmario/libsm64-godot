@@ -171,7 +171,6 @@ var _metal_material := preload("res://addons/libsm64-godot/mario/mario_metal_mat
 var _wing_material := preload("res://addons/libsm64-godot/mario/mario_wing_material.tres") as StandardMaterial3D
 var _material: StandardMaterial3D
 var _id := -1
-var _time_since_last_tick := 0.0
 # FIXME: SM64Input stopped working in beta 15
 var _mario_input := {}
 
@@ -188,11 +187,6 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	_time_since_last_tick += delta
-	if _time_since_last_tick < DELTA:
-		return
-	_time_since_last_tick -= DELTA
-
 	if _id < 0:
 		return
 
@@ -205,7 +199,7 @@ func _physics_process(delta: float) -> void:
 	_mario_input.b = Input.is_action_pressed(input_b)
 	_mario_input.z = Input.is_action_pressed(input_z)
 
-	var tick_output := _internal.tick(_mario_input)
+	var tick_output := _internal.tick(delta, _mario_input)
 
 	global_position = tick_output.position as Vector3
 	_velocity = tick_output.velocity as Vector3
