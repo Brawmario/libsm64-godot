@@ -1,13 +1,12 @@
 #include <sm64_mario_internal.hpp>
 
-#include <cstdlib>
-#include <cstring>
-
 #include <godot_cpp/core/math.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/array_mesh.hpp>
 
 #include <sm64_global.hpp>
+
+#define LERP(last, current, amount) (last + (current - last) * amount)
 
 #define CONVERT_RADIANS_TO_SM64(x) (-(x) / Math_PI * 32768.0)
 
@@ -44,20 +43,15 @@ static void invert_vertex_order_3d(float *p_arr, size_t p_triangle_count)
     }
 }
 
-static float lerp(float a, float b, float amount)
-{
-    return a + (b - a) * amount;
-}
-
 static void lerp(struct SM64MarioState &out, const struct SM64MarioState &last, const struct SM64MarioState &current, float amount)
 {
     out = current;
 
     for (int i = 0; i < 3; i++)
-        out.position[i] = lerp(last.position[i], current.position[i], amount);
+        out.position[i] = LERP(last.position[i], current.position[i], amount);
     for (int i = 0; i < 3; i++)
-        out.velocity[i] = lerp(last.velocity[i], current.velocity[i], amount);
-    out.faceAngle= lerp(last.faceAngle, current.faceAngle, amount);
+        out.velocity[i] = LERP(last.velocity[i], current.velocity[i], amount);
+    out.faceAngle = LERP(last.faceAngle, current.faceAngle, amount);
 }
 
 int SM64MarioInternal::mario_create(godot::Vector3 p_position, godot::Vector3 p_rotation)
@@ -153,26 +147,20 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     ret["drop_method"]    = (int) m_out_state.dropMethod;
 
     const int vertex_count = m_geometry.triangles_used() * 3;
-    if (mesh_array.size() != godot::ArrayMesh::ARRAY_MAX)
-        mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
-    if (m_position.size() != vertex_count)
-        m_position.resize(vertex_count);
-    if (m_normal.size() != vertex_count)
-        m_normal.resize(vertex_count);
-    if (m_color.size() != vertex_count)
-        m_color.resize(vertex_count);
-    if (m_uv.size() != vertex_count)
-        m_uv.resize(vertex_count);
 
+    mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
+    m_position.resize(vertex_count);
+    m_normal.resize(vertex_count);
+    m_color.resize(vertex_count);
+    m_uv.resize(vertex_count);
+
+    // SM64 to godot conversion
     invert_vertex_order_3d(m_geometry.position, m_geometry.triangles_used());
     invert_vertex_order_3d(m_geometry.normal,   m_geometry.triangles_used());
     invert_vertex_order_3d(m_geometry.color,    m_geometry.triangles_used());
     invert_vertex_order_2d(m_geometry.uv,       m_geometry.triangles_used());
 
     godot::Vector3 *position_ptrw = m_position.ptrw();
-    godot::Vector3 *normal_ptrw   = m_normal.ptrw();
-    godot::Color   *color_ptrw    = m_color.ptrw();
-    godot::Vector2 *uv_ptrw       = m_uv.ptrw();
     for (int i = 0; i < vertex_count; i += 3)
     {
         position_ptrw[i+0].z =  m_geometry.position[3*i+0] / scale_factor;
@@ -184,7 +172,10 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
         position_ptrw[i+2].z =  m_geometry.position[3*i+6] / scale_factor;
         position_ptrw[i+2].y =  m_geometry.position[3*i+7] / scale_factor;
         position_ptrw[i+2].x = -m_geometry.position[3*i+8] / scale_factor;
-
+    }
+    godot::Vector3 *normal_ptrw = m_normal.ptrw();
+    for (int i = 0; i < vertex_count; i += 3)
+    {
         normal_ptrw[i+0].z =  m_geometry.normal[3*i+0];
         normal_ptrw[i+0].y =  m_geometry.normal[3*i+1];
         normal_ptrw[i+0].x = -m_geometry.normal[3*i+2];
@@ -194,7 +185,10 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
         normal_ptrw[i+2].z =  m_geometry.normal[3*i+6];
         normal_ptrw[i+2].y =  m_geometry.normal[3*i+7];
         normal_ptrw[i+2].x = -m_geometry.normal[3*i+8];
-
+    }
+    godot::Color *color_ptrw = m_color.ptrw();
+    for (int i = 0; i < vertex_count; i += 3)
+    {
         color_ptrw[i+0] = godot::Color(m_geometry.color[3*i+0],
                                        m_geometry.color[3*i+1],
                                        m_geometry.color[3*i+2]);
@@ -204,7 +198,10 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
         color_ptrw[i+2] = godot::Color(m_geometry.color[3*i+6],
                                        m_geometry.color[3*i+7],
                                        m_geometry.color[3*i+8]);
-
+    }
+    godot::Vector2 *uv_ptrw = m_uv.ptrw();
+    for (int i = 0; i < vertex_count; i += 3)
+    {
         uv_ptrw[i+0] = godot::Vector2(m_geometry.uv[2*i+0],
                                       m_geometry.uv[2*i+1]);
         uv_ptrw[i+1] = godot::Vector2(m_geometry.uv[2*i+2],
