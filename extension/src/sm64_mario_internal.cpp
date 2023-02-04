@@ -11,6 +11,8 @@
 
 #define CONVERT_RADIANS_TO_SM64(x) (-(x) / Math_PI * 32768.0)
 
+constexpr real_t g_sm64_fps = 1.0/30.0;
+
 static void invert_vertex_order_2d(float *p_arr, size_t p_triangle_count)
 {
     const size_t arr_size = p_triangle_count * 6;
@@ -42,6 +44,22 @@ static void invert_vertex_order_3d(float *p_arr, size_t p_triangle_count)
     }
 }
 
+static float lerp(float a, float b, float amount)
+{
+    return a + (b - a) * amount;
+}
+
+static void lerp(struct SM64MarioState &out, const struct SM64MarioState &last, const struct SM64MarioState &current, float amount)
+{
+    out = current;
+
+    for (int i = 0; i < 3; i++)
+        out.position[i] = lerp(last.position[i], current.position[i], amount);
+    for (int i = 0; i < 3; i++)
+        out.velocity[i] = lerp(last.velocity[i], current.velocity[i], amount);
+    out.faceAngle= lerp(last.faceAngle, current.faceAngle, amount);
+}
+
 int SM64MarioInternal::mario_create(godot::Vector3 p_position, godot::Vector3 p_rotation)
 {
     const SM64Global *sm64_global = SM64Global::get_singleton();
@@ -61,11 +79,10 @@ int SM64MarioInternal::mario_create(godot::Vector3 p_position, godot::Vector3 p_
     return m_id;
 }
 
-godot::Dictionary SM64MarioInternal::tick(godot::Dictionary p_input)
+godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_input)
 {
     godot::Dictionary ret;
     godot::Array mesh_array;
-    struct SM64MarioState out_state;
 
     ERR_FAIL_COND_V_MSG(m_id < 0, ret, "[libsm64-godot] tried to tick non existent Mario");
 
@@ -91,24 +108,49 @@ godot::Dictionary SM64MarioInternal::tick(godot::Dictionary p_input)
         (uint8_t) z
     };
 
-    sm64_mario_tick(m_id, &inputs, &out_state, m_geometry.c_handle());
+    // First call will always trigger a tick
+    if (unlikely(m_first_tick))
+    {
+        sm64_mario_tick(m_id, &inputs, &m_out_state_hard_tick[m_current_index], m_geometry_hard_tick[m_current_index].c_handle());
+        m_out_state_hard_tick[m_last_index] = m_out_state_hard_tick[m_current_index];
+        m_geometry_hard_tick[m_last_index] = m_geometry_hard_tick[m_current_index];
 
-    ret["position"]       = godot::Vector3(-out_state.position[2] / scale_factor,
-                                            out_state.position[1] / scale_factor,
-                                            out_state.position[0] / scale_factor);
-    ret["velocity"]       = godot::Vector3(-out_state.velocity[2] / scale_factor,
-                                            out_state.velocity[1] / scale_factor,
-                                            out_state.velocity[0] / scale_factor);
-    ret["face_angle"]     = (real_t) out_state.faceAngle;
-    ret["health"]         = (int) out_state.health;
-    ret["action"]         = (int) out_state.action;
-    ret["flags"]          = (int) out_state.flags;
-    ret["particle_flags"] = (int) out_state.particleFlags;
-    ret["invinc_timer"]   = (int) out_state.invincTimer;
-    ret["hurt_counter"]   = (int) out_state.hurtCounter;
-    ret["num_lives"]      = (int) out_state.numLives;
-    ret["holding_object"] = (bool) out_state.holdingObject;
-    ret["drop_method"]    = (int) out_state.dropMethod;
+        m_first_tick = false;
+    }
+    else
+    {
+        m_time_since_last_tick += delta;
+        while (m_time_since_last_tick >= g_sm64_fps)
+        {
+            // Old current becomes new last, old last will be overwritten by new current
+            SWAP(m_current_index, m_last_index);
+
+            sm64_mario_tick(m_id, &inputs, &m_out_state_hard_tick[m_current_index], m_geometry_hard_tick[m_current_index].c_handle());
+
+            m_time_since_last_tick -= g_sm64_fps;
+        }
+    }
+
+    // Interpolation
+    lerp(m_out_state, m_out_state_hard_tick[m_last_index], m_out_state_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_fps);
+    m_geometry.lerp(m_geometry_hard_tick[m_last_index], m_geometry_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_fps);
+
+    ret["position"]       = godot::Vector3(-m_out_state.position[2] / scale_factor,
+                                            m_out_state.position[1] / scale_factor,
+                                            m_out_state.position[0] / scale_factor);
+    ret["velocity"]       = godot::Vector3(-m_out_state.velocity[2] / scale_factor,
+                                            m_out_state.velocity[1] / scale_factor,
+                                            m_out_state.velocity[0] / scale_factor);
+    ret["face_angle"]     = (real_t) m_out_state.faceAngle;
+    ret["health"]         = (int) m_out_state.health;
+    ret["action"]         = (int) m_out_state.action;
+    ret["flags"]          = (int) m_out_state.flags;
+    ret["particle_flags"] = (int) m_out_state.particleFlags;
+    ret["invinc_timer"]   = (int) m_out_state.invincTimer;
+    ret["hurt_counter"]   = (int) m_out_state.hurtCounter;
+    ret["num_lives"]      = (int) m_out_state.numLives;
+    ret["holding_object"] = (bool) m_out_state.holdingObject;
+    ret["drop_method"]    = (int) m_out_state.dropMethod;
 
     const int vertex_count = m_geometry.triangles_used() * 3;
     if (mesh_array.size() != godot::ArrayMesh::ARRAY_MAX)
