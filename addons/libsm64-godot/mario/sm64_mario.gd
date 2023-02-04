@@ -45,6 +45,8 @@ signal lives_changed(lives: int)
 ## Action equivalent to pushing the Z button
 @export var input_z := &"mario_z"
 
+var _internal := SM64MarioInternal.new()
+
 var _action := 0x0:
 	set(value):
 		_action = value
@@ -56,7 +58,7 @@ var action: int:
 	set(value):
 		if _id < 0:
 			return
-		SM64.set_mario_action(_id, value)
+		_internal.set_action(value)
 		_action = value
 
 var _flags := 0x0:
@@ -70,7 +72,7 @@ var flags: int:
 	set(value):
 		if _id < 0:
 			return
-		SM64.set_mario_state(_id, value)
+		_internal.set_state(value)
 		_flags = value
 
 var _velocity := Vector3()
@@ -81,7 +83,7 @@ var velocity: Vector3:
 	set(value):
 		if _id < 0:
 			return
-		SM64.set_mario_velocity(_id, value)
+		_internal.set_velocity(value)
 		_velocity = value
 
 var _face_angle := 0.0:
@@ -95,7 +97,7 @@ var face_angle: float:
 	set(value):
 		if _id < 0:
 			return
-		SM64.set_mario_angle(_id, value)
+		_internal.set_angle(value)
 		_face_angle = value
 
 var _health := FULL_HEALTH:
@@ -110,7 +112,7 @@ var health: int:
 	set(value):
 		if _id < 0:
 			return
-		SM64.set_mario_health(_id, value)
+		_internal.set_health(value)
 		_health = value
 
 ## Mario's amount of health wedges
@@ -121,7 +123,7 @@ var health_wedges: int:
 		if _id < 0:
 			return
 		var new_health := value << 0x8 if value > 0 else 0x0
-		SM64.set_mario_health(_id, new_health)
+		_internal.set_health(new_health)
 		_health = new_health
 
 var _invicibility_time_frames := 0
@@ -133,7 +135,7 @@ var invicibility_time: float:
 		if _id < 0:
 			return
 		_invicibility_time_frames = value * FPS
-		SM64.set_mario_invincibility(_id, _invicibility_time_frames)
+		_internal.set_invincibility(_invicibility_time_frames)
 
 var hurt_counter := 0
 
@@ -148,7 +150,7 @@ var lives: int:
 	set(value):
 		if _id < 0:
 			return
-		SM64.mario_set_lives(_id, value)
+		_internal.set_lives(value)
 		_lives = value
 
 ## Mario's water level
@@ -158,7 +160,7 @@ var water_level := -100000.0:
 	set(value):
 		if _id < 0:
 			return
-		SM64.set_mario_water_level(_id, value)
+		_internal.set_water_level(value)
 		water_level = value
 
 var _mesh_instance: MeshInstance3D
@@ -203,7 +205,7 @@ func _physics_process(delta: float) -> void:
 	_mario_input.b = Input.is_action_pressed(input_b)
 	_mario_input.z = Input.is_action_pressed(input_z)
 
-	var tick_output := SM64.mario_tick(_id, _mario_input)
+	var tick_output := _internal.tick(_mario_input)
 
 	global_position = tick_output.position as Vector3
 	_velocity = tick_output.velocity as Vector3
@@ -246,15 +248,15 @@ func _physics_process(delta: float) -> void:
 
 ## Create Mario (requires initializing the libsm64 via the global_init function)
 func create() -> void:
-	if SM64.is_init():
+	if SM64Global.is_init():
 		if _id >= 0:
 			delete()
-		_id = SM64.mario_create(global_position, global_rotation)
+		_id = _internal.mario_create(global_position, global_rotation)
 		if _id < 0:
 			return
 
 		if not _default_material.detail_albedo:
-			var detail_texture := SM64.get_mario_image_texture() as ImageTexture
+			var detail_texture := SM64Global.get_mario_image_texture() as ImageTexture
 			_default_material.detail_albedo = detail_texture
 			_wing_material.detail_albedo = detail_texture
 			_metal_material.detail_albedo = detail_texture
@@ -265,7 +267,7 @@ func create() -> void:
 func delete() -> void:
 	if _id < 0:
 		return
-	SM64.mario_delete(_id)
+	_internal.mario_delete()
 	_id = -1
 
 
@@ -278,7 +280,7 @@ func get_action_name() -> StringName:
 func teleport(to_global_position: Vector3) -> void:
 	if _id < 0:
 		return
-	SM64.set_mario_position(_id, to_global_position)
+	_internal.set_position(to_global_position)
 	global_position = to_global_position
 
 
@@ -286,46 +288,46 @@ func teleport(to_global_position: Vector3) -> void:
 func set_forward_velocity(velocity: float) -> void:
 	if _id < 0:
 		return
-	SM64.set_mario_forward_velocity(_id, velocity)
+	_internal.set_forward_velocity(velocity)
 
 
 ## Override the floor properties
 func set_floor_override(surface_properties: SM64SurfaceProperties) -> void:
 	if _id < 0:
 		return
-	SM64.set_mario_floor_override(_id, surface_properties)
+	_internal.set_floor_override(surface_properties)
 
 
 ## Reset overriden floor properties
 func reset_floor_override() -> void:
 	if _id < 0:
 		return
-	SM64.reset_mario_floor_override(_id)
+	_internal.reset_floor_override()
 
 
 ## Make Mario take damage in amount of health wedges from a source position
 func take_damage(damage: int, source_position: Vector3, big_knockback := false) -> void:
 	if _id < 0:
 		return
-	SM64.mario_take_damage(_id, damage, source_position, big_knockback)
+	_internal.take_damage(damage, source_position, big_knockback)
 
 
 ## Heal Mario a specific amount of wedges
 func heal(wedges: int) -> void:
 	if _id < 0:
 		return
-	SM64.mario_heal(_id, wedges)
+	_internal.heal(wedges)
 
 
 ## Equip special cap (see SM64Mario.Caps for values)
 func interact_cap(cap: Caps, cap_time := 0.0, play_music := true) -> void:
 	if _id < 0:
 		return
-	SM64.mario_interact_cap(_id, cap, cap_time * FPS, play_music)
+	_internal.interact_cap(cap, cap_time * FPS, play_music)
 
 
 ## Extend current special cap time
 func extend_cap(cap_time: float) -> void:
 	if _id < 0:
 		return
-	SM64.mario_extend_cap(_id, cap_time * FPS)
+	_internal.extend_cap(cap_time * FPS)
