@@ -30,7 +30,7 @@ func load_static_surfaces() -> void:
 		array.fill(surface_properties)
 		surface_properties_array.append_array(array)
 
-	SM64.static_surfaces_load(faces, surface_properties_array)
+	SM64Surfaces.static_surfaces_load(faces, surface_properties_array)
 
 
 func _find_surface_properties(node: Node) -> SM64SurfaceProperties:

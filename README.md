@@ -12,7 +12,7 @@ Currently compatible with Godot 4.0 beta 16, with binaries compiled for Windows 
 
 This add-on consists of two main components:
 
-- *SM64*: Singleton that exposes the funcitions of the libsm64 library
+- *SM64Global*: Singleton that exposes the `init` and `terminate` of the libsm64 library
 - *SM64Mario*: Extends Node3D; can have multiple in any scene.
 
 It also adds two helper nodes:
@@ -34,7 +34,7 @@ When creating the scene:
 
 Then do the following on the scene's main script:
 
-1. Feed the *SM64* singleton the file path to the Super Mario 64 ROM file (`SM64.rom_filepath = <path-to-rom>`).
-2. Call the `SM64.global_init()` function.
+1. Feed the *SM64Global* singleton the file path to the Super Mario 64 ROM file (`SM64Global.rom_filepath = <path-to-rom>`).
+2. Call the `SM64Global.global_init()` function.
 3. Call `StaticSurfaceHandler.load_static_surfaces()` on your *SM64StaticSurfaceHandler* node.
 4. Call `SM64Mario.create()` on your *SM64Mario* node(s).

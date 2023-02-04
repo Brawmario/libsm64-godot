@@ -27,7 +27,7 @@ func _update_surface_objects() -> void:
 		var id := _surface_objects_ids[i]
 		var position := _surface_objects_refs[i].global_position
 		var rotation := _surface_objects_refs[i].global_rotation
-		SM64.surface_object_move(id, position, rotation)
+		SM64Surfaces.surface_object_move(id, position, rotation)
 
 
 ## Load MeshInstance3D into SM64
@@ -41,7 +41,7 @@ func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	surface_properties_array.resize(mesh_faces.size() / 3)
 	surface_properties_array.fill(surface_properties)
 
-	var surface_object_id := SM64.surface_object_create(mesh_faces, position, rotation, surface_properties_array)
+	var surface_object_id := SM64Surfaces.surface_object_create(mesh_faces, position, rotation, surface_properties_array)
 
 	_surface_objects_ids.push_back(surface_object_id)
 	_surface_objects_refs.push_back(mesh_instance)
@@ -67,7 +67,7 @@ func delete_surface_object(mesh_instance: MeshInstance3D) -> void:
 		return
 
 	var id := _surface_objects_ids[index]
-	SM64.surface_object_delete(id)
+	SM64Surfaces.surface_object_delete(id)
 	_surface_objects_refs.remove_at(index)
 	_surface_objects_ids.remove_at(index)
 
@@ -75,7 +75,7 @@ func delete_surface_object(mesh_instance: MeshInstance3D) -> void:
 ## Delete all MeshInstance3D from SM64
 func delete_all_surface_objects() -> void:
 	for id in _surface_objects_ids:
-		SM64.surface_object_delete(id)
+		SM64Surfaces.surface_object_delete(id)
 
 	_surface_objects_refs.clear()
 	_surface_objects_ids.clear()

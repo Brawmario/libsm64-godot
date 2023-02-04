@@ -2,7 +2,7 @@ extends Node3D
 
 
 func _ready() -> void:
-	SM64.global_init()
+	SM64Global.init()
 	$SM64StaticSurfacesHandler.load_static_surfaces()
 	$SM64SurfaceObjectsHandler.load_all_surface_objects()
 
@@ -20,4 +20,4 @@ func _on_initial_scenario_tree_exiting() -> void:
 		if not mario:
 			continue
 		mario.delete()
-	SM64.global_terminate()
+	SM64Global.terminate()

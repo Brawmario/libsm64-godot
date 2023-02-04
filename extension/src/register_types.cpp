@@ -7,25 +7,33 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/godot.hpp>
 
-#include <libsm64gde.hpp>
+#include <sm64_global.hpp>
+#include <sm64_surfaces.hpp>
+#include <sm64_mario_internal.hpp>
 #include <sm64_input.hpp>
 #include <sm64_surface_properties.hpp>
 
 using namespace godot;
 
-static SM64 *_sm64;
+static SM64Global *_sm64_global;
+static SM64Surfaces *_sm64_surfaces;
 
 void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
     }
 
-    ClassDB::register_class<SM64>();
+    ClassDB::register_class<SM64Global>();
+    ClassDB::register_class<SM64Surfaces>();
+    ClassDB::register_class<SM64MarioInternal>();
     ClassDB::register_class<SM64Input>();
     ClassDB::register_class<SM64SurfaceProperties>();
 
-    _sm64 = memnew(SM64);
-    Engine::get_singleton()->register_singleton("SM64", SM64::get_singleton());
+    _sm64_global = memnew(SM64Global);
+    Engine::get_singleton()->register_singleton("SM64Global", SM64Global::get_singleton());
+
+    _sm64_surfaces = memnew(SM64Surfaces);
+    Engine::get_singleton()->register_singleton("SM64Surfaces", SM64Surfaces::get_singleton());
 }
 
 void uninitialize_libsm64gd_module(ModuleInitializationLevel p_level) {
@@ -33,8 +41,12 @@ void uninitialize_libsm64gd_module(ModuleInitializationLevel p_level) {
         return;
     }
 
-    Engine::get_singleton()->unregister_singleton("SM64");
-    memdelete(_sm64);
+    Engine::get_singleton()->unregister_singleton("SM64Global");
+    memdelete(_sm64_global);
+
+    Engine::get_singleton()->unregister_singleton("SM64Surfaces");
+    memdelete(_sm64_surfaces);
+
 }
 
 extern "C" {
