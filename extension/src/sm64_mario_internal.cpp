@@ -45,12 +45,15 @@ static void invert_vertex_order_3d(float *p_arr, size_t p_triangle_count)
 
 static void lerp(struct SM64MarioState &out, const struct SM64MarioState &last, const struct SM64MarioState &current, float amount)
 {
+    // Copy current first to account for unlerped members
     out = current;
 
     for (int i = 0; i < 3; i++)
         out.position[i] = LERP(last.position[i], current.position[i], amount);
+
     for (int i = 0; i < 3; i++)
         out.velocity[i] = LERP(last.velocity[i], current.velocity[i], amount);
+
     out.faceAngle = LERP(last.faceAngle, current.faceAngle, amount);
 }
 
@@ -127,6 +130,7 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
 
     // Interpolation
     lerp(m_out_state, m_out_state_hard_tick[m_last_index], m_out_state_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_fps);
+    const real_t invinc_timer_lerped = godot::MAX(0.0f, (m_out_state.invincTimer * g_sm64_fps) - m_time_since_last_tick);
     m_geometry.lerp(m_geometry_hard_tick[m_last_index], m_geometry_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_fps);
 
     ret["position"]       = godot::Vector3(-m_out_state.position[2] / scale_factor,
@@ -140,7 +144,7 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     ret["action"]         = (int)    m_out_state.action;
     ret["flags"]          = (int)    m_out_state.flags;
     ret["particle_flags"] = (int)    m_out_state.particleFlags;
-    ret["invinc_timer"]   = (real_t) godot::MAX(0.0f, (m_out_state.invincTimer * g_sm64_fps) - m_time_since_last_tick);
+    ret["invinc_timer"]   = (real_t) invinc_timer_lerped;
     ret["hurt_counter"]   = (int)    m_out_state.hurtCounter;
     ret["num_lives"]      = (int)    m_out_state.numLives;
     ret["holding_object"] = (bool)   m_out_state.holdingObject;
