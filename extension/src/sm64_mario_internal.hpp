@@ -56,7 +56,7 @@ public:
     void set_angle(real_t p_face_angle);
     void set_velocity(godot::Vector3 p_velocity);
     void set_forward_velocity(real_t p_velocity);
-    void set_invincibility(int p_timer);
+    void set_invincibility(real_t p_time);
     void set_water_level(real_t p_level);
     void set_floor_override(godot::Ref<SM64SurfaceProperties> p_surface_properties);
     void reset_floor_override();
@@ -64,8 +64,8 @@ public:
     void take_damage(int p_damage, godot::Vector3 p_source_position, bool p_big_knockback = false);
     void heal(int p_heal_counter);
     void set_lives(int p_lives);
-    void interact_cap(int p_cap, int p_cap_time = 0, bool p_play_music = 1);
-    void extend_cap(int p_cap_time);
+    void interact_cap(int p_cap, real_t p_cap_time = 0, bool p_play_music = 1);
+    void extend_cap(real_t p_cap_time);
     // bool sm64_mario_attack(int32_t marioId, float x, float y, float z, float hitboxHeight);
 
 protected:

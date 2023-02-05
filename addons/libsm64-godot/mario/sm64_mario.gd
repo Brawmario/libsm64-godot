@@ -3,9 +3,6 @@ class_name SM64Mario
 extends Node3D
 
 
-const FPS := 30.0
-const DELTA := 1.0 / FPS
-
 ## Value that represents Mario being at full health
 const FULL_HEALTH = 0x0880
 ## Value that represents one health wedge
@@ -126,16 +123,16 @@ var health_wedges: int:
 		_internal.set_health(new_health)
 		_health = new_health
 
-var _invicibility_time_frames := 0
+var _invicibility_time := 0.0
 ## Mario's invincibility time in seconds
 var invicibility_time: float:
 	get:
-		return _invicibility_time_frames / FPS
+		return _invicibility_time
 	set(value):
 		if _id < 0:
 			return
-		_invicibility_time_frames = value * FPS
-		_internal.set_invincibility(_invicibility_time_frames)
+		_internal.set_invincibility(value)
+		_invicibility_time = value
 
 var hurt_counter := 0
 
@@ -217,7 +214,7 @@ func _physics_process(delta: float) -> void:
 	if new_flags != _flags:
 		_flags = new_flags
 
-	_invicibility_time_frames = tick_output.invinc_timer as int
+	_invicibility_time = tick_output.invinc_timer as float
 	hurt_counter = tick_output.hurt_counter as int
 
 	var new_lives := tick_output.num_lives as int
@@ -317,11 +314,11 @@ func heal(wedges: int) -> void:
 func interact_cap(cap: Caps, cap_time := 0.0, play_music := true) -> void:
 	if _id < 0:
 		return
-	_internal.interact_cap(cap, cap_time * FPS, play_music)
+	_internal.interact_cap(cap, cap_time, play_music)
 
 
 ## Extend current special cap time
 func extend_cap(cap_time: float) -> void:
 	if _id < 0:
 		return
-	_internal.extend_cap(cap_time * FPS)
+	_internal.extend_cap(cap_time)
