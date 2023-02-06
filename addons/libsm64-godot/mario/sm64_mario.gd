@@ -21,7 +21,7 @@ signal action_changed(action: int)
 signal flags_changed(flags: int)
 signal health_changed(health: int)
 signal health_wedges_changed(health_wedges: int)
-signal lives_changed(lives: int)
+# signal lives_changed(lives: int)
 
 ## Camera instance that follows Mario
 @export var camera: Camera3D
@@ -94,7 +94,7 @@ var face_angle: float:
 	set(value):
 		if _id < 0:
 			return
-		_internal.set_angle(value)
+		_internal.set_face_angle(value)
 		_face_angle = value
 
 var _health := FULL_HEALTH:
@@ -123,32 +123,24 @@ var health_wedges: int:
 		_internal.set_health(new_health)
 		_health = new_health
 
-var _invicibility_time := 0.0
 ## Mario's invincibility time in seconds
-var invicibility_time: float:
-	get:
-		return _invicibility_time
-	set(value):
-		if _id < 0:
-			return
-		_internal.set_invincibility(value)
-		_invicibility_time = value
+var invicibility_time := 0.0
 
-var hurt_counter := 0
+# var hurt_counter := 0
 
-var _lives := 4:
-	set(value):
-		_lives = value
-		lives_changed.emit(_lives)
+#var _lives := 4:
+#	set(value):
+#		_lives = value
+#		lives_changed.emit(_lives)
 ## Mario's lives
-var lives: int:
-	get:
-		return _lives
-	set(value):
-		if _id < 0:
-			return
-		_internal.set_lives(value)
-		_lives = value
+#var lives: int:
+#	get:
+#		return _lives
+#	set(value):
+#		if _id < 0:
+#			return
+#		_internal.set_lives(value)
+#		_lives = value
 
 ## Mario's water level
 var water_level := -100000.0:
@@ -214,12 +206,12 @@ func _physics_process(delta: float) -> void:
 	if new_flags != _flags:
 		_flags = new_flags
 
-	_invicibility_time = tick_output.invinc_timer as float
-	hurt_counter = tick_output.hurt_counter as int
+	invicibility_time = tick_output.invinc_timer as float
+	# hurt_counter = tick_output.hurt_counter as int
 
-	var new_lives := tick_output.num_lives as int
-	if new_lives != _lives:
-		_lives = new_lives
+	# var new_lives := tick_output.num_lives as int
+	# if new_lives != _lives:
+	# 	_lives = new_lives
 
 	match _flags & SPECIAL_CAPS:
 		SM64Mario.Caps.VANISH:
@@ -274,6 +266,12 @@ func teleport(to_global_position: Vector3) -> void:
 	_internal.set_position(to_global_position)
 	global_position = to_global_position
 
+## Set angle of mario in the libsm64 world
+func set_angle(to_global_rotation: Vector3) -> void:
+	if _id < 0:
+		return
+	_internal.set_angle(to_global_rotation)
+	# global_rotation = to_global_rotation
 
 ## Set Mario's forward velocity in the libsm64 world
 func set_forward_velocity(velocity: float) -> void:
@@ -283,17 +281,17 @@ func set_forward_velocity(velocity: float) -> void:
 
 
 ## Override the floor properties
-func set_floor_override(surface_properties: SM64SurfaceProperties) -> void:
-	if _id < 0:
-		return
-	_internal.set_floor_override(surface_properties)
+# func set_floor_override(surface_properties: SM64SurfaceProperties) -> void:
+# 	if _id < 0:
+# 		return
+# 	_internal.set_floor_override(surface_properties)
 
 
 ## Reset overriden floor properties
-func reset_floor_override() -> void:
-	if _id < 0:
-		return
-	_internal.reset_floor_override()
+# func reset_floor_override() -> void:
+# 	if _id < 0:
+# 		return
+# 	_internal.reset_floor_override()
 
 
 ## Make Mario take damage in amount of health wedges from a source position
@@ -318,7 +316,7 @@ func interact_cap(cap: Caps, cap_time := 0.0, play_music := true) -> void:
 
 
 ## Extend current special cap time
-func extend_cap(cap_time: float) -> void:
-	if _id < 0:
-		return
-	_internal.extend_cap(cap_time)
+# func extend_cap(cap_time: float) -> void:
+# 	if _id < 0:
+# 		return
+# 	_internal.extend_cap(cap_time)

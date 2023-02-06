@@ -67,11 +67,12 @@ int SM64MarioInternal::mario_create(godot::Vector3 p_position, godot::Vector3 p_
     float x = (float) ( p_position.z * scale_factor);
     float y = (float) ( p_position.y * scale_factor);
     float z = (float) (-p_position.x * scale_factor);
-    int16_t rx = (int16_t) CONVERT_RADIANS_TO_SM64(-p_rotation.z);
-    int16_t ry = (int16_t) CONVERT_RADIANS_TO_SM64(-p_rotation.y);
-    int16_t rz = (int16_t) CONVERT_RADIANS_TO_SM64( p_rotation.x);
+    // Unused for now
+    // int16_t rx = (int16_t) CONVERT_RADIANS_TO_SM64(-p_rotation.z);
+    // int16_t ry = (int16_t) CONVERT_RADIANS_TO_SM64(-p_rotation.y);
+    // int16_t rz = (int16_t) CONVERT_RADIANS_TO_SM64( p_rotation.x);
 
-    m_id = sm64_mario_create(x, y, z, rx, ry, rz, 0);
+    m_id = sm64_mario_create(x, y, z);
 
     return m_id;
 }
@@ -145,10 +146,10 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     ret["flags"]          = (int)    m_out_state.flags;
     ret["particle_flags"] = (int)    m_out_state.particleFlags;
     ret["invinc_timer"]   = (real_t) invinc_timer_lerped;
-    ret["hurt_counter"]   = (int)    m_out_state.hurtCounter;
-    ret["num_lives"]      = (int)    m_out_state.numLives;
-    ret["holding_object"] = (bool)   m_out_state.holdingObject;
-    ret["drop_method"]    = (int)    m_out_state.dropMethod;
+    // ret["hurt_counter"]   = (int)    m_out_state.hurtCounter;
+    // ret["num_lives"]      = (int)    m_out_state.numLives;
+    // ret["holding_object"] = (bool)   m_out_state.holdingObject;
+    // ret["drop_method"]    = (int)    m_out_state.dropMethod;
 
     const int vertex_count = m_geometry.triangles_used() * 3;
 
@@ -261,11 +262,21 @@ void SM64MarioInternal::set_position(godot::Vector3 p_position)
                             -p_position.x * scale_factor);
 }
 
-void SM64MarioInternal::set_angle(real_t p_angle)
+void SM64MarioInternal::set_angle(godot::Vector3 p_rotation)
 {
     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
 
-    sm64_set_mario_angle(m_id, p_angle);
+    sm64_set_mario_angle(m_id,
+                          p_rotation.z,
+                          p_rotation.y,
+                         -p_rotation.x);
+}
+
+void SM64MarioInternal::set_face_angle(real_t p_value)
+{
+    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+
+    sm64_set_mario_faceangle(m_id, p_value);
 }
 
 void SM64MarioInternal::set_velocity(godot::Vector3 p_velocity)
@@ -297,12 +308,12 @@ void SM64MarioInternal::set_forward_velocity(real_t p_velocity)
     sm64_set_mario_forward_velocity(m_id, p_velocity * scale_factor);
 }
 
-void SM64MarioInternal::set_invincibility(real_t p_time)
-{
-    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
-
-    sm64_set_mario_invincibility(m_id, (int16_t) (p_time / g_sm64_fps));
-}
+// void SM64MarioInternal::set_invincibility(real_t p_time)
+// {
+//     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+//
+//     sm64_set_mario_invincibility(m_id, (int16_t) (p_time / g_sm64_fps));
+// }
 
 void SM64MarioInternal::set_water_level(real_t p_level)
 {
@@ -317,30 +328,30 @@ void SM64MarioInternal::set_water_level(real_t p_level)
     sm64_set_mario_water_level(m_id, (int) p_level * scale_factor);
 }
 
-void SM64MarioInternal::set_floor_override(godot::Ref<SM64SurfaceProperties> p_surface_properties)
-{
-    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
-    ERR_FAIL_COND_MSG(p_surface_properties.is_null(), "[libsm64-godot] Called set_floor_override with null surface_properties.");
+// void SM64MarioInternal::set_floor_override(godot::Ref<SM64SurfaceProperties> p_surface_properties)
+// {
+//     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+//     ERR_FAIL_COND_MSG(p_surface_properties.is_null(), "[libsm64-godot] Called set_floor_override with null surface_properties.");
+//
+//     sm64_set_mario_floor_override(m_id,
+//                                   p_surface_properties->get_terrain_type(),
+//                                   p_surface_properties->get_surface_type(),
+//                                   p_surface_properties->get_force());
+// }
 
-    sm64_set_mario_floor_override(m_id,
-                                  p_surface_properties->get_terrain_type(),
-                                  p_surface_properties->get_surface_type(),
-                                  p_surface_properties->get_force());
-}
+// void SM64MarioInternal::reset_floor_override()
+// {
+//     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+//
+//     sm64_set_mario_floor_override(m_id, 0x7, 0x100, 0);
+// }
 
-void SM64MarioInternal::reset_floor_override()
-{
-    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
-
-    sm64_set_mario_floor_override(m_id, 0x7, 0x100, 0);
-}
-
-void SM64MarioInternal::set_health(int p_health)
-{
-    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
-
-    sm64_set_mario_health(m_id, p_health);
-}
+// void SM64MarioInternal::set_health(int p_health)
+// {
+//     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+//
+//     sm64_set_mario_health(m_id, p_health);
+// }
 
 void SM64MarioInternal::take_damage(int p_damage, godot::Vector3 p_source_position, bool p_big_knockback)
 {
@@ -367,12 +378,12 @@ void SM64MarioInternal::heal(int p_heal_counter)
     sm64_mario_heal(m_id, p_heal_counter);
 }
 
-void SM64MarioInternal::set_lives(int p_lives)
-{
-    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
-
-    sm64_mario_set_lives(m_id, p_lives);
-}
+// void SM64MarioInternal::set_lives(int p_lives)
+// {
+//     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+//
+//     sm64_mario_set_lives(m_id, p_lives);
+// }
 
 void SM64MarioInternal::interact_cap(int p_cap, real_t p_cap_time, bool p_play_music)
 {
@@ -381,12 +392,12 @@ void SM64MarioInternal::interact_cap(int p_cap, real_t p_cap_time, bool p_play_m
     sm64_mario_interact_cap(m_id, (uint32_t) p_cap, (uint16_t) (p_cap_time / g_sm64_fps), (uint8_t) p_play_music);
 }
 
-void SM64MarioInternal::extend_cap(real_t p_cap_time)
-{
-    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
-
-    sm64_mario_extend_cap(m_id, (uint16_t) (p_cap_time / g_sm64_fps));
-}
+// void SM64MarioInternal::extend_cap(real_t p_cap_time)
+// {
+//     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+//
+//     sm64_mario_extend_cap(m_id, (uint16_t) (p_cap_time / g_sm64_fps));
+// }
 
 void SM64MarioInternal::_bind_methods()
 {
@@ -396,17 +407,18 @@ void SM64MarioInternal::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_action", "action"), &SM64MarioInternal::set_action);
     godot::ClassDB::bind_method(godot::D_METHOD("set_state", "flags"), &SM64MarioInternal::set_state);
     godot::ClassDB::bind_method(godot::D_METHOD("set_position", "position"), &SM64MarioInternal::set_position);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_angle", "angle"), &SM64MarioInternal::set_angle);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_angle", "rotation"), &SM64MarioInternal::set_angle);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_face_angle", "value"), &SM64MarioInternal::set_face_angle);
     godot::ClassDB::bind_method(godot::D_METHOD("set_velocity", "velocity"), &SM64MarioInternal::set_velocity);
     godot::ClassDB::bind_method(godot::D_METHOD("set_forward_velocity", "velocity"), &SM64MarioInternal::set_forward_velocity);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_invincibility", "time"), &SM64MarioInternal::set_invincibility);
+    // godot::ClassDB::bind_method(godot::D_METHOD("set_invincibility", "time"), &SM64MarioInternal::set_invincibility);
     godot::ClassDB::bind_method(godot::D_METHOD("set_water_level", "level"), &SM64MarioInternal::set_water_level);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_floor_override", "surface_properties"), &SM64MarioInternal::set_floor_override);
-    godot::ClassDB::bind_method(godot::D_METHOD("reset_floor_override"), &SM64MarioInternal::reset_floor_override);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_health", "health"), &SM64MarioInternal::set_health);
+    // godot::ClassDB::bind_method(godot::D_METHOD("set_floor_override", "surface_properties"), &SM64MarioInternal::set_floor_override);
+    // godot::ClassDB::bind_method(godot::D_METHOD("reset_floor_override"), &SM64MarioInternal::reset_floor_override);
+    // godot::ClassDB::bind_method(godot::D_METHOD("set_health", "health"), &SM64MarioInternal::set_health);
     godot::ClassDB::bind_method(godot::D_METHOD("take_damage", "damage", "source_position", "big_knockback"), &SM64MarioInternal::take_damage, DEFVAL(false));
     godot::ClassDB::bind_method(godot::D_METHOD("heal", "heal_counter"), &SM64MarioInternal::heal);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_lives", "lives"), &SM64MarioInternal::set_lives);
+    // godot::ClassDB::bind_method(godot::D_METHOD("set_lives", "lives"), &SM64MarioInternal::set_lives);
     godot::ClassDB::bind_method(godot::D_METHOD("interact_cap", "cap", "cap_time", "play_music"), &SM64MarioInternal::interact_cap, DEFVAL(0), DEFVAL(true));
-    godot::ClassDB::bind_method(godot::D_METHOD("extend_cap", "cap_time"), &SM64MarioInternal::extend_cap);
+    // godot::ClassDB::bind_method(godot::D_METHOD("extend_cap", "cap_time"), &SM64MarioInternal::extend_cap);
 }
