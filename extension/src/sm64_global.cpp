@@ -8,26 +8,6 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/file_access.hpp>
 
-static struct SM64TextureAtlasInfo mario_texture_atlas_info = {
-    .offset             = 0x114750,
-    .numUsedTextures    = 11,
-    .atlasWidth         = 11*64,
-    .atlasHeight        = 64,
-    .texInfos = {
-        { .offset = 144, .width = 64, .height = 32, .format = FORMAT_RGBA },
-        { .offset = 4240, .width = 32, .height = 32, .format = FORMAT_RGBA },
-        { .offset = 6288, .width = 32, .height = 32, .format = FORMAT_RGBA },
-        { .offset = 8336, .width = 32, .height = 32, .format = FORMAT_RGBA },
-        { .offset = 10384, .width = 32, .height = 32, .format = FORMAT_RGBA },
-        { .offset = 12432, .width = 32, .height = 32, .format = FORMAT_RGBA },
-        { .offset = 14480, .width = 32, .height = 32, .format = FORMAT_RGBA },
-        { .offset = 16528, .width = 32, .height = 32, .format = FORMAT_RGBA },
-        { .offset = 30864, .width = 32, .height = 32, .format = FORMAT_RGBA },
-        { .offset = 32912, .width = 32, .height = 64, .format = FORMAT_RGBA },
-        { .offset = 37008, .width = 32, .height = 64, .format = FORMAT_RGBA },
-    }
-};
-
 static void SM64DebugPrintFunction(const char *msg)
 {
     godot::UtilityFunctions::print(godot::String("[libsm64] ") + godot::String(msg) + godot::String("\n"));
@@ -70,8 +50,9 @@ void SM64Global::init()
     constexpr int64_t mario_texture_size = 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT;
     uint8_t *mario_texture_raw = (uint8_t *) malloc(mario_texture_size);
 
-    sm64_global_init(rom.ptrw(), SM64DebugPrintFunction);
-    sm64_texture_load(rom.ptrw(), &mario_texture_atlas_info, mario_texture_raw);
+    sm64_register_debug_print_function(SM64DebugPrintFunction);
+    sm64_global_init(rom.ptrw(), mario_texture_raw);
+    sm64_audio_init(rom.ptrw());
 
     godot::PackedByteArray mario_texture_packed;
     mario_texture_packed.resize(mario_texture_size);
@@ -128,13 +109,13 @@ real_t SM64Global::get_scale_factor() const
 
 void SM64Global::set_volume(real_t p_volume)
 {
-    sm64_set_volume(p_volume);
+    sm64_set_sound_volume(p_volume);
 }
 
-void SM64Global::set_reverb(int p_reverb)
-{
-    sm64_set_reverb((uint8_t) p_reverb);
-}
+// void SM64Global::set_reverb(int p_reverb)
+// {
+//     sm64_set_reverb((uint8_t) p_reverb);
+// }
 
 void SM64Global::_bind_methods()
 {
@@ -150,5 +131,5 @@ void SM64Global::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("get_scale_factor"), &SM64Global::get_scale_factor);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "scale_factor"), "set_scale_factor", "get_scale_factor");
     godot::ClassDB::bind_method(godot::D_METHOD("set_volume", "volume"), &SM64Global::set_volume);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_reverb", "reverb"), &SM64Global::set_reverb);
+    // godot::ClassDB::bind_method(godot::D_METHOD("set_reverb", "reverb"), &SM64Global::set_reverb);
 }

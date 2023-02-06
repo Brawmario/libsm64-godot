@@ -41,7 +41,7 @@ public:
     real_t get_scale_factor() const;
 
     void set_volume(real_t p_volume);
-    void set_reverb(int p_reverb);
+    // void set_reverb(int p_reverb);
 
 protected:
     static void _bind_methods();
