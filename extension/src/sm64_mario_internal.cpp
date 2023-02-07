@@ -10,7 +10,7 @@
 
 #define CONVERT_RADIANS_TO_SM64(x) (-(x) / Math_PI * 32768.0)
 
-constexpr real_t g_sm64_fps = 1.0/30.0;
+constexpr real_t g_sm64_delta = 1.0/30.0;
 
 static void invert_vertex_order_2d(float *p_arr, size_t p_triangle_count)
 {
@@ -118,21 +118,21 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     else
     {
         m_time_since_last_tick += delta;
-        while (m_time_since_last_tick >= g_sm64_fps)
+        while (m_time_since_last_tick >= g_sm64_delta)
         {
             // Old current becomes new last, old last will be overwritten by new current
             SWAP(m_current_index, m_last_index);
 
             sm64_mario_tick(m_id, &inputs, &m_out_state_hard_tick[m_current_index], m_geometry_hard_tick[m_current_index].c_handle());
 
-            m_time_since_last_tick -= g_sm64_fps;
+            m_time_since_last_tick -= g_sm64_delta;
         }
     }
 
     // Interpolation
-    lerp(m_out_state, m_out_state_hard_tick[m_last_index], m_out_state_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_fps);
-    const real_t invinc_timer_lerped = godot::MAX(0.0f, (m_out_state.invincTimer * g_sm64_fps) - m_time_since_last_tick);
-    m_geometry.lerp(m_geometry_hard_tick[m_last_index], m_geometry_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_fps);
+    lerp(m_out_state, m_out_state_hard_tick[m_last_index], m_out_state_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_delta);
+    const real_t invinc_timer_lerped = godot::MAX(0.0f, (m_out_state.invincTimer * g_sm64_delta) - m_time_since_last_tick);
+    m_geometry.lerp(m_geometry_hard_tick[m_last_index], m_geometry_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_delta);
 
     ret["position"]       = godot::Vector3(-m_out_state.position[2] / scale_factor,
                                             m_out_state.position[1] / scale_factor,
@@ -312,7 +312,7 @@ void SM64MarioInternal::set_forward_velocity(real_t p_velocity)
 // {
 //     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
 //
-//     sm64_set_mario_invincibility(m_id, (int16_t) (p_time / g_sm64_fps));
+//     sm64_set_mario_invincibility(m_id, (int16_t) (p_time / g_sm64_delta));
 // }
 
 void SM64MarioInternal::set_water_level(real_t p_level)
@@ -389,14 +389,14 @@ void SM64MarioInternal::interact_cap(int p_cap, real_t p_cap_time, bool p_play_m
 {
     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
 
-    sm64_mario_interact_cap(m_id, (uint32_t) p_cap, (uint16_t) (p_cap_time / g_sm64_fps), (uint8_t) p_play_music);
+    sm64_mario_interact_cap(m_id, (uint32_t) p_cap, (uint16_t) (p_cap_time / g_sm64_delta), (uint8_t) p_play_music);
 }
 
 // void SM64MarioInternal::extend_cap(real_t p_cap_time)
 // {
 //     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
 //
-//     sm64_mario_extend_cap(m_id, (uint16_t) (p_cap_time / g_sm64_fps));
+//     sm64_mario_extend_cap(m_id, (uint16_t) (p_cap_time / g_sm64_delta));
 // }
 
 void SM64MarioInternal::_bind_methods()
