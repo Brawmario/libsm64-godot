@@ -106,22 +106,22 @@ var _health := FULL_HEALTH:
 var health: int:
 	get:
 		return _health
-	set(value):
-		if _id < 0:
-			return
-		_internal.set_health(value)
-		_health = value
+	#set(value):
+	#	if _id < 0:
+	#		return
+	#	_internal.set_health(value)
+	#	_health = value
 
 ## Mario's amount of health wedges
 var health_wedges: int:
 	get:
 		return _health >> 0x8 if _health > 0 else 0x0
-	set(value):
-		if _id < 0:
-			return
-		var new_health := value << 0x8 if value > 0 else 0x0
-		_internal.set_health(new_health)
-		_health = new_health
+	#set(value):
+	#	if _id < 0:
+	#		return
+	#	var new_health := value << 0x8 if value > 0 else 0x0
+	#	_internal.set_health(new_health)
+	#	_health = new_health
 
 ## Mario's invincibility time in seconds
 var invicibility_time := 0.0
@@ -306,6 +306,13 @@ func heal(wedges: int) -> void:
 	if _id < 0:
 		return
 	_internal.heal(wedges)
+
+
+## Kill Mario
+func kill() -> void:
+	if _id < 0:
+		return
+	_internal.kill()
 
 
 ## Equip special cap (see SM64Mario.Caps for values)
