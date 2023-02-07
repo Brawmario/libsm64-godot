@@ -144,13 +144,19 @@ var invicibility_time := 0.0
 
 ## Mario's water level
 var water_level := -100000.0:
-	get:
-		return water_level
 	set(value):
 		if _id < 0:
 			return
 		_internal.set_water_level(value)
 		water_level = value
+
+## Mario's gas level
+var gas_level := -100000.0:
+	set(value):
+		if _id < 0:
+			return
+		_internal.set_gas_level(value)
+		gas_level = value
 
 var _mesh_instance: MeshInstance3D
 var _mesh: ArrayMesh

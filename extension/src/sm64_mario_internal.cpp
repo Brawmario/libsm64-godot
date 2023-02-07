@@ -328,6 +328,19 @@ void SM64MarioInternal::set_water_level(real_t p_level)
     sm64_set_mario_water_level(m_id, (int) p_level * scale_factor);
 }
 
+void SM64MarioInternal::set_gas_level(real_t p_level)
+{
+    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+
+    const SM64Global *sm64_global = SM64Global::get_singleton();
+    ERR_FAIL_NULL(sm64_global);
+    ERR_FAIL_COND_MSG(!sm64_global->is_init(), "[libsm64-godot] SM64Global is not init");
+
+    const real_t scale_factor = sm64_global->get_scale_factor();
+
+    sm64_set_mario_gas_level(m_id, (int) p_level * scale_factor);
+}
+
 // void SM64MarioInternal::set_floor_override(godot::Ref<SM64SurfaceProperties> p_surface_properties)
 // {
 //     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
@@ -420,6 +433,7 @@ void SM64MarioInternal::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_forward_velocity", "velocity"), &SM64MarioInternal::set_forward_velocity);
     // godot::ClassDB::bind_method(godot::D_METHOD("set_invincibility", "time"), &SM64MarioInternal::set_invincibility);
     godot::ClassDB::bind_method(godot::D_METHOD("set_water_level", "level"), &SM64MarioInternal::set_water_level);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_gas_level", "level"), &SM64MarioInternal::set_gas_level);
     // godot::ClassDB::bind_method(godot::D_METHOD("set_floor_override", "surface_properties"), &SM64MarioInternal::set_floor_override);
     // godot::ClassDB::bind_method(godot::D_METHOD("reset_floor_override"), &SM64MarioInternal::reset_floor_override);
     // godot::ClassDB::bind_method(godot::D_METHOD("set_health", "health"), &SM64MarioInternal::set_health);

@@ -59,6 +59,7 @@ public:
     void set_forward_velocity(real_t p_velocity);
     // void set_invincibility(real_t p_time);
     void set_water_level(real_t p_level);
+    void set_gas_level(real_t p_level);
     // void set_floor_override(godot::Ref<SM64SurfaceProperties> p_surface_properties);
     // void reset_floor_override();
     // void set_health(int p_health);
