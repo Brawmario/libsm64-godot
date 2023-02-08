@@ -8,6 +8,9 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/file_access.hpp>
 
+#include <audio/sm64_native_audio.hpp>
+#include <audio/audio_wasapi.hpp>
+
 static void SM64DebugPrintFunction(const char *msg)
 {
     godot::UtilityFunctions::print(godot::String("[libsm64] ") + godot::String(msg) + godot::String("\n"));
@@ -51,8 +54,24 @@ void SM64Global::init()
     uint8_t *mario_texture_raw = (uint8_t *) malloc(mario_texture_size);
 
     sm64_register_debug_print_function(SM64DebugPrintFunction);
+
     sm64_global_init(rom.ptrw(), mario_texture_raw);
-    sm64_audio_init(rom.ptrw());
+
+    // sm64_audio_init leaks audio everytime it's called, make sure it's only called once
+    static bool s_is_audio_init = false;
+    if (unlikely(!s_is_audio_init))
+    {
+        sm64_audio_init(rom.ptrw());
+        s_is_audio_init = true;
+    }
+
+    // Audio registering (Windows only for now)
+    #if HAVE_WASAPI
+    if (sm64_native_audio_register(&g_audio_wasapi)) {
+        godot::UtilityFunctions::print(godot::String("[libsm64-godot] Audio API: WASAPI"));
+    }
+    #endif // HAVE_WASAPI
+    sm64_native_audio_start();
 
     godot::PackedByteArray mario_texture_packed;
     mario_texture_packed.resize(mario_texture_size);
@@ -69,6 +88,7 @@ void SM64Global::init()
 void SM64Global::terminate()
 {
     sm64_global_terminate();
+    sm64_native_audio_stop();
     m_init = false;
 }
 
