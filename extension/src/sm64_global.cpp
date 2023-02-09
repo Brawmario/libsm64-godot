@@ -41,12 +41,12 @@ void SM64Global::init()
     ERR_FAIL_COND_MSG(!godot::FileAccess::file_exists(m_rom_filepath), "[libsm64-godot] ROM file not found.");
 
     const godot::String file_expected_sha256 = "17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91";
-    godot::String file_sha256 = godot::FileAccess::get_sha256(m_rom_filepath);
+    const godot::String file_sha256 = godot::FileAccess::get_sha256(m_rom_filepath);
 
     ERR_FAIL_COND_MSG(file_sha256.is_empty(), "[libsm64-godot] Failed to get ROM file's SHA256.");
     ERR_FAIL_COND_MSG(file_sha256 != file_expected_sha256, "[libsm64-godot] ROM file doesnt have expected SHA256.");
 
-    godot::PackedByteArray rom = godot::FileAccess::get_file_as_bytes(m_rom_filepath);
+    const godot::PackedByteArray rom = godot::FileAccess::get_file_as_bytes(m_rom_filepath);
 
     ERR_FAIL_COND_MSG(rom.is_empty(), "[libsm64-godot] Failed to read ROM file.");
 
@@ -55,13 +55,13 @@ void SM64Global::init()
 
     sm64_register_debug_print_function(SM64DebugPrintFunction);
 
-    sm64_global_init(rom.ptrw(), mario_texture_raw);
+    sm64_global_init(rom.ptr(), mario_texture_raw);
 
     // sm64_audio_init leaks audio everytime it's called, make sure it's only called once
     static bool s_is_audio_init = false;
     if (unlikely(!s_is_audio_init))
     {
-        sm64_audio_init(rom.ptrw());
+        sm64_audio_init(rom.ptr());
         s_is_audio_init = true;
     }
 

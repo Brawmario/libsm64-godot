@@ -441,6 +441,6 @@ void SM64MarioInternal::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("heal", "heal_counter"), &SM64MarioInternal::heal);
     godot::ClassDB::bind_method(godot::D_METHOD("kill"), &SM64MarioInternal::kill);
     // godot::ClassDB::bind_method(godot::D_METHOD("set_lives", "lives"), &SM64MarioInternal::set_lives);
-    godot::ClassDB::bind_method(godot::D_METHOD("interact_cap", "cap", "cap_time", "play_music"), &SM64MarioInternal::interact_cap, DEFVAL(0), DEFVAL(true));
+    godot::ClassDB::bind_method(godot::D_METHOD("interact_cap", "cap", "cap_time", "play_music"), &SM64MarioInternal::interact_cap, DEFVAL((real_t)0.0), DEFVAL(true));
     // godot::ClassDB::bind_method(godot::D_METHOD("extend_cap", "cap_time"), &SM64MarioInternal::extend_cap);
 }
