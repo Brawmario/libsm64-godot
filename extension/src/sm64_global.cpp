@@ -127,16 +127,6 @@ real_t SM64Global::get_scale_factor() const
     return m_scale_factor;
 }
 
-void SM64Global::set_volume(real_t p_volume)
-{
-    sm64_set_sound_volume(p_volume);
-}
-
-// void SM64Global::set_reverb(int p_reverb)
-// {
-//     sm64_set_reverb((uint8_t) p_reverb);
-// }
-
 void SM64Global::_bind_methods()
 {
     godot::ClassDB::bind_method(godot::D_METHOD("init"), &SM64Global::init);
@@ -150,6 +140,4 @@ void SM64Global::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_scale_factor", "value"), &SM64Global::set_scale_factor);
     godot::ClassDB::bind_method(godot::D_METHOD("get_scale_factor"), &SM64Global::get_scale_factor);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "scale_factor"), "set_scale_factor", "get_scale_factor");
-    godot::ClassDB::bind_method(godot::D_METHOD("set_volume", "volume"), &SM64Global::set_volume);
-    // godot::ClassDB::bind_method(godot::D_METHOD("set_reverb", "reverb"), &SM64Global::set_reverb);
 }
