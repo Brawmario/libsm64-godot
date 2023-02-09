@@ -23,10 +23,11 @@ public:
     static SM64Audio *get_singleton();
 
     // void sm64_seq_player_play_sequence(uint8_t player, uint8_t seqId, uint16_t arg2);
-    // void sm64_play_music(uint8_t player, uint16_t seqArgs, uint16_t fadeTimer);
-    // void sm64_stop_background_music(uint16_t seqId);
+    void play_music(int p_player, int p_seq_args, real_t p_fade_time);
+    void stop_background_music(int p_seq_id);
+    void stop_current_background_music();
     // void sm64_fadeout_background_music(uint16_t arg0, uint16_t fadeOut);
-    // uint16_t sm64_get_current_background_music();
+    int get_current_background_music();
     // void sm64_play_sound(int32_t soundBits, float *pos);
     // void sm64_play_sound_global(int32_t soundBits);
     // void sm64_set_sound_volume(float vol);

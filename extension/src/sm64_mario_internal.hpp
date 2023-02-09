@@ -64,7 +64,7 @@ public:
     void heal(int p_heal_counter);
     void kill();
     // void set_lives(int p_lives);
-    void interact_cap(int p_cap, real_t p_cap_time = 0, bool p_play_music = 1);
+    void interact_cap(int p_cap, real_t p_cap_time = 0.0, bool p_play_music = true);
     // void extend_cap(real_t p_cap_time);
     // bool sm64_mario_attack(int32_t marioId, float x, float y, float z, float hitboxHeight);
 
