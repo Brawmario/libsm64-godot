@@ -53,7 +53,9 @@ void SM64Global::init()
     constexpr int64_t mario_texture_size = 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT;
     uint8_t *mario_texture_raw = (uint8_t *) malloc(mario_texture_size);
 
+#ifdef DEBUG_ENABLED
     sm64_register_debug_print_function(SM64DebugPrintFunction);
+#endif // DEBUG_ENABLED
 
     sm64_global_init(rom.ptr(), mario_texture_raw);
 
