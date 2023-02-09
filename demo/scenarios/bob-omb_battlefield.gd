@@ -3,20 +3,20 @@ extends Node3D
 
 @export var start_cap := SM64Mario.Caps.NORMAL
 
-@onready var mario := $SM64Mario as SM64Mario
+@onready var sm_64_mario = $SM64Mario as SM64Mario
+@onready var sm_64_static_surface_handler = $SM64StaticSurfaceHandler as SM64StaticSurfaceHandler
+@onready var hud = $HUD
 
 
 func _ready() -> void:
-	SM64Global.scale_factor = 75
+	SM64Global.scale_factor = 175
 	SM64Global.init()
-	$SM64StaticSurfacesHandler.load_static_surfaces()
-	$SM64SurfaceObjectsHandler.load_all_surface_objects()
+	sm_64_static_surface_handler.load_static_surfaces()
 
-	mario.create()
-	mario.water_level = 0.0
-	mario.interact_cap(start_cap)
+	sm_64_mario.create()
+	sm_64_mario.interact_cap(start_cap)
 
-	$HUD.mario = mario
+	hud.mario = sm_64_mario
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -33,6 +33,6 @@ func _toggle_mouse_lock() -> void:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
-func _on_tree_exiting() -> void:
-	mario.delete()
+func _on_tree_exiting():
+	sm_64_mario.delete()
 	SM64Global.terminate()

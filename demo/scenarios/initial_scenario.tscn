@@ -27,6 +27,6 @@ script = ExtResource("7_ju0gc")
 
 [node name="HUD" parent="." instance=ExtResource("8_f016e")]
 
-[connection signal="tree_exiting" from="." to="." method="_on_initial_scenario_tree_exiting"]
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 
 [editable path="SM64Mario/CameraRig"]

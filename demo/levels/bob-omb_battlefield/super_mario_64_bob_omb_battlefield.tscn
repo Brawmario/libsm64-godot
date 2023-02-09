@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0lwkwuo43als"]
+
+[ext_resource type="PackedScene" uid="uid://kqv01jfxrc47" path="res://demo/levels/bob-omb_battlefield/super_mario_64_bob-omb_battlefield.glb" id="1_vnccn"]
+
+[node name="super_mario_64_bob-omb_battlefield" instance=ExtResource("1_vnccn")]

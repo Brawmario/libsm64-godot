@@ -40,3 +40,7 @@ func _on_many_marios_button_pressed():
 
 func _on_flying_range_button_pressed() -> void:
 	get_tree().change_scene_to_packed(preload("res://demo/scenarios/flying_range.tscn"))
+
+
+func _on_bob_omb_battlefield_button_pressed():
+	get_tree().change_scene_to_packed(preload("res://demo/scenarios/bob-omb_battlefield.tscn"))

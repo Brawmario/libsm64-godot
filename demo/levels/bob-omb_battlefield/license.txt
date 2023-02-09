@@ -1,0 +1,11 @@
+Model Information:
+* title:	Super Mario 64 Bob-omb Battlefield
+* source:	https://sketchfab.com/3d-models/super-mario-64-bob-omb-battlefield-78db994daec94d9fb46f322e71eaca00
+* author:	exeperimentgameing (https://sketchfab.com/exeperimentgameing)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Super Mario 64 Bob-omb Battlefield" (https://sketchfab.com/3d-models/super-mario-64-bob-omb-battlefield-78db994daec94d9fb46f322e71eaca00) by exeperimentgameing (https://sketchfab.com/exeperimentgameing) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
