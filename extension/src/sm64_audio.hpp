@@ -4,10 +4,7 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/object.hpp>
 
-extern "C"
-{
 #include <libsm64.h>
-}
 
 #ifdef WIN32
 #include <windows.h>

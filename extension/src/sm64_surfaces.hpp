@@ -6,10 +6,7 @@
 
 #include <sm64_surface_properties.hpp>
 
-extern "C"
-{
 #include <libsm64.h>
-}
 
 #ifdef WIN32
 #include <windows.h>

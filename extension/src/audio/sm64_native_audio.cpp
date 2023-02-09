@@ -4,9 +4,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-extern "C" {
 #include <libsm64.h>
-}
 
 #include <audio/audio_null.hpp>
 

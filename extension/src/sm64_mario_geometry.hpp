@@ -3,10 +3,7 @@
 
 #include <godot_cpp/core/defs.hpp>
 
-extern "C"
-{
 #include <libsm64.h>
-}
 
 class SM64MarioGeometry
 {
