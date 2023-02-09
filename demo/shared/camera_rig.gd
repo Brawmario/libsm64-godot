@@ -26,13 +26,6 @@ func _process(delta: float) -> void:
 	elif look_direction.length() > 0:
 		update_rotation(look_direction * sensitivity_gamepad * delta)
 
-	var is_moving_towards_camera: bool = (
-		move_direction.x >= -deadzone
-		and move_direction.x <= deadzone
-	)
-	if not is_moving_towards_camera:
-		auto_rotate()
-
 	rotation.y = wrapf(rotation.y, -PI, PI)
 
 
@@ -40,18 +33,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	var mouse_event := event as InputEventMouseMotion
 	if mouse_event and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		_input_relative += mouse_event.relative
-
-
-func auto_rotate() -> void:
-	var offset: float = player.rotation.y - rotation.y
-	var target_angle: float = (
-		player.rotation.y - 2 * PI
-		if offset > PI
-		else player.rotation.y + 2 * PI
-		if offset < -PI
-		else player.rotation.y
-	)
-	rotation.y = lerp(rotation.y, target_angle, 0.015)
 
 
 func update_rotation(offset: Vector2) -> void:
@@ -62,12 +43,12 @@ func update_rotation(offset: Vector2) -> void:
 
 
 # Returns the direction of the camera movement from the player
-static func get_look_direction() -> Vector2:
+func get_look_direction() -> Vector2:
 	return Vector2(Input.get_axis("camera_right", "camera_left"), Input.get_axis("camera_up", "camera_down")).normalized()
 
 
 # Returns the move direction of the character controlled by the player
-static func get_move_direction() -> Vector3:
+func get_move_direction() -> Vector3:
 	return Vector3(
 		Input.get_axis("mario_stick_right", "mario_stick_left"),
 		0,
