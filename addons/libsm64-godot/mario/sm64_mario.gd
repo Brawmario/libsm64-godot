@@ -10,6 +10,11 @@ const HEALTH_WEDGE = 0x0100
 ## Special Caps mask
 const SPECIAL_CAPS = SM64Mario.Caps.VANISH | SM64Mario.Caps.METAL | SM64Mario.Caps.WING
 
+enum TickProcessMode {
+	PHYSICS, ## Process tick during the physics process.
+	IDLE,    ## Process tick during the idle process.
+}
+
 enum Caps {
 	NORMAL = 0x1,
 	VANISH = 0x2,
@@ -25,6 +30,19 @@ signal health_wedges_changed(health_wedges: int)
 
 ## Camera instance that follows Mario
 @export var camera: Camera3D
+
+## The process notification in which to tick.
+@export var tick_process_mode := TickProcessMode.IDLE:
+	set(value):
+		match value:
+			TickProcessMode.PHYSICS:
+				set_physics_process(true)
+				set_process(false)
+				tick_process_mode = value
+			TickProcessMode.IDLE:
+				set_physics_process(false)
+				set_process(true)
+				tick_process_mode = value
 
 @export_group("Input Actions")
 ## Action equivalent to pushing the joystick to the left
@@ -180,59 +198,18 @@ func _ready() -> void:
 	_mesh = ArrayMesh.new()
 	_mesh_instance.mesh = _mesh
 
+	if tick_process_mode == TickProcessMode.PHYSICS:
+		set_process(false)
+	else:
+		set_physics_process(false)
+
+
+func _process(delta: float) -> void:
+	_tick(delta)
+
 
 func _physics_process(delta: float) -> void:
-	if _id < 0:
-		return
-
-	_mario_input.stick = Input.get_vector(stick_left, stick_right, stick_up, stick_down)
-
-	var look_direction := camera.global_transform.basis.z
-	_mario_input.cam_look = Vector2(look_direction.x, look_direction.z)
-
-	_mario_input.a = Input.is_action_pressed(input_a)
-	_mario_input.b = Input.is_action_pressed(input_b)
-	_mario_input.z = Input.is_action_pressed(input_z)
-
-	var tick_output := _internal.tick(delta, _mario_input)
-
-	global_position = tick_output.position as Vector3
-	_velocity = tick_output.velocity as Vector3
-	_face_angle = tick_output.face_angle as float
-
-	var new_health := tick_output.health as float
-	if new_health != _health:
-		_health = new_health
-
-	var new_action := tick_output.action as int
-	if new_action != _action:
-		_action = new_action
-
-	var new_flags := tick_output.flags as int
-	if new_flags != _flags:
-		_flags = new_flags
-
-	invicibility_time = tick_output.invinc_timer as float
-	# hurt_counter = tick_output.hurt_counter as int
-
-	# var new_lives := tick_output.num_lives as int
-	# if new_lives != _lives:
-	# 	_lives = new_lives
-
-	match _flags & SPECIAL_CAPS:
-		SM64Mario.Caps.VANISH:
-			_material = _vanish_material
-		SM64Mario.Caps.METAL:
-			_material = _metal_material
-		SM64Mario.Caps.WING:
-			_material = _wing_material
-		_:
-			_material = _default_material
-
-	var mesh_array := tick_output.mesh_array as Array
-	_mesh.clear_surfaces()
-	_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_array)
-	_mesh_instance.set_surface_override_material(0, _material)
+	_tick(delta)
 
 
 ## Create Mario (requires initializing the libsm64 via the global_init function)
@@ -333,3 +310,57 @@ func interact_cap(cap: Caps, cap_time := 0.0, play_music := true) -> void:
 # 	if _id < 0:
 # 		return
 # 	_internal.extend_cap(cap_time)
+
+
+func _tick(delta: float) -> void:
+	if _id < 0:
+		return
+
+	_mario_input.stick = Input.get_vector(stick_left, stick_right, stick_up, stick_down)
+
+	var look_direction := camera.global_transform.basis.z
+	_mario_input.cam_look = Vector2(look_direction.x, look_direction.z)
+
+	_mario_input.a = Input.is_action_pressed(input_a)
+	_mario_input.b = Input.is_action_pressed(input_b)
+	_mario_input.z = Input.is_action_pressed(input_z)
+
+	var tick_output := _internal.tick(delta, _mario_input)
+
+	global_position = tick_output.position as Vector3
+	_velocity = tick_output.velocity as Vector3
+	_face_angle = tick_output.face_angle as float
+
+	var new_health := tick_output.health as float
+	if new_health != _health:
+		_health = new_health
+
+	var new_action := tick_output.action as int
+	if new_action != _action:
+		_action = new_action
+
+	var new_flags := tick_output.flags as int
+	if new_flags != _flags:
+		_flags = new_flags
+
+	invicibility_time = tick_output.invinc_timer as float
+	# hurt_counter = tick_output.hurt_counter as int
+
+	# var new_lives := tick_output.num_lives as int
+	# if new_lives != _lives:
+	# 	_lives = new_lives
+
+	match _flags & SPECIAL_CAPS:
+		SM64Mario.Caps.VANISH:
+			_material = _vanish_material
+		SM64Mario.Caps.METAL:
+			_material = _metal_material
+		SM64Mario.Caps.WING:
+			_material = _wing_material
+		_:
+			_material = _default_material
+
+	var mesh_array := tick_output.mesh_array as Array
+	_mesh.clear_surfaces()
+	_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_array)
+	_mesh_instance.set_surface_override_material(0, _material)
