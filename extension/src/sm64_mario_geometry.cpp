@@ -57,10 +57,8 @@ void SM64MarioGeometry::lerp(const SM64MarioGeometry &last, const SM64MarioGeome
         normal[i] = LERP(last.normal[i], current.normal[i], amount);
 
     // Mario's colors seems to be always constant, no need to interpolate.
-    // for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
-    //     color[i] = LERP(last.color[i], current.color[i], amount);
-    std::copy(current.color, current.color + (9 * SM64_GEO_MAX_TRIANGLES), color);
+    std::copy(current.color, current.color + (9 * geometry.numTrianglesUsed), color);
 
-    for (int i = 0; i < 6 * geometry.numTrianglesUsed; i++)
-        uv[i] = LERP(last.uv[i], current.uv[i], amount);
+    // Don't lerp the UV
+    std::copy(current.uv, current.uv + (6 * geometry.numTrianglesUsed), uv);
 }
