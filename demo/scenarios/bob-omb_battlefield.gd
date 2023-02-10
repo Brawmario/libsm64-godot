@@ -11,7 +11,7 @@ extends Node3D
 func _ready() -> void:
 	SM64Global.scale_factor = 175
 	SM64Global.init()
-	SM64Audio.play_music(0, 0x03 | 0x80, 0.0)
+	SM64Audio.play_music(SM64Audio.MUSIC_ID_LEVEL_GRASS)
 	sm_64_static_surface_handler.load_static_surfaces()
 
 	sm_64_mario.create()
@@ -36,6 +36,6 @@ func _toggle_mouse_lock() -> void:
 
 
 func _on_tree_exiting():
-	SM64Audio.stop_current_background_music()
+	SM64Audio.stop_background_music(SM64Audio.MUSIC_ID_LEVEL_GRASS)
 	sm_64_mario.delete()
 	SM64Global.terminate()
