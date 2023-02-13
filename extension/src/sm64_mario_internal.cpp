@@ -6,8 +6,6 @@
 
 #include <sm64_global.hpp>
 
-#define LERP(last, current, amount) (last + (current - last) * amount)
-
 #define CONVERT_RADIANS_TO_SM64(x) (-(x) / Math_PI * 32768.0)
 
 constexpr real_t g_sm64_delta = 1.0/30.0;
@@ -49,12 +47,12 @@ static void lerp(struct SM64MarioState &out, const struct SM64MarioState &last, 
     out = current;
 
     for (int i = 0; i < 3; i++)
-        out.position[i] = LERP(last.position[i], current.position[i], amount);
+        out.position[i] = godot::Math::lerp(last.position[i], current.position[i], amount);
 
     for (int i = 0; i < 3; i++)
-        out.velocity[i] = LERP(last.velocity[i], current.velocity[i], amount);
+        out.velocity[i] = godot::Math::lerp(last.velocity[i], current.velocity[i], amount);
 
-    out.faceAngle = LERP(last.faceAngle, current.faceAngle, amount);
+    out.faceAngle = godot::Math::lerp_angle(last.faceAngle, current.faceAngle, amount);
 }
 
 int SM64MarioInternal::mario_create(godot::Vector3 p_position, godot::Vector3 p_rotation)
