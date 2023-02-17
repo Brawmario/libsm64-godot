@@ -75,6 +75,10 @@ var action: int:
 			return
 		_internal.set_action(value)
 		_action = value
+## Mario's action as StringName
+var action_name: StringName:
+	get:
+		return SM64MarioAction.to_action_name(_action)
 
 var _flags := 0x0:
 	set(value):
@@ -235,11 +239,6 @@ func delete() -> void:
 		return
 	_internal.mario_delete()
 	_id = -1
-
-
-## Get the current action name
-func get_action_name() -> StringName:
-	return SM64MarioAction.to_action_name(_action)
 
 
 ## Teleport mario in the libsm64 world

@@ -16,7 +16,7 @@ var mario: SM64Mario
 func _process(_delta: float) -> void:
 	if mario:
 		mario_info_label.text = MARIO_INFO_FORMAT % [
-				mario.get_action_name(),
+				mario.action_name,
 				mario.health_wedges,
 				mario.invicibility_time,
 				rad_to_deg(mario.face_angle)]
