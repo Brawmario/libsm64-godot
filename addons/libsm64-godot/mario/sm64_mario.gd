@@ -128,25 +128,33 @@ var _health := FULL_HEALTH:
 var health: int:
 	get:
 		return _health
-	#set(value):
-	#	if _id < 0:
-	#		return
-	#	_internal.set_health(value)
-	#	_health = value
+	set(value):
+		if _id < 0:
+			return
+		_internal.set_health(value)
+		_health = value
 
 ## Mario's amount of health wedges
 var health_wedges: int:
 	get:
 		return _health >> 0x8 if _health > 0 else 0x0
-	#set(value):
-	#	if _id < 0:
-	#		return
-	#	var new_health := value << 0x8 if value > 0 else 0x0
-	#	_internal.set_health(new_health)
-	#	_health = new_health
+	set(value):
+		if _id < 0:
+			return
+		var new_health := value << 0x8 if value > 0 else 0x0
+		_internal.set_health(new_health)
+		_health = new_health
 
+var _invicibility_time := 0.0
 ## Mario's invincibility time in seconds
-var invicibility_time := 0.0
+var invicibility_time: float:
+	get:
+		return _invicibility_time
+	set(value):
+		if _id < 0:
+			return
+		_internal.set_invincibility(value)
+		_invicibility_time = value
 
 # var hurt_counter := 0
 
@@ -248,12 +256,14 @@ func teleport(to_global_position: Vector3) -> void:
 	_internal.set_position(to_global_position)
 	global_position = to_global_position
 
+
 ## Set angle of mario in the libsm64 world
 func set_angle(to_global_rotation: Vector3) -> void:
 	if _id < 0:
 		return
 	_internal.set_angle(to_global_rotation)
 	# global_rotation = to_global_rotation
+
 
 ## Set Mario's forward velocity in the libsm64 world
 func set_forward_velocity(velocity: float) -> void:
@@ -305,10 +315,10 @@ func interact_cap(cap: Caps, cap_time := 0.0, play_music := true) -> void:
 
 
 ## Extend current special cap time
-# func extend_cap(cap_time: float) -> void:
-# 	if _id < 0:
-# 		return
-# 	_internal.extend_cap(cap_time)
+func extend_cap(cap_time: float) -> void:
+	if _id < 0:
+		return
+	_internal.extend_cap(cap_time)
 
 
 func _tick(delta: float) -> void:
@@ -346,7 +356,7 @@ func _tick(delta: float) -> void:
 	if new_flags != _flags:
 		_flags = new_flags
 
-	invicibility_time = tick_output.invinc_timer as float
+	_invicibility_time = tick_output.invinc_timer as float
 	# hurt_counter = tick_output.hurt_counter as int
 
 	# var new_lives := tick_output.num_lives as int

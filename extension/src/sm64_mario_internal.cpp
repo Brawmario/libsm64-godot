@@ -306,12 +306,13 @@ void SM64MarioInternal::set_forward_velocity(real_t p_velocity)
     sm64_set_mario_forward_velocity(m_id, p_velocity * scale_factor);
 }
 
-// void SM64MarioInternal::set_invincibility(real_t p_time)
-// {
-//     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
-//
-//     sm64_set_mario_invincibility(m_id, (int16_t) (p_time / g_sm64_delta));
-// }
+void SM64MarioInternal::set_invincibility(real_t p_time)
+{
+    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+
+    const int16_t time = static_cast<int16_t>(godot::Math::clamp((p_time / g_sm64_delta), (real_t) INT16_MIN, (real_t) INT16_MAX));
+    sm64_set_mario_invincibility(m_id, time);
+}
 
 void SM64MarioInternal::set_water_level(real_t p_level)
 {
@@ -357,12 +358,13 @@ void SM64MarioInternal::set_gas_level(real_t p_level)
 //     sm64_set_mario_floor_override(m_id, 0x7, 0x100, 0);
 // }
 
-// void SM64MarioInternal::set_health(int p_health)
-// {
-//     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
-//
-//     sm64_set_mario_health(m_id, p_health);
-// }
+void SM64MarioInternal::set_health(int p_health)
+{
+    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+
+    const uint16_t health = static_cast<uint16_t>(godot::Math::clamp(p_health, 0, (int) UINT16_MAX));
+    sm64_set_mario_health(m_id, health);
+}
 
 void SM64MarioInternal::take_damage(int p_damage, godot::Vector3 p_source_position, bool p_big_knockback)
 {
@@ -407,15 +409,17 @@ void SM64MarioInternal::interact_cap(int p_cap, real_t p_cap_time, bool p_play_m
 {
     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
 
-    sm64_mario_interact_cap(m_id, (uint32_t) p_cap, (uint16_t) (p_cap_time / g_sm64_delta), (uint8_t) p_play_music);
+    const uint16_t cap_time = static_cast<uint16_t>(godot::Math::clamp((p_cap_time / g_sm64_delta), (real_t) 0, (real_t) UINT16_MAX));
+    sm64_mario_interact_cap(m_id, (uint32_t) p_cap, cap_time, (uint8_t) p_play_music);
 }
 
-// void SM64MarioInternal::extend_cap(real_t p_cap_time)
-// {
-//     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
-//
-//     sm64_mario_extend_cap(m_id, (uint16_t) (p_cap_time / g_sm64_delta));
-// }
+void SM64MarioInternal::extend_cap(real_t p_cap_time)
+{
+    ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
+
+    const uint16_t cap_time = static_cast<uint16_t>(godot::Math::clamp((p_cap_time / g_sm64_delta), (real_t) 0, (real_t) UINT16_MAX));
+    sm64_mario_extend_cap(m_id, cap_time);
+}
 
 void SM64MarioInternal::_bind_methods()
 {
@@ -429,16 +433,16 @@ void SM64MarioInternal::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_face_angle", "value"), &SM64MarioInternal::set_face_angle);
     godot::ClassDB::bind_method(godot::D_METHOD("set_velocity", "velocity"), &SM64MarioInternal::set_velocity);
     godot::ClassDB::bind_method(godot::D_METHOD("set_forward_velocity", "velocity"), &SM64MarioInternal::set_forward_velocity);
-    // godot::ClassDB::bind_method(godot::D_METHOD("set_invincibility", "time"), &SM64MarioInternal::set_invincibility);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_invincibility", "time"), &SM64MarioInternal::set_invincibility);
     godot::ClassDB::bind_method(godot::D_METHOD("set_water_level", "level"), &SM64MarioInternal::set_water_level);
     godot::ClassDB::bind_method(godot::D_METHOD("set_gas_level", "level"), &SM64MarioInternal::set_gas_level);
     // godot::ClassDB::bind_method(godot::D_METHOD("set_floor_override", "surface_properties"), &SM64MarioInternal::set_floor_override);
     // godot::ClassDB::bind_method(godot::D_METHOD("reset_floor_override"), &SM64MarioInternal::reset_floor_override);
-    // godot::ClassDB::bind_method(godot::D_METHOD("set_health", "health"), &SM64MarioInternal::set_health);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_health", "health"), &SM64MarioInternal::set_health);
     godot::ClassDB::bind_method(godot::D_METHOD("take_damage", "damage", "source_position", "big_knockback"), &SM64MarioInternal::take_damage, DEFVAL(false));
     godot::ClassDB::bind_method(godot::D_METHOD("heal", "heal_counter"), &SM64MarioInternal::heal);
     godot::ClassDB::bind_method(godot::D_METHOD("kill"), &SM64MarioInternal::kill);
     // godot::ClassDB::bind_method(godot::D_METHOD("set_lives", "lives"), &SM64MarioInternal::set_lives);
     godot::ClassDB::bind_method(godot::D_METHOD("interact_cap", "cap", "cap_time", "play_music"), &SM64MarioInternal::interact_cap, DEFVAL((real_t)0.0), DEFVAL(true));
-    // godot::ClassDB::bind_method(godot::D_METHOD("extend_cap", "cap_time"), &SM64MarioInternal::extend_cap);
+    godot::ClassDB::bind_method(godot::D_METHOD("extend_cap", "cap_time"), &SM64MarioInternal::extend_cap);
 }
