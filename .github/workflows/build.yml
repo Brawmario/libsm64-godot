@@ -10,6 +10,7 @@ on:
 env:
   GODOT_EXE_LINK: https://downloads.tuxfamily.org/godotengine/4.0/rc3/Godot_v4.0-rc3_linux.x86_64.zip
   GODOT_TEMPLATES_LINK: https://downloads.tuxfamily.org/godotengine/4.0/rc3/Godot_v4.0-rc3_export_templates.tpz
+  GODOT_TEMPLATES_FOLDER: 4.0.rc3
   GODOT_EXE: Godot_v4.0-rc3_linux.x86_64
   GODOT_TEMPLATES: Godot_v4.0-rc3_export_templates.tpz
 
@@ -136,8 +137,8 @@ jobs:
           unzip ${GODOT_EXE}
           wget -nv ${GODOT_TEMPLATES_LINK}
           unzip ${GODOT_TEMPLATES}
-          mkdir -v -p ~/.local/share/godot/export_templates
-          mv templates/* ~/.local/share/godot/export_templates
+          mkdir -v -p ~/.local/share/godot/export_templates/${GODOT_TEMPLATES_FOLDER}
+          mv templates/* ~/.local/share/godot/export_templates/${GODOT_TEMPLATES_FOLDER}
 
       - name: (Release only) Export demo
         if: ${{ endsWith(matrix.identifier, '-release') }}
