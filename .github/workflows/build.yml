@@ -8,10 +8,10 @@ on:
 #      - 'v*.*.*'
 
 env:
-  GODOT_EXE_LINK: https://downloads.tuxfamily.org/godotengine/4.0/beta15/Godot_v4.0-beta15_linux.x86_64.zip
-  GODOT_TEMPLATES_LINK: https://downloads.tuxfamily.org/godotengine/4.0/beta15/Godot_v4.0-beta15_export_templates.tpz
-  GODOT_EXE: Godot_v4.0-beta15_linux.x86_64
-  GODOT_TEMPLATES: Godot_v4.0-beta15_export_templates.tpz
+  GODOT_EXE_LINK: https://downloads.tuxfamily.org/godotengine/4.0/rc3/Godot_v4.0-rc3_linux.x86_64.zip
+  GODOT_TEMPLATES_LINK: https://downloads.tuxfamily.org/godotengine/4.0/rc3/Godot_v4.0-rc3_export_templates.tpz
+  GODOT_EXE: Godot_v4.0-rc3_linux.x86_64
+  GODOT_TEMPLATES: Godot_v4.0-rc3_export_templates.tpz
 
 jobs:
   build:
@@ -128,27 +128,27 @@ jobs:
           name: ${{ github.event.repository.name }}-addon.${{ github.ref_name }}
           path: ${{ github.workspace }}/addons
 
-#      - name: (Release only) Setup demo export
-#        if: ${{ endsWith(matrix.identifier, '-release') }}
-#        shell: sh
-#        run: |
-#          wget -nv ${GODOT_EXE_LINK}
-#          unzip ${GODOT_EXE}
-#          wget -nv ${GODOT_TEMPLATES_LINK}
-#          unzip ${GODOT_TEMPLATES}
-#          mkdir -v -p ~/.local/share/godot/export_templates
-#          mv templates/* ~/.local/share/godot/export_templates
-#
-#      - name: (Release only) Export demo
-#        if: ${{ endsWith(matrix.identifier, '-release') }}
-#        shell: sh
-#        run: |
-#          mkdir -v -p export/${{ matrix.platform }}
-#          ./${GODOT_EXE} -v --headless --export-release "${{ matrix.export_preset }}" export/${{ matrix.platform }}/${{ matrix.export_filename }}
-#
-#      - name: (Release only) Upload demo
-#        if: ${{ endsWith(matrix.identifier, '-release') }}
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: ${{ github.event.repository.name }}.${{ github.ref_name }}.${{ matrix.platform }}
-#          path: export/${{ matrix.platform }}
+      - name: (Release only) Setup demo export
+        if: ${{ endsWith(matrix.identifier, '-release') }}
+        shell: sh
+        run: |
+          wget -nv ${GODOT_EXE_LINK}
+          unzip ${GODOT_EXE}
+          wget -nv ${GODOT_TEMPLATES_LINK}
+          unzip ${GODOT_TEMPLATES}
+          mkdir -v -p ~/.local/share/godot/export_templates
+          mv templates/* ~/.local/share/godot/export_templates
+
+      - name: (Release only) Export demo
+        if: ${{ endsWith(matrix.identifier, '-release') }}
+        shell: sh
+        run: |
+          mkdir -v -p export/${{ matrix.platform }}
+          ./${GODOT_EXE} -v --headless --export-release "${{ matrix.export_preset }}" export/${{ matrix.platform }}/${{ matrix.export_filename }}
+
+      - name: (Release only) Upload demo
+        if: ${{ endsWith(matrix.identifier, '-release') }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}.${{ github.ref_name }}.${{ matrix.platform }}
+          path: export/${{ matrix.platform }}
