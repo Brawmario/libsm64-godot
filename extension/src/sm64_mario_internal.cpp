@@ -135,9 +135,9 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     ret["position"]       = godot::Vector3(-m_out_state.position[2] / scale_factor,
                                             m_out_state.position[1] / scale_factor,
                                             m_out_state.position[0] / scale_factor);
-    ret["velocity"]       = godot::Vector3(-m_out_state.velocity[2] / scale_factor,
-                                            m_out_state.velocity[1] / scale_factor,
-                                            m_out_state.velocity[0] / scale_factor);
+    ret["velocity"]       = godot::Vector3(-m_out_state.velocity[2] / (g_sm64_delta * scale_factor),
+                                            m_out_state.velocity[1] / (g_sm64_delta * scale_factor),
+                                            m_out_state.velocity[0] / (g_sm64_delta * scale_factor));
     ret["face_angle"]     = (real_t) m_out_state.faceAngle;
     ret["health"]         = (int)    m_out_state.health;
     ret["action"]         = (int)    m_out_state.action;
@@ -288,9 +288,9 @@ void SM64MarioInternal::set_velocity(godot::Vector3 p_velocity)
     const real_t scale_factor = sm64_global->get_scale_factor();
 
     sm64_set_mario_velocity(m_id,
-                             p_velocity.z * scale_factor,
-                             p_velocity.y * scale_factor,
-                            -p_velocity.x * scale_factor);
+                             p_velocity.z * g_sm64_delta * scale_factor,
+                             p_velocity.y * g_sm64_delta * scale_factor,
+                            -p_velocity.x * g_sm64_delta * scale_factor);
 }
 
 void SM64MarioInternal::set_forward_velocity(real_t p_velocity)
@@ -303,7 +303,7 @@ void SM64MarioInternal::set_forward_velocity(real_t p_velocity)
 
     const real_t scale_factor = sm64_global->get_scale_factor();
 
-    sm64_set_mario_forward_velocity(m_id, p_velocity * scale_factor);
+    sm64_set_mario_forward_velocity(m_id, p_velocity * g_sm64_delta * scale_factor);
 }
 
 void SM64MarioInternal::set_invincibility(real_t p_time)
