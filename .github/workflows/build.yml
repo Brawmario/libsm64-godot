@@ -5,52 +5,36 @@ on:
   workflow_dispatch:
 #  push:
 #    tags:
-#      - 'v*.*.*'
-
-env:
-  GODOT_EXE_LINK: https://downloads.tuxfamily.org/godotengine/4.0/rc3/Godot_v4.0-rc3_linux.x86_64.zip
-  GODOT_TEMPLATES_LINK: https://downloads.tuxfamily.org/godotengine/4.0/rc3/Godot_v4.0-rc3_export_templates.tpz
-  GODOT_TEMPLATES_FOLDER: 4.0.rc3
-  GODOT_EXE: Godot_v4.0-rc3_linux.x86_64
-  GODOT_TEMPLATES: Godot_v4.0-rc3_export_templates.tpz
+#      - 'v*'
 
 jobs:
-  build:
-    runs-on: ${{ matrix.runner }}
-    name: ${{ matrix.name }}
+  build-addon:
+    name: Build addon for ${{ matrix.name }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
           - identifier: linux-debug
             name: Linux Debug
-            runner: ubuntu-latest
             target: template_debug
             platform: linux
             arch: x86_64
           - identifier: linux-release
             name: Linux Release
-            runner: ubuntu-latest
             target: template_release
             platform: linux
             arch: x86_64
-            export_preset: Linux/X11
-            export_filename: libsm64-godot-demo.x86_64
           - identifier: windows-debug
             name: Windows Debug
-            runner: ubuntu-latest
             target: template_debug
             platform: windows
             arch: x86_64
           - identifier: windows-release
             name: Windows Release
-            runner: ubuntu-latest
             target: template_release
             platform: windows
             arch: x86_64
-            export_preset: Windows Desktop
-            export_filename: libsm64-godot-demo.exe
-
     steps:
       - name: (Windows) Set up MinGW
         if: ${{ startsWith(matrix.identifier, 'windows-') }}
@@ -129,27 +113,37 @@ jobs:
           name: ${{ github.event.repository.name }}-addon.${{ github.ref_name }}
           path: ${{ github.workspace }}/addons
 
-      - name: (Release only) Setup demo export
-        if: ${{ endsWith(matrix.identifier, '-release') }}
-        shell: sh
-        run: |
-          wget -nv ${GODOT_EXE_LINK}
-          unzip ${GODOT_EXE}
-          wget -nv ${GODOT_TEMPLATES_LINK}
-          unzip ${GODOT_TEMPLATES}
-          mkdir -v -p ~/.local/share/godot/export_templates/${GODOT_TEMPLATES_FOLDER}
-          mv templates/* ~/.local/share/godot/export_templates/${GODOT_TEMPLATES_FOLDER}
+  export-demo:
+    name: Export demo
+    needs: build-addon
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: (Release only) Export demo
-        if: ${{ endsWith(matrix.identifier, '-release') }}
-        shell: sh
-        run: |
-          mkdir -v -p export/${{ matrix.platform }}
-          ./${GODOT_EXE} -v --headless --export-release "${{ matrix.export_preset }}" export/${{ matrix.platform }}/${{ matrix.export_filename }}
+      - name: Download addon artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-addon.${{ github.ref_name }}
+          path: addons
 
-      - name: (Release only) Upload demo
-        if: ${{ endsWith(matrix.identifier, '-release') }}
+      - name: Export
+        id: export
+        uses: firebelley/godot-export@v4.7.0
+        with:
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.0/Godot_v4.0-stable_linux.x86_64.zip
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.0/Godot_v4.0-stable_export_templates.tpz
+          relative_project_path: ./
+          use_godot_4: true
+
+      - name: Upload Windows Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.${{ matrix.platform }}
-          path: export/${{ matrix.platform }}
+          name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.windows
+          path: ${{ steps.export.outputs.build_directory }}/Windows Desktop
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.linux
+          path: ${{ steps.export.outputs.build_directory }}/LinuxX11
