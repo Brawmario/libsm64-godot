@@ -118,14 +118,10 @@ jobs:
     needs: build-addon
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Download addon artifact
+      - name: Download project artifact
         uses: actions/download-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-addon.${{ github.ref_name }}
-          path: addons
+          name: ${{ github.event.repository.name }}-project.${{ github.ref_name }}
 
       - name: Export
         id: export
