@@ -125,12 +125,11 @@ jobs:
 
       - name: Export
         id: export
-        uses: firebelley/godot-export@v4.7.0
+        uses: firebelley/godot-export@v5.0.0
         with:
-          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.0/Godot_v4.0-stable_linux.x86_64.zip
-          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.0/Godot_v4.0-stable_export_templates.tpz
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.0.1/Godot_v4.0.1-stable_linux.x86_64.zip
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.0.1/Godot_v4.0.1-stable_export_templates.tpz
           relative_project_path: ./
-          use_godot_4: true
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v3
