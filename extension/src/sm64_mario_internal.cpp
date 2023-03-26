@@ -192,25 +192,25 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     godot::Color *color_ptrw = m_color.ptrw();
     for (int i = 0; i < vertex_count; i += 3)
     {
-        color_ptrw[i+0] = godot::Color(m_geometry.color[3*i+0],
-                                       m_geometry.color[3*i+1],
-                                       m_geometry.color[3*i+2]);
-        color_ptrw[i+1] = godot::Color(m_geometry.color[3*i+3],
-                                       m_geometry.color[3*i+4],
-                                       m_geometry.color[3*i+5]);
-        color_ptrw[i+2] = godot::Color(m_geometry.color[3*i+6],
-                                       m_geometry.color[3*i+7],
-                                       m_geometry.color[3*i+8]);
+        color_ptrw[i+0].r = m_geometry.color[3*i+0];
+        color_ptrw[i+0].g = m_geometry.color[3*i+1];
+        color_ptrw[i+0].b = m_geometry.color[3*i+2];
+        color_ptrw[i+1].r = m_geometry.color[3*i+3];
+        color_ptrw[i+1].g = m_geometry.color[3*i+4];
+        color_ptrw[i+1].b = m_geometry.color[3*i+5];
+        color_ptrw[i+2].r = m_geometry.color[3*i+6];
+        color_ptrw[i+2].g = m_geometry.color[3*i+7];
+        color_ptrw[i+2].b = m_geometry.color[3*i+8];
     }
     godot::Vector2 *uv_ptrw = m_uv.ptrw();
     for (int i = 0; i < vertex_count; i += 3)
     {
-        uv_ptrw[i+0] = godot::Vector2(m_geometry.uv[2*i+0],
-                                      m_geometry.uv[2*i+1]);
-        uv_ptrw[i+1] = godot::Vector2(m_geometry.uv[2*i+2],
-                                      m_geometry.uv[2*i+3]);
-        uv_ptrw[i+2] = godot::Vector2(m_geometry.uv[2*i+4],
-                                      m_geometry.uv[2*i+5]);
+        uv_ptrw[i+0].x = m_geometry.uv[2*i+0];
+        uv_ptrw[i+0].y = m_geometry.uv[2*i+1];
+        uv_ptrw[i+1].x = m_geometry.uv[2*i+2];
+        uv_ptrw[i+1].y = m_geometry.uv[2*i+3];
+        uv_ptrw[i+2].x = m_geometry.uv[2*i+4];
+        uv_ptrw[i+2].y = m_geometry.uv[2*i+5];
     }
 
     mesh_array[godot::ArrayMesh::ARRAY_VERTEX] = m_position;
