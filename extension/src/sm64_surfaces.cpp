@@ -93,8 +93,6 @@ int SM64Surfaces::surface_object_create(godot::PackedVector3Array p_vertexes, go
 
     const real_t scale_factor = sm64_global->get_scale_factor();
     const int64_t vertexes_size = p_vertexes.size();
-    struct SM64SurfaceObject surface_object;
-    int id;
     struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes_size / 3);
     godot::Ref<SM64SurfaceProperties> default_surface_properties;
 
@@ -129,6 +127,8 @@ int SM64Surfaces::surface_object_create(godot::PackedVector3Array p_vertexes, go
         j++;
     }
 
+    struct SM64SurfaceObject surface_object;
+
     surface_object.surfaces = surface_array;
     surface_object.surfaceCount = j;
 
@@ -140,7 +140,7 @@ int SM64Surfaces::surface_object_create(godot::PackedVector3Array p_vertexes, go
     surface_object.transform.eulerRotation[1] = -godot::Math::rad_to_deg(p_rotation.y);
     surface_object.transform.eulerRotation[2] =  godot::Math::rad_to_deg(p_rotation.x);
 
-    id = sm64_surface_object_create(&surface_object);
+    const int id = sm64_surface_object_create(&surface_object);
 
     ::free(surface_array);
 
@@ -176,7 +176,6 @@ void SM64Surfaces::surface_object_delete(int p_object_id)
 
     sm64_surface_object_delete(p_object_id);
 }
-
 
 void SM64Surfaces::_bind_methods()
 {
