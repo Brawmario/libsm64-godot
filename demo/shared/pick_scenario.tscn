@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://demo/shared/pick_scenario.gd" id="1_m2pta"]
 
-[node name="Main" type="Control"]
+[node name="PickScenario" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

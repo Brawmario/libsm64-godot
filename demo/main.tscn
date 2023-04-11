@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://85jyhrarwsrf"]
+
+[ext_resource type="PackedScene" uid="uid://d3rx1sbxj60dq" path="res://demo/shared/pick_scenario.tscn" id="1_on8r3"]
+[ext_resource type="Script" path="res://demo/main.gd" id="1_w76b2"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_w76b2")
+
+[node name="PickScenario" parent="." instance=ExtResource("1_on8r3")]
+
+[node name="ScenarioContainer" type="Node" parent="."]
+
+[connection signal="scenario_picked" from="PickScenario" to="." method="_on_pick_scenario_scenario_picked"]
