@@ -34,5 +34,6 @@ func _toggle_mouse_lock() -> void:
 
 
 func _on_tree_exiting() -> void:
+	SM64Audio.stop_current_background_music()
 	mario.delete()
 	SM64Global.terminate()

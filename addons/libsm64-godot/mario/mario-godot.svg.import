@@ -5,8 +5,6 @@ type="CompressedTexture2D"
 uid="uid://bhiuog3b3iyge"
 path="res://.godot/imported/mario-godot.svg-d5dd6988e4b14c8a515a8138f3b154ec.ctex"
 metadata={
-"editor_dark_theme": true,
-"editor_scale": 1.0,
 "has_editor_variant": true,
 "vram_texture": false
 }
@@ -19,9 +17,9 @@ dest_files=["res://.godot/imported/mario-godot.svg-d5dd6988e4b14c8a515a8138f3b15
 [params]
 
 compress/mode=0
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=false
