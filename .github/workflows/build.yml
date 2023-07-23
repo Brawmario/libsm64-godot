@@ -123,6 +123,12 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}-project.${{ github.ref_name }}
 
+      - name: Install Wine
+        id: wine_install
+        run: |
+          sudo apt install wine64
+          echo "WINE_PATH=$(which wine64)" >> $GITHUB_OUTPUT
+
       - name: Export
         id: export
         uses: firebelley/godot-export@v5.2.0
@@ -131,6 +137,7 @@ jobs:
           godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.1/Godot_v4.1-stable_export_templates.tpz
           relative_project_path: ./
           cache: true
+          wine_path: ${{ steps.wine_install.outputs.WINE_PATH }}
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v3
