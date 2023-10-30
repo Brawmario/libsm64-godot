@@ -1,11 +1,9 @@
 name: 🛠️ Builds
 on:
   push:
-  pull_request:
+    tags:
+      - 'v*'
   workflow_dispatch:
-#  push:
-#    tags:
-#      - 'v*'
 
 jobs:
   build-addon:
