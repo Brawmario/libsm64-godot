@@ -30,7 +30,7 @@ If the SHA256 doesn't match, it will be rejected and the addon will fail to init
 
 When creating the scene:
 
-1. Add a `SM64StaticSurfaceHandler` node to the scene
+1. Add a `SM64StaticSurfaceHandler` node to the scene.
 2. Add the meshes that compose the world to the `libsm64_static_surfaces` group (NOTICE: use simple, low-polycount meshes for best results).
 3. Add a `SM64Mario` node (or as many as you want) and set its camera property with an `Camera3D` node.
 4. Create the action names that are in the `SM64Mario` node's `Input Actions` export group in the project's Input Map and bind them to the appropriate axes/buttons/keys.

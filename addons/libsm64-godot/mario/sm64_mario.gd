@@ -2,6 +2,7 @@
 class_name SM64Mario
 extends Node3D
 
+## Node that instances a Mario into a scenario
 
 ## Value that represents Mario being at full health
 const FULL_HEALTH = 0x0880
