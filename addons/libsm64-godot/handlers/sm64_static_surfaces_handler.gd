@@ -1,6 +1,7 @@
 class_name SM64StaticSurfaceHandler
 extends Node
 
+## Node that handles adding MeshInstance3D nodes as Static Surfaces for libsm64.
 
 ## Group name that contains the MeshInstance3D that are part of the scene's static surfaces
 @export var static_surfaces_group := &"libsm64_static_surfaces"

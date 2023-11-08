@@ -1,6 +1,7 @@
 class_name SM64SurfaceObjectsHandler
 extends Node
 
+## Node that handles adding and updating MeshInstance3D nodes as Surface Objects for libsm64.
 
 const FPS_30_DELTA := 1.0/30.0
 

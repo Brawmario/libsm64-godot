@@ -1,6 +1,8 @@
 class_name SM64MarioAction
 extends Object
 
+## Collection of Mario's Actions flags and constants.
+
 ## 0x000001C0
 const GROUP_MASK   = 0x000001C0
 ## 0x00000000
