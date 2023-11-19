@@ -2,18 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vhg1tl7j474v"
-path.s3tc="res://.godot/imported/super_mario_64_bob-omb_battlefield_14.png-d92c211c446b455d97c335e9a2e57982.s3tc.ctex"
+uid="uid://dukvdj5t6efgk"
+path.s3tc="res://.godot/imported/texture_08.png-9f10423014bb26c5c3dedf720f5a5bd4.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
-generator_parameters={}
 
 [deps]
 
-source_file="res://demo/levels/bob-omb_battlefield/super_mario_64_bob-omb_battlefield_14.png"
-dest_files=["res://.godot/imported/super_mario_64_bob-omb_battlefield_14.png-d92c211c446b455d97c335e9a2e57982.s3tc.ctex"]
+source_file="res://demo/scenarios/bob-omb_minimal/texture_08.png"
+dest_files=["res://.godot/imported/texture_08.png-9f10423014bb26c5c3dedf720f5a5bd4.s3tc.ctex"]
 
 [params]
 

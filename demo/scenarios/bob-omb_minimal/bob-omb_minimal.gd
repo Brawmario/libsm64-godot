@@ -3,20 +3,25 @@ extends Node3D
 
 @export var start_cap := SM64Mario.Caps.NORMAL
 
-@onready var sm_64_mario = $SM64Mario as SM64Mario
-@onready var sm_64_static_surface_handler = $SM64StaticSurfaceHandler as SM64StaticSurfaceHandler
-@onready var hud = $HUD
+@onready var battlefield: MeshInstance3D = $Battlefield
+@onready var sm_64_mario: Node3D = $SM64Mario
+@onready var hud: HUD = $HUD
 
 
 func _ready() -> void:
-	SM64Global.scale_factor = 175
+	battlefield.mesh = BombOmbMinimalSurfaces.generate_godot_mesh()
+
+	var material := preload("res://demo/scenarios/bob-omb_minimal/bob-omb_minimal_material.tres")
+	battlefield.set_surface_override_material(0, material)
+
+	SM64Global.scale_factor = 75
 	SM64Global.init()
 	SM64Audio.play_music(SM64Audio.MUSIC_ID_LEVEL_GRASS)
-	sm_64_static_surface_handler.load_static_surfaces()
+
+	BombOmbMinimalSurfaces.load_static_surfaces()
 
 	sm_64_mario.create()
 	sm_64_mario.interact_cap(start_cap)
-	sm_64_mario.face_angle = PI
 
 	hud.mario = sm_64_mario
 

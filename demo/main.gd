@@ -43,4 +43,4 @@ func _on_flying_range_button_pressed() -> void:
 
 
 func _on_bob_omb_battlefield_button_pressed():
-	get_tree().change_scene_to_packed(preload("res://demo/scenarios/bob-omb_battlefield.tscn"))
+	get_tree().change_scene_to_packed(preload("res://demo/scenarios/bob-omb_minimal/bob-omb_minimal.tscn"))
