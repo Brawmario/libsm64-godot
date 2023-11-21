@@ -9,15 +9,12 @@ extends Node3D
 
 
 func _ready() -> void:
-	battlefield.mesh = BombOmbMinimalSurfaces.generate_godot_mesh()
-
-	var material := preload("res://demo/scenarios/bob-omb_minimal/bob-omb_minimal_material.tres")
-	battlefield.set_surface_override_material(0, material)
-
 	SM64Global.scale_factor = 75
 	SM64Global.init()
 	SM64Audio.play_music(SM64Audio.MUSIC_ID_LEVEL_GRASS)
 
+	battlefield.mesh = BombOmbMinimalSurfaces.generate_godot_mesh()
+	battlefield.mesh.surface_set_material(0, preload("res://demo/scenarios/bob-omb_minimal/bob-omb_minimal_material.tres"))
 	BombOmbMinimalSurfaces.load_static_surfaces()
 
 	sm_64_mario.create()

@@ -158,59 +158,43 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     m_uv.resize(vertex_count);
 
     // SM64 to godot conversion
+
+    // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
     invert_vertex_order_3d(m_geometry.position, m_geometry.triangles_used());
     invert_vertex_order_3d(m_geometry.normal,   m_geometry.triangles_used());
     invert_vertex_order_3d(m_geometry.color,    m_geometry.triangles_used());
     invert_vertex_order_2d(m_geometry.uv,       m_geometry.triangles_used());
 
+    // SM64 3D vector to Godot 3D vector: (x, y, z) -> (z, y, -x)
     godot::Vector3 *position_ptrw = m_position.ptrw();
-    for (int i = 0; i < vertex_count; i += 3)
+    for (int i = 0; i < vertex_count; i++)
     {
-        position_ptrw[i+0].z =  m_geometry.position[3*i+0] / scale_factor;
-        position_ptrw[i+0].y =  m_geometry.position[3*i+1] / scale_factor;
-        position_ptrw[i+0].x = -m_geometry.position[3*i+2] / scale_factor;
-        position_ptrw[i+1].z =  m_geometry.position[3*i+3] / scale_factor;
-        position_ptrw[i+1].y =  m_geometry.position[3*i+4] / scale_factor;
-        position_ptrw[i+1].x = -m_geometry.position[3*i+5] / scale_factor;
-        position_ptrw[i+2].z =  m_geometry.position[3*i+6] / scale_factor;
-        position_ptrw[i+2].y =  m_geometry.position[3*i+7] / scale_factor;
-        position_ptrw[i+2].x = -m_geometry.position[3*i+8] / scale_factor;
+        position_ptrw[i].z =  m_geometry.position[3*i+0] / scale_factor;
+        position_ptrw[i].y =  m_geometry.position[3*i+1] / scale_factor;
+        position_ptrw[i].x = -m_geometry.position[3*i+2] / scale_factor;
     }
+
     godot::Vector3 *normal_ptrw = m_normal.ptrw();
-    for (int i = 0; i < vertex_count; i += 3)
+    for (int i = 0; i < vertex_count; i++)
     {
-        normal_ptrw[i+0].z =  m_geometry.normal[3*i+0];
-        normal_ptrw[i+0].y =  m_geometry.normal[3*i+1];
-        normal_ptrw[i+0].x = -m_geometry.normal[3*i+2];
-        normal_ptrw[i+1].z =  m_geometry.normal[3*i+3];
-        normal_ptrw[i+1].y =  m_geometry.normal[3*i+4];
-        normal_ptrw[i+1].x = -m_geometry.normal[3*i+5];
-        normal_ptrw[i+2].z =  m_geometry.normal[3*i+6];
-        normal_ptrw[i+2].y =  m_geometry.normal[3*i+7];
-        normal_ptrw[i+2].x = -m_geometry.normal[3*i+8];
+        normal_ptrw[i].z =  m_geometry.normal[3*i+0];
+        normal_ptrw[i].y =  m_geometry.normal[3*i+1];
+        normal_ptrw[i].x = -m_geometry.normal[3*i+2];
     }
+
     godot::Color *color_ptrw = m_color.ptrw();
-    for (int i = 0; i < vertex_count; i += 3)
+    for (int i = 0; i < vertex_count; i++)
     {
-        color_ptrw[i+0].r = m_geometry.color[3*i+0];
-        color_ptrw[i+0].g = m_geometry.color[3*i+1];
-        color_ptrw[i+0].b = m_geometry.color[3*i+2];
-        color_ptrw[i+1].r = m_geometry.color[3*i+3];
-        color_ptrw[i+1].g = m_geometry.color[3*i+4];
-        color_ptrw[i+1].b = m_geometry.color[3*i+5];
-        color_ptrw[i+2].r = m_geometry.color[3*i+6];
-        color_ptrw[i+2].g = m_geometry.color[3*i+7];
-        color_ptrw[i+2].b = m_geometry.color[3*i+8];
+        color_ptrw[i].r = m_geometry.color[3*i+0];
+        color_ptrw[i].g = m_geometry.color[3*i+1];
+        color_ptrw[i].b = m_geometry.color[3*i+2];
     }
+
     godot::Vector2 *uv_ptrw = m_uv.ptrw();
-    for (int i = 0; i < vertex_count; i += 3)
+    for (int i = 0; i < vertex_count; i++)
     {
-        uv_ptrw[i+0].x = m_geometry.uv[2*i+0];
-        uv_ptrw[i+0].y = m_geometry.uv[2*i+1];
-        uv_ptrw[i+1].x = m_geometry.uv[2*i+2];
-        uv_ptrw[i+1].y = m_geometry.uv[2*i+3];
-        uv_ptrw[i+2].x = m_geometry.uv[2*i+4];
-        uv_ptrw[i+2].y = m_geometry.uv[2*i+5];
+        uv_ptrw[i].x = m_geometry.uv[2*i+0];
+        uv_ptrw[i].y = m_geometry.uv[2*i+1];
     }
 
     mesh_array[godot::ArrayMesh::ARRAY_VERTEX] = m_position;
