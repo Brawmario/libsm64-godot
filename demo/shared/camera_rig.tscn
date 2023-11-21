@@ -7,5 +7,5 @@ top_level = true
 script = ExtResource("1_2hp1r")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.864538, 0.502567, 0, -0.502567, 0.864538, 0, 3.48953, 4.10769)
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 5.13559, 7.4278)
 current = true
