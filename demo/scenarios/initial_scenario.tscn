@@ -19,6 +19,9 @@ camera = NodePath("CameraRig/Camera3D")
 
 [node name="CameraRig" parent="SM64Mario" instance=ExtResource("5_uu7a6")]
 
+[node name="Camera3D" parent="SM64Mario/CameraRig" index="0"]
+current = false
+
 [node name="SM64StaticSurfacesHandler" type="Node" parent="."]
 script = ExtResource("6_41tpo")
 
