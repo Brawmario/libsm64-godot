@@ -95,51 +95,57 @@ public:
     }
 } notification_client;
 
-static void ThrowIfFailed(HRESULT res) {
-    if (FAILED(res)) {
-        throw res;
-    }
-}
-
 static bool audio_wasapi_init(void) {
     CoInitialize(NULL);
-    try {
-        ThrowIfFailed(CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&immdev_enumerator)));
-    } catch (HRESULT res) {
-        return false;
-    }
 
-    ThrowIfFailed(immdev_enumerator->RegisterEndpointNotificationCallback(new NotificationClient()));
+    if (FAILED(CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&immdev_enumerator))))
+        return false;
+
+    if (FAILED(immdev_enumerator->RegisterEndpointNotificationCallback(new NotificationClient())))
+        return false;
+
     return true;
 }
 
 static bool audio_wasapi_setup_stream(void) {
     wasapi = WasapiState();
 
-    try {
-        ThrowIfFailed(immdev_enumerator->GetDefaultAudioEndpoint(eRender, eConsole, &wasapi.device));
-        ThrowIfFailed(wasapi.device->Activate(IID_IAudioClient, CLSCTX_ALL, nullptr, IID_PPV_ARGS_Helper(&wasapi.client)));
-
-        WAVEFORMATEX desired;
-        desired.wFormatTag = WAVE_FORMAT_PCM;
-        desired.nChannels = 2;
-        desired.nSamplesPerSec = 32000;
-        desired.nAvgBytesPerSec = 32000 * 2 * 2;
-        desired.nBlockAlign = 4;
-        desired.wBitsPerSample = 16;
-        desired.cbSize = 0;
-
-        ThrowIfFailed(wasapi.client->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM | AUDCLNT_STREAMFLAGS_SRC_DEFAULT_QUALITY, 2000000, 0, &desired, nullptr));
-
-        ThrowIfFailed(wasapi.client->GetBufferSize(&wasapi.buffer_frame_count));
-        ThrowIfFailed(wasapi.client->GetService(IID_PPV_ARGS(&wasapi.rclient)));
-
-        wasapi.started = false;
-        wasapi.initialized = true;
-    } catch (HRESULT res) {
+    if (FAILED(immdev_enumerator->GetDefaultAudioEndpoint(eRender, eConsole, &wasapi.device))) {
         wasapi = WasapiState();
         return false;
     }
+
+    if (FAILED(wasapi.device->Activate(IID_IAudioClient, CLSCTX_ALL, nullptr, IID_PPV_ARGS_Helper(&wasapi.client)))) {
+        wasapi = WasapiState();
+        return false;
+    }
+
+    WAVEFORMATEX desired;
+    desired.wFormatTag = WAVE_FORMAT_PCM;
+    desired.nChannels = 2;
+    desired.nSamplesPerSec = 32000;
+    desired.nAvgBytesPerSec = 32000 * 2 * 2;
+    desired.nBlockAlign = 4;
+    desired.wBitsPerSample = 16;
+    desired.cbSize = 0;
+
+    if (FAILED(wasapi.client->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM | AUDCLNT_STREAMFLAGS_SRC_DEFAULT_QUALITY, 2000000, 0, &desired, nullptr))) {
+        wasapi = WasapiState();
+        return false;
+    }
+
+    if (FAILED(wasapi.client->GetBufferSize(&wasapi.buffer_frame_count))) {
+        wasapi = WasapiState();
+        return false;
+    }
+
+    if (FAILED(wasapi.client->GetService(IID_PPV_ARGS(&wasapi.rclient)))) {
+        wasapi = WasapiState();
+        return false;
+    }
+
+    wasapi.started = false;
+    wasapi.initialized = true;
 
     return true;
 }
@@ -150,14 +156,14 @@ static int audio_wasapi_buffered(void) {
             return 0;
         }
     }
-    try {
-        UINT32 padding;
-        ThrowIfFailed(wasapi.client->GetCurrentPadding(&padding));
-        return padding;
-    } catch (HRESULT res) {
+
+    UINT32 padding;
+    if (FAILED(wasapi.client->GetCurrentPadding(&padding))) {
         wasapi = WasapiState();
         return 0;
     }
+
+    return padding;
 }
 
 static int audio_wasapi_get_desired_buffered(void) {
@@ -170,30 +176,42 @@ static void audio_wasapi_play(const uint8_t *buf, size_t len) {
             return;
         }
     }
-    try {
-        UINT32 frames = len / 4;
 
-        UINT32 padding;
-        ThrowIfFailed(wasapi.client->GetCurrentPadding(&padding));
-        if(padding >= 5400)
-            return;
+    UINT32 frames = len / 4;
 
-        UINT32 available = wasapi.buffer_frame_count - padding;
-        if (available < frames) {
-            frames = available;
-        }
-
-        BYTE *data;
-        ThrowIfFailed(wasapi.rclient->GetBuffer(frames, &data));
-        memcpy(data, buf, frames * 4);
-        ThrowIfFailed(wasapi.rclient->ReleaseBuffer(frames, 0));
-
-        if (!wasapi.started && padding + frames > 1500) {
-            wasapi.started = true;
-            ThrowIfFailed(wasapi.client->Start());
-        }
-    } catch (HRESULT res) {
+    UINT32 padding;
+    if (FAILED(wasapi.client->GetCurrentPadding(&padding))) {
         wasapi = WasapiState();
+        return;
+    }
+
+    if(padding >= 5400)
+        return;
+
+    UINT32 available = wasapi.buffer_frame_count - padding;
+    if (available < frames) {
+        frames = available;
+    }
+
+    BYTE *data;
+    if (FAILED(wasapi.rclient->GetBuffer(frames, &data))) {
+        wasapi = WasapiState();
+        return;
+    }
+
+    memcpy(data, buf, frames * 4);
+
+    if (FAILED(wasapi.rclient->ReleaseBuffer(frames, 0))) {
+        wasapi = WasapiState();
+        return;
+    }
+
+    if (!wasapi.started && padding + frames > 1500) {
+        wasapi.started = true;
+        if (FAILED(wasapi.client->Start())) {
+            wasapi = WasapiState();
+            return;
+        }
     }
 }
 
