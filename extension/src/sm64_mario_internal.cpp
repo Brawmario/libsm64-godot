@@ -55,6 +55,24 @@ static void lerp(struct SM64MarioState &out, const struct SM64MarioState &last, 
     out.faceAngle = godot::Math::lerp_angle(last.faceAngle, current.faceAngle, amount);
 }
 
+void SM64MarioInternal::set_interpolate(bool value)
+{
+    m_interpolate = value;
+    reset_interpolation();
+}
+
+bool SM64MarioInternal::get_interpolate() const
+{
+    return m_interpolate;
+}
+
+void SM64MarioInternal::reset_interpolation()
+{
+    // Making last = current effectively nulls interpolation until next hard tick
+    m_out_state_hard_tick[m_last_index] = m_out_state_hard_tick[m_current_index];
+    m_geometry_hard_tick[m_last_index] = m_geometry_hard_tick[m_current_index];
+}
+
 int SM64MarioInternal::mario_create(godot::Vector3 p_position, godot::Vector3 p_rotation)
 {
     const SM64Global *sm64_global = SM64Global::get_singleton();
@@ -108,8 +126,7 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     if (unlikely(m_first_tick))
     {
         sm64_mario_tick(m_id, &inputs, &m_out_state_hard_tick[m_current_index], m_geometry_hard_tick[m_current_index].c_handle());
-        m_out_state_hard_tick[m_last_index] = m_out_state_hard_tick[m_current_index];
-        m_geometry_hard_tick[m_last_index] = m_geometry_hard_tick[m_current_index];
+        reset_interpolation();
 
         m_first_tick = false;
     }
@@ -128,9 +145,22 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     }
 
     // Interpolation
-    lerp(m_out_state, m_out_state_hard_tick[m_last_index], m_out_state_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_delta);
-    const real_t invinc_timer_lerped = godot::MAX(0.0f, (m_out_state.invincTimer * g_sm64_delta) - m_time_since_last_tick);
-    m_geometry.lerp(m_geometry_hard_tick[m_last_index], m_geometry_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_delta);
+    if (m_interpolate)
+    {
+        lerp(m_out_state, m_out_state_hard_tick[m_last_index], m_out_state_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_delta);
+        m_geometry.lerp(m_geometry_hard_tick[m_last_index], m_geometry_hard_tick[m_current_index], m_time_since_last_tick / g_sm64_delta);
+    }
+    else
+    {
+        m_out_state = m_out_state_hard_tick[m_current_index];
+        m_geometry = m_geometry_hard_tick[m_current_index];
+    }
+
+    real_t invinc_timer = m_out_state.invincTimer * g_sm64_delta;
+    if (m_interpolate)
+    {
+        invinc_timer = godot::MAX(0.0f, invinc_timer - m_time_since_last_tick);
+    }
 
     ret["position"]       = godot::Vector3(-m_out_state.position[2] / scale_factor,
                                             m_out_state.position[1] / scale_factor,
@@ -143,7 +173,7 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     ret["action"]         = (int)    m_out_state.action;
     ret["flags"]          = (int)    m_out_state.flags;
     ret["particle_flags"] = (int)    m_out_state.particleFlags;
-    ret["invinc_timer"]   = (real_t) invinc_timer_lerped;
+    ret["invinc_timer"]   = (real_t) invinc_timer;
     // ret["hurt_counter"]   = (int)    m_out_state.hurtCounter;
     // ret["num_lives"]      = (int)    m_out_state.numLives;
     // ret["holding_object"] = (bool)   m_out_state.holdingObject;
@@ -407,6 +437,10 @@ void SM64MarioInternal::extend_cap(real_t p_cap_time)
 
 void SM64MarioInternal::_bind_methods()
 {
+    godot::ClassDB::bind_method(godot::D_METHOD("set_interpolate", "value"), &SM64MarioInternal::set_interpolate);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_interpolate"), &SM64MarioInternal::get_interpolate);
+    ADD_PROPERTY(godot::PropertyInfo(godot::Variant::BOOL, "interpolate"), "set_interpolate", "get_interpolate");
+    godot::ClassDB::bind_method(godot::D_METHOD("reset_interpolation"), &SM64MarioInternal::reset_interpolation);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position", "rotation"), &SM64MarioInternal::mario_create);
     godot::ClassDB::bind_method(godot::D_METHOD("tick", "input"), &SM64MarioInternal::tick);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_delete"), &SM64MarioInternal::mario_delete);

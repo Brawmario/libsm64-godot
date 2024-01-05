@@ -35,15 +35,22 @@ signal health_wedges_changed(health_wedges: int)
 ## The process notification in which to tick.
 @export var tick_process_mode := TickProcessMode.IDLE:
 	set(value):
-		match value:
+		tick_process_mode = value
+		match tick_process_mode:
 			TickProcessMode.PHYSICS:
 				set_physics_process(true)
 				set_process(false)
-				tick_process_mode = value
 			TickProcessMode.IDLE:
 				set_physics_process(false)
 				set_process(true)
-				tick_process_mode = value
+
+## if [code]true[/code], linearly interpolate Mario's mesh and transform
+## from the SM64 engine's hardcoded 30 frames per second to the tick rate
+## of the current [code]tick_process_mode[/code].
+@export var interpolate := true:
+	set(value):
+		_internal.interpolate = value
+		interpolate = value
 
 @export_group("Input Actions")
 ## Action equivalent to pushing the joystick to the left

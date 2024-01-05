@@ -20,6 +20,11 @@ class SM64MarioInternal : public godot::RefCounted
 public:
     SM64MarioInternal() = default;
 
+    void set_interpolate(bool value);
+    bool get_interpolate() const;
+
+    void reset_interpolation();
+
     int mario_create(godot::Vector3 p_position, godot::Vector3 p_rotation);
 
     /**
@@ -73,6 +78,7 @@ protected:
 
 private:
     int m_id = -1;
+    bool m_interpolate = true;
 
     bool m_first_tick = true;
     real_t m_time_since_last_tick = 0.0;
