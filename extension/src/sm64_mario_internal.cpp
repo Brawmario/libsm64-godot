@@ -140,6 +140,12 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
 
             sm64_mario_tick(m_id, &inputs, &m_out_state_hard_tick[m_current_index], m_geometry_hard_tick[m_current_index].c_handle());
 
+            if (m_reset_interpolation_next_tick)
+            {
+                reset_interpolation();
+                m_reset_interpolation_next_tick = false;
+            }
+
             m_time_since_last_tick -= g_sm64_delta;
         }
     }
@@ -268,20 +274,32 @@ void SM64MarioInternal::set_position(godot::Vector3 p_position)
 
     const real_t scale_factor = sm64_global->get_scale_factor();
 
-    sm64_set_mario_position(m_id,
-                             p_position.z * scale_factor,
-                             p_position.y * scale_factor,
-                            -p_position.x * scale_factor);
+    const godot::Vector3 sm64_position = godot::Vector3(p_position.z * scale_factor,
+                                                         p_position.y * scale_factor,
+                                                        -p_position.x * scale_factor);
+
+    sm64_set_mario_position(m_id, sm64_position.x, sm64_position.y, sm64_position.z);
+
+    m_out_state_hard_tick[m_current_index].position[0] = sm64_position.x;
+    m_out_state_hard_tick[m_current_index].position[1] = sm64_position.y;
+    m_out_state_hard_tick[m_current_index].position[2] = sm64_position.z;
+    reset_interpolation();
+    m_reset_interpolation_next_tick = true;
 }
 
 void SM64MarioInternal::set_angle(godot::Vector3 p_rotation)
 {
     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
 
-    sm64_set_mario_angle(m_id,
-                          p_rotation.z,
-                          p_rotation.y,
-                         -p_rotation.x);
+    const godot::Vector3 sm64_rotation = godot::Vector3(p_rotation.z,
+                                                         p_rotation.y,
+                                                        -p_rotation.x);
+
+    sm64_set_mario_angle(m_id, sm64_rotation.x, sm64_rotation.y, sm64_rotation.z);
+
+    m_out_state_hard_tick[m_current_index].faceAngle = sm64_rotation.y;
+    reset_interpolation();
+    m_reset_interpolation_next_tick = true;
 }
 
 void SM64MarioInternal::set_face_angle(real_t p_value)
@@ -289,6 +307,10 @@ void SM64MarioInternal::set_face_angle(real_t p_value)
     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
 
     sm64_set_mario_faceangle(m_id, p_value);
+
+    m_out_state_hard_tick[m_current_index].faceAngle = p_value;
+    reset_interpolation();
+    m_reset_interpolation_next_tick = true;
 }
 
 void SM64MarioInternal::set_velocity(godot::Vector3 p_velocity)

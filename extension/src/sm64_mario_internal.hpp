@@ -86,6 +86,8 @@ private:
     int m_current_index = 0;
     int m_last_index = 1;
 
+    bool m_reset_interpolation_next_tick = false;
+
     struct SM64MarioState m_out_state;
     struct SM64MarioState m_out_state_hard_tick[2];
 
