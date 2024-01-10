@@ -66,7 +66,7 @@ public:
     // void reset_floor_override();
     void set_health(int p_health);
     void take_damage(int p_damage, godot::Vector3 p_source_position, bool p_big_knockback = false);
-    void heal(int p_heal_counter);
+    void heal(int p_wedges);
     void kill();
     // void set_lives(int p_lives);
     void interact_cap(int p_cap, real_t p_cap_time = 0.0, bool p_play_music = true);

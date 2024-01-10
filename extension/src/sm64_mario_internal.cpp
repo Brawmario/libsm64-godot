@@ -420,11 +420,12 @@ void SM64MarioInternal::take_damage(int p_damage, godot::Vector3 p_source_positi
                            -p_source_position.x * scale_factor);
 }
 
-void SM64MarioInternal::heal(int p_heal_counter)
+void SM64MarioInternal::heal(int p_wedges)
 {
     ERR_FAIL_COND_MSG(m_id < 0, "[libsm64-godot] Non existent Mario");
 
-    sm64_mario_heal(m_id, p_heal_counter);
+    const int heal_counter = p_wedges * 4;
+    sm64_mario_heal(m_id, heal_counter);
 }
 
 void SM64MarioInternal::kill()
@@ -480,7 +481,7 @@ void SM64MarioInternal::_bind_methods()
     // godot::ClassDB::bind_method(godot::D_METHOD("reset_floor_override"), &SM64MarioInternal::reset_floor_override);
     godot::ClassDB::bind_method(godot::D_METHOD("set_health", "health"), &SM64MarioInternal::set_health);
     godot::ClassDB::bind_method(godot::D_METHOD("take_damage", "damage", "source_position", "big_knockback"), &SM64MarioInternal::take_damage, DEFVAL(false));
-    godot::ClassDB::bind_method(godot::D_METHOD("heal", "heal_counter"), &SM64MarioInternal::heal);
+    godot::ClassDB::bind_method(godot::D_METHOD("heal", "wedges"), &SM64MarioInternal::heal);
     godot::ClassDB::bind_method(godot::D_METHOD("kill"), &SM64MarioInternal::kill);
     // godot::ClassDB::bind_method(godot::D_METHOD("set_lives", "lives"), &SM64MarioInternal::set_lives);
     godot::ClassDB::bind_method(godot::D_METHOD("interact_cap", "cap", "cap_time", "play_music"), &SM64MarioInternal::interact_cap, DEFVAL((real_t)0.0), DEFVAL(true));
