@@ -26,16 +26,18 @@ func _physics_process(delta: float) -> void:
 func _update_surface_objects() -> void:
 	for i in range(_surface_objects_ids.size()):
 		var id := _surface_objects_ids[i]
-		var position := _surface_objects_refs[i].global_position
-		var rotation := _surface_objects_refs[i].global_rotation
+		var transform := _surface_objects_refs[i].global_transform
+		var position := transform.origin
+		var rotation := transform.basis.get_euler(EULER_ORDER_YXZ)
 		SM64Surfaces.surface_object_move(id, position, rotation)
 
 
 ## Load MeshInstance3D into SM64
 func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	var mesh_faces := mesh_instance.get_mesh().get_faces()
-	var position := mesh_instance.global_position
-	var rotation := mesh_instance.global_rotation
+	var transform := mesh_instance.global_transform
+	var position := transform.origin
+	var rotation := transform.basis.get_euler(EULER_ORDER_YXZ)
 
 	var surface_properties := _find_surface_properties(mesh_instance)
 	var surface_properties_array: Array[SM64SurfaceProperties] = []
