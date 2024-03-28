@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bgh3wj50eylge"]
+[gd_scene load_steps=17 format=3 uid="uid://bgh3wj50eylge"]
 
 [ext_resource type="Script" path="res://demo/scenarios/interactives/interactives.gd" id="1_3ts7i"]
 [ext_resource type="Script" path="res://addons/libsm64-godot/mario/sm64_mario.gd" id="3_23fop"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://d0ipccf6g5cxx" path="res://icon.svg" id="3_dlnrv"]
 [ext_resource type="PackedScene" uid="uid://yt8kbrfd41gi" path="res://demo/shared/camera_rig.tscn" id="4_gtfal"]
 [ext_resource type="PackedScene" uid="uid://3snharvjukbg" path="res://demo/scenarios/interactives/punch_block.tscn" id="4_ru8nu"]
+[ext_resource type="PackedScene" uid="uid://dq0l8w1ns3b5a" path="res://demo/scenarios/interactives/jump_block.tscn" id="5_5x384"]
 [ext_resource type="Script" path="res://addons/libsm64-godot/handlers/sm64_static_surfaces_handler.gd" id="5_euurp"]
 [ext_resource type="Script" path="res://addons/libsm64-godot/handlers/sm64_surface_objects_handler.gd" id="6_b7ii8"]
 [ext_resource type="PackedScene" uid="uid://dprpekyttg0g6" path="res://demo/shared/hud.tscn" id="7_o8afg"]
@@ -58,6 +59,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.89533, 1.17874, 0.536876)
 
 [node name="PunchBlock" parent="MiniLevel/Objects" instance=ExtResource("4_ru8nu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.8247, 0.91743, 0.730133)
+
+[node name="JumpBlock" parent="MiniLevel/Objects" instance=ExtResource("5_5x384")]
 
 [node name="SM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 script = ExtResource("3_23fop")

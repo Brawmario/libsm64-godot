@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://dq0l8w1ns3b5a"]
+
+[ext_resource type="Script" path="res://demo/scenarios/interactives/jump_block.gd" id="1_fy8cw"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7fbyk"]
+size = Vector3(2, 0.5, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4vbvj"]
+size = Vector3(2, 0.4, 2)
+
+[node name="JumpBlock" type="MeshInstance3D" groups=["libsm64_surface_objects"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.42276, 0.91743, -6.76215)
+mesh = SubResource("BoxMesh_7fbyk")
+script = ExtResource("1_fy8cw")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_4vbvj")
+
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_area_entered"]
