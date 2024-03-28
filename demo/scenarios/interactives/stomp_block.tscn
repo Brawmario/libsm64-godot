@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bfvdjgjtv88ps"]
+
+[ext_resource type="Script" path="res://demo/scenarios/interactives/stomp_block.gd" id="1_k7bn5"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_805c7"]
+top_radius = 2.0
+bottom_radius = 2.0
+radial_segments = 16
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_m5f1t"]
+height = 2.1
+radius = 2.1
+
+[node name="StompBlock" type="MeshInstance3D" groups=["libsm64_surface_objects"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.26621, 0.91743, 0.760004)
+mesh = SubResource("CylinderMesh_805c7")
+script = ExtResource("1_k7bn5")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_m5f1t")
+
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_area_entered"]
