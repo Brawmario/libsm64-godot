@@ -4,6 +4,11 @@ Addon that binds [libsm64](https://github.com/libsm64/libsm64) to godot via GDEx
 
 ![SM64 Mario in GDQuest demo](docs/sm64-mario-gdquest-demo.png)
 
+## Projects using libsm64-godot
+
+| [Infinite Mario 64 (by TwilightPB)](https://twilightpb.itch.io/infinite-mario-64) | [![Infinite Mario 64 (by TwilightPB)](https://img.itch.zone/aW1hZ2UvMjU1NjA1Ni8xNTIxMDcwOC5naWY=/original/XL2MU5.gif)](https://twilightpb.itch.io/infinite-mario-64) |
+|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+
 ## Current Godot compatibility
 
 Currently compatible with Godot 4.2.x, with binaries compiled for Windows and Linux (untested) 64 bits. Check the [Releases](https://github.com/Brawmario/libsm64-godot/releases) for the files.
