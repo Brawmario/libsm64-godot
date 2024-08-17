@@ -13,7 +13,7 @@ script = ExtResource("1_w76b2")
 
 [node name="RomPickerDialog" type="FileDialog" parent="."]
 title = "Pick Super Mario 64 ROM file"
-size = Vector2i(335, 162)
+size = Vector2i(335, 175)
 ok_button_text = "Open"
 mode_overrides_title = false
 file_mode = 0
