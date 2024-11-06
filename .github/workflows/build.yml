@@ -122,7 +122,7 @@ jobs:
 
       - name: Export
         id: export
-        uses: firebelley/godot-export@v5.2.1
+        uses: firebelley/godot-export@v6.0.0
         with:
           godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.3/Godot_v4.3-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.3/Godot_v4.3-stable_export_templates.tpz
