@@ -8,24 +8,30 @@ on:
 jobs:
   build-addon:
     name: Build addon for ${{ matrix.name }}
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: Linux
             platform: linux
+            os: ubuntu-latest
             arch: x86_64
           - name: Windows
             platform: windows
+            os: ubuntu-latest
             arch: x86_64
+          - name: macOS
+            platform: macos
+            os: macos-latest
+            arch: universal
+    runs-on: ${{ matrix.os }}
     steps:
       - name: (Windows) Set up MinGW
         if: ${{ matrix.platform == 'windows' }}
         uses: egor-tensin/setup-mingw@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
 
       - name: (Linux) Set up Pulse Audio and ALSA
         if: ${{ matrix.platform == 'linux' }}
@@ -135,3 +141,9 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.linux
           path: ${{ steps.export.outputs.build_directory }}/LinuxX11
+
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.macos
+          path: ${{ steps.export.outputs.build_directory }}/macOS

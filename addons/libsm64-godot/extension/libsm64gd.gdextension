@@ -2,17 +2,20 @@
 
 entry_symbol = "libsm64gd_library_init"
 compatibility_minimum = 4.1
+reloadable = true
 
 [dependencies]
 
-windows.x86_64 = {"res://addons/libsm64-godot/extension/bin/sm64.dll" : ""}
-windows.template_release.x86_64 = {"res://addons/libsm64-godot/extension/bin/sm64.dll" : ""}
-linux.x86_64 = {"res://addons/libsm64-godot/extension/bin/libsm64.so" : ""}
-linux.template_release.x86_64 = {"res://addons/libsm64-godot/extension/bin/libsm64.so" : ""}
+windows.debug = {"res://addons/libsm64-godot/extension/bin/sm64.dll" : ""}
+windows.release = {"res://addons/libsm64-godot/extension/bin/sm64.dll" : ""}
+linux.debug = {"res://addons/libsm64-godot/extension/bin/libsm64.so" : ""}
+linux.release = {"res://addons/libsm64-godot/extension/bin/libsm64.so" : ""}
 
 [libraries]
 
-windows.x86_64 = "res://addons/libsm64-godot/extension/bin/libsm64gd.windows.template_debug.x86_64.dll"
-windows.template_release.x86_64 = "res://addons/libsm64-godot/extension/bin/libsm64gd.windows.template_release.x86_64.dll"
-linux.x86_64 = "res://addons/libsm64-godot/extension/bin/libsm64gd.linux.template_debug.x86_64.so"
-linux.template_release.x86_64 = "res://addons/libsm64-godot/extension/bin/libsm64gd.linux.template_release.x86_64.so"
+windows.debug.x86_64 = "res://addons/libsm64-godot/extension/bin/libsm64gd.windows.template_debug.x86_64.dll"
+windows.release.x86_64 = "res://addons/libsm64-godot/extension/bin/libsm64gd.windows.template_release.x86_64.dll"
+macos.debug = "res://addons/libsm64-godot/extension/bin/libsm64gd.macos.template_debug.framework"
+macos.release = "res://addons/libsm64-godot/extension/bin/libsm64gd.macos.template_release.framework"
+linux.debug.x86_64 = "res://addons/libsm64-godot/extension/bin/libsm64gd.linux.template_debug.x86_64.so"
+linux.release.x86_64 = "res://addons/libsm64-godot/extension/bin/libsm64gd.linux.template_release.x86_64.so"
