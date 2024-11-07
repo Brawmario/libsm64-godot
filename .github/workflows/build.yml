@@ -47,7 +47,7 @@ jobs:
           scons --version
 
       - name: Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -94,13 +94,13 @@ jobs:
           done
 
       - name: Upload demo project
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-project.${{ github.ref_name }}
           path: ${{ github.workspace }}
 
       - name: Upload addon
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-addon.${{ github.ref_name }}
           path: ${{ github.workspace }}/addons
@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download project artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-project.${{ github.ref_name }}
 
@@ -132,19 +132,19 @@ jobs:
           wine_path: ${{ steps.wine_install.outputs.WINE_PATH }}
 
       - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.windows
           path: ${{ steps.export.outputs.build_directory }}/Windows Desktop
 
       - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.linux
           path: ${{ steps.export.outputs.build_directory }}/LinuxX11
 
       - name: Upload macOS Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.macos
           path: ${{ steps.export.outputs.build_directory }}/macOS
