@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-addon:
-    name: Build addon for ${{ matrix.name }}
+  build-gdextension:
+    name: Build GDExtension files for ${{ matrix.name }}
     strategy:
       fail-fast: false
       matrix:
@@ -62,7 +62,7 @@ jobs:
         run: |
           cd extension/libsm64
           cc --version
-          make -j`nproc`
+          make -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
           cd ../..
           mkdir -p addons/libsm64-godot/extension/bin
           cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
@@ -75,6 +75,32 @@ jobs:
           scons target=template_release platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
           cd ..
 
+      - name: Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-gdextension.${{ github.ref_name }}.${{ matrix.platform }}
+          path: ${{ github.workspace }}/addons/libsm64-godot/extension/bin
+
+  output-artifacts:
+    name: Build the addon, project and export demo
+    needs: build-gdextension
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Download GDExtension binaries
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ${{ github.event.repository.name }}-gdextension.${{ github.ref_name }}*
+          path: ${{ github.workspace }}/addons/libsm64-godot/extension/bin
+          merge-multiple: true
+
+      - name: Copy extra files to addon
+        shell: sh
+        run: |
+          cp -n '${{ github.workspace }}/LICENSE' '${{ github.workspace }}/addons/libsm64-godot/'
+
       - name: Clean extra files
         shell: sh
         run: |
@@ -82,16 +108,7 @@ jobs:
           rm -rf .git
           rm -rf .github
           rm -rf .vscode
-          rm .gitmodules
-          rm .gitignore
-          rm .gitattributes
-
-      - name: Copy extra files to addon
-        shell: sh
-        run: |
-          for addon in ${{ github.workspace }}/addons/libsm64-godot/; do
-            cp -n '${{ github.workspace }}/README.md' '${{ github.workspace }}/LICENSE' "$addon"
-          done
+          rm .git*
 
       - name: Upload demo project
         uses: actions/upload-artifact@v4
@@ -99,21 +116,11 @@ jobs:
           name: ${{ github.event.repository.name }}-project.${{ github.ref_name }}
           path: ${{ github.workspace }}
 
-      - name: Upload addon
+      - name: Upload addon folder
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-addon.${{ github.ref_name }}
           path: ${{ github.workspace }}/addons
-
-  export-demo:
-    name: Export demo
-    needs: build-addon
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download project artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ github.event.repository.name }}-project.${{ github.ref_name }}
 
       - name: Install Wine
         id: wine_install
@@ -121,8 +128,8 @@ jobs:
           sudo apt install wine64
           echo "WINE_PATH=$(which wine64)" >> $GITHUB_OUTPUT
 
-      - name: Export
-        id: export
+      - name: Export demo
+        id: demo_export
         uses: firebelley/godot-export@v6.0.0
         with:
           godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.3/Godot_v4.3-stable_linux.x86_64.zip
@@ -131,20 +138,20 @@ jobs:
           cache: true
           wine_path: ${{ steps.wine_install.outputs.WINE_PATH }}
 
-      - name: Upload Windows Artifact
+      - name: Upload Windows demo
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.windows
-          path: ${{ steps.export.outputs.build_directory }}/Windows Desktop
+          path: ${{ steps.demo_export.outputs.build_directory }}/Windows Desktop
 
-      - name: Upload Linux Artifact
+      - name: Upload Linux demo
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.linux
-          path: ${{ steps.export.outputs.build_directory }}/LinuxX11
+          path: ${{ steps.demo_export.outputs.build_directory }}/LinuxX11
 
-      - name: Upload macOS Artifact
+      - name: Upload macOS demo
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.macos
-          path: ${{ steps.export.outputs.build_directory }}/macOS
+          path: ${{ steps.demo_export.outputs.build_directory }}/macOS
