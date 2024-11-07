@@ -23,7 +23,7 @@ jobs:
           - name: macOS
             platform: macos
             os: macos-latest
-            arch: arm64
+            arch: universal
     runs-on: ${{ matrix.os }}
     steps:
       - name: (Windows) Set up MinGW
@@ -66,11 +66,6 @@ jobs:
           cd ../..
           mkdir -p addons/libsm64-godot/extension/bin
           cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
-
-      - name: (MacOS) Rename libsm64
-        if: ${{ matrix.platform == 'macos' }}
-        run: |
-          mv addons/libsm64-godot/extension/bin/libsm64.so addons/libsm64-godot/extension/bin/libsm64.dylib
 
       - name: Compile extension
         shell: sh
