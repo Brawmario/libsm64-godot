@@ -1,9 +1,5 @@
 name: 🛠️ Builds
-on:
-  push:
-    tags:
-      - 'v*'
-  workflow_dispatch:
+on: [push, pull_request]
 
 jobs:
   build-gdextension:
@@ -35,12 +31,10 @@ jobs:
 
       - name: (Linux) Set up Pulse Audio and ALSA
         if: ${{ matrix.platform == 'linux' }}
-        shell: sh
         run: |
           sudo apt-get install libpulse-dev libasound2-dev
 
       - name: Set up SCons
-        shell: sh
         run: |
           python -c "import sys; print(sys.version)"
           python -m pip install scons
@@ -53,12 +47,10 @@ jobs:
 
       - name: (Windows) Prepare cross compilation
         if: ${{ matrix.platform == 'windows' }}
-        shell: sh
         run: |
           echo "OS=Windows_NT" >> $GITHUB_ENV
 
       - name: Compile libsm64
-        shell: sh
         run: |
           cd extension/libsm64
           cc --version
@@ -68,12 +60,10 @@ jobs:
           cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
 
       - name: Compile extension
-        shell: sh
         run: |
           cd extension
           scons target=template_debug platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
           scons target=template_release platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
-          cd ..
 
       - name: Upload binaries
         uses: actions/upload-artifact@v4
@@ -84,6 +74,8 @@ jobs:
   output-artifacts:
     name: Build the addon, project and export demo
     needs: build-gdextension
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout project
@@ -97,12 +89,10 @@ jobs:
           merge-multiple: true
 
       - name: Copy extra files to addon
-        shell: sh
         run: |
           cp -n '${{ github.workspace }}/LICENSE' '${{ github.workspace }}/addons/libsm64-godot/'
 
       - name: Clean extra files
-        shell: sh
         run: |
           rm -rf extension
           rm -rf .git
@@ -135,6 +125,7 @@ jobs:
           godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.3/Godot_v4.3-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.3/Godot_v4.3-stable_export_templates.tpz
           relative_project_path: ./
+          archive_output: true
           cache: true
           wine_path: ${{ steps.wine_install.outputs.WINE_PATH }}
 
@@ -155,3 +146,24 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.macos
           path: ${{ steps.demo_export.outputs.build_directory }}/macOS
+
+      - name: Rename archives
+        run: |
+          cd ${{ steps.demo_export.outputs.archive_directory }}
+          mv "Windows Desktop.zip" "${{ github.event.repository.name }}-demo.${{ github.ref_name }}.windows.zip"
+          mv "macOS.zip"           "${{ github.event.repository.name }}-demo.${{ github.ref_name }}.mac.zip"
+          mv "LinuxX11.zip"        "${{ github.event.repository.name }}-demo.${{ github.ref_name }}.linux.zip"
+
+      - name: Archive project and addon
+        run: |
+          7z a -tzip ${{ github.event.repository.name }}-project.${{ github.ref_name }}.zip ${{ github.workspace }}
+          7z a -tzip ${{ github.event.repository.name }}-addon.${{ github.ref_name }}.zip ${{ github.workspace }}/addons/libsm64-godot
+
+      - name: Make release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ github.event.repository.name }}-addon.${{ github.ref_name }}.zip
+            ${{ github.event.repository.name }}-project.${{ github.ref_name }}.zip
+            ${{ steps.demo_export.outputs.archive_directory }}/*
