@@ -92,8 +92,8 @@ jobs:
 
               lipo "${library_name}.framework/${library_name}" -thin arm64 -output "${library_name}-arm64"
               lipo "${library_name}.framework/${library_name}" -thin x86_64 -output "${library_name}-x86_64"
-              install_name_tool -change "dist/libsm64.dylib.arm64" "@rpath/libsm64.framework/libsm64" "{library_name}-arm64"
-              install_name_tool -change "dist/libsm64.dylib.x86_64" "@rpath/libsm64.framework/libsm64" "{library_name}-x86_64"
+              install_name_tool -change "dist/libsm64.dylib.arm64" "@rpath/libsm64.framework/libsm64" "${library_name}-arm64"
+              install_name_tool -change "dist/libsm64.dylib.x86_64" "@rpath/libsm64.framework/libsm64" "${library_name}-x86_64"
               lipo -create -output "${library_name}.framework/${library_name}" "${library_name}-arm64" "${library_name}-x86_64"
               rm "${library_name}-arm64" "${library_name}-x86_64"
           }
