@@ -65,6 +65,42 @@ jobs:
           scons target=template_debug platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
           scons target=template_release platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
 
+      - name: (macOS) Resolve liniking
+        if: ${{ matrix.platform == 'macos' }}
+        run: |
+          cd addons/libsm64-godot/extension/bin
+          mkdir -p libsm64.framework
+          mv libsm64.dylib libsm64.framework/libsm64
+
+          function fix_id() {
+              local library_name=$1
+
+              lipo "${library_name}.framework/${library_name}" -thin arm64 -output "${library_name}-arm64"
+              lipo "${library_name}.framework/${library_name}" -thin x86_64 -output "${library_name}-x86_64"
+              install_name_tool -id "@rpath/${library_name}.framework/${library_name}" "${library_name}-arm64"
+              install_name_tool -id "@rpath/${library_name}.framework/${library_name}" "${library_name}-x86_64"
+              lipo -create -output "${library_name}.framework/${library_name}" "${library_name}-arm64" "${library_name}-x86_64"
+              rm "${library_name}-arm64" "${library_name}-x86_64"
+          }
+
+          fix_id libsm64
+          fix_id libsm64gd.macos.template_debug
+          fix_id libsm64gd.macos.template_release
+
+          function solve_libsm64_load() {
+              local library_name=$1
+
+              lipo "${library_name}.framework/${library_name}" -thin arm64 -output "${library_name}-arm64"
+              lipo "${library_name}.framework/${library_name}" -thin x86_64 -output "${library_name}-x86_64"
+              install_name_tool -change "dist/libsm64.dylib.arm64" "@rpath/libsm64.framework/libsm64" "{library_name}-arm64"
+              install_name_tool -change "dist/libsm64.dylib.x86_64" "@rpath/libsm64.framework/libsm64" "{library_name}-x86_64"
+              lipo -create -output "${library_name}.framework/${library_name}" "${library_name}-arm64" "${library_name}-x86_64"
+              rm "${library_name}-arm64" "${library_name}-x86_64"
+          }
+
+          solve_libsm64_load libsm64gd.macos.template_debug
+          solve_libsm64_load libsm64gd.macos.template_release
+
       - name: Upload binaries
         uses: actions/upload-artifact@v4
         with:

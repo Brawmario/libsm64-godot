@@ -8,8 +8,8 @@ reloadable = true
 
 windows.debug = {"res://addons/libsm64-godot/extension/bin/sm64.dll" : ""}
 windows.release = {"res://addons/libsm64-godot/extension/bin/sm64.dll" : ""}
-macos.debug = {"res://addons/libsm64-godot/extension/bin/libsm64.dylib" : ""}
-macos.release = {"res://addons/libsm64-godot/extension/bin/libsm64.dylib" : ""}
+macos.debug = {"res://addons/libsm64-godot/extension/bin/libsm64.framework" : "Contents/Frameworks"}
+macos.release = {"res://addons/libsm64-godot/extension/bin/libsm64.framework" : "Contents/Frameworks"}
 linux.debug = {"res://addons/libsm64-godot/extension/bin/libsm64.so" : ""}
 linux.release = {"res://addons/libsm64-godot/extension/bin/libsm64.so" : ""}
 
