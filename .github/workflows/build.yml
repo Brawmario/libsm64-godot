@@ -31,12 +31,10 @@ jobs:
 
       - name: (Linux) Set up Pulse Audio and ALSA
         if: ${{ matrix.platform == 'linux' }}
-        shell: sh
         run: |
           sudo apt-get install libpulse-dev libasound2-dev
 
       - name: Set up SCons
-        shell: sh
         run: |
           python -c "import sys; print(sys.version)"
           python -m pip install scons
@@ -49,12 +47,10 @@ jobs:
 
       - name: (Windows) Prepare cross compilation
         if: ${{ matrix.platform == 'windows' }}
-        shell: sh
         run: |
           echo "OS=Windows_NT" >> $GITHUB_ENV
 
       - name: Compile libsm64
-        shell: sh
         run: |
           cd extension/libsm64
           cc --version
@@ -64,12 +60,10 @@ jobs:
           cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
 
       - name: Compile extension
-        shell: sh
         run: |
           cd extension
           scons target=template_debug platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
           scons target=template_release platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
-          cd ..
 
       - name: Upload binaries
         uses: actions/upload-artifact@v4
@@ -95,12 +89,10 @@ jobs:
           merge-multiple: true
 
       - name: Copy extra files to addon
-        shell: sh
         run: |
           cp -n '${{ github.workspace }}/LICENSE' '${{ github.workspace }}/addons/libsm64-godot/'
 
       - name: Clean extra files
-        shell: sh
         run: |
           rm -rf extension
           rm -rf .git
@@ -162,15 +154,8 @@ jobs:
           mv "macOS.zip"           "${{ github.event.repository.name }}-demo.${{ github.ref_name }}.mac.zip"
           mv "LinuxX11.zip"        "${{ github.event.repository.name }}-demo.${{ github.ref_name }}.linux.zip"
 
-      - name: Upload archives
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}
-          path: ${{ steps.demo_export.outputs.archive_directory }}
-
       - name: Archive project and addon
         run: |
-          cd ${{ github.workspace }}
           7z a -tzip ${{ github.event.repository.name }}-project.${{ github.ref_name }}.zip ${{ github.workspace }}
           7z a -tzip ${{ github.event.repository.name }}-addon.${{ github.ref_name }}.zip ${{ github.workspace }}/addons/libsm64-godot
 
@@ -179,6 +164,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ${{ github.workspace }}/${{ github.event.repository.name }}-addon.${{ github.ref_name }}.zip
-            ${{ github.workspace }}/${{ github.event.repository.name }}-project.${{ github.ref_name }}.zip
+            ${{ github.event.repository.name }}-addon.${{ github.ref_name }}.zip
+            ${{ github.event.repository.name }}-project.${{ github.ref_name }}.zip
             ${{ steps.demo_export.outputs.archive_directory }}/*
