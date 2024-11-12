@@ -22,5 +22,7 @@ export/*
 *.a
 *.so
 *.dll
+*.dylib
+*.framework
 *.z64
 *.n64
