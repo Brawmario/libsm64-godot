@@ -11,7 +11,7 @@ Addon that binds [libsm64](https://github.com/libsm64/libsm64) to godot via GDEx
 
 ## Current Godot compatibility
 
-Currently compatible with Godot 4.2.x, with binaries compiled for Windows and Linux (untested) 64 bits. Check the [Releases](https://github.com/Brawmario/libsm64-godot/releases) for the files.
+Currently compatible with Godot 4.3.x, with binaries compiled for Windows (x86_64), macOS (universal) and Linux (x86_64). Check the [Releases](https://github.com/Brawmario/libsm64-godot/releases) for the files.
 
 ## How to compile the GDExtension
 
@@ -19,7 +19,7 @@ If you just clone the project throught Git and attempt to run it, you'll get err
 
 First, [build libsm64](https://github.com/libsm64/libsm64?tab=readme-ov-file#building-on-windows) and then copy (don't move) the genereated dynamic library from the `extension/libsm64/dist/` folder into `addons/libsm64-godot/extension/bin`.
 
-Setup the [requirements for building Godot with MinGW](https://docs.godotengine.org/en/stable/contributing/development/compiling/compiling_for_windows.html#requirements). Then, run the following command from inside of the `extension` folder to compile the GDExtension. It will automatically copy the generated binary into `addons/libsm64-godot/extension/bin`.
+Setup the [requirements for building Godot for your platform of choice](https://docs.godotengine.org/en/stable/contributing/development/compiling/index.html#toc-devel-compiling) (If compiling for Windows, use the MinGW 64 enviroment you used to compile libsm64). Then, run the following command from inside of the `extension` folder to compile the GDExtension. It will automatically copy the generated binary into `addons/libsm64-godot/extension/bin`.
 
 - For debug build: `scons target=template_debug use_mingw=yes`
 - For release build: `scons target=template_release use_mingw=yes`
