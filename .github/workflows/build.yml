@@ -1,5 +1,12 @@
 name: 🛠️ Builds
-on: [push, pull_request]
+
+on:
+  push:
+    paths:
+      - extension/**
+      - .github/workflows/**
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build-gdextension:
@@ -69,7 +76,8 @@ jobs:
         if: ${{ matrix.platform == 'macos' }}
         run: |
           cd addons/libsm64-godot/extension/bin
-          mkdir -p libsm64.framework
+
+          mkdir libsm64.framework
           mv libsm64.dylib libsm64.framework/libsm64
 
           function fix_id() {
