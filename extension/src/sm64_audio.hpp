@@ -11,9 +11,9 @@
 #include <windows.h>
 #endif
 
-#define SEQ_PLAYER_LEVEL            0  // Level background music
-#define SEQ_PLAYER_ENV              1  // Misc music like the puzzle jingle
-#define SEQ_PLAYER_SFX              2  // Sound effects
+#define SM64_SEQ_PLAYER_LEVEL            0  // Level background music
+#define SM64_SEQ_PLAYER_ENV              1  // Misc music like the puzzle jingle
+#define SM64_SEQ_PLAYER_SFX              2  // Sound effects
 
 class SM64Audio : public godot::Object
 {
@@ -28,9 +28,9 @@ public:
     static SM64Audio *get_singleton();
 
     enum Player {
-        PLAYER_LEVEL = SEQ_PLAYER_LEVEL, // Level background music
-        PLAYER_ENV   = SEQ_PLAYER_ENV,   // Misc music like the puzzle jingle
-        PLAYER_SFX   = SEQ_PLAYER_SFX,   // Sound effects
+        PLAYER_LEVEL = SM64_SEQ_PLAYER_LEVEL, // Level background music
+        PLAYER_ENV   = SM64_SEQ_PLAYER_ENV,   // Misc music like the puzzle jingle
+        PLAYER_SFX   = SM64_SEQ_PLAYER_SFX,   // Sound effects
     };
 
     enum MusicID {

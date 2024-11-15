@@ -8,9 +8,6 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/file_access.hpp>
 
-#include <audio/sm64_native_audio.hpp>
-#include <audio/audio_wasapi.hpp>
-
 static void SM64DebugPrintFunction(const char *msg)
 {
     godot::UtilityFunctions::print(godot::String("[libsm64] ") + godot::String(msg) + godot::String("\n"));
@@ -68,14 +65,6 @@ void SM64Global::init()
         s_is_audio_init = true;
     }
 
-    // Audio registering (Windows only for now)
-    #if HAVE_WASAPI
-    if (sm64_native_audio_register(&g_audio_wasapi)) {
-        godot::UtilityFunctions::print(godot::String("[libsm64-godot] Audio API: WASAPI"));
-    }
-    #endif // HAVE_WASAPI
-    sm64_native_audio_start();
-
     m_mario_image = godot::Image::create_from_data(SM64_TEXTURE_WIDTH, SM64_TEXTURE_HEIGHT, false, godot::Image::FORMAT_RGBA8, mario_texture_bytes);
     m_mario_image_texture = godot::ImageTexture::create_from_image(m_mario_image);
 
@@ -85,7 +74,6 @@ void SM64Global::init()
 void SM64Global::terminate()
 {
     sm64_global_terminate();
-    sm64_native_audio_stop();
     m_init = false;
 }
 

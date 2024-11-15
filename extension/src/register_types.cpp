@@ -13,6 +13,7 @@
 #include <sm64_mario_internal.hpp>
 #include <sm64_input.hpp>
 #include <sm64_surface_properties.hpp>
+#include <sm64_audio_stream_player.hpp>
 
 using namespace godot;
 
@@ -31,6 +32,7 @@ void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<SM64MarioInternal>();
     ClassDB::register_class<SM64Input>();
     ClassDB::register_class<SM64SurfaceProperties>();
+    ClassDB::register_class<SM64AudioStreamPlayer>();
 
     _sm64_global = memnew(SM64Global);
     Engine::get_singleton()->register_singleton("SM64Global", SM64Global::get_singleton());

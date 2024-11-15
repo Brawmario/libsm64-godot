@@ -40,6 +40,8 @@ camera = NodePath("CameraRig/Camera3D")
 [node name="HUD" parent="." instance=ExtResource("4_8fya1")]
 metadata/_edit_use_anchors_ = true
 
+[node name="SM64AudioStreamPlayer" type="SM64AudioStreamPlayer" parent="."]
+
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 
 [editable path="SM64Mario/CameraRig"]

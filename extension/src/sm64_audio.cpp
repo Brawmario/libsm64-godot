@@ -1,7 +1,5 @@
 #include <sm64_audio.hpp>
 
-constexpr real_t g_sm64_delta = 1.0/30.0;
-
 SM64Audio::SM64Audio()
 {
     ERR_FAIL_COND(singleton != nullptr);
@@ -21,24 +19,28 @@ SM64Audio *SM64Audio::get_singleton()
 
 void SM64Audio::play_music(MusicID p_music_id, bool p_variant)
 {
+    WARN_DEPRECATED_MSG(godot::String("Use the SM64AudioStreamPlayer node instead"));
     uint16_t seq_arg = static_cast<uint16_t>(p_music_id) | (p_variant ? SEQ_VARIATION : 0);
     // seq_arg |= p_priority << 8;
 
-    sm64_play_music(SEQ_PLAYER_LEVEL, seq_arg, 0);
+    sm64_play_music(SM64_SEQ_PLAYER_LEVEL, seq_arg, 0);
 }
 
 void SM64Audio::stop_background_music(MusicID p_music_id)
 {
+    WARN_DEPRECATED_MSG(godot::String("Use the SM64AudioStreamPlayer node instead"));
     sm64_stop_background_music(static_cast<uint16_t>(p_music_id));
 }
 
 void SM64Audio::stop_current_background_music()
 {
+    WARN_DEPRECATED_MSG(godot::String("Use the SM64AudioStreamPlayer node instead"));
     sm64_stop_background_music(sm64_get_current_background_music());
 }
 
 SM64Audio::MusicID SM64Audio::get_current_background_music()
 {
+    WARN_DEPRECATED_MSG(godot::String("Use the SM64AudioStreamPlayer node instead"));
     int id = sm64_get_current_background_music();
     if (id < 0)
         return MUSIC_ID_COUNT;
@@ -48,11 +50,13 @@ SM64Audio::MusicID SM64Audio::get_current_background_music()
 
 void SM64Audio::set_volume(real_t p_volume)
 {
+    WARN_DEPRECATED_MSG(godot::String("Use the SM64AudioStreamPlayer node instead"));
     sm64_set_sound_volume(p_volume);
 }
 
 // void SM64Audio::set_reverb(int p_reverb)
 // {
+//     WARN_DEPRECATED_MSG(godot::String("Use the SM64AudioStreamPlayer node instead"));
 //     sm64_set_reverb((uint8_t) p_reverb);
 // }
 

@@ -4,7 +4,7 @@ extends Node3D
 @export var start_cap := SM64Mario.Caps.NORMAL
 
 @onready var mario := $SM64Mario as SM64Mario
-
+@onready var sm_64_audio_stream_player: SM64AudioStreamPlayer = $SM64AudioStreamPlayer
 
 func _ready() -> void:
 	SM64Global.scale_factor = 75
@@ -19,6 +19,8 @@ func _ready() -> void:
 	$HUD.mario = mario
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	sm_64_audio_stream_player.play()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -34,6 +36,6 @@ func _toggle_mouse_lock() -> void:
 
 
 func _on_tree_exiting() -> void:
-	SM64Audio.stop_current_background_music()
+	sm_64_audio_stream_player.stop_current_background_music()
 	mario.delete()
 	SM64Global.terminate()
