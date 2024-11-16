@@ -12,19 +12,17 @@
 #define SM64_SEQ_PLAYER_ENV              1  // Misc music like the puzzle jingle
 #define SM64_SEQ_PLAYER_SFX              2  // Sound effects
 
-using namespace godot;
-
-class SM64AudioStreamPlayer : public AudioStreamPlayer
+class SM64AudioStreamPlayer : public godot::AudioStreamPlayer
 {
-    GDCLASS(SM64AudioStreamPlayer, AudioStreamPlayer);
+    GDCLASS(SM64AudioStreamPlayer, godot::AudioStreamPlayer);
 
 private:
     real_t m_time_since_last_tick;
-    PackedVector2Array m_frames;
+    godot::PackedVector2Array m_frames;
     int m_max_queued_frames;
 
-    Ref<AudioStreamGenerator> m_stream;
-    Ref<AudioStreamGeneratorPlayback> m_playback;
+    godot::Ref<godot::AudioStreamGenerator> m_stream;
+    godot::Ref<godot::AudioStreamGeneratorPlayback> m_playback;
 
     void audio_tick();
 

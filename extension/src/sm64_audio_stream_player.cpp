@@ -45,7 +45,7 @@ SM64AudioStreamPlayer::SM64AudioStreamPlayer()
 
 void SM64AudioStreamPlayer::_ready()
 {
-    if (Engine::get_singleton()->is_editor_hint())
+    if (godot::Engine::get_singleton()->is_editor_hint())
         return;
 
     m_stream.instantiate();
@@ -55,7 +55,7 @@ void SM64AudioStreamPlayer::_ready()
 
 void SM64AudioStreamPlayer::_process(double delta)
 {
-    if (Engine::get_singleton()->is_editor_hint())
+    if (godot::Engine::get_singleton()->is_editor_hint())
         return;
 
     if (!is_playing())

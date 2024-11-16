@@ -35,6 +35,8 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
       - name: (Linux) Set up Pulse Audio and ALSA
         if: ${{ matrix.platform == 'linux' }}
@@ -62,7 +64,9 @@ jobs:
           cd extension/libsm64
           cc --version
           make -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
-          cd ../..
+
+      - name: Copy libsm64 binary
+        run: |
           mkdir -p addons/libsm64-godot/extension/bin
           cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
 
