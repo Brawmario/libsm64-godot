@@ -40,11 +40,6 @@ env = SConscript("godot-cpp/SConstruct")
 # tweak this if you want to use different folders, or more folders, to store your source code in.
 env.Append(CPPPATH=["src/"])
 sources = (Glob("src/*.cpp"))
-sources += (Glob("src/audio/*.cpp"))
-
-# for audio support on Windows
-if env["platform"] == "windows":
-    env.Append(LIBS=["ole32"])
 
 # libsm64 settings (run make on the libsm64 folder before attempting compilation)
 env.Append(CPPPATH=["./"])
@@ -53,7 +48,8 @@ env.Append(LIBPATH=["libsm64/dist/"])
 env.Append(LIBS=["libsm64"])
 
 # remove -static flag from LINKFLAGS if present
-env["LINKFLAGS"] = [x for x in env["LINKFLAGS"] if x != "-static"]
+if env["platform"] == "windows":
+    env["LINKFLAGS"] = [x for x in env["LINKFLAGS"] if x != "-static"]
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
