@@ -2,9 +2,14 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=godot
 
 ### Godot ###
-# Godot-specific ignores
+# Godot 4+ specific ignores
 .godot/
-export.cfg
+
+# Godot-specific ignores
+.import/
+# Export files are commited to version control for continuous integration
+#export.cfg
+#export_presets.cfg
 
 # Imported translations (automatically generated from CSV files)
 *.translation
@@ -12,17 +17,27 @@ export.cfg
 # Mono-specific ignores
 .mono/
 data_*/
+mono_crash.*.json
 
 # End of https://www.toptal.com/developers/gitignore/api/godot
 
+# Scons artifacts
 .sconsign.dblite
 
-export/*
+# Godot exports
+export/
+
+# Compilation artifacts
 *.o
 *.a
 *.so
 *.dll
 *.dylib
 *.framework
+
+# N64 ROM files
 *.z64
 *.n64
+
+# GDExtension generated files
+extension/src/gen/
