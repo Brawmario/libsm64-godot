@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SM64Surfaces" inherits="Object" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Singleton with the methods for loading and unloading the [code]libsm64[/code] world.
+	</brief_description>
+	<description>
+		The [SM64Surfaces] singleton exposed the [code]libsm64[/code] functions for defining the surfaces that Mario will be interacting with.
+		[b]Note:[/b] use the [SM64StaticSurfaceHandler] and [SM64SurfaceObjectsHandler] helper nodes when using [MeshInstance3D] nodes. Using [SM64Surfaces] directly is only recommended for procedural generetion or if the provided helper nodes are insufficient.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="static_surfaces_load">
+			<return type="void" />
+			<param index="0" name="vertexes" type="PackedVector3Array" />
+			<param index="1" name="surface_properties_array" type="SM64SurfaceProperties[]" />
+			<description>
+				Loads the static surfaces into the [code]libsm64[/code] world.
+				[b]Note:[/b] calling this function multiple times will overwrite the previous calls.
+				[b]Warning:[/b] there should be at least one plane that spans the entire playing area at the bottom of the map.
+			</description>
+		</method>
+		<method name="surface_object_create">
+			<return type="int" />
+			<param index="0" name="vertexes" type="PackedVector3Array" />
+			<param index="1" name="position" type="Vector3" />
+			<param index="2" name="rotation" type="Vector3" />
+			<param index="3" name="surface_properties_array" type="SM64SurfaceProperties[]" />
+			<description>
+				Creates a surface object with the [param vertexes] and the [param surface_properties_array] at the [param postion] with the [param rotation] (use [constant EULER_ORDER_YXZ]) in the [code]libsm64[/code] world.
+				Returns the internal [code]object_id[/code] of the created surface object.
+			</description>
+		</method>
+		<method name="surface_object_delete">
+			<return type="void" />
+			<param index="0" name="object_id" type="int" />
+			<description>
+				Deletes the surface object identified by [param object_id] in the [code]libsm64[/code] world.
+			</description>
+		</method>
+		<method name="surface_object_move">
+			<return type="void" />
+			<param index="0" name="object_id" type="int" />
+			<param index="1" name="position" type="Vector3" />
+			<param index="2" name="rotation" type="Vector3" />
+			<description>
+				Moves the surface object identified by [param object_id] in the [code]libsm64[/code] world to the new [param position] and [param rotation] (use [constant EULER_ORDER_YXZ]).
+				[b]Warning:[/b] If moving an object continuously (like a moving platform), this method should be called at a fixed rate of 30 times per second.
+			</description>
+		</method>
+	</methods>
+</class>

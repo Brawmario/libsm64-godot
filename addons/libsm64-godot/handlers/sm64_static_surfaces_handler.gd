@@ -10,6 +10,7 @@ var _default_surface_properties := SM64SurfaceProperties.new()
 
 
 ## Load all MeshInstance3D in static_surfaces_group into SM64
+## [b]Warning:[/b] there should be at least one plane that spans the entire playing area at the bottom of the map.
 func load_static_surfaces() -> void:
 	var faces := PackedVector3Array()
 	var surface_properties_array: Array[SM64SurfaceProperties] = []

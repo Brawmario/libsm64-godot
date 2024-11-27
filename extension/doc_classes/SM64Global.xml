@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SM64Global" inherits="Object" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Singleton with the methods for initializing and terminating the [code]libsm64[/code] world.
+	</brief_description>
+	<description>
+		The [SM64Global] singeton contains the methods necessary for setting up [code]libsm64[/code] to work inside of Godot.
+		In order to initialize [code]libsm64[/code], it's necessary to provide the Super Mario 64 ROM file to the [member rom_filepath] property.
+		It's recommended to call [method init] only in the scene where the [code]libsm64[/code] world is going to be created. It's recommended to call [method terminate] before the termination of the scene where the [code]libsm64[/code] world was created.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_mario_image">
+			<return type="Image" />
+			<description>
+				Returns the Image resource extracted from the ROM file.
+				[b]Note:[/b] only available if [method init] has been called sucessfully.
+			</description>
+		</method>
+		<method name="get_mario_image_texture">
+			<return type="ImageTexture" />
+			<description>
+				Returns the ImageTexture resource extracted from the ROM file.
+				[b]Note:[/b] only available if [method init] has been called sucessfully.
+			</description>
+		</method>
+		<method name="init">
+			<return type="void" />
+			<description>
+				Initialize the current [code]libsm64[/code] world.
+				[b]Note:[/b] [member rom_filepath] must be set before calling this function.
+			</description>
+		</method>
+		<method name="is_init" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if [method init] has been called sucessfully.
+			</description>
+		</method>
+		<method name="terminate">
+			<return type="void" />
+			<description>
+				Terminate the current [code]libsm64[/code] world.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="rom_filepath" type="String" setter="set_rom_filepath" getter="get_rom_filepath" default="&quot;&quot;">
+			The filepath to the Super Mario 64 ROM file. Supply this parameter before calling [method init].
+		</member>
+		<member name="scale_factor" type="float" setter="set_scale_factor" getter="get_scale_factor" default="75.0">
+			The scale factor of the internal [code]libsm64[/code] world. The bigger the scale, the smaller Mario will be in the Godot scene.
+			At 75.0 scale, Mario will be just below 2 meters tall in the Godot scene.
+		</member>
+	</members>
+</class>
