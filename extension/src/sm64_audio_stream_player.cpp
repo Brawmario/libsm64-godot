@@ -6,41 +6,38 @@
 
 #include <libsm64.h>
 
-constexpr real_t g_sm64_delta = 1.0 / 30.0;
-
-
+constexpr double g_sm64_delta = 1.0 / 30.0;
+constexpr size_t g_sm64_audio_buffer_length = 544 * 2 * 2;
 
 void SM64AudioStreamPlayer::audio_tick()
 {
-    int16_t audio_buffer[544 * 2 * 2];
-
-    m_playback = get_stream_playback();
-    if (m_playback.is_null())
+    godot::Ref<godot::AudioStreamGeneratorPlayback> playback = get_stream_playback();
+    if (playback.is_null())
         return;
 
-    const int buffered_frames = m_max_queued_frames - m_playback->get_frames_available();
+    const int buffered_frames = m_playback_frames_buffer_length - playback->get_frames_available();
+    const int buffered_samples = buffered_frames / 2;
 
-    const uint32_t num_audio_samples = sm64_audio_tick(buffered_frames / 4, 11000, audio_buffer);
+    int16_t audio_buffer[g_sm64_audio_buffer_length];
+    const int num_audio_samples = sm64_audio_tick(buffered_samples, 1100, audio_buffer);
 
-    if (buffered_frames > 5400)
+    if (buffered_samples > 6000)
         return;
 
-    const int64_t frame_count = num_audio_samples * 2;
+    const int frame_count = num_audio_samples * 2;
     m_frames.resize(frame_count);
     godot::Vector2 *frames_ptrw = m_frames.ptrw();
-    for (int64_t i = 0; i < frame_count; i++)
+    for (int i = 0; i < frame_count; i++)
     {
         frames_ptrw[i].x = real_t(audio_buffer[2 * i + 0]) / 32767.0;
         frames_ptrw[i].y = real_t(audio_buffer[2 * i + 1]) / 32767.0;
     }
-
-    m_playback->push_buffer(m_frames);
+    playback->push_buffer(m_frames);
 }
 
 SM64AudioStreamPlayer::SM64AudioStreamPlayer()
 {
     m_time_since_last_tick = 0.0;
-    m_max_queued_frames = 16383;
 }
 
 void SM64AudioStreamPlayer::_ready()
@@ -48,9 +45,14 @@ void SM64AudioStreamPlayer::_ready()
     if (godot::Engine::get_singleton()->is_editor_hint())
         return;
 
-    m_stream.instantiate();
-    m_stream->set_mix_rate(32000.0);
-    set_stream(m_stream);
+    godot::Ref<godot::AudioStreamGenerator> stream;
+    stream.instantiate();
+    stream->set_mix_rate(32000.0);
+    set_stream(stream);
+
+    // Playback buffer size math since Godot 4.3
+    const int target_frames_buffer_length = stream->get_mix_rate() * stream->get_buffer_length();
+    m_playback_frames_buffer_length = godot::next_power_of_2(target_frames_buffer_length);
 }
 
 void SM64AudioStreamPlayer::_process(double delta)

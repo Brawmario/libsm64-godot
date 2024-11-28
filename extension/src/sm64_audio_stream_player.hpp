@@ -17,12 +17,9 @@ class SM64AudioStreamPlayer : public godot::AudioStreamPlayer
     GDCLASS(SM64AudioStreamPlayer, godot::AudioStreamPlayer);
 
 private:
-    real_t m_time_since_last_tick;
+    double m_time_since_last_tick;
     godot::PackedVector2Array m_frames;
-    int m_max_queued_frames;
-
-    godot::Ref<godot::AudioStreamGenerator> m_stream;
-    godot::Ref<godot::AudioStreamGeneratorPlayback> m_playback;
+    int m_playback_frames_buffer_length;
 
     void audio_tick();
 
