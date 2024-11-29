@@ -1,7 +1,10 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://bkhlgdhhbo5th"]
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bkhlgdhhbo5th"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eylyr"]
+vertex_color_use_as_albedo = true
 
 [resource]
-vertex_color_use_as_albedo = true
-clearcoat = 0.0
-clearcoat_roughness = 1.0
-detail_enabled = true
+next_pass = SubResource("StandardMaterial3D_eylyr")
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0

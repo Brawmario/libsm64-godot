@@ -234,19 +234,19 @@ func _physics_process(delta: float) -> void:
 
 ## Create Mario (requires initializing the libsm64 via the global_init function)
 func create() -> void:
-	if SM64Global.is_init():
-		if _id >= 0:
-			delete()
-		_id = _internal.mario_create(global_position, global_rotation)
-		if _id < 0:
-			return
+	if _id >= 0:
+		delete()
 
-		if not _default_material.detail_albedo:
-			var detail_texture := SM64Global.get_mario_image_texture() as ImageTexture
-			_default_material.detail_albedo = detail_texture
-			_wing_material.detail_albedo = detail_texture
-			_metal_material.detail_albedo = detail_texture
-			_vanish_material.detail_albedo = detail_texture
+	_id = _internal.mario_create(global_position, global_rotation)
+	if _id < 0:
+		return
+
+	if not _default_material.albedo_texture:
+		var mario_image_texture := SM64Global.get_mario_image_texture()
+		_default_material.albedo_texture = mario_image_texture
+		_wing_material.albedo_texture = mario_image_texture
+		_metal_material.albedo_texture = mario_image_texture
+		_vanish_material.albedo_texture = mario_image_texture
 
 
 ## Delete mario inside the libsm64 world
