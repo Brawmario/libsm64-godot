@@ -15,18 +15,36 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Linux
+          - name: Linux (debug)
+            target: template_debug
             platform: linux
-            os: ubuntu-latest
             arch: x86_64
-          - name: Windows
+            os: ubuntu-latest
+          - name: Linux (release)
+            target: template_release
+            platform: linux
+            arch: x86_64
+            os: ubuntu-latest
+          - name: Windows (debug)
+            target: template_debug
             platform: windows
-            os: ubuntu-latest
             arch: x86_64
-          - name: macOS
+            os: ubuntu-latest
+          - name: Windows (release)
+            target: template_release
+            platform: windows
+            arch: x86_64
+            os: ubuntu-latest
+          - name: macOS (debug)
+            target: template_debug
             platform: macos
-            os: macos-latest
             arch: universal
+            os: macos-latest
+          - name: macOS (release)
+            target: template_release
+            platform: macos
+            arch: universal
+            os: macos-latest
     runs-on: ${{ matrix.os }}
     steps:
       - name: (Windows) Set up MinGW
@@ -73,8 +91,7 @@ jobs:
       - name: Compile extension
         run: |
           cd extension
-          scons target=template_debug platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
-          scons target=template_release platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
+          scons target=${{ matrix.target }} platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
 
       - name: (macOS) Resolve liniking
         if: ${{ matrix.platform == 'macos' }}
@@ -96,8 +113,7 @@ jobs:
           }
 
           fix_id libsm64
-          fix_id libsm64gd.macos.template_debug
-          fix_id libsm64gd.macos.template_release
+          fix_id libsm64gd.macos.${{ matrix.target }}
 
           function solve_libsm64_load() {
               local library_name=$1
@@ -110,13 +126,12 @@ jobs:
               rm "${library_name}-arm64" "${library_name}-x86_64"
           }
 
-          solve_libsm64_load libsm64gd.macos.template_debug
-          solve_libsm64_load libsm64gd.macos.template_release
+          solve_libsm64_load libsm64gd.macos.${{ matrix.target }}
 
       - name: Upload binaries
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-gdextension.${{ github.ref_name }}.${{ matrix.platform }}
+          name: ${{ github.event.repository.name }}-gdextension.${{ github.ref_name }}.${{ matrix.platform }}.${{ matrix.target }}
           path: ${{ github.workspace }}/addons/libsm64-godot/extension/bin
 
   output-artifacts:
