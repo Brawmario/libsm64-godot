@@ -9,8 +9,27 @@ on:
   workflow_dispatch:
 
 jobs:
+  sanitize_ref_name:
+    name: Sanitize `github.ref_name`
+    runs-on: ubuntu-latest
+    outputs:
+      sanitized_ref_name: ${{ steps.get_ref_name.outputs.ref_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sanitize `github.ref_name`
+        id: get_ref_name
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          SANITIZED_REF_NAME=$(echo -n "$REF_NAME" | tr "/" "-")
+          echo "Sanitized ref_name: $SANITIZED_REF_NAME"
+          echo "ref_name=$SANITIZED_REF_NAME" >> $GITHUB_OUTPUT;
+
   build-gdextension:
     name: Build GDExtension files for ${{ matrix.name }}
+    needs: sanitize_ref_name
     strategy:
       fail-fast: false
       matrix:
@@ -46,6 +65,8 @@ jobs:
             arch: universal
             os: macos-latest
     runs-on: ${{ matrix.os }}
+    env:
+      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
     steps:
       - name: (Windows) Set up MinGW
         if: ${{ matrix.platform == 'windows' }}
@@ -131,15 +152,17 @@ jobs:
       - name: Upload binaries
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-gdextension.${{ github.ref_name }}.${{ matrix.platform }}.${{ matrix.target }}
+          name: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.${{ matrix.platform }}.${{ matrix.target }}
           path: ${{ github.workspace }}/addons/libsm64-godot/extension/bin
 
   output-artifacts:
     name: Build the addon, project and export demo
-    needs: build-gdextension
+    needs: [sanitize_ref_name, build-gdextension]
     permissions:
       contents: write
     runs-on: ubuntu-latest
+    env:
+      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
@@ -147,7 +170,7 @@ jobs:
       - name: Download GDExtension binaries
         uses: actions/download-artifact@v4
         with:
-          pattern: ${{ github.event.repository.name }}-gdextension.${{ github.ref_name }}*
+          pattern: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}*
           path: ${{ github.workspace }}/addons/libsm64-godot/extension/bin
           merge-multiple: true
 
@@ -166,13 +189,13 @@ jobs:
       - name: Upload demo project
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-project.${{ github.ref_name }}
+          name: ${{ github.event.repository.name }}-project.${{ env.ref_name }}
           path: ${{ github.workspace }}
 
       - name: Upload addon folder
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-addon.${{ github.ref_name }}
+          name: ${{ github.event.repository.name }}-addon.${{ env.ref_name }}
           path: ${{ github.workspace }}/addons
 
       - name: Install Wine
@@ -195,38 +218,38 @@ jobs:
       - name: Upload Windows demo
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.windows
+          name: ${{ github.event.repository.name }}-demo.${{ env.ref_name }}.windows
           path: ${{ steps.demo_export.outputs.build_directory }}/Windows Desktop
 
       - name: Upload Linux demo
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.linux
+          name: ${{ github.event.repository.name }}-demo.${{ env.ref_name }}.linux
           path: ${{ steps.demo_export.outputs.build_directory }}/LinuxX11
 
       - name: Upload macOS demo
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-demo.${{ github.ref_name }}.macos
+          name: ${{ github.event.repository.name }}-demo.${{ env.ref_name }}.macos
           path: ${{ steps.demo_export.outputs.build_directory }}/macOS
 
       - name: Rename archives
         run: |
           cd ${{ steps.demo_export.outputs.archive_directory }}
-          mv "Windows Desktop.zip" "${{ github.event.repository.name }}-demo.${{ github.ref_name }}.windows.zip"
-          mv "macOS.zip"           "${{ github.event.repository.name }}-demo.${{ github.ref_name }}.mac.zip"
-          mv "LinuxX11.zip"        "${{ github.event.repository.name }}-demo.${{ github.ref_name }}.linux.zip"
+          mv "Windows Desktop.zip" "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.windows.zip"
+          mv "macOS.zip"           "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.mac.zip"
+          mv "LinuxX11.zip"        "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.linux.zip"
 
       - name: Archive project and addon
         run: |
-          7z a -tzip ${{ github.event.repository.name }}-project.${{ github.ref_name }}.zip ${{ github.workspace }}
-          7z a -tzip ${{ github.event.repository.name }}-addon.${{ github.ref_name }}.zip ${{ github.workspace }}/addons/libsm64-godot
+          7z a -tzip ${{ github.event.repository.name }}-project.${{ env.ref_name }}.zip ${{ github.workspace }}
+          7z a -tzip ${{ github.event.repository.name }}-addon.${{ env.ref_name }}.zip ${{ github.workspace }}/addons/libsm64-godot
 
       - name: Make release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ${{ github.event.repository.name }}-addon.${{ github.ref_name }}.zip
-            ${{ github.event.repository.name }}-project.${{ github.ref_name }}.zip
+            ${{ github.event.repository.name }}-addon.${{ env.ref_name }}.zip
+            ${{ github.event.repository.name }}-project.${{ env.ref_name }}.zip
             ${{ steps.demo_export.outputs.archive_directory }}/*
