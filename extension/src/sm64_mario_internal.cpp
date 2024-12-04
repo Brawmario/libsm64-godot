@@ -224,15 +224,11 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
         color_ptrw[i].r = m_geometry.color[3*i+0];
         color_ptrw[i].g = m_geometry.color[3*i+1];
         color_ptrw[i].b = m_geometry.color[3*i+2];
-    }
-
-    // Add transparency to the wings of the wing cap
-    if (m_out_state.flags & 0x8 && vertex_count > 2256)
-    {
-        for (int i = vertex_count - 24; i < vertex_count; i++)
-        {
+        // Add transparency to the wings of the wing cap
+        if (m_out_state.flags & 0x8 && vertex_count > 2256 && i >= vertex_count - 24)
             color_ptrw[i].a = 0.0;
-        }
+        else
+            color_ptrw[i].a = 1.0;
     }
 
     godot::Vector2 *uv_ptrw = m_uv.ptrw();
