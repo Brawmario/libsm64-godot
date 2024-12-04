@@ -229,7 +229,7 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     // Add transparency to the wings of the wing cap
     if (m_out_state.flags & 0x8 && vertex_count > 2256)
     {
-        for (int i = vertex_count - 25; i < vertex_count; i++)
+        for (int i = vertex_count - 24; i < vertex_count; i++)
         {
             color_ptrw[i].a = 0.0;
         }
