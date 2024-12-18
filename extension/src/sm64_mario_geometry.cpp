@@ -6,40 +6,40 @@
 
 SM64MarioGeometry::SM64MarioGeometry()
 {
-    std::fill(position, position + (9 * SM64_GEO_MAX_TRIANGLES), 0.0f);
-    std::fill(normal,   normal   + (9 * SM64_GEO_MAX_TRIANGLES), 0.0f);
-    std::fill(color,    color    + (9 * SM64_GEO_MAX_TRIANGLES), 0.0f);
-    std::fill(uv,       uv       + (6 * SM64_GEO_MAX_TRIANGLES), 0.0f);
+    position.fill(0.0f);
+    normal.fill(0.0f);
+    color.fill(0.0f);
+    uv.fill(0.0f);
 
-    geometry.position = position;
-    geometry.normal   = normal;
-    geometry.color    = color;
-    geometry.uv       = uv;
+    geometry.position = position.data();
+    geometry.normal = normal.data();
+    geometry.color = color.data();
+    geometry.uv = uv.data();
 
     geometry.numTrianglesUsed = 0;
 }
 
 SM64MarioGeometry::SM64MarioGeometry(const SM64MarioGeometry &other)
 {
-    std::copy(other.position, other.position + (9 * SM64_GEO_MAX_TRIANGLES), position);
-    std::copy(other.normal,   other.normal   + (9 * SM64_GEO_MAX_TRIANGLES), normal);
-    std::copy(other.color,    other.color    + (9 * SM64_GEO_MAX_TRIANGLES), color);
-    std::copy(other.uv,       other.uv       + (6 * SM64_GEO_MAX_TRIANGLES), uv);
+    position = other.position;
+    normal = other.normal;
+    color = other.color;
+    uv = other.uv;
 
-    geometry.position = position;
-    geometry.normal   = normal;
-    geometry.color    = color;
-    geometry.uv       = uv;
+    geometry.position = position.data();
+    geometry.normal = normal.data();
+    geometry.color = color.data();
+    geometry.uv = uv.data();
 
     geometry.numTrianglesUsed = other.geometry.numTrianglesUsed;
 }
 
 SM64MarioGeometry &SM64MarioGeometry::operator=(const SM64MarioGeometry &other)
 {
-    std::copy(other.position, other.position + (9 * SM64_GEO_MAX_TRIANGLES), position);
-    std::copy(other.normal,   other.normal   + (9 * SM64_GEO_MAX_TRIANGLES), normal);
-    std::copy(other.color,    other.color    + (9 * SM64_GEO_MAX_TRIANGLES), color);
-    std::copy(other.uv,       other.uv       + (6 * SM64_GEO_MAX_TRIANGLES), uv);
+    position = other.position;
+    normal = other.normal;
+    color = other.color;
+    uv = other.uv;
 
     geometry.numTrianglesUsed = other.geometry.numTrianglesUsed;
 
@@ -56,9 +56,6 @@ void SM64MarioGeometry::lerp(const SM64MarioGeometry &last, const SM64MarioGeome
     for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
         normal[i] = LERP(last.normal[i], current.normal[i], amount);
 
-    // Mario's colors seems to be always constant, no need to interpolate.
-    std::copy(current.color, current.color + (9 * geometry.numTrianglesUsed), color);
-
-    // Don't lerp the UV
-    std::copy(current.uv, current.uv + (6 * geometry.numTrianglesUsed), uv);
+    color = current.color;
+    uv = current.uv;
 }

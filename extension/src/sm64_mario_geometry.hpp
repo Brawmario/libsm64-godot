@@ -1,6 +1,8 @@
 #ifndef LIBSM64GD_SM64MARIOGEOMETRY_H
 #define LIBSM64GD_SM64MARIOGEOMETRY_H
 
+#include <array>
+
 #include <godot_cpp/core/defs.hpp>
 
 #include <libsm64.h>
@@ -19,10 +21,10 @@ public:
 
     void lerp(const SM64MarioGeometry &last, const SM64MarioGeometry &current, float amount);
 
-    float position[9 * SM64_GEO_MAX_TRIANGLES];
-    float normal[9 * SM64_GEO_MAX_TRIANGLES];
-    float color[9 * SM64_GEO_MAX_TRIANGLES];
-    float uv[6 * SM64_GEO_MAX_TRIANGLES];
+    std::array<float, 9 * SM64_GEO_MAX_TRIANGLES> position;
+    std::array<float, 9 * SM64_GEO_MAX_TRIANGLES> normal;
+    std::array<float, 9 * SM64_GEO_MAX_TRIANGLES> color;
+    std::array<float, 6 * SM64_GEO_MAX_TRIANGLES> uv;
 
 private:
     struct SM64MarioGeometryBuffers geometry;

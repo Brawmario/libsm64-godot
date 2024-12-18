@@ -196,10 +196,10 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     // SM64 to godot conversion
 
     // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
-    invert_vertex_order_3d(m_geometry.position, m_geometry.triangles_used());
-    invert_vertex_order_3d(m_geometry.normal,   m_geometry.triangles_used());
-    invert_vertex_order_3d(m_geometry.color,    m_geometry.triangles_used());
-    invert_vertex_order_2d(m_geometry.uv,       m_geometry.triangles_used());
+    invert_vertex_order_3d(m_geometry.position.data(), m_geometry.triangles_used());
+    invert_vertex_order_3d(m_geometry.normal.data(),   m_geometry.triangles_used());
+    invert_vertex_order_3d(m_geometry.color.data(),    m_geometry.triangles_used());
+    invert_vertex_order_2d(m_geometry.uv.data(),       m_geometry.triangles_used());
 
     // SM64 3D vector to Godot 3D vector: (x, y, z) -> (z, y, -x)
     godot::Vector3 *position_ptrw = m_position.ptrw();
