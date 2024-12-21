@@ -10,7 +10,7 @@
 
 static void SM64DebugPrintFunction(const char *msg)
 {
-    godot::UtilityFunctions::print(godot::String("[libsm64] ") + godot::String(msg) + godot::String("\n"));
+    godot::UtilityFunctions::print("[libsm64] ", msg);
 }
 
 SM64Global::SM64Global()
@@ -51,9 +51,9 @@ void SM64Global::init()
     constexpr int64_t mario_texture_bytes_size = 4 * SM64_TEXTURE_WIDTH * SM64_TEXTURE_HEIGHT;
     mario_texture_bytes.resize(mario_texture_bytes_size);
 
-// #ifdef DEBUG_ENABLED
-//     sm64_register_debug_print_function(SM64DebugPrintFunction);
-// #endif // DEBUG_ENABLED
+#if 0 // DEBUG_ENABLED
+    sm64_register_debug_print_function(SM64DebugPrintFunction);
+#endif // DEBUG_ENABLED
 
     sm64_global_init(rom.ptr(), mario_texture_bytes.ptrw());
 
