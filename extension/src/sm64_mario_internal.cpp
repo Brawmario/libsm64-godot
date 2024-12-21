@@ -232,10 +232,18 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     }
 
     godot::Vector2 *uv_ptrw = m_uv.ptrw();
-    for (int i = 0; i < vertex_count; i++)
+    if constexpr (std::is_same<real_t, float>::value)
     {
-        uv_ptrw[i].x = m_geometry.uv[2*i+0];
-        uv_ptrw[i].y = m_geometry.uv[2*i+1];
+        // UV array and Vector2 array have the same memory layout, so we can just copy the data
+        memcpy(uv_ptrw, m_geometry.uv.data(), vertex_count * sizeof(godot::Vector2));
+    }
+    else
+    {
+        for (int i = 0; i < vertex_count; i++)
+        {
+            uv_ptrw[i].x = m_geometry.uv[2*i+0];
+            uv_ptrw[i].y = m_geometry.uv[2*i+1];
+        }
     }
 
     mesh_array[godot::ArrayMesh::ARRAY_VERTEX] = m_position;
