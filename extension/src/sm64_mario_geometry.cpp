@@ -2,8 +2,6 @@
 
 #include <algorithm>
 
-#define LERP(last, current, amount) (last + (current - last) * amount)
-
 SM64MarioGeometry::SM64MarioGeometry()
 {
     position.fill(0.0f);
@@ -46,16 +44,21 @@ SM64MarioGeometry &SM64MarioGeometry::operator=(const SM64MarioGeometry &other)
     return *this;
 }
 
+#define LERP(last, current, amount) (last + (current - last) * amount)
+
+template<class ConstIt, class It>
+_FORCE_INLINE_ static void lerp_range(ConstIt p_it_last, ConstIt p_it_current, float p_amount, It p_it, It p_end)
+{
+    for (; p_it != p_end; ++p_it_last, ++p_it_current, ++p_it)
+        *p_it = LERP(*p_it_last, *p_it_current, p_amount);
+}
+
 void SM64MarioGeometry::lerp(const SM64MarioGeometry &last, const SM64MarioGeometry &current, float amount)
 {
     geometry.numTrianglesUsed = current.geometry.numTrianglesUsed;
 
-    for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
-        position[i] = LERP(last.position[i], current.position[i], amount);
-
-    for (int i = 0; i < 9 * geometry.numTrianglesUsed; i++)
-        normal[i] = LERP(last.normal[i], current.normal[i], amount);
-
+    lerp_range(last.position.begin(), current.position.begin(), amount, position.begin(), position.begin() + geometry.numTrianglesUsed * 9);
+    lerp_range(last.normal.begin(), current.normal.begin(), amount, normal.begin(), normal.begin() + geometry.numTrianglesUsed * 9);
     color = current.color;
     uv = current.uv;
 }

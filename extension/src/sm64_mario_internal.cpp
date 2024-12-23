@@ -10,34 +10,24 @@
 
 constexpr real_t g_sm64_delta = 1.0/30.0;
 
-static void invert_vertex_order_2d(float *p_arr, size_t p_triangle_count)
+template<class It>
+_FORCE_INLINE_ static void invert_vertex_order_2d(It p_it, It p_end)
 {
-    const size_t arr_size = p_triangle_count * 6;
-    for (size_t i = 0; i < arr_size; i += 6)
+    for (; p_it != p_end; p_it += 6)
     {
-        float temp_x = p_arr[i+0];
-        float temp_y = p_arr[i+1];
-        p_arr[i+0] = p_arr[i+2];
-        p_arr[i+1] = p_arr[i+3];
-        p_arr[i+2] = temp_x;
-        p_arr[i+3] = temp_y;
+        std::swap(*(p_it + 0), *(p_it + 2));
+        std::swap(*(p_it + 1), *(p_it + 3));
     }
 }
 
-static void invert_vertex_order_3d(float *p_arr, size_t p_triangle_count)
+template<class It>
+_FORCE_INLINE_ static void invert_vertex_order_3d(It p_it, It p_end)
 {
-    const size_t arr_size = p_triangle_count * 9;
-    for (size_t i = 0; i < arr_size; i += 9)
+    for (; p_it != p_end; p_it += 9)
     {
-        float temp_x = p_arr[i+0];
-        float temp_y = p_arr[i+1];
-        float temp_z = p_arr[i+2];
-        p_arr[i+0] = p_arr[i+3];
-        p_arr[i+1] = p_arr[i+4];
-        p_arr[i+2] = p_arr[i+5];
-        p_arr[i+3] = temp_x;
-        p_arr[i+4] = temp_y;
-        p_arr[i+5] = temp_z;
+        std::swap(*(p_it + 0), *(p_it + 3));
+        std::swap(*(p_it + 1), *(p_it + 4));
+        std::swap(*(p_it + 2), *(p_it + 5));
     }
 }
 
@@ -136,7 +126,7 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
         while (m_time_since_last_tick >= g_sm64_delta)
         {
             // Old current becomes new last, old last will be overwritten by new current
-            SWAP(m_current_index, m_last_index);
+            std::swap(m_current_index, m_last_index);
 
             sm64_mario_tick(m_id, &inputs, &m_out_state_hard_tick[m_current_index], m_geometry_hard_tick[m_current_index].c_handle());
 
@@ -196,53 +186,62 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     // SM64 to godot conversion
 
     // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
-    invert_vertex_order_3d(m_geometry.position.data(), m_geometry.triangles_used());
-    invert_vertex_order_3d(m_geometry.normal.data(),   m_geometry.triangles_used());
-    invert_vertex_order_3d(m_geometry.color.data(),    m_geometry.triangles_used());
-    invert_vertex_order_2d(m_geometry.uv.data(),       m_geometry.triangles_used());
+    invert_vertex_order_3d(m_geometry.position.begin(), m_geometry.position.begin() + vertex_count * 3);
+    invert_vertex_order_3d(m_geometry.normal.begin(),   m_geometry.normal.begin()   + vertex_count * 3);
+    invert_vertex_order_3d(m_geometry.color.begin(),    m_geometry.color.begin()    + vertex_count * 3);
+    invert_vertex_order_2d(m_geometry.uv.begin(),       m_geometry.uv.begin()       + vertex_count * 2);
 
     // SM64 3D vector to Godot 3D vector: (x, y, z) -> (z, y, -x)
-    godot::Vector3 *position_ptrw = m_position.ptrw();
-    for (int i = 0; i < vertex_count; i++)
     {
-        position_ptrw[i].z =  m_geometry.position[3*i+0] / scale_factor;
-        position_ptrw[i].y =  m_geometry.position[3*i+1] / scale_factor;
-        position_ptrw[i].x = -m_geometry.position[3*i+2] / scale_factor;
+        auto geo_position_it = m_geometry.position.begin();
+        for (auto &vec3 : m_position)
+        {
+            vec3.z =  *(geo_position_it++) / scale_factor;
+            vec3.y =  *(geo_position_it++) / scale_factor;
+            vec3.x = -*(geo_position_it++) / scale_factor;
+        }
     }
 
-    godot::Vector3 *normal_ptrw = m_normal.ptrw();
-    for (int i = 0; i < vertex_count; i++)
     {
-        normal_ptrw[i].z =  m_geometry.normal[3*i+0];
-        normal_ptrw[i].y =  m_geometry.normal[3*i+1];
-        normal_ptrw[i].x = -m_geometry.normal[3*i+2];
+        auto geo_normal_it = m_geometry.normal.begin();
+        for (auto &vec3 : m_normal)
+        {
+            vec3.z =  *(geo_normal_it++);
+            vec3.y =  *(geo_normal_it++);
+            vec3.x = -*(geo_normal_it++);
+        }
     }
 
-    godot::Color *color_ptrw = m_color.ptrw();
-    for (int i = 0; i < vertex_count; i++)
     {
-        color_ptrw[i].r = m_geometry.color[3*i+0];
-        color_ptrw[i].g = m_geometry.color[3*i+1];
-        color_ptrw[i].b = m_geometry.color[3*i+2];
-        // Add transparency to the wings of the wing cap
-        if (m_out_state.flags & 0x8 && vertex_count > 2256 && i >= vertex_count - 24)
-            color_ptrw[i].a = 0.0;
-        else
-            color_ptrw[i].a = 1.0;
+        auto geo_color_it = m_geometry.color.begin();
+        for (auto &color : m_color)
+        {
+            color.r = *(geo_color_it++);
+            color.g = *(geo_color_it++);
+            color.b = *(geo_color_it++);
+            color.a = 1.0f;
+        }
+        if (m_out_state.flags & 0x8 && vertex_count > 2256)
+        {
+            // Add transparency to the wings of the wing cap (last 24 vertexes)
+            for (auto color_it = godot::PackedColorArray::Iterator(m_color.ptrw() + vertex_count - 24), color_it_end = m_color.end(); color_it != color_it_end; ++color_it)
+                color_it->a = 0.0f;
+        }
     }
 
-    godot::Vector2 *uv_ptrw = m_uv.ptrw();
+
     if constexpr (std::is_same<real_t, float>::value)
     {
         // UV array and Vector2 array have the same memory layout, so we can just copy the data
-        memcpy(uv_ptrw, m_geometry.uv.data(), vertex_count * sizeof(godot::Vector2));
+        memcpy(m_uv.ptrw(), m_geometry.uv.data(), vertex_count * sizeof(godot::Vector2));
     }
     else
     {
-        for (int i = 0; i < vertex_count; i++)
+        auto geo_uv_it = m_geometry.uv.begin();
+        for (auto &vec2 : m_uv)
         {
-            uv_ptrw[i].x = m_geometry.uv[2*i+0];
-            uv_ptrw[i].y = m_geometry.uv[2*i+1];
+            vec2.x = *(geo_uv_it++);
+            vec2.y = *(geo_uv_it++);
         }
     }
 

@@ -89,10 +89,10 @@ private:
     bool m_reset_interpolation_next_tick = false;
 
     struct SM64MarioState m_out_state;
-    struct SM64MarioState m_out_state_hard_tick[2];
+    std::array<struct SM64MarioState, 2> m_out_state_hard_tick;
 
     SM64MarioGeometry m_geometry;
-    SM64MarioGeometry m_geometry_hard_tick[2];
+    std::array<SM64MarioGeometry, 2> m_geometry_hard_tick;
 
     godot::PackedVector3Array m_position;
     godot::PackedVector3Array m_normal;

@@ -9,15 +9,14 @@
 
 #include <sm64_global.hpp>
 
-static void invert_vertex_order(godot::PackedVector3Array &p_arr)
+_FORCE_INLINE_ static void invert_vertex_order(godot::PackedVector3Array &p_arr)
 {
-    godot::Vector3 *arr_ptrw = p_arr.ptrw();
-    const int64_t arr_size = p_arr.size();
-    for (int64_t i = 0; i < arr_size; i += 3)
+    for (auto v_it = p_arr.begin(), v_it_end = p_arr.end(); v_it != v_it_end; ++v_it)
     {
-        godot::Vector3 temp = arr_ptrw[i+0];
-        arr_ptrw[i+0] = arr_ptrw[i+1];
-        arr_ptrw[i+1] = temp;
+        auto &first = *v_it;
+        auto &second = *(++v_it);
+        std::swap(first, second);
+        ++v_it;
     }
 }
 
@@ -40,6 +39,8 @@ SM64Surfaces *SM64Surfaces::get_singleton()
 
 void SM64Surfaces::static_surfaces_load(godot::PackedVector3Array p_vertexes, godot::TypedArray<SM64SurfaceProperties> p_surface_properties_array)
 {
+    ERR_FAIL_COND_MSG(p_vertexes.size() % 3 != 0, "[libsm64-godot] Vertex array size must be a multiple of 3");
+
     const SM64Global *sm64_global = SM64Global::get_singleton();
     ERR_FAIL_NULL(sm64_global);
     ERR_FAIL_COND_MSG(!sm64_global->is_init(), "[libsm64-godot] Called static_surfaces_load but SM64Global is not init");
@@ -51,42 +52,41 @@ void SM64Surfaces::static_surfaces_load(godot::PackedVector3Array p_vertexes, go
 
     default_surface_properties.instantiate();
 
-    if (p_surface_properties_array.size() != vertexes_size / 3)
-        p_surface_properties_array.resize(vertexes_size / 3);
+    p_surface_properties_array.resize(vertexes_size / 3);
 
     invert_vertex_order(p_vertexes);
 
-    const godot::Vector3 *vertexes_ptr = p_vertexes.ptr();
-    uint32_t j = 0;
-    for (int64_t i = 0; i < vertexes_size; i += 3)
+    uint32_t si = 0;
+    for (auto v_it = p_vertexes.begin(), v_it_end = p_vertexes.end(); v_it != v_it_end;)
     {
-        godot::Ref<SM64SurfaceProperties> surface_properties = p_surface_properties_array[j];
+        godot::Ref<SM64SurfaceProperties> surface_properties = p_surface_properties_array[si];
         if (surface_properties.is_null())
             surface_properties = default_surface_properties;
 
-        surface_array[j].type = (int16_t) surface_properties->get_surface_type();
-        surface_array[j].force = (int16_t) surface_properties->get_force();
-        surface_array[j].terrain = (uint16_t) surface_properties->get_terrain_type();
-        surface_array[j].vertices[0][0] = (int32_t) ( vertexes_ptr[i+0].z * scale_factor);
-        surface_array[j].vertices[0][1] = (int32_t) ( vertexes_ptr[i+0].y * scale_factor);
-        surface_array[j].vertices[0][2] = (int32_t) (-vertexes_ptr[i+0].x * scale_factor);
-        surface_array[j].vertices[1][0] = (int32_t) ( vertexes_ptr[i+1].z * scale_factor);
-        surface_array[j].vertices[1][1] = (int32_t) ( vertexes_ptr[i+1].y * scale_factor);
-        surface_array[j].vertices[1][2] = (int32_t) (-vertexes_ptr[i+1].x * scale_factor);
-        surface_array[j].vertices[2][0] = (int32_t) ( vertexes_ptr[i+2].z * scale_factor);
-        surface_array[j].vertices[2][1] = (int32_t) ( vertexes_ptr[i+2].y * scale_factor);
-        surface_array[j].vertices[2][2] = (int32_t) (-vertexes_ptr[i+2].x * scale_factor);
+        surface_array[si].type = (int16_t) surface_properties->get_surface_type();
+        surface_array[si].force = (int16_t) surface_properties->get_force();
+        surface_array[si].terrain = (uint16_t) surface_properties->get_terrain_type();
 
-        j++;
+        for (int sj = 0; sj < 3; sj++)
+        {
+            surface_array[si].vertices[sj][0] = (int32_t) ( v_it->z * scale_factor);
+            surface_array[si].vertices[sj][1] = (int32_t) ( v_it->y * scale_factor);
+            surface_array[si].vertices[sj][2] = (int32_t) (-v_it->x * scale_factor);
+            ++v_it;
+        }
+
+        si++;
     }
 
-    sm64_static_surfaces_load(surface_array, j);
+    sm64_static_surfaces_load(surface_array, si);
 
     ::free(surface_array);
 }
 
 int SM64Surfaces::surface_object_create(godot::PackedVector3Array p_vertexes, godot::Vector3 p_position, godot::Vector3 p_rotation, godot::TypedArray<SM64SurfaceProperties> p_surface_properties_array)
 {
+    ERR_FAIL_COND_V_MSG(p_vertexes.size() % 3 != 0, -1, "[libsm64-godot] Vertex array size must be a multiple of 3");
+
     const SM64Global *sm64_global = SM64Global::get_singleton();
     ERR_FAIL_NULL_V(sm64_global, -1);
     ERR_FAIL_COND_V_MSG(!sm64_global->is_init(), -1, "[libsm64-godot] Called surface_object_create but SM64Global is not init");
@@ -100,37 +100,34 @@ int SM64Surfaces::surface_object_create(godot::PackedVector3Array p_vertexes, go
 
     default_surface_properties.instantiate();
 
-    if (p_surface_properties_array.size() != vertexes_size / 3)
-        p_surface_properties_array.resize(vertexes_size / 3);
+    p_surface_properties_array.resize(vertexes_size / 3);
 
     invert_vertex_order(p_vertexes);
 
-    const godot::Vector3 *vertexes_ptr = p_vertexes.ptr();
-    uint32_t j = 0;
-    for (int64_t i = 0; i < vertexes_size; i += 3)
+    uint32_t si = 0;
+    for (auto v_it = p_vertexes.begin(), v_it_end = p_vertexes.end(); v_it != v_it_end;)
     {
-        godot::Ref<SM64SurfaceProperties> surface_properties = p_surface_properties_array[j];
+        godot::Ref<SM64SurfaceProperties> surface_properties = p_surface_properties_array[si];
         if (surface_properties.is_null())
             surface_properties = default_surface_properties;
 
-        surface_array[j].type = (int16_t) surface_properties->get_surface_type();
-        surface_array[j].force = (int16_t) surface_properties->get_force();
-        surface_array[j].terrain = (uint16_t) surface_properties->get_terrain_type();
-        surface_array[j].vertices[0][0] = (int32_t) ( vertexes_ptr[i+0].z * scale_factor);
-        surface_array[j].vertices[0][1] = (int32_t) ( vertexes_ptr[i+0].y * scale_factor);
-        surface_array[j].vertices[0][2] = (int32_t) (-vertexes_ptr[i+0].x * scale_factor);
-        surface_array[j].vertices[1][0] = (int32_t) ( vertexes_ptr[i+1].z * scale_factor);
-        surface_array[j].vertices[1][1] = (int32_t) ( vertexes_ptr[i+1].y * scale_factor);
-        surface_array[j].vertices[1][2] = (int32_t) (-vertexes_ptr[i+1].x * scale_factor);
-        surface_array[j].vertices[2][0] = (int32_t) ( vertexes_ptr[i+2].z * scale_factor);
-        surface_array[j].vertices[2][1] = (int32_t) ( vertexes_ptr[i+2].y * scale_factor);
-        surface_array[j].vertices[2][2] = (int32_t) (-vertexes_ptr[i+2].x * scale_factor);
+        surface_array[si].type = (int16_t) surface_properties->get_surface_type();
+        surface_array[si].force = (int16_t) surface_properties->get_force();
+        surface_array[si].terrain = (uint16_t) surface_properties->get_terrain_type();
 
-        j++;
+        for (int sj = 0; sj < 3; sj++)
+        {
+            surface_array[si].vertices[sj][0] = (int32_t) ( v_it->z * scale_factor);
+            surface_array[si].vertices[sj][1] = (int32_t) ( v_it->y * scale_factor);
+            surface_array[si].vertices[sj][2] = (int32_t) (-v_it->x * scale_factor);
+            ++v_it;
+        }
+
+        si++;
     }
 
     surface_object.surfaces = surface_array;
-    surface_object.surfaceCount = j;
+    surface_object.surfaceCount = si;
 
     surface_object.transform.position[0] =  p_position.z * scale_factor;
     surface_object.transform.position[1] =  p_position.y * scale_factor;
