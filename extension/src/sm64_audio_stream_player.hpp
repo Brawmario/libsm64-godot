@@ -85,7 +85,6 @@ public:
     // void sm64_set_sound_volume(float vol);
 
     void set_internal_volume(real_t p_volume);
-    // void set_reverb(int p_reverb);
 
 protected:
     static void _bind_methods();

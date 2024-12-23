@@ -18,20 +18,22 @@ void SM64AudioStreamPlayer::audio_tick()
     const int buffered_frames = m_playback_frames_buffer_length - playback->get_frames_available();
     const int buffered_samples = buffered_frames / 2;
 
-    int16_t audio_buffer[g_sm64_audio_buffer_length];
-    const int num_audio_samples = sm64_audio_tick(buffered_samples, 1100, audio_buffer);
+    std::array<int16_t, g_sm64_audio_buffer_length> audio_buffer;
+    const int num_audio_samples = sm64_audio_tick(buffered_samples, 1100, audio_buffer.data());
 
     if (buffered_samples > 6000)
         return;
 
     const int frame_count = num_audio_samples * 2;
     m_frames.resize(frame_count);
-    godot::Vector2 *frames_ptrw = m_frames.ptrw();
-    for (int i = 0; i < frame_count; i++)
+
+    auto audio_buffer_it = audio_buffer.begin();
+    for (auto &frame : m_frames)
     {
-        frames_ptrw[i].x = real_t(audio_buffer[2 * i + 0]) / 32767.0;
-        frames_ptrw[i].y = real_t(audio_buffer[2 * i + 1]) / 32767.0;
+        frame.x = real_t(*(audio_buffer_it++)) / 32767.0;
+        frame.y = real_t(*(audio_buffer_it++)) / 32767.0;
     }
+
     playback->push_buffer(m_frames);
 }
 
@@ -108,11 +110,6 @@ void SM64AudioStreamPlayer::set_internal_volume(real_t p_volume)
     sm64_set_sound_volume(p_volume);
 }
 
-// void SM64AudioStreamPlayer::set_reverb(int p_reverb)
-// {
-//     sm64_set_reverb((uint8_t) p_reverb);
-// }
-
 void SM64AudioStreamPlayer::_bind_methods()
 {
     godot::ClassDB::bind_method(godot::D_METHOD("play_music", "seq_id", "variant"), &SM64AudioStreamPlayer::play_music, DEFVAL(false));
@@ -120,7 +117,6 @@ void SM64AudioStreamPlayer::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("stop_current_background_music"), &SM64AudioStreamPlayer::stop_current_background_music);
     godot::ClassDB::bind_method(godot::D_METHOD("get_current_background_music"), &SM64AudioStreamPlayer::get_current_background_music);
     godot::ClassDB::bind_method(godot::D_METHOD("set_internal_volume", "volume"), &SM64AudioStreamPlayer::set_internal_volume);
-    // godot::ClassDB::bind_method(godot::D_METHOD("set_reverb", "reverb"), &SM64Global::set_reverb);
 
     BIND_ENUM_CONSTANT(SEQ_PLAYER_LEVEL);
     BIND_ENUM_CONSTANT(SEQ_PLAYER_ENV);
