@@ -11,12 +11,11 @@
 
 _FORCE_INLINE_ static void invert_vertex_order(godot::PackedVector3Array &p_arr)
 {
-    for (auto v_it = p_arr.begin(), v_it_end = p_arr.end(); v_it != v_it_end; ++v_it)
+    godot::Vector3 *vertexes = p_arr.ptrw();
+    int64_t vertexes_size = p_arr.size();
+    for (int i = 0; i < vertexes_size; i += 3)
     {
-        auto &first = *v_it;
-        auto &second = *(++v_it);
-        std::swap(first, second);
-        ++v_it;
+        std::swap(vertexes[i], vertexes[i + 1]);
     }
 }
 
@@ -56,8 +55,9 @@ void SM64Surfaces::static_surfaces_load(godot::PackedVector3Array p_vertexes, go
 
     invert_vertex_order(p_vertexes);
 
-    uint32_t si = 0;
-    for (auto v_it = p_vertexes.begin(), v_it_end = p_vertexes.end(); v_it != v_it_end;)
+    godot::Vector3 *vertexes_ptrw = p_vertexes.ptrw();
+    uint32_t si;
+    for (si = 0; si < vertexes_size / 3; si++)
     {
         godot::Ref<SM64SurfaceProperties> surface_properties = p_surface_properties_array[si];
         if (surface_properties.is_null())
@@ -69,13 +69,12 @@ void SM64Surfaces::static_surfaces_load(godot::PackedVector3Array p_vertexes, go
 
         for (int sj = 0; sj < 3; sj++)
         {
-            surface_array[si].vertices[sj][0] = (int32_t) ( v_it->z * scale_factor);
-            surface_array[si].vertices[sj][1] = (int32_t) ( v_it->y * scale_factor);
-            surface_array[si].vertices[sj][2] = (int32_t) (-v_it->x * scale_factor);
-            ++v_it;
+            int32_t *sa_vertex = (int32_t *) &surface_array[si].vertices[sj];
+            auto &vec3 = vertexes_ptrw[si * 3 + sj];
+            sa_vertex[0] = (int32_t) ( vec3.z * scale_factor);
+            sa_vertex[1] = (int32_t) ( vec3.y * scale_factor);
+            sa_vertex[2] = (int32_t) (-vec3.x * scale_factor);
         }
-
-        si++;
     }
 
     sm64_static_surfaces_load(surface_array, si);
@@ -104,8 +103,9 @@ int SM64Surfaces::surface_object_create(godot::PackedVector3Array p_vertexes, go
 
     invert_vertex_order(p_vertexes);
 
-    uint32_t si = 0;
-    for (auto v_it = p_vertexes.begin(), v_it_end = p_vertexes.end(); v_it != v_it_end;)
+    godot::Vector3 *vertexes_ptrw = p_vertexes.ptrw();
+    uint32_t si;
+    for (si = 0; si < vertexes_size / 3; si++)
     {
         godot::Ref<SM64SurfaceProperties> surface_properties = p_surface_properties_array[si];
         if (surface_properties.is_null())
@@ -117,13 +117,12 @@ int SM64Surfaces::surface_object_create(godot::PackedVector3Array p_vertexes, go
 
         for (int sj = 0; sj < 3; sj++)
         {
-            surface_array[si].vertices[sj][0] = (int32_t) ( v_it->z * scale_factor);
-            surface_array[si].vertices[sj][1] = (int32_t) ( v_it->y * scale_factor);
-            surface_array[si].vertices[sj][2] = (int32_t) (-v_it->x * scale_factor);
-            ++v_it;
+            int32_t *sa_vertex = (int32_t *) &surface_array[si].vertices[sj];
+            auto &vec3 = vertexes_ptrw[si * 3 + sj];
+            sa_vertex[0] = (int32_t) ( vec3.z * scale_factor);
+            sa_vertex[1] = (int32_t) ( vec3.y * scale_factor);
+            sa_vertex[2] = (int32_t) (-vec3.x * scale_factor);
         }
-
-        si++;
     }
 
     surface_object.surfaces = surface_array;

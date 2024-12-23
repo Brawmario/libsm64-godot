@@ -197,7 +197,7 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
         for (int i = 0; i < vertex_count; i++)
         {
             auto &pos = position_ptrw[i];
-            auto *geo_pos = &m_geometry.position[3*i];
+            auto *geo_pos = &m_geometry.position[3 * i];
             pos.z =   geo_pos[0] / scale_factor;
             pos.y =   geo_pos[1] / scale_factor;
             pos.x =  -geo_pos[2] / scale_factor;
@@ -205,32 +205,34 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     }
 
     {
-        auto geo_normal_it = m_geometry.normal.begin();
-        for (auto &vec3 : m_normal)
+        godot::Vector3 *normal_ptrw = m_normal.ptrw();
+        for (int i = 0; i < vertex_count; i++)
         {
-            vec3.z =  *(geo_normal_it++);
-            vec3.y =  *(geo_normal_it++);
-            vec3.x = -*(geo_normal_it++);
+            auto &normal = normal_ptrw[i];
+            auto *geo_normal = &m_geometry.normal[3 * i];
+            normal.z =   geo_normal[0];
+            normal.y =   geo_normal[1];
+            normal.x =  -geo_normal[2];
         }
     }
 
     {
-        auto geo_color_it = m_geometry.color.begin();
-        for (auto &color : m_color)
+        const bool wing_cap_on = m_out_state.flags & 0x8;
+        godot::Color *color_ptrw = m_color.ptrw();
+        for (int i = 0; i < vertex_count; i++)
         {
-            color.r = *(geo_color_it++);
-            color.g = *(geo_color_it++);
-            color.b = *(geo_color_it++);
-            color.a = 1.0f;
-        }
-        if (m_out_state.flags & 0x8 && vertex_count > 2256)
-        {
+            auto &color = color_ptrw[i];
+            auto *geo_color = &m_geometry.color[3 * i];
+            color.r = geo_color[0];
+            color.g = geo_color[1];
+            color.b = geo_color[2];
             // Add transparency to the wings of the wing cap (last 24 vertexes)
-            for (auto color_it = godot::PackedColorArray::Iterator(m_color.ptrw() + vertex_count - 24), color_it_end = m_color.end(); color_it != color_it_end; ++color_it)
-                color_it->a = 0.0f;
+            if (wing_cap_on && vertex_count > 2256 && i >= vertex_count - 24)
+                color.a = 0.0f;
+            else
+                color.a = 1.0f;
         }
     }
-
 
     if constexpr (std::is_same<real_t, float>::value)
     {
@@ -239,11 +241,13 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
     }
     else
     {
-        auto geo_uv_it = m_geometry.uv.begin();
-        for (auto &vec2 : m_uv)
+        godot::Vector2 *uv_ptrw = m_uv.ptrw();
+        for (int i = 0; i < vertex_count; i++)
         {
-            vec2.x = *(geo_uv_it++);
-            vec2.y = *(geo_uv_it++);
+            auto &uv = uv_ptrw[i];
+            auto *geo_uv = &m_geometry.uv[2 * i];
+            uv.x = geo_uv[0];
+            uv.y = geo_uv[1];
         }
     }
 

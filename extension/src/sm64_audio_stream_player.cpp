@@ -27,11 +27,13 @@ void SM64AudioStreamPlayer::audio_tick()
     const int frame_count = num_audio_samples * 2;
     m_frames.resize(frame_count);
 
-    auto audio_buffer_it = audio_buffer.begin();
-    for (auto &frame : m_frames)
+    godot::Vector2 *frames_ptrw = m_frames.ptrw();
+    for (int i = 0; i < frame_count; i++)
     {
-        frame.x = real_t(*(audio_buffer_it++)) / 32767.0;
-        frame.y = real_t(*(audio_buffer_it++)) / 32767.0;
+        auto &frame = frames_ptrw[i];
+        auto *audio_buffer_frame = &audio_buffer[2 * i];
+        frame.x = real_t(audio_buffer_frame[0]) / 32767.0;
+        frame.y = real_t(audio_buffer_frame[1]) / 32767.0;
     }
 
     playback->push_buffer(m_frames);
