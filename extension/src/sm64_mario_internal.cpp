@@ -193,12 +193,14 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
 
     // SM64 3D vector to Godot 3D vector: (x, y, z) -> (z, y, -x)
     {
-        auto geo_position_it = m_geometry.position.begin();
-        for (auto &vec3 : m_position)
+        godot::Vector3 *position_ptrw = m_position.ptrw();
+        for (int i = 0; i < vertex_count; i++)
         {
-            vec3.z =  *(geo_position_it++) / scale_factor;
-            vec3.y =  *(geo_position_it++) / scale_factor;
-            vec3.x = -*(geo_position_it++) / scale_factor;
+            auto &pos = position_ptrw[i];
+            auto *geo_pos = &m_geometry.position[3*i];
+            pos.z =   geo_pos[0] / scale_factor;
+            pos.y =   geo_pos[1] / scale_factor;
+            pos.x =  -geo_pos[2] / scale_factor;
         }
     }
 
