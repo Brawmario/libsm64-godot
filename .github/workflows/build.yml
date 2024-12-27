@@ -193,7 +193,7 @@ jobs:
       - name: Install Wine
         id: wine_install
         run: |
-          sudo apt install wine64
+          sudo apt update && sudo apt install wine64
           echo "wine_path=$(which wine64)" >> $GITHUB_OUTPUT
 
       - name: Export demo
