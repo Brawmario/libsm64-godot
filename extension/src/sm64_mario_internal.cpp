@@ -83,11 +83,11 @@ int SM64MarioInternal::mario_create(godot::Vector3 p_position, godot::Vector3 p_
     return m_id;
 }
 
-godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_input)
+godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Ref<SM64Input> p_input)
 {
     godot::Dictionary ret;
-    godot::Array mesh_array;
 
+    ERR_FAIL_NULL_V(p_input, ret);
     ERR_FAIL_COND_V_MSG(m_id < 0, ret, "[libsm64-godot] tried to tick non existent Mario");
 
     const SM64Global *sm64_global = SM64Global::get_singleton();
@@ -96,21 +96,7 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
 
     const real_t scale_factor = sm64_global->get_scale_factor();
 
-    const godot::Vector2 cam_look = p_input["cam_look"];
-    const godot::Vector2 stick = p_input["stick"];
-    const bool a = p_input["a"];
-    const bool b = p_input["b"];
-    const bool z = p_input["z"];
-
-    const struct SM64MarioInputs inputs = {
-        -cam_look.y, // camLookX
-        cam_look.x, // camLookZ
-        stick.x,
-        stick.y,
-        (uint8_t) a,
-        (uint8_t) b,
-        (uint8_t) z
-    };
+    const struct SM64MarioInputs inputs = p_input->to_sm64_mario_inputs();
 
     // First call will always trigger a tick
     if (unlikely(m_first_tick))
@@ -177,6 +163,7 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Dictionary p_inpu
 
     const int vertex_count = m_geometry.triangles_used() * 3;
 
+    godot::Array mesh_array;
     mesh_array.resize(godot::ArrayMesh::ARRAY_MAX);
     m_position.resize(vertex_count);
     m_normal.resize(vertex_count);

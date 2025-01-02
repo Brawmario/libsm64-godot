@@ -3,6 +3,8 @@
 
 #include <godot_cpp/classes/ref.hpp>
 
+#include <libsm64.h>
+
 #ifdef WIN32
 #include <windows.h>
 #endif
@@ -28,6 +30,19 @@ public:
 
     void set_z(bool value);
     bool get_z() const;
+
+    _FORCE_INLINE_ struct SM64MarioInputs to_sm64_mario_inputs() const
+    {
+        return {
+            -cam_look.y,
+            cam_look.x,
+            stick.x,
+            stick.y,
+            a,
+            b,
+            z
+        };
+    }
 
 protected:
     static void _bind_methods();

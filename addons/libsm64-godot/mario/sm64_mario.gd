@@ -204,8 +204,7 @@ var _metal_material := preload("res://addons/libsm64-godot/mario/mario_metal_mat
 var _wing_material := preload("res://addons/libsm64-godot/mario/mario_wing_material.tres") as StandardMaterial3D
 var _material: StandardMaterial3D
 var _id := -1
-# FIXME: SM64Input stopped working in beta 15
-var _mario_input := {}
+var _mario_input := SM64Input.new()
 
 
 func _ready() -> void:

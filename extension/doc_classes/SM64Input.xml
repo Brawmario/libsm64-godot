@@ -16,6 +16,9 @@
 		</member>
 		<member name="cam_look" type="Vector2" setter="set_cam_look" getter="get_cam_look" default="Vector2(0, 0)">
 			Camera vector information for calculating the desired movement direction.
+			[member Vector2.x] should the [code]x[/code] coordinate of the 3D vector representing the direction the game camera is facing.
+			[member Vector2.y] should the [code]z[/code] coordinate of the 3D vector representing the direction the game camera is facing.
+			[b]Note:[/b] the 3D vector of the facing direction of a [Camera3D] node is [member Camera3D.global_transform.basis.z].
 		</member>
 		<member name="stick" type="Vector2" setter="set_stick" getter="get_stick" default="Vector2(0, 0)">
 			Input vector of the Nintendo 64 controller's joystick

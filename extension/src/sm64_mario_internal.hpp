@@ -6,6 +6,7 @@
 
 #include <sm64_surface_properties.hpp>
 #include <sm64_mario_geometry.hpp>
+#include <sm64_input.hpp>
 
 #include <libsm64.h>
 
@@ -48,7 +49,7 @@ public:
      *     "array_mesh": godot::Ref<godot::ArrayMesh>,
      * }
      */
-    godot::Dictionary tick(real_t delta, godot::Dictionary p_input);
+    godot::Dictionary tick(real_t delta, godot::Ref<SM64Input> p_input);
 
     void mario_delete();
 
