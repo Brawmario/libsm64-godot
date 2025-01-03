@@ -33,9 +33,6 @@ _FORCE_INLINE_ static void invert_vertex_order_3d(It p_it, It p_end)
 
 static void lerp(struct SM64MarioState &out, const struct SM64MarioState &last, const struct SM64MarioState &current, float amount)
 {
-    // Copy current first to account for unlerped members
-    out = current;
-
     for (int i = 0; i < 3; i++)
         out.position[i] = godot::Math::lerp(last.position[i], current.position[i], amount);
 
@@ -43,6 +40,12 @@ static void lerp(struct SM64MarioState &out, const struct SM64MarioState &last, 
         out.velocity[i] = godot::Math::lerp(last.velocity[i], current.velocity[i], amount);
 
     out.faceAngle = godot::Math::lerp_angle(last.faceAngle, current.faceAngle, amount);
+
+    out.health = current.health;
+    out.action = current.action;
+    out.flags = current.flags;
+    out.particleFlags = current.particleFlags;
+    out.invincTimer = current.invincTimer;
 }
 
 void SM64MarioInternal::set_interpolate(bool value)
@@ -81,6 +84,116 @@ int SM64MarioInternal::mario_create(godot::Vector3 p_position, godot::Vector3 p_
     m_id = sm64_mario_create(x, y, z);
 
     return m_id;
+}
+
+inline static void sm64_to_godot(float *sm64_vec_arr, godot::Vector3 *godot_vec_arr, int vertex_count, real_t scale_factor)
+{
+    for (int i = 0; i < vertex_count; i += 3)
+    {
+        godot::Vector3 *godot_vec = &godot_vec_arr[i];
+        float *sm64_vec = &sm64_vec_arr[3 * i];
+
+        // SM64 3D vector to Godot 3D vector
+        // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
+        // SM64 vector(x, y, z) -> Godot vector(-z, y, x)
+
+        godot_vec[0].x = -sm64_vec[(3 * 1) + 2] / scale_factor;
+        godot_vec[0].y =  sm64_vec[(3 * 1) + 1] / scale_factor;
+        godot_vec[0].z =  sm64_vec[(3 * 1) + 0] / scale_factor;
+
+        godot_vec[1].x = -sm64_vec[(3 * 0) + 2] / scale_factor;
+        godot_vec[1].y =  sm64_vec[(3 * 0) + 1] / scale_factor;
+        godot_vec[1].z =  sm64_vec[(3 * 0) + 0] / scale_factor;
+
+        godot_vec[2].x = -sm64_vec[(3 * 2) + 2] / scale_factor;
+        godot_vec[2].y =  sm64_vec[(3 * 2) + 1] / scale_factor;
+        godot_vec[2].z =  sm64_vec[(3 * 2) + 0] / scale_factor;
+    }
+}
+
+inline static void sm64_to_godot(float *sm64_vec_arr, godot::Vector3 *godot_vec_arr, int vertex_count)
+{
+    for (int i = 0; i < vertex_count; i += 3)
+    {
+        godot::Vector3 *godot_vec = &godot_vec_arr[i];
+        float *sm64_vec = &sm64_vec_arr[3 * i];
+
+        // SM64 3D vector to Godot 3D vector
+        // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
+        // Coordiantes shift: SM64(x, y, z) -> Godot(-z, y, x)
+
+        godot_vec[0].x = -sm64_vec[(3 * 1) + 2];
+        godot_vec[0].y =  sm64_vec[(3 * 1) + 1];
+        godot_vec[0].z =  sm64_vec[(3 * 1) + 0];
+
+        godot_vec[1].x = -sm64_vec[(3 * 0) + 2];
+        godot_vec[1].y =  sm64_vec[(3 * 0) + 1];
+        godot_vec[1].z =  sm64_vec[(3 * 0) + 0];
+
+        godot_vec[2].x = -sm64_vec[(3 * 2) + 2];
+        godot_vec[2].y =  sm64_vec[(3 * 2) + 1];
+        godot_vec[2].z =  sm64_vec[(3 * 2) + 0];
+    }
+}
+
+inline static void sm64_to_godot(float *sm64_color_arr, godot::Color *godot_color_arr, int vertex_count, bool wing_cap_on)
+{
+    for (int i = 0; i < vertex_count; i += 3)
+    {
+        godot::Color *godot_color = &godot_color_arr[i];
+        float *sm64_color = &sm64_color_arr[3 * i];
+
+        // SM64 color to Godot color
+        // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
+        // SM64 color(r, g, b) -> Godot color(r, g, b, a)
+
+        godot_color[0].r = sm64_color[(3 * 1) + 0];
+        godot_color[0].g = sm64_color[(3 * 1) + 1];
+        godot_color[0].b = sm64_color[(3 * 1) + 2];
+
+        godot_color[1].r = sm64_color[(3 * 0) + 0];
+        godot_color[1].g = sm64_color[(3 * 0) + 1];
+        godot_color[1].b = sm64_color[(3 * 0) + 2];
+
+        godot_color[2].r = sm64_color[(3 * 2) + 0];
+        godot_color[2].g = sm64_color[(3 * 2) + 1];
+        godot_color[2].b = sm64_color[(3 * 2) + 2];
+
+        // Add transparency to the wings of the wing cap (last 24 vertexes)
+        if (wing_cap_on && vertex_count > 2256 && i >= vertex_count - 24)
+        {
+            godot_color[0].a = 0.0f;
+            godot_color[1].a = 0.0f;
+            godot_color[2].a = 0.0f;
+        }
+        else
+        {
+            godot_color[0].a = 1.0f;
+            godot_color[1].a = 1.0f;
+            godot_color[2].a = 1.0f;
+        }
+    }
+}
+
+inline static void sm64_to_godot(float *sm64_vec_arr, godot::Vector2 *godot_vec_arr, int vertex_count)
+{
+    for (int i = 0; i < vertex_count; i += 3)
+    {
+        godot::Vector2 *godot_vec = &godot_vec_arr[i];
+        float *sm64_vec = &sm64_vec_arr[2 * i];
+
+        // SM64 2D vector to Godot 2D vector
+        // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
+
+        godot_vec[0].x = sm64_vec[(2 * 1) + 0];
+        godot_vec[0].y = sm64_vec[(2 * 1) + 1];
+
+        godot_vec[1].x = sm64_vec[(2 * 0) + 0];
+        godot_vec[1].y = sm64_vec[(2 * 0) + 1];
+
+        godot_vec[2].x = sm64_vec[(2 * 2) + 0];
+        godot_vec[2].y = sm64_vec[(2 * 2) + 1];
+    }
 }
 
 godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Ref<SM64Input> p_input)
@@ -170,73 +283,10 @@ godot::Dictionary SM64MarioInternal::tick(real_t delta, godot::Ref<SM64Input> p_
     m_color.resize(vertex_count);
     m_uv.resize(vertex_count);
 
-    // SM64 to godot conversion
-
-    // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
-    invert_vertex_order_3d(m_geometry.position.begin(), m_geometry.position.begin() + vertex_count * 3);
-    invert_vertex_order_3d(m_geometry.normal.begin(),   m_geometry.normal.begin()   + vertex_count * 3);
-    invert_vertex_order_3d(m_geometry.color.begin(),    m_geometry.color.begin()    + vertex_count * 3);
-    invert_vertex_order_2d(m_geometry.uv.begin(),       m_geometry.uv.begin()       + vertex_count * 2);
-
-    // SM64 3D vector to Godot 3D vector: (x, y, z) -> (z, y, -x)
-    {
-        godot::Vector3 *position_ptrw = m_position.ptrw();
-        for (int i = 0; i < vertex_count; i++)
-        {
-            auto &pos = position_ptrw[i];
-            auto *geo_pos = &m_geometry.position[3 * i];
-            pos.z =   geo_pos[0] / scale_factor;
-            pos.y =   geo_pos[1] / scale_factor;
-            pos.x =  -geo_pos[2] / scale_factor;
-        }
-    }
-
-    {
-        godot::Vector3 *normal_ptrw = m_normal.ptrw();
-        for (int i = 0; i < vertex_count; i++)
-        {
-            auto &normal = normal_ptrw[i];
-            auto *geo_normal = &m_geometry.normal[3 * i];
-            normal.z =   geo_normal[0];
-            normal.y =   geo_normal[1];
-            normal.x =  -geo_normal[2];
-        }
-    }
-
-    {
-        const bool wing_cap_on = m_out_state.flags & 0x8;
-        godot::Color *color_ptrw = m_color.ptrw();
-        for (int i = 0; i < vertex_count; i++)
-        {
-            auto &color = color_ptrw[i];
-            auto *geo_color = &m_geometry.color[3 * i];
-            color.r = geo_color[0];
-            color.g = geo_color[1];
-            color.b = geo_color[2];
-            // Add transparency to the wings of the wing cap (last 24 vertexes)
-            if (wing_cap_on && vertex_count > 2256 && i >= vertex_count - 24)
-                color.a = 0.0f;
-            else
-                color.a = 1.0f;
-        }
-    }
-
-    if constexpr (std::is_same<real_t, float>::value)
-    {
-        // UV array and Vector2 array have the same memory layout, so we can just copy the data
-        memcpy(m_uv.ptrw(), m_geometry.uv.data(), vertex_count * sizeof(godot::Vector2));
-    }
-    else
-    {
-        godot::Vector2 *uv_ptrw = m_uv.ptrw();
-        for (int i = 0; i < vertex_count; i++)
-        {
-            auto &uv = uv_ptrw[i];
-            auto *geo_uv = &m_geometry.uv[2 * i];
-            uv.x = geo_uv[0];
-            uv.y = geo_uv[1];
-        }
-    }
+    sm64_to_godot(m_geometry.position.data(), m_position.ptrw(), vertex_count, scale_factor);
+    sm64_to_godot(m_geometry.normal.data(), m_normal.ptrw(), vertex_count);
+    sm64_to_godot(m_geometry.color.data(), m_color.ptrw(), vertex_count, m_out_state.flags & 0x8);
+    sm64_to_godot(m_geometry.uv.data(), m_uv.ptrw(), vertex_count);
 
     mesh_array[godot::ArrayMesh::ARRAY_VERTEX] = m_position;
     mesh_array[godot::ArrayMesh::ARRAY_NORMAL] = m_normal;
