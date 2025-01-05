@@ -1,8 +1,5 @@
 #include <sm64_surfaces.hpp>
 
-#include <cstdlib>
-#include <cstring>
-
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/core/math.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
@@ -46,7 +43,7 @@ void SM64Surfaces::static_surfaces_load(godot::PackedVector3Array p_vertexes, go
 
     const real_t scale_factor = sm64_global->get_scale_factor();
     const int64_t vertexes_size = p_vertexes.size();
-    struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes_size / 3);
+    struct SM64Surface* surface_array = static_cast<SM64Surface*>(memalloc(sizeof(SM64Surface) * vertexes_size / 3));
     godot::Ref<SM64SurfaceProperties> default_surface_properties;
 
     default_surface_properties.instantiate();
@@ -79,7 +76,7 @@ void SM64Surfaces::static_surfaces_load(godot::PackedVector3Array p_vertexes, go
 
     sm64_static_surfaces_load(surface_array, si);
 
-    ::free(surface_array);
+    memfree(surface_array);
 }
 
 int SM64Surfaces::surface_object_create(godot::PackedVector3Array p_vertexes, godot::Vector3 p_position, godot::Vector3 p_rotation, godot::TypedArray<SM64SurfaceProperties> p_surface_properties_array)
@@ -94,7 +91,7 @@ int SM64Surfaces::surface_object_create(godot::PackedVector3Array p_vertexes, go
     const int64_t vertexes_size = p_vertexes.size();
     struct SM64SurfaceObject surface_object;
     int id;
-    struct SM64Surface *surface_array = (SM64Surface *) malloc(sizeof(SM64Surface) * vertexes_size / 3);
+    struct SM64Surface* surface_array = static_cast<SM64Surface*>(memalloc(sizeof(SM64Surface) * vertexes_size / 3));
     godot::Ref<SM64SurfaceProperties> default_surface_properties;
 
     default_surface_properties.instantiate();
@@ -138,7 +135,7 @@ int SM64Surfaces::surface_object_create(godot::PackedVector3Array p_vertexes, go
 
     id = sm64_surface_object_create(&surface_object);
 
-    ::free(surface_array);
+    memfree(surface_array);
 
     return id;
 }
