@@ -15,11 +15,18 @@
 #include <sm64_surface_properties.hpp>
 #include <sm64_audio_stream_player.hpp>
 
+#include <libsm64.hpp>
+#include <libsm64_mario_inputs.hpp>
+#include <libsm64_mario_state.hpp>
+#include <libsm64_mario_tick_output.hpp>
+#include <libsm64_surface_array.hpp>
+
 using namespace godot;
 
-static SM64Global *_sm64_global;
-static SM64Surfaces *_sm64_surfaces;
-static SM64Audio *_sm64_audio;
+static SM64Global *s_sm64_global;
+static SM64Surfaces *s_sm64_surfaces;
+static SM64Audio *s_sm64_audio;
+static LibSM64 *s_libsm64;
 
 void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -34,14 +41,23 @@ void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<SM64SurfaceProperties>();
     ClassDB::register_class<SM64AudioStreamPlayer>();
 
-    _sm64_global = memnew(SM64Global);
+    ClassDB::register_class<LibSM64>();
+    ClassDB::register_class<LibSM64MarioInputs>();
+    ClassDB::register_class<LibSM64MarioState>();
+    ClassDB::register_class<LibSM64MarioTickOutput>();
+    ClassDB::register_class<LibSM64SurfaceArray>();
+
+    s_sm64_global = memnew(SM64Global);
     Engine::get_singleton()->register_singleton("SM64Global", SM64Global::get_singleton());
 
-    _sm64_surfaces = memnew(SM64Surfaces);
+    s_sm64_surfaces = memnew(SM64Surfaces);
     Engine::get_singleton()->register_singleton("SM64Surfaces", SM64Surfaces::get_singleton());
 
-    _sm64_audio = memnew(SM64Audio);
+    s_sm64_audio = memnew(SM64Audio);
     Engine::get_singleton()->register_singleton("SM64Audio", SM64Audio::get_singleton());
+
+    s_libsm64 = memnew(LibSM64);
+    Engine::get_singleton()->register_singleton("LibSM64", LibSM64::get_singleton());
 }
 
 void uninitialize_libsm64gd_module(ModuleInitializationLevel p_level) {
@@ -50,13 +66,16 @@ void uninitialize_libsm64gd_module(ModuleInitializationLevel p_level) {
     }
 
     Engine::get_singleton()->unregister_singleton("SM64Global");
-    memdelete(_sm64_global);
+    memdelete(s_sm64_global);
 
     Engine::get_singleton()->unregister_singleton("SM64Surfaces");
-    memdelete(_sm64_surfaces);
+    memdelete(s_sm64_surfaces);
 
     Engine::get_singleton()->unregister_singleton("SM64Audio");
-    memdelete(_sm64_audio);
+    memdelete(s_sm64_audio);
+
+    Engine::get_singleton()->unregister_singleton("LibSM64");
+    memdelete(s_libsm64);
 }
 
 extern "C" {
