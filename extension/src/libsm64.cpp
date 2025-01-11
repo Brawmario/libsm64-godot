@@ -255,8 +255,8 @@ godot::PackedVector2Array LibSM64::audio_tick(int p_queued_frames, int p_desired
     {
         auto &frame = frames_ptrw[i];
         auto *audio_buffer_frame_pair = &audio_buffer[2 * i];
-        frame.x = real_t(audio_buffer_frame_pair[0]) / 32767.0;
-        frame.y = real_t(audio_buffer_frame_pair[1]) / 32767.0;
+        frame.x = static_cast<real_t>(audio_buffer_frame_pair[0]) / 32767.0;
+        frame.y = static_cast<real_t>(audio_buffer_frame_pair[1]) / 32767.0;
     }
 
     return frames;
@@ -269,18 +269,18 @@ void LibSM64::static_surfaces_load(const godot::Ref<LibSM64SurfaceArray> &p_surf
     sm64_static_surfaces_load(p_surfaces->sm64_surfaces.data(), p_surfaces->sm64_surfaces.size());
 }
 
-int LibSM64::mario_create(const godot::Vector3 &p_position)
+int32_t LibSM64::mario_create(const godot::Vector3 &p_position)
 {
     float x, y, z;
     godot_to_sm64(p_position, x, y, z, scale_factor);
 
-    int mario_id = sm64_mario_create(x, y, z);
+    int32_t mario_id = sm64_mario_create(x, y, z);
     ERR_FAIL_COND_V_MSG(mario_id < 0, mario_id, "[libsm64-godot] Failed to create Mario. Have you created a floor for him to stand on yet?");
 
     return mario_id;
 }
 
-godot::Ref<LibSM64MarioTickOutput> LibSM64::mario_tick(int p_mario_id, const godot::Ref<LibSM64MarioInputs> &p_inputs)
+godot::Ref<LibSM64MarioTickOutput> LibSM64::mario_tick(int32_t p_mario_id, const godot::Ref<LibSM64MarioInputs> &p_inputs)
 {
     ERR_FAIL_COND_V(p_mario_id < 0, nullptr);
     ERR_FAIL_NULL_V(p_inputs, nullptr);
@@ -317,49 +317,49 @@ godot::Ref<LibSM64MarioTickOutput> LibSM64::mario_tick(int p_mario_id, const god
     return memnew(LibSM64MarioTickOutput(mario_state, array_mesh_triangles, -mario_state->get_position(), godot::Vector3(1.0 / scale_factor, 1.0 / scale_factor, 1.0 / scale_factor)));
 }
 
-void LibSM64::mario_delete(int p_mario_id)
+void LibSM64::mario_delete(int32_t p_mario_id)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_mario_delete(p_mario_id);
 }
 
-void LibSM64::set_mario_action(int p_mario_id, int p_action)
+void LibSM64::set_mario_action(int32_t p_mario_id, uint32_t p_action)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_set_mario_action(p_mario_id, p_action);
 }
 
-void LibSM64::set_mario_action_arg(int p_mario_id, int p_action, int p_action_arg)
+void LibSM64::set_mario_action_arg(int32_t p_mario_id, uint32_t p_action, uint32_t p_action_arg)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_set_mario_action_arg(p_mario_id, p_action, p_action_arg);
 }
 
-void LibSM64::set_mario_animation(int p_mario_id, int p_anim_id)
+void LibSM64::set_mario_animation(int32_t p_mario_id, int32_t p_anim_id)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_set_mario_animation(p_mario_id, p_anim_id);
 }
 
-void LibSM64::set_mario_anim_frame(int p_mario_id, int p_anim_frame)
+void LibSM64::set_mario_anim_frame(int32_t p_mario_id, int16_t p_anim_frame)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_set_mario_anim_frame(p_mario_id, p_anim_frame);
 }
 
-void LibSM64::set_mario_state(int p_mario_id, int p_flags)
+void LibSM64::set_mario_state(int32_t p_mario_id, uint32_t p_flags)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_set_mario_state(p_mario_id, p_flags);
 }
 
-void LibSM64::set_mario_position(int p_mario_id, const godot::Vector3 &p_position)
+void LibSM64::set_mario_position(int32_t p_mario_id, const godot::Vector3 &p_position)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
@@ -368,7 +368,7 @@ void LibSM64::set_mario_position(int p_mario_id, const godot::Vector3 &p_positio
     sm64_set_mario_position(p_mario_id, x, y, z);
 }
 
-void LibSM64::set_mario_angle(int p_mario_id, const godot::Quaternion &p_angle)
+void LibSM64::set_mario_angle(int32_t p_mario_id, const godot::Quaternion &p_angle)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
@@ -376,14 +376,14 @@ void LibSM64::set_mario_angle(int p_mario_id, const godot::Quaternion &p_angle)
     sm64_set_mario_angle(p_mario_id, rotation_vec.x, rotation_vec.y, rotation_vec.z);
 }
 
-void LibSM64::set_mario_face_angle(int p_mario_id, float p_y)
+void LibSM64::set_mario_face_angle(int32_t p_mario_id, float p_y)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_set_mario_faceangle(p_mario_id, p_y);
 }
 
-void LibSM64::set_mario_velocity(int p_mario_id, const godot::Vector3 &p_velocity)
+void LibSM64::set_mario_velocity(int32_t p_mario_id, const godot::Vector3 &p_velocity)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
@@ -392,42 +392,42 @@ void LibSM64::set_mario_velocity(int p_mario_id, const godot::Vector3 &p_velocit
     sm64_set_mario_velocity(p_mario_id, x, y, z);
 }
 
-void LibSM64::set_mario_forward_velocity(int p_mario_id, float p_velocity)
+void LibSM64::set_mario_forward_velocity(int32_t p_mario_id, float p_velocity)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_set_mario_forward_velocity(p_mario_id, p_velocity / (scale_factor * g_sm64_timestep_interval));
 }
 
-void LibSM64::set_mario_invincibility(int p_mario_id, double p_time)
+void LibSM64::set_mario_invincibility(int32_t p_mario_id, double p_time)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_set_mario_invincibility(p_mario_id, int16_t(p_time / g_sm64_timestep_interval));
+    sm64_set_mario_invincibility(p_mario_id, static_cast<int16_t>(p_time / g_sm64_timestep_interval));
 }
 
-void LibSM64::set_mario_water_level(int p_mario_id, real_t p_level)
+void LibSM64::set_mario_water_level(int32_t p_mario_id, real_t p_level)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_set_mario_water_level(p_mario_id, int(p_level / scale_factor));
+    sm64_set_mario_water_level(p_mario_id, static_cast<signed int>(p_level / scale_factor));
 }
 
-void LibSM64::set_mario_gas_level(int p_mario_id, real_t p_level)
+void LibSM64::set_mario_gas_level(int32_t p_mario_id, real_t p_level)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_set_mario_gas_level(p_mario_id, int(p_level / scale_factor));
+    sm64_set_mario_gas_level(p_mario_id, static_cast<signed int>(p_level / scale_factor));
 }
 
-void LibSM64::set_mario_health(int p_mario_id, int p_health)
+void LibSM64::set_mario_health(int32_t p_mario_id, uint16_t p_health)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_set_mario_health(p_mario_id, p_health);
 }
 
-void LibSM64::mario_take_damage(int p_mario_id, int p_damage, int p_subtype, const godot::Vector3 &p_position)
+void LibSM64::mario_take_damage(int32_t p_mario_id, uint32_t p_damage, uint32_t p_subtype, const godot::Vector3 &p_position)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
@@ -436,35 +436,35 @@ void LibSM64::mario_take_damage(int p_mario_id, int p_damage, int p_subtype, con
     sm64_mario_take_damage(p_mario_id, p_damage, p_subtype, x, y, z);
 }
 
-void LibSM64::mario_heal(int p_mario_id, int p_heal_counter)
+void LibSM64::mario_heal(int32_t p_mario_id, uint8_t p_heal_counter)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_mario_heal(p_mario_id, p_heal_counter);
 }
 
-void LibSM64::mario_kill(int p_mario_id)
+void LibSM64::mario_kill(int32_t p_mario_id)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
     sm64_mario_kill(p_mario_id);
 }
 
-void LibSM64::mario_interact_cap(int p_mario_id, int p_cap_flag, int p_cap_time, bool p_play_music)
+void LibSM64::mario_interact_cap(int32_t p_mario_id, uint32_t p_cap_flag, double p_cap_time, bool p_play_music)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_mario_interact_cap(p_mario_id, p_cap_flag, p_cap_time, p_play_music);
+    sm64_mario_interact_cap(p_mario_id, p_cap_flag, static_cast<uint16_t>(p_cap_time / g_sm64_timestep_interval), static_cast<uint8_t>(p_play_music));
 }
 
-void LibSM64::mario_extend_cap(int p_mario_id, double p_cap_time)
+void LibSM64::mario_extend_cap(int32_t p_mario_id, double p_cap_time)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_mario_extend_cap(p_mario_id, uint16_t(p_cap_time / g_sm64_timestep_interval));
+    sm64_mario_extend_cap(p_mario_id, static_cast<uint16_t>(p_cap_time / g_sm64_timestep_interval));
 }
 
-void LibSM64::mario_attack(int p_mario_id, const godot::Vector3 &p_position, float p_hitbox_height)
+void LibSM64::mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position, float p_hitbox_height)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
@@ -490,7 +490,7 @@ int LibSM64::surface_object_create(const godot::Vector3 &p_position, const godot
     return sm64_surface_object_create(&object);
 }
 
-void LibSM64::surface_object_move(int p_object_id, const godot::Vector3 &p_position, const godot::Quaternion &p_rotation)
+void LibSM64::surface_object_move(uint32_t p_object_id, const godot::Vector3 &p_position, const godot::Quaternion &p_rotation)
 {
     ERR_FAIL_COND(p_object_id < 0);
 
@@ -501,39 +501,39 @@ void LibSM64::surface_object_move(int p_object_id, const godot::Vector3 &p_posit
     sm64_surface_object_move(p_object_id, &object_transform);
 }
 
-void LibSM64::surface_object_delete(int p_object_id)
+void LibSM64::surface_object_delete(uint32_t p_object_id)
 {
     sm64_surface_object_delete(p_object_id);
 }
 
-void LibSM64::seq_player_play_sequence(int p_player, int p_seq_id, double p_fade_in_time)
+void LibSM64::seq_player_play_sequence(uint8_t p_player, uint8_t p_seq_id, double p_fade_in_time)
 {
     sm64_seq_player_play_sequence(p_player, p_seq_id, p_fade_in_time / g_sm64_timestep_interval);
 }
 
-void LibSM64::play_music(int p_player, int p_seq_args, double p_fade_in_time)
+void LibSM64::play_music(uint8_t p_player, uint16_t p_seq_args, double p_fade_in_time)
 {
     sm64_play_music(p_player, p_seq_args, p_fade_in_time / g_sm64_timestep_interval);
 }
 
-void LibSM64::stop_background_music(int p_seq_id)
+void LibSM64::stop_background_music(uint16_t p_seq_id)
 {
     sm64_stop_background_music(p_seq_id);
 }
 
-void LibSM64::fadeout_background_music(int p_seq_id, double p_fade_out_time)
+void LibSM64::fadeout_background_music(uint16_t p_seq_id, double p_fade_out_time)
 {
     sm64_fadeout_background_music(p_seq_id, p_fade_out_time / g_sm64_timestep_interval);
 }
 
-void LibSM64::play_sound(int p_sound_bits, const godot::Vector3 &p_position)
+void LibSM64::play_sound(int32_t p_sound_bits, const godot::Vector3 &p_position)
 {
     float pos[3];
     godot_to_sm64(p_position, pos, scale_factor);
     sm64_play_sound(p_sound_bits, pos);
 }
 
-void LibSM64::play_sound_global(int p_sound_bits)
+void LibSM64::play_sound_global(int32_t p_sound_bits)
 {
     sm64_play_sound_global(p_sound_bits);
 }
@@ -583,7 +583,7 @@ void LibSM64::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("mario_take_damage", "mario_id", "damage", "subtype", "position"), &LibSM64::mario_take_damage);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_heal", "mario_id", "heal_counter"), &LibSM64::mario_heal);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_kill", "mario_id"), &LibSM64::mario_kill);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_interact_cap", "mario_id", "cap_flag", "cap_time", "play_music"), &LibSM64::mario_interact_cap);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_interact_cap", "mario_id", "cap_flag", "cap_time", "play_music"), &LibSM64::mario_interact_cap, DEFVAL(0.0), DEFVAL(true));
     godot::ClassDB::bind_method(godot::D_METHOD("mario_extend_cap", "mario_id", "cap_time"), &LibSM64::mario_extend_cap);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_attack", "mario_id", "position", "hitbox_height"), &LibSM64::mario_attack);
 

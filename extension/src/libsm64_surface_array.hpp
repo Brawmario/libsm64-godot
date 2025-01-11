@@ -22,7 +22,7 @@ public:
 
     void append_surfaces(const godot::Ref<LibSM64SurfaceArray> &p_surfaces);
 
-    void add_triangle(const godot::Vector3 &p_vertex_1, const godot::Vector3 &p_vertex_2, const godot::Vector3 &p_vertex_3, int p_surface_type = 0, int p_terrain_type = 0, int p_force = 0);
+    void add_triangle(const godot::Vector3 &p_vertex_1, const godot::Vector3 &p_vertex_2, const godot::Vector3 &p_vertex_3, int16_t p_surface_type = 0, uint16_t p_terrain_type = 0, int16_t p_force = 0);
 
 protected:
     static void _bind_methods();

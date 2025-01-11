@@ -38,9 +38,9 @@ public:
             cam_look.x,
             stick.x,
             stick.y,
-            button_a,
-            button_b,
-            button_z
+            static_cast<uint8_t>(button_a),
+            static_cast<uint8_t>(button_b),
+            static_cast<uint8_t>(button_z)
         };
     }
 
