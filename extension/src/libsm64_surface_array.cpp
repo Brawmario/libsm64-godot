@@ -11,7 +11,7 @@ void LibSM64SurfaceArray::append_surfaces(const godot::Ref<LibSM64SurfaceArray> 
     sm64_surfaces.insert(sm64_surfaces.end(), sm64_surfaces_other.begin(), sm64_surfaces_other.end());
 }
 
-void LibSM64SurfaceArray::add_triangle(const godot::Vector3 &p_vertex_1, const godot::Vector3 &p_vertex_2, const godot::Vector3 &p_vertex_3, int p_surface_type, int p_terrain_type, int p_force)
+void LibSM64SurfaceArray::add_triangle(const godot::Vector3 &p_vertex_1, const godot::Vector3 &p_vertex_2, const godot::Vector3 &p_vertex_3, int16_t p_surface_type, uint16_t p_terrain_type, int16_t p_force)
 {
     LibSM64 *libsm64 = LibSM64::get_singleton();
     ERR_FAIL_NULL(libsm64);
@@ -22,9 +22,21 @@ void LibSM64SurfaceArray::add_triangle(const godot::Vector3 &p_vertex_1, const g
         p_force,
         p_terrain_type,
         {
-            {p_vertex_2.z * scale_factor, p_vertex_2.y * scale_factor, -p_vertex_2.x * scale_factor},
-            {p_vertex_1.z * scale_factor, p_vertex_1.y * scale_factor, -p_vertex_1.x * scale_factor},
-            {p_vertex_3.z * scale_factor, p_vertex_3.y * scale_factor, -p_vertex_3.x * scale_factor},
+            {
+                static_cast<int32_t>(p_vertex_2.z * scale_factor),
+                static_cast<int32_t>(p_vertex_2.y * scale_factor),
+                static_cast<int32_t>(-p_vertex_2.x * scale_factor)
+            },
+            {
+                static_cast<int32_t>(p_vertex_1.z * scale_factor),
+                static_cast<int32_t>(p_vertex_1.y * scale_factor),
+                static_cast<int32_t>(-p_vertex_1.x * scale_factor)
+            },
+            {
+                static_cast<int32_t>(p_vertex_3.z * scale_factor),
+                static_cast<int32_t>(p_vertex_3.y * scale_factor),
+                static_cast<int32_t>(-p_vertex_3.x * scale_factor)
+            },
         },
     });
 
