@@ -11,9 +11,9 @@
 
 static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float *p_arr_out, real_t p_scale_factor)
 {
-    p_arr_out[0] = p_vec.z / p_scale_factor;
-    p_arr_out[1] = p_vec.y / p_scale_factor;
-    p_arr_out[2] = -p_vec.x / p_scale_factor;
+    p_arr_out[0] =  p_vec.z * p_scale_factor;
+    p_arr_out[1] =  p_vec.y * p_scale_factor;
+    p_arr_out[2] = -p_vec.x * p_scale_factor;
 }
 
 static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float *p_arr_out)
@@ -25,9 +25,9 @@ static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float *p_a
 
 static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float &p_x_out, float &p_y_out, float &p_z_out, real_t p_scale_factor)
 {
-    p_x_out = p_vec.z / p_scale_factor;
-    p_y_out = p_vec.y / p_scale_factor;
-    p_z_out = -p_vec.x / p_scale_factor;
+    p_x_out =  p_vec.z * p_scale_factor;
+    p_y_out =  p_vec.y * p_scale_factor;
+    p_z_out = -p_vec.x * p_scale_factor;
 }
 
 static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float &p_x_out, float &p_y_out, float &p_z_out)
