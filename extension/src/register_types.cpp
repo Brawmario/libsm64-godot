@@ -20,6 +20,7 @@
 #include <libsm64_mario_state.hpp>
 #include <libsm64_mario_tick_output.hpp>
 #include <libsm64_surface_array.hpp>
+#include <libsm64_mario_internal.hpp>
 
 using namespace godot;
 
@@ -46,6 +47,7 @@ void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<LibSM64MarioState>();
     ClassDB::register_class<LibSM64MarioTickOutput>();
     ClassDB::register_class<LibSM64SurfaceArray>();
+    ClassDB::register_class<LibSM64MarioInternal>();
 
     s_sm64_global = memnew(SM64Global);
     Engine::get_singleton()->register_singleton("SM64Global", SM64Global::get_singleton());
