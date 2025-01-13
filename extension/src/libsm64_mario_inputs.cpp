@@ -3,9 +3,9 @@
 #include <godot_cpp/core/class_db.hpp>
 
 
-void LibSM64MarioInputs::set_cam_look(godot::Vector2 value)
+void LibSM64MarioInputs::set_cam_look(godot::Vector2 p_value)
 {
-    cam_look = value;
+    cam_look = p_value;
 }
 
 godot::Vector2 LibSM64MarioInputs::get_cam_look() const
@@ -13,9 +13,9 @@ godot::Vector2 LibSM64MarioInputs::get_cam_look() const
     return cam_look;
 }
 
-void LibSM64MarioInputs::set_stick(godot::Vector2 value)
+void LibSM64MarioInputs::set_stick(godot::Vector2 p_value)
 {
-    stick = value;
+    stick = p_value;
 }
 
 godot::Vector2 LibSM64MarioInputs::get_stick() const
@@ -23,9 +23,9 @@ godot::Vector2 LibSM64MarioInputs::get_stick() const
     return stick;
 }
 
-void LibSM64MarioInputs::set_button_a(bool value)
+void LibSM64MarioInputs::set_button_a(bool p_value)
 {
-    button_a = value;
+    button_a = p_value;
 }
 
 bool LibSM64MarioInputs::get_button_a() const
@@ -33,9 +33,9 @@ bool LibSM64MarioInputs::get_button_a() const
     return button_a;
 }
 
-void LibSM64MarioInputs::set_button_b(bool value)
+void LibSM64MarioInputs::set_button_b(bool p_value)
 {
-    button_b = value;
+    button_b = p_value;
 }
 
 bool LibSM64MarioInputs::get_button_b() const
@@ -43,9 +43,9 @@ bool LibSM64MarioInputs::get_button_b() const
     return button_b;
 }
 
-void LibSM64MarioInputs::set_button_z(bool value)
+void LibSM64MarioInputs::set_button_z(bool p_value)
 {
-    button_z = value;
+    button_z = p_value;
 }
 
 bool LibSM64MarioInputs::get_button_z() const

@@ -16,19 +16,19 @@ class LibSM64MarioInputs : public godot::RefCounted
 public:
     LibSM64MarioInputs() = default;
 
-    void set_cam_look(godot::Vector2 value);
+    void set_cam_look(godot::Vector2 p_value);
     godot::Vector2 get_cam_look() const;
 
-    void set_stick(godot::Vector2 value);
+    void set_stick(godot::Vector2 p_value);
     godot::Vector2 get_stick() const;
 
-    void set_button_a(bool value);
+    void set_button_a(bool p_value);
     bool get_button_a() const;
 
-    void set_button_b(bool value);
+    void set_button_b(bool p_value);
     bool get_button_b() const;
 
-    void set_button_z(bool value);
+    void set_button_z(bool p_value);
     bool get_button_z() const;
 
     _FORCE_INLINE_ struct SM64MarioInputs to_sm64() const
