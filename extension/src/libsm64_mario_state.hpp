@@ -15,13 +15,16 @@ class LibSM64MarioState : public godot::RefCounted
 
 public:
     LibSM64MarioState();
-    LibSM64MarioState(const struct SM64MarioState &state);
+    LibSM64MarioState(const struct SM64MarioState &state, real_t scale_factor);
 
     void set_position(godot::Vector3 p_value);
     godot::Vector3 get_position() const;
 
     void set_velocity(godot::Vector3 p_value);
     godot::Vector3 get_velocity() const;
+
+    void set_face_angle(float p_value);
+    float get_face_angle() const;
 
     void set_health(int p_value);
     int get_health() const;
@@ -44,6 +47,7 @@ protected:
 private:
     godot::Vector3 position;
     godot::Vector3 velocity;
+    float face_angle;
     int health;
     int action;
     int flags;

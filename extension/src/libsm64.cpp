@@ -290,7 +290,7 @@ godot::Ref<LibSM64MarioTickOutput> LibSM64::mario_tick(int32_t p_mario_id, const
     LibSM64MarioGeometry sm64_mario_geometry;
     sm64_mario_tick(p_mario_id, &sm64_mario_inputs, &sm64_mario_state, sm64_mario_geometry.data());
 
-    godot::Ref<LibSM64MarioState> mario_state = memnew(LibSM64MarioState(sm64_mario_state));
+    godot::Ref<LibSM64MarioState> mario_state = memnew(LibSM64MarioState(sm64_mario_state, scale_factor));
 
     const int vertex_count = sm64_mario_geometry.triangles() * 3;
     godot::PackedVector3Array position;
