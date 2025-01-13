@@ -130,7 +130,7 @@ public:
     // extern SM64_LIB_FN void sm64_fadeout_background_music(uint16_t arg0, uint16_t fadeOut);
     void fadeout_background_music(uint16_t p_seq_id, double p_fade_out_time);
     // extern SM64_LIB_FN uint16_t sm64_get_current_background_music();
-    int get_current_background_music();
+    uint16_t get_current_background_music();
     // extern SM64_LIB_FN void sm64_play_sound(int32_t soundBits, float *pos);
     void play_sound(int32_t p_sound_bits, const godot::Vector3 &p_position);
     // extern SM64_LIB_FN void sm64_play_sound_global(int32_t soundBits);
