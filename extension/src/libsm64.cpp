@@ -526,6 +526,11 @@ void LibSM64::fadeout_background_music(uint16_t p_seq_id, double p_fade_out_time
     sm64_fadeout_background_music(p_seq_id, p_fade_out_time / g_sm64_timestep_interval);
 }
 
+uint16_t LibSM64::get_current_background_music()
+{
+    return sm64_get_current_background_music();
+}
+
 void LibSM64::play_sound(int32_t p_sound_bits, const godot::Vector3 &p_position)
 {
     float pos[3];
@@ -595,6 +600,7 @@ void LibSM64::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("play_music", "player", "seq_args", "fade_in_time"), &LibSM64::play_music);
     godot::ClassDB::bind_method(godot::D_METHOD("stop_background_music", "seq_id"), &LibSM64::stop_background_music);
     godot::ClassDB::bind_method(godot::D_METHOD("fadeout_background_music", "seq_id", "fade_out_time"), &LibSM64::fadeout_background_music);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_current_background_music"), &LibSM64::get_current_background_music);
     godot::ClassDB::bind_method(godot::D_METHOD("play_sound", "sound_bits", "position"), &LibSM64::play_sound);
     godot::ClassDB::bind_method(godot::D_METHOD("play_sound_global", "sound_bits"), &LibSM64::play_sound_global);
     godot::ClassDB::bind_method(godot::D_METHOD("set_sound_volume", "volume"), &LibSM64::set_sound_volume);
