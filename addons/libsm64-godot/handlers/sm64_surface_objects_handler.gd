@@ -11,7 +11,7 @@ var sm64_delta := LibSM64.sm64_timestep_interval
 var _surface_objects_ids: Array[int] = []
 var _surface_objects_refs: Array[MeshInstance3D] = []
 var _time_since_last_tick := 0.0
-var _default_surface_properties := SM64SurfaceProperties.new()
+var _default_surface_properties := LibSM64SurfaceProperties.new()
 
 
 func _physics_process(delta: float) -> void:
@@ -87,9 +87,9 @@ func delete_all_surface_objects() -> void:
 	_surface_objects_ids.clear()
 
 
-func _find_surface_properties(node: Node) -> SM64SurfaceProperties:
+func _find_surface_properties(node: Node) -> LibSM64SurfaceProperties:
 	for child in node.get_children():
-		if child is SM64SurfacePropertiesComponent:
+		if child is LibSM64SurfacePropertiesComponent:
 			return child.surface_properties
 
 	return _default_surface_properties
