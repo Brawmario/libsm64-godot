@@ -6,7 +6,6 @@ extends Node3D
 @onready var battlefield: MeshInstance3D = $Battlefield
 @onready var sm_64_mario: Node3D = $SM64Mario
 @onready var hud: HUD = $HUD
-@onready var sm_64_audio_stream_player: SM64AudioStreamPlayer = $SM64AudioStreamPlayer
 
 func _ready() -> void:
 	SM64Global.scale_factor = 75
@@ -23,8 +22,8 @@ func _ready() -> void:
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
-	sm_64_audio_stream_player.play_music(SM64AudioStreamPlayer.SEQ_ID_LEVEL_GRASS)
-	sm_64_audio_stream_player.play()
+	LibSM64.play_music(LibSM64.SEQ_PLAYER_LEVEL, LibSM64.SEQ_LEVEL_GRASS)
+	$LibSM64AudioStreamPlayer.play()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -40,6 +39,6 @@ func _toggle_mouse_lock() -> void:
 
 
 func _on_tree_exiting():
-	sm_64_audio_stream_player.stop_background_music(SM64AudioStreamPlayer.SEQ_ID_LEVEL_GRASS)
+	LibSM64.stop_background_music(LibSM64.SEQ_LEVEL_GRASS)
 	sm_64_mario.delete()
 	SM64Global.terminate()

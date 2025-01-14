@@ -13,6 +13,8 @@ class LibSM64MarioState : public godot::RefCounted
 {
     GDCLASS(LibSM64MarioState, godot::RefCounted);
 
+    friend class LibSM64MarioInternal;
+
 public:
     LibSM64MarioState();
     LibSM64MarioState(const struct SM64MarioState &state, real_t scale_factor);

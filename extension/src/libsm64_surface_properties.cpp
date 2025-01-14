@@ -1,4 +1,4 @@
-#include <sm64_surface_properties.hpp>
+#include <libsm64_surface_properties.hpp>
 
 #include <godot_cpp/core/class_db.hpp>
 
@@ -7,45 +7,45 @@
 #define TERRAIN_TYPE_HINT_STRING "Grass,Stone,Snow,Sand,Spooky,Water,Slide,Mask"
 
 
-void SM64SurfaceProperties::set_surface_type(int value)
+void LibSM64SurfaceProperties::set_surface_type(SurfaceType value)
 {
     surface_type = value;
 }
 
-int SM64SurfaceProperties::get_surface_type() const
+SurfaceType LibSM64SurfaceProperties::get_surface_type() const
 {
     return surface_type;
 }
 
-void SM64SurfaceProperties::set_terrain_type(int value)
+void LibSM64SurfaceProperties::set_terrain_type(TerrainType value)
 {
     terrain_type = value;
 }
 
-int SM64SurfaceProperties::get_terrain_type() const
+TerrainType LibSM64SurfaceProperties::get_terrain_type() const
 {
     return terrain_type;
 }
 
-void SM64SurfaceProperties::set_force(int value)
+void LibSM64SurfaceProperties::set_force(int value)
 {
     force = value;
 }
 
-int SM64SurfaceProperties::get_force() const
+int LibSM64SurfaceProperties::get_force() const
 {
     return force;
 }
 
-void SM64SurfaceProperties::_bind_methods()
+void LibSM64SurfaceProperties::_bind_methods()
 {
-    godot::ClassDB::bind_method(godot::D_METHOD("set_surface_type", "value"), &SM64SurfaceProperties::set_surface_type);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_surface_type"), &SM64SurfaceProperties::get_surface_type);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_surface_type", "value"), &LibSM64SurfaceProperties::set_surface_type);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_surface_type"), &LibSM64SurfaceProperties::get_surface_type);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::INT, "surface_type", godot::PROPERTY_HINT_ENUM, SURFACE_TYPE_HINT_STRING), "set_surface_type", "get_surface_type");
-    godot::ClassDB::bind_method(godot::D_METHOD("set_terrain_type", "value"), &SM64SurfaceProperties::set_terrain_type);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_terrain_type"), &SM64SurfaceProperties::get_terrain_type);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_terrain_type", "value"), &LibSM64SurfaceProperties::set_terrain_type);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_terrain_type"), &LibSM64SurfaceProperties::get_terrain_type);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::INT, "terrain_type", godot::PROPERTY_HINT_ENUM, TERRAIN_TYPE_HINT_STRING), "set_terrain_type", "get_terrain_type");
-    godot::ClassDB::bind_method(godot::D_METHOD("set_force", "value"), &SM64SurfaceProperties::set_force);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_force"), &SM64SurfaceProperties::get_force);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_force", "value"), &LibSM64SurfaceProperties::set_force);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_force"), &LibSM64SurfaceProperties::get_force);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::INT, "force"), "set_force", "get_force");
 }

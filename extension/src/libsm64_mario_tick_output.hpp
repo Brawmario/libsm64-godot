@@ -23,8 +23,8 @@ public:
     void set_array_mesh_offset(const godot::Vector3 &p_value);
     godot::Vector3 get_array_mesh_offset() const;
 
-    void set_array_mesh_scale(const godot::Vector3 &p_value);
-    godot::Vector3 get_array_mesh_scale() const;
+    //void set_array_mesh_scale(const godot::Vector3 &p_value);
+    //godot::Vector3 get_array_mesh_scale() const;
 
 protected:
     static void _bind_methods();
@@ -33,7 +33,7 @@ private:
     godot::Ref<LibSM64MarioState> mario_state;
     godot::Array array_mesh_triangles;
     godot::Vector3 array_mesh_offset;
-    godot::Vector3 array_mesh_scale;
+    //godot::Vector3 array_mesh_scale;
 };
 
 #endif // LIBSM64GD_LIBSM64MARIOTICKOUTPUT_H
