@@ -6,13 +6,13 @@ extends Node
 ## Group name that contains the MeshInstance3D that are part of the scene's static surfaces
 @export var static_surfaces_group := &"libsm64_static_surfaces"
 
-var _default_surface_properties := SM64SurfaceProperties.new()
+var _default_surface_properties := LibSM64SurfaceProperties.new()
 
 
 ## Load all MeshInstance3D in static_surfaces_group into SM64
 ## [b]Warning:[/b] there should be at least one plane that spans the entire playing area at the bottom of the map.
 func load_static_surfaces() -> void:
-	var surface_properties_array: Array[SM64SurfaceProperties] = []
+	var surface_properties_array: Array[LibSM64SurfaceProperties] = []
 
 	var libsm64_surface_array := LibSM64SurfaceArray.new()
 
@@ -33,9 +33,9 @@ func load_static_surfaces() -> void:
 	LibSM64.static_surfaces_load(libsm64_surface_array)
 
 
-func _find_surface_properties(node: Node) -> SM64SurfaceProperties:
+func _find_surface_properties(node: Node) -> LibSM64SurfaceProperties:
 	for child in node.get_children():
-		if child is SM64SurfacePropertiesComponent:
+		if child is LibSM64SurfacePropertiesComponent:
 			return child.surface_properties
 
 	return _default_surface_properties
