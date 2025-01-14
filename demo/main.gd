@@ -1,25 +1,18 @@
 extends Control
 
 
-const ROM_SHA256 := "17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91"
-
 @onready var rom_picker_dialog := $RomPickerDialog as FileDialog
 @onready var invalid_rom_dialog : = $InvalidRomDialog as AcceptDialog
 
 
 func _ready() -> void:
-	if SM64Global.rom_filepath == "":
+	if LibSM64Global.rom.is_empty():
 		rom_picker_dialog.popup_centered_ratio()
 
 
 func _on_rom_picker_dialog_file_selected(path: String) -> void:
-	var rom_file_sha256 := FileAccess.get_sha256(path)
-
-	if rom_file_sha256 != ROM_SHA256:
+	if not LibSM64Global.load_rom_file(path):
 		invalid_rom_dialog.popup_centered()
-		return
-
-	SM64Global.rom_filepath = path
 
 
 func _on_invalid_rom_dialog_confirmed() -> void:

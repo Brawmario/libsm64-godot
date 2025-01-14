@@ -7,8 +7,7 @@ extends Node3D
 
 
 func _ready() -> void:
-	SM64Global.scale_factor = 75
-	SM64Global.init()
+	LibSM64Global.init()
 	$SM64StaticSurfacesHandler.load_static_surfaces()
 	$SM64SurfaceObjectsHandler.load_all_surface_objects()
 
@@ -19,7 +18,7 @@ func _ready() -> void:
 	$HUD.mario = mario
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
+
 	$LibSM64AudioStreamPlayer.play()
 
 
@@ -38,4 +37,4 @@ func _toggle_mouse_lock() -> void:
 func _on_tree_exiting() -> void:
 	LibSM64.stop_background_music(LibSM64.get_current_background_music())
 	mario.delete()
-	SM64Global.terminate()
+	LibSM64Global.terminate()

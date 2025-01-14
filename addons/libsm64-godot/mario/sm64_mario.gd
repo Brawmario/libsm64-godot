@@ -268,11 +268,11 @@ func create() -> void:
 	_mario_internal.mario_state_previous.position = global_position
 
 	if not _default_material.albedo_texture:
-		var mario_image_texture := SM64Global.get_mario_image_texture()
-		_default_material.albedo_texture = mario_image_texture
-		_wing_material.albedo_texture = mario_image_texture
-		_metal_material.albedo_texture = mario_image_texture
-		_vanish_material.albedo_texture = mario_image_texture
+		var mario_texture := LibSM64Global.mario_texture
+		_default_material.albedo_texture = mario_texture
+		_wing_material.albedo_texture = mario_texture
+		_metal_material.albedo_texture = mario_texture
+		_vanish_material.albedo_texture = mario_texture
 
 
 ## Delete mario inside the libsm64 world
