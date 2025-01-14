@@ -1,8 +1,7 @@
 extends Node3D
 
 func _ready() -> void:
-	SM64Global.scale_factor = 75
-	SM64Global.init()
+	LibSM64Global.init()
 	$SM64StaticSurfacesHandler.load_static_surfaces()
 	$SM64SurfaceObjectsHandler.load_all_surface_objects()
 
@@ -12,7 +11,7 @@ func _ready() -> void:
 			continue
 		mario.create()
 		mario.water_level = 0.0
-	
+
 	$LibSM64AudioStreamPlayer.play()
 
 
@@ -23,4 +22,4 @@ func _on_tree_exiting() -> void:
 		if not mario:
 			continue
 		mario.delete()
-	SM64Global.terminate()
+	LibSM64Global.terminate()

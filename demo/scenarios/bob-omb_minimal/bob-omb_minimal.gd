@@ -8,8 +8,7 @@ extends Node3D
 @onready var hud: HUD = $HUD
 
 func _ready() -> void:
-	SM64Global.scale_factor = 75
-	SM64Global.init()
+	LibSM64Global.init()
 
 	battlefield.mesh = BombOmbMinimalSurfaces.generate_godot_mesh()
 	battlefield.mesh.surface_set_material(0, preload("res://demo/scenarios/bob-omb_minimal/bob-omb_minimal_material.tres"))
@@ -21,7 +20,7 @@ func _ready() -> void:
 	hud.mario = sm_64_mario
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
+
 	LibSM64.play_music(LibSM64.SEQ_PLAYER_LEVEL, LibSM64.SEQ_LEVEL_GRASS)
 	$LibSM64AudioStreamPlayer.play()
 
@@ -41,4 +40,4 @@ func _toggle_mouse_lock() -> void:
 func _on_tree_exiting():
 	LibSM64.stop_background_music(LibSM64.SEQ_LEVEL_GRASS)
 	sm_64_mario.delete()
-	SM64Global.terminate()
+	LibSM64Global.terminate()
