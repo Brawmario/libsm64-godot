@@ -7,22 +7,22 @@
 #define TERRAIN_TYPE_HINT_STRING "Grass,Stone,Snow,Sand,Spooky,Water,Slide,Mask"
 
 
-void LibSM64SurfaceProperties::set_surface_type(SurfaceType value)
+void LibSM64SurfaceProperties::set_surface_type(LibSM64::SurfaceType value)
 {
     surface_type = value;
 }
 
-SurfaceType LibSM64SurfaceProperties::get_surface_type() const
+LibSM64::SurfaceType LibSM64SurfaceProperties::get_surface_type() const
 {
     return surface_type;
 }
 
-void LibSM64SurfaceProperties::set_terrain_type(TerrainType value)
+void LibSM64SurfaceProperties::set_terrain_type(LibSM64::TerrainType value)
 {
     terrain_type = value;
 }
 
-TerrainType LibSM64SurfaceProperties::get_terrain_type() const
+LibSM64::TerrainType LibSM64SurfaceProperties::get_terrain_type() const
 {
     return terrain_type;
 }
