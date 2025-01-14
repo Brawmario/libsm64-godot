@@ -29,7 +29,7 @@ script = ExtResource("7_ju0gc")
 
 [node name="HUD" parent="." instance=ExtResource("8_f016e")]
 
-[node name="SM64AudioStreamPlayer" type="SM64AudioStreamPlayer" parent="."]
+[node name="LibSM64AudioStreamPlayer" type="LibSM64AudioStreamPlayer" parent="."]
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 

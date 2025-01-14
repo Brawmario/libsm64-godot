@@ -3,7 +3,7 @@ extends Node
 
 ## Node that handles adding and updating MeshInstance3D nodes as Surface Objects for libsm64.
 
-const FPS_30_DELTA := 1.0/30.0
+var sm64_delta := LibSM64.sm64_timestep_interval
 
 ## Group name that contains the MeshInstance3D that are part of the scene's surface objects
 @export var surface_objects_group := &"libsm64_surface_objects"
@@ -16,9 +16,9 @@ var _default_surface_properties := SM64SurfaceProperties.new()
 
 func _physics_process(delta: float) -> void:
 	_time_since_last_tick += delta
-	if _time_since_last_tick < FPS_30_DELTA:
+	if _time_since_last_tick < sm64_delta:
 		return
-	_time_since_last_tick -= FPS_30_DELTA
+	_time_since_last_tick -= sm64_delta
 
 	_update_surface_objects()
 
@@ -28,23 +28,26 @@ func _update_surface_objects() -> void:
 		var id := _surface_objects_ids[i]
 		var transform := _surface_objects_refs[i].global_transform
 		var position := transform.origin
-		var rotation := transform.basis.get_euler(EULER_ORDER_YXZ)
-		SM64Surfaces.surface_object_move(id, position, rotation)
+		var rotation := transform.basis.get_rotation_quaternion()
+		LibSM64.surface_object_move(id, position, rotation)
 
 
 ## Load MeshInstance3D into SM64
 func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 	var mesh_faces := mesh_instance.get_mesh().get_faces()
+	var libsm64_surface_array := LibSM64SurfaceArray.new()
 	var transform := mesh_instance.global_transform
 	var position := transform.origin
-	var rotation := transform.basis.get_euler(EULER_ORDER_YXZ)
+	var rotation := transform.basis.get_rotation_quaternion()
 
-	var surface_properties := _find_surface_properties(mesh_instance)
-	var surface_properties_array: Array[SM64SurfaceProperties] = []
-	surface_properties_array.resize(mesh_faces.size() / 3)
-	surface_properties_array.fill(surface_properties)
+	var properties := _find_surface_properties(mesh_instance)
+	for i in range(0, mesh_faces.size(), 3):
+		var v1 = mesh_faces[i + 0]
+		var v2 = mesh_faces[i + 1]
+		var v3 = mesh_faces[i + 2]
+		libsm64_surface_array.add_triangle(v1, v2, v3, properties.surface_type, properties.terrain_type, properties.force)
 
-	var surface_object_id := SM64Surfaces.surface_object_create(mesh_faces, position, rotation, surface_properties_array)
+	var surface_object_id := LibSM64.surface_object_create(position, rotation, libsm64_surface_array)
 
 	_surface_objects_ids.push_back(surface_object_id)
 	_surface_objects_refs.push_back(mesh_instance)
@@ -70,7 +73,7 @@ func delete_surface_object(mesh_instance: MeshInstance3D) -> void:
 		return
 
 	var id := _surface_objects_ids[index]
-	SM64Surfaces.surface_object_delete(id)
+	LibSM64.surface_object_delete(id)
 	_surface_objects_refs.remove_at(index)
 	_surface_objects_ids.remove_at(index)
 
@@ -78,7 +81,7 @@ func delete_surface_object(mesh_instance: MeshInstance3D) -> void:
 ## Delete all MeshInstance3D from SM64
 func delete_all_surface_objects() -> void:
 	for id in _surface_objects_ids:
-		SM64Surfaces.surface_object_delete(id)
+		LibSM64.surface_object_delete(id)
 
 	_surface_objects_refs.clear()
 	_surface_objects_ids.clear()

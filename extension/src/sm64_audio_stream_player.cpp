@@ -80,15 +80,15 @@ void SM64AudioStreamPlayer::_process(double delta)
 }
 
 
-void SM64AudioStreamPlayer::play_music(SeqID p_seq_id, bool p_variant)
+void SM64AudioStreamPlayer::play_music(int p_seq_id, bool p_variant)
 {
-    uint16_t seq_arg = static_cast<uint16_t>(p_seq_id) | (p_variant ? SEQ_VARIATION : 0);
+    uint16_t seq_arg = static_cast<uint16_t>(p_seq_id) | (p_variant ? 0x80 : 0);
     // seq_arg |= p_priority << 8;
 
-    sm64_play_music(SM64_SEQ_PLAYER_LEVEL, seq_arg, 0);
+    sm64_play_music(0, seq_arg, 0);
 }
 
-void SM64AudioStreamPlayer::stop_background_music(SeqID p_seq_id)
+void SM64AudioStreamPlayer::stop_background_music(int p_seq_id)
 {
     sm64_stop_background_music(static_cast<uint16_t>(p_seq_id));
 }
@@ -98,13 +98,9 @@ void SM64AudioStreamPlayer::stop_current_background_music()
     sm64_stop_background_music(sm64_get_current_background_music());
 }
 
-SM64AudioStreamPlayer::SeqID SM64AudioStreamPlayer::get_current_background_music()
+int SM64AudioStreamPlayer::get_current_background_music()
 {
-    int id = sm64_get_current_background_music();
-    if (id < 0)
-        return SEQ_ID_COUNT;
-    else
-        return static_cast<SeqID>(id & 0xFF);
+    return sm64_get_current_background_music();
 }
 
 void SM64AudioStreamPlayer::set_internal_volume(real_t p_volume)
@@ -119,45 +115,4 @@ void SM64AudioStreamPlayer::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("stop_current_background_music"), &SM64AudioStreamPlayer::stop_current_background_music);
     godot::ClassDB::bind_method(godot::D_METHOD("get_current_background_music"), &SM64AudioStreamPlayer::get_current_background_music);
     godot::ClassDB::bind_method(godot::D_METHOD("set_internal_volume", "volume"), &SM64AudioStreamPlayer::set_internal_volume);
-
-    BIND_ENUM_CONSTANT(SEQ_PLAYER_LEVEL);
-    BIND_ENUM_CONSTANT(SEQ_PLAYER_ENV);
-    BIND_ENUM_CONSTANT(SEQ_PLAYER_SFX);
-
-    BIND_ENUM_CONSTANT(SEQ_ID_SOUND_PLAYER);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_CUTSCENE_COLLECT_STAR);
-    BIND_ENUM_CONSTANT(SEQ_ID_MENU_TITLE_SCREEN);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_GRASS);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_INSIDE_CASTLE);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_WATER);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_HOT);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_BOSS_KOOPA);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_SNOW);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_SLIDE);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_SPOOKY);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_PIRANHA_PLANT);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_UNDERGROUND);
-    BIND_ENUM_CONSTANT(SEQ_ID_MENU_STAR_SELECT);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_POWERUP);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_METAL_CAP);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_KOOPA_MESSAGE);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_KOOPA_ROAD);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_HIGH_SCORE);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_MERRY_GO_ROUND);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_RACE);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_CUTSCENE_STAR_SPAWN);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_BOSS);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_CUTSCENE_COLLECT_KEY);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_ENDLESS_STAIRS);
-    BIND_ENUM_CONSTANT(SEQ_ID_LEVEL_BOSS_KOOPA_FINAL);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_CUTSCENE_CREDITS);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_SOLVE_PUZZLE);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_TOAD_MESSAGE);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_PEACH_MESSAGE);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_CUTSCENE_INTRO);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_CUTSCENE_VICTORY);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_CUTSCENE_ENDING);
-    BIND_ENUM_CONSTANT(SEQ_ID_MENU_FILE_SELECT);
-    BIND_ENUM_CONSTANT(SEQ_ID_EVENT_CUTSCENE_LAKITU);
-    BIND_ENUM_CONSTANT(SEQ_ID_COUNT);
 }

@@ -12,8 +12,9 @@ var _default_surface_properties := SM64SurfaceProperties.new()
 ## Load all MeshInstance3D in static_surfaces_group into SM64
 ## [b]Warning:[/b] there should be at least one plane that spans the entire playing area at the bottom of the map.
 func load_static_surfaces() -> void:
-	var faces := PackedVector3Array()
 	var surface_properties_array: Array[SM64SurfaceProperties] = []
+
+	var libsm64_surface_array := LibSM64SurfaceArray.new()
 
 	for node in get_tree().get_nodes_in_group(static_surfaces_group):
 		var mesh_instance := node as MeshInstance3D
@@ -21,18 +22,15 @@ func load_static_surfaces() -> void:
 			push_warning("Non MeshInstance3D in %s group" % static_surfaces_group)
 			continue
 
+		var properties := _find_surface_properties(mesh_instance)
 		var mesh_faces := mesh_instance.get_mesh().get_faces()
-		for i in range(mesh_faces.size()):
-			mesh_faces[i] = mesh_instance.global_transform * mesh_faces[i]
-		faces.append_array(mesh_faces)
+		for i in range(0, mesh_faces.size(), 3):
+			var v1 = mesh_instance.global_transform * mesh_faces[i + 0]
+			var v2 = mesh_instance.global_transform * mesh_faces[i + 1]
+			var v3 = mesh_instance.global_transform * mesh_faces[i + 2]
+			libsm64_surface_array.add_triangle(v1, v2, v3, properties.surface_type, properties.terrain_type, properties.force)
 
-		var surface_properties := _find_surface_properties(mesh_instance)
-		var array: Array[SM64SurfaceProperties] = []
-		array.resize(mesh_faces.size() / 3)
-		array.fill(surface_properties)
-		surface_properties_array.append_array(array)
-
-	SM64Surfaces.static_surfaces_load(faces, surface_properties_array)
+	LibSM64.static_surfaces_load(libsm64_surface_array)
 
 
 func _find_surface_properties(node: Node) -> SM64SurfaceProperties:

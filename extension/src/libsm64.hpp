@@ -8,7 +8,8 @@
 
 #include <godot_cpp/variant/callable.hpp>
 
-#include <sm64_surface_properties.hpp>
+#include <libsm64_enums.hpp>
+
 #include <libsm64_mario_inputs.hpp>
 #include <libsm64_mario_tick_output.hpp>
 #include <libsm64_surface_array.hpp>
@@ -122,9 +123,9 @@ public:
     // extern SM64_LIB_FN float sm64_surface_find_poison_gas_level( float x, float z );
 
     // extern SM64_LIB_FN void sm64_seq_player_play_sequence(uint8_t player, uint8_t seqId, uint16_t arg2);
-    void seq_player_play_sequence(uint8_t p_player, uint8_t p_seq_id, double p_fade_in_time);
+    void seq_player_play_sequence(uint8_t p_player, uint8_t p_seq_id, double p_fade_in_time = 0.0);
     // extern SM64_LIB_FN void sm64_play_music(uint8_t player, uint16_t seqArgs, uint16_t fadeTimer);
-    void play_music(uint8_t p_player, uint16_t p_seq_args, double p_fade_in_time);
+    void play_music(uint8_t p_player, uint16_t p_seq_args, double p_fade_in_time = 0.0);
     // extern SM64_LIB_FN void sm64_stop_background_music(uint16_t seqId);
     void stop_background_music(uint16_t p_seq_id);
     // extern SM64_LIB_FN void sm64_fadeout_background_music(uint16_t arg0, uint16_t fadeOut);
@@ -147,5 +148,14 @@ private:
     godot::Callable debug_print_function;
     godot::Callable play_sound_function;
 };
+
+VARIANT_ENUM_CAST(SurfaceType);
+VARIANT_ENUM_CAST(TerrainType);
+
+VARIANT_BITFIELD_CAST(MarioFlags);
+VARIANT_BITFIELD_CAST(ActionFlags);
+
+VARIANT_ENUM_CAST(SeqPlayer);
+VARIANT_ENUM_CAST(SeqId);
 
 #endif // LIBSM64GD_LIBSM64_H
