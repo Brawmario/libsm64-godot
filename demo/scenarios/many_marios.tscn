@@ -65,10 +65,10 @@ camera = NodePath("../Camera3D")
 transform = Transform3D(1, 0, 0, 0, 0.516309, 0.856402, 0, -0.856402, 0.516309, 0, 23.9055, 16.654)
 current = true
 
-[node name="SM64StaticSurfacesHandler" type="Node" parent="."]
+[node name="LibSM64StaticSurfacesHandler" type="Node" parent="."]
 script = ExtResource("6_41tpo")
 
-[node name="SM64SurfaceObjectsHandler" type="Node" parent="."]
+[node name="LibSM64SurfaceObjectsHandler" type="Node" parent="."]
 script = ExtResource("7_ju0gc")
 
 [node name="HUD" parent="." instance=ExtResource("8_f016e")]
