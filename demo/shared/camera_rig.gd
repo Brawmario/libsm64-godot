@@ -50,7 +50,7 @@ func get_look_direction() -> Vector2:
 # Returns the move direction of the character controlled by the player
 func get_move_direction() -> Vector3:
 	return Vector3(
-		Input.get_axis("mario_stick_right", "mario_stick_left"),
+		Input.get_axis("libsm64_mario_inputs_stick_right", "libsm64_mario_inputs_stick_left"),
 		0,
-		Input.get_axis("mario_stick_down", "mario_stick_up")
+		Input.get_axis("libsm64_mario_inputs_stick_down", "libsm64_mario_inputs_stick_up")
 	)
