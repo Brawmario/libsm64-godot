@@ -1,4 +1,4 @@
-class_name SM64SurfaceObjectsHandler
+class_name LibSM64SurfaceObjectsHandler
 extends Node
 
 ## Node that handles adding and updating MeshInstance3D nodes as Surface Objects for libsm64.
@@ -42,9 +42,9 @@ func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 
 	var properties := _find_surface_properties(mesh_instance)
 	for i in range(0, mesh_faces.size(), 3):
-		var v1 = mesh_faces[i + 0]
-		var v2 = mesh_faces[i + 1]
-		var v3 = mesh_faces[i + 2]
+		var v1 := mesh_faces[i + 0]
+		var v2 := mesh_faces[i + 1]
+		var v3 := mesh_faces[i + 2]
 		libsm64_surface_array.add_triangle_with_properties(v1, v2, v3, properties)
 
 	var surface_object_id := LibSM64.surface_object_create(position, rotation, libsm64_surface_array)

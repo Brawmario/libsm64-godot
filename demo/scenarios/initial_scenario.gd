@@ -8,8 +8,8 @@ extends Node3D
 
 func _ready() -> void:
 	LibSM64Global.init()
-	$SM64StaticSurfacesHandler.load_static_surfaces()
-	$SM64SurfaceObjectsHandler.load_all_surface_objects()
+	$LibSM64StaticSurfacesHandler.load_static_surfaces()
+	$LibSM64SurfaceObjectsHandler.load_all_surface_objects()
 
 	mario.create()
 	mario.water_level = 0.0

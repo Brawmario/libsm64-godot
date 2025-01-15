@@ -2,8 +2,8 @@ extends Node3D
 
 func _ready() -> void:
 	LibSM64Global.init()
-	$SM64StaticSurfacesHandler.load_static_surfaces()
-	$SM64SurfaceObjectsHandler.load_all_surface_objects()
+	$LibSM64StaticSurfacesHandler.load_static_surfaces()
+	$LibSM64SurfaceObjectsHandler.load_all_surface_objects()
 
 	for node in get_tree().get_nodes_in_group("libsm64_mario"):
 		var mario := node as LibSM64Mario

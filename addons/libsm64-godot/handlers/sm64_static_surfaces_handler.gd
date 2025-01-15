@@ -1,4 +1,4 @@
-class_name SM64StaticSurfaceHandler
+class_name LibSM64StaticSurfacesHandler
 extends Node
 
 ## Node that handles adding MeshInstance3D nodes as Static Surfaces for libsm64.
@@ -23,9 +23,9 @@ func load_static_surfaces() -> void:
 		var properties := _find_surface_properties(mesh_instance)
 		var mesh_faces := mesh_instance.get_mesh().get_faces()
 		for i in range(0, mesh_faces.size(), 3):
-			var v1 = mesh_instance.global_transform * mesh_faces[i + 0]
-			var v2 = mesh_instance.global_transform * mesh_faces[i + 1]
-			var v3 = mesh_instance.global_transform * mesh_faces[i + 2]
+			var v1 := mesh_instance.global_transform * mesh_faces[i + 0]
+			var v2 := mesh_instance.global_transform * mesh_faces[i + 1]
+			var v3 := mesh_instance.global_transform * mesh_faces[i + 2]
 			libsm64_surface_array.add_triangle_with_properties(v1, v2, v3, properties)
 
 	LibSM64.static_surfaces_load(libsm64_surface_array)
