@@ -73,7 +73,7 @@ godot::Ref<LibSM64MarioState> LibSM64MarioInterpolator::get_mario_state_previous
     return mario_state_previous;
 }
 
-godot::Array LibSM64MarioInterpolator::interolate_array_mesh_triangles(double p_t) const
+godot::Array LibSM64MarioInterpolator::interpolate_array_mesh_triangles(double p_t) const
 {
     auto ret = godot::Array();
     ret.resize(godot::ArrayMesh::ARRAY_MAX);
@@ -132,6 +132,6 @@ void LibSM64MarioInterpolator::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_state_previous", "value"), &LibSM64MarioInterpolator::set_mario_state_previous);
     godot::ClassDB::bind_method(godot::D_METHOD("get_mario_state_previous"), &LibSM64MarioInterpolator::get_mario_state_previous);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::OBJECT, "mario_state_previous"), "set_mario_state_previous", "get_mario_state_previous");
-    godot::ClassDB::bind_method(godot::D_METHOD("interolate_array_mesh_triangles", "t"), &LibSM64MarioInterpolator::interolate_array_mesh_triangles);
+    godot::ClassDB::bind_method(godot::D_METHOD("interpolate_array_mesh_triangles", "t"), &LibSM64MarioInterpolator::interpolate_array_mesh_triangles);
     godot::ClassDB::bind_method(godot::D_METHOD("interpolate_mario_state", "t"), &LibSM64MarioInterpolator::interpolate_mario_state);
 }

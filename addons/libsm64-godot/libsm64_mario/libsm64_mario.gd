@@ -225,7 +225,7 @@ func _process(delta: float) -> void:
 
 	var array_mesh_triangles: Array
 	if interpolate:
-		array_mesh_triangles = _mario_interpolator.interolate_array_mesh_triangles(lerp_t)
+		array_mesh_triangles = _mario_interpolator.interpolate_array_mesh_triangles(lerp_t)
 	else:
 		array_mesh_triangles = _mario_interpolator.array_mesh_triangles_current
 

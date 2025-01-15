@@ -28,7 +28,7 @@ public:
     void set_mario_state_previous(const godot::Ref<LibSM64MarioState> &p_value);
     godot::Ref<LibSM64MarioState> get_mario_state_previous() const;
 
-    godot::Array interolate_array_mesh_triangles(double p_t) const;
+    godot::Array interpolate_array_mesh_triangles(double p_t) const;
     godot::Ref<LibSM64MarioState> interpolate_mario_state(double p_t) const;
 
 protected:
