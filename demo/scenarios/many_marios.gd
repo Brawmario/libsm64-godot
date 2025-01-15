@@ -6,7 +6,7 @@ func _ready() -> void:
 	$SM64SurfaceObjectsHandler.load_all_surface_objects()
 
 	for node in get_tree().get_nodes_in_group("libsm64_mario"):
-		var mario := node as SM64Mario
+		var mario := node as LibSM64Mario
 		if not mario:
 			continue
 		mario.create()
@@ -18,7 +18,7 @@ func _ready() -> void:
 func _on_tree_exiting() -> void:
 	LibSM64.stop_background_music(LibSM64.get_current_background_music())
 	for node in get_tree().get_nodes_in_group("libsm64_mario"):
-		var mario := node as SM64Mario
+		var mario := node as LibSM64Mario
 		if not mario:
 			continue
 		mario.delete()

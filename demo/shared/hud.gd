@@ -9,7 +9,7 @@ Invicibility Time: %.2f
 Face angle: %dº
 """
 
-var mario: SM64Mario
+var mario: LibSM64Mario
 
 @onready var mario_info_label := %MarioInfoLabel as Label
 

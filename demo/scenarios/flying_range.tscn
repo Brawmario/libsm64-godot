@@ -14,12 +14,12 @@ start_cap = 8
 
 [node name="BigLevel" parent="." instance=ExtResource("3_ihbeb")]
 
-[node name="SM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
+[node name="LibSM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.5, 49)
 script = ExtResource("4_umvy3")
 camera = NodePath("CameraRig/Camera3D")
 
-[node name="CameraRig" parent="SM64Mario" instance=ExtResource("5_uu7a6")]
+[node name="CameraRig" parent="LibSM64Mario" instance=ExtResource("5_uu7a6")]
 
 [node name="SM64StaticSurfacesHandler" type="Node" parent="."]
 script = ExtResource("6_41tpo")
@@ -33,4 +33,4 @@ script = ExtResource("7_ju0gc")
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 
-[editable path="SM64Mario/CameraRig"]
+[editable path="LibSM64Mario/CameraRig"]

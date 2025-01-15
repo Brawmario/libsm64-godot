@@ -30,12 +30,12 @@ environment = SubResource("Environment_wxohf")
 
 [node name="Battlefield" type="MeshInstance3D" parent="."]
 
-[node name="SM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
+[node name="LibSM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.3144, 11.8729, -21.092)
 script = ExtResource("2_eljv2")
 camera = NodePath("CameraRig/Camera3D")
 
-[node name="CameraRig" parent="SM64Mario" instance=ExtResource("3_lc572")]
+[node name="CameraRig" parent="LibSM64Mario" instance=ExtResource("3_lc572")]
 
 [node name="HUD" parent="." instance=ExtResource("4_8fya1")]
 metadata/_edit_use_anchors_ = true
@@ -44,4 +44,4 @@ metadata/_edit_use_anchors_ = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 
-[editable path="SM64Mario/CameraRig"]
+[editable path="LibSM64Mario/CameraRig"]

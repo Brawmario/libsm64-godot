@@ -9,7 +9,7 @@ const ANGLE_X_MAX := PI / 3
 @export var sensitivity_gamepad := Vector2(2.5, 2.5)
 @export var sensitivity_mouse := Vector2(0.1, 0.1)
 
-@onready var player := get_parent() as SM64Mario
+@onready var player := get_parent() as LibSM64Mario
 
 var _input_relative := Vector2.ZERO
 
