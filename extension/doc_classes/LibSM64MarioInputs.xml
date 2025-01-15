@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="SM64Input" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+<class name="LibSM64MarioInputs" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
-		POD class representing the Nintendo 64 controller input.
+		Class representing the Nintendo 64 controller input.
 	</brief_description>
 	<description>
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
-		<member name="a" type="bool" setter="set_a" getter="get_a" default="false">
+		<member name="button_a" type="bool" setter="set_button_a" getter="get_button_a" default="false">
 			If [code]true[/code], the Nintendo 64 controller's A button is being pressed.
 		</member>
-		<member name="b" type="bool" setter="set_b" getter="get_b" default="false">
+		<member name="button_b" type="bool" setter="set_button_b" getter="get_button_b" default="false">
 			If [code]true[/code], the Nintendo 64 controller's B button is being pressed.
+		</member>
+		<member name="button_z" type="bool" setter="set_button_z" getter="get_button_z" default="false">
+			If [code]true[/code], the Nintendo 64 controller's Z button is being pressed.
 		</member>
 		<member name="cam_look" type="Vector2" setter="set_cam_look" getter="get_cam_look" default="Vector2(0, 0)">
 			Camera vector information for calculating the desired movement direction.
@@ -21,10 +24,9 @@
 			[b]Note:[/b] the 3D vector of the facing direction of a [Camera3D] node is [member Camera3D.global_transform.basis.z].
 		</member>
 		<member name="stick" type="Vector2" setter="set_stick" getter="get_stick" default="Vector2(0, 0)">
-			Input vector of the Nintendo 64 controller's joystick
-		</member>
-		<member name="z" type="bool" setter="set_z" getter="get_z" default="false">
-			If [code]true[/code], the Nintendo 64 controller's Z button is being pressed.
+			Input vector of the Nintendo 64 controller's joystick.
+			[member Vector2.x] should be in the range [-1, 1].
+			[member Vector2.y] should be in the range [-1, 1].
 		</member>
 	</members>
 </class>

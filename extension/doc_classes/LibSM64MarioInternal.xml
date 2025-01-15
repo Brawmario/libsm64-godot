@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="LibSM64MarioInternal" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="interolate_array_mesh_triangles" qualifiers="const">
+			<return type="Array" />
+			<param index="0" name="t" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="interpolate_mario_state" qualifiers="const">
+			<return type="LibSM64MarioState" />
+			<param index="0" name="t" type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="array_mesh_triangles_current" type="Array" setter="set_array_mesh_triangles_current" getter="get_array_mesh_triangles_current" default="[PackedVector3Array(), PackedVector3Array(), null, PackedColorArray(), PackedVector2Array(), null, null, null, null, null, null, null, null]">
+		</member>
+		<member name="array_mesh_triangles_previous" type="Array" setter="set_array_mesh_triangles_previous" getter="get_array_mesh_triangles_previous" default="[PackedVector3Array(), PackedVector3Array(), null, PackedColorArray(), PackedVector2Array(), null, null, null, null, null, null, null, null]">
+		</member>
+		<member name="mario_state_current" type="LibSM64MarioState" setter="set_mario_state_current" getter="get_mario_state_current">
+		</member>
+		<member name="mario_state_previous" type="LibSM64MarioState" setter="set_mario_state_previous" getter="get_mario_state_previous">
+		</member>
+	</members>
+</class>

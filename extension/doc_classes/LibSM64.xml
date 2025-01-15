@@ -1,0 +1,1652 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="LibSM64" inherits="Object" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Singleton that exposes all of [code]libsm64[/code]'s functionality.
+	</brief_description>
+	<description>
+		The [LibSM64] singleton exposes all of [code]libsm64[/code]'s constants and public functions. All of the inputs and outputs of the functions are internally converted back and forth from Godot to [code]libsm64[/code]'s types.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="audio_init">
+			<return type="void" />
+			<param index="0" name="rom" type="PackedByteArray" />
+			<description>
+			</description>
+		</method>
+		<method name="audio_tick">
+			<return type="PackedVector2Array" />
+			<param index="0" name="queued_frames" type="int" />
+			<param index="1" name="desired_frames" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="fadeout_background_music">
+			<return type="void" />
+			<param index="0" name="seq_id" type="int" />
+			<param index="1" name="fade_out_time" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="get_current_background_music">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="global_init">
+			<return type="Image" />
+			<param index="0" name="rom" type="PackedByteArray" />
+			<description>
+				Initialize [code]libsm64[/code] with the given loaded ROM.
+				Returns the Mario's [Image] resource extracted from the ROM file.
+				[b]Warning:[/b] Calling this function with the wrong ROM will cause the game to crash!
+			</description>
+		</method>
+		<method name="global_terminate">
+			<return type="void" />
+			<description>
+				Terminate [code]libsm64[/code].
+			</description>
+		</method>
+		<method name="mario_attack">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="position" type="Vector3" />
+			<param index="2" name="hitbox_height" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="mario_create">
+			<return type="int" />
+			<param index="0" name="position" type="Vector3" />
+			<description>
+			</description>
+		</method>
+		<method name="mario_delete">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="mario_extend_cap">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="cap_time" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="mario_heal">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="heal_counter" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="mario_interact_cap">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="cap_flag" type="int" />
+			<param index="2" name="cap_time" type="float" default="0.0" />
+			<param index="3" name="play_music" type="bool" default="true" />
+			<description>
+			</description>
+		</method>
+		<method name="mario_kill">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="mario_take_damage">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="damage" type="int" />
+			<param index="2" name="subtype" type="int" />
+			<param index="3" name="position" type="Vector3" />
+			<description>
+			</description>
+		</method>
+		<method name="mario_tick">
+			<return type="LibSM64MarioTickOutput" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="inputs" type="LibSM64MarioInputs" />
+			<description>
+			</description>
+		</method>
+		<method name="play_music">
+			<return type="void" />
+			<param index="0" name="player" type="int" />
+			<param index="1" name="seq_args" type="int" />
+			<param index="2" name="fade_in_time" type="float" default="0.0" />
+			<description>
+			</description>
+		</method>
+		<method name="play_sound">
+			<return type="void" />
+			<param index="0" name="sound_bits" type="int" />
+			<param index="1" name="position" type="Vector3" />
+			<description>
+			</description>
+		</method>
+		<method name="play_sound_global">
+			<return type="void" />
+			<param index="0" name="sound_bits" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="register_debug_print_function">
+			<return type="void" />
+			<param index="0" name="callback" type="Callable" />
+			<description>
+			</description>
+		</method>
+		<method name="register_play_sound_function">
+			<return type="void" />
+			<param index="0" name="callback" type="Callable" />
+			<description>
+			</description>
+		</method>
+		<method name="seq_player_play_sequence">
+			<return type="void" />
+			<param index="0" name="player" type="int" />
+			<param index="1" name="seq_id" type="int" />
+			<param index="2" name="fade_in_time" type="float" default="0.0" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_action">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="action" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_action_arg">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="action" type="int" />
+			<param index="2" name="action_arg" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_angle">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="angle" type="Quaternion" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_anim_frame">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="anim_frame" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_animation">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="anim_id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_face_angle">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="y" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_forward_velocity">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="velocity" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_gas_level">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="level" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_health">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="health" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_invincibility">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="time" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_position">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="position" type="Vector3" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_state">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="flags" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_velocity">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="velocity" type="Vector3" />
+			<description>
+			</description>
+		</method>
+		<method name="set_mario_water_level">
+			<return type="void" />
+			<param index="0" name="mario_id" type="int" />
+			<param index="1" name="level" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_sound_volume">
+			<return type="void" />
+			<param index="0" name="volume" type="float" />
+			<description>
+				Set the internal volume of the sounds played by [code]libsm64[/code].
+			</description>
+		</method>
+		<method name="static_surfaces_load">
+			<return type="void" />
+			<param index="0" name="surfaces" type="LibSM64SurfaceArray" />
+			<description>
+			</description>
+		</method>
+		<method name="stop_background_music">
+			<return type="void" />
+			<param index="0" name="seq_id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="surface_object_create">
+			<return type="int" />
+			<param index="0" name="position" type="Vector3" />
+			<param index="1" name="rotation" type="Quaternion" />
+			<param index="2" name="surfaces" type="LibSM64SurfaceArray" />
+			<description>
+			</description>
+		</method>
+		<method name="surface_object_delete">
+			<return type="void" />
+			<param index="0" name="object_id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="surface_object_move">
+			<return type="void" />
+			<param index="0" name="object_id" type="int" />
+			<param index="1" name="position" type="Vector3" />
+			<param index="2" name="rotation" type="Quaternion" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="scale_factor" type="float" setter="set_scale_factor" getter="get_scale_factor" default="75.0">
+			The scale factor used to convert Godot values into [code]libsm64[/code] values (and vice-versa). The bigger the scale, the smaller Mario will be in the Godot scene.
+			At 75.0 scale, Mario will be just below 2 meters tall in the Godot scene.
+		</member>
+		<member name="sm64_timestep_interval" type="float" setter="" getter="get_sm64_timestep_interval" default="0.0333333">
+		</member>
+	</members>
+	<constants>
+		<constant name="SURFACE_DEFAULT" value="0" enum="SurfaceType">
+			Environment default.
+		</constant>
+		<constant name="SURFACE_BURNING" value="1" enum="SurfaceType">
+			Lava/Frostbite (in SL), but is used mostly for Lava.
+		</constant>
+		<constant name="SURFACE_0004" value="4" enum="SurfaceType">
+			Unused, has no function and has parameters.
+		</constant>
+		<constant name="SURFACE_HANGABLE" value="5" enum="SurfaceType">
+			Ceiling that Mario can climb on.
+		</constant>
+		<constant name="SURFACE_SLOW" value="9" enum="SurfaceType">
+			Slow down Mario, unused.
+		</constant>
+		<constant name="SURFACE_DEATH_PLANE" value="10" enum="SurfaceType">
+			Death floor.
+		</constant>
+		<constant name="SURFACE_CLOSE_CAMERA" value="11" enum="SurfaceType">
+			Close camera.
+		</constant>
+		<constant name="SURFACE_WATER" value="13" enum="SurfaceType">
+			Water, has no action, used on some waterboxes below.
+		</constant>
+		<constant name="SURFACE_FLOWING_WATER" value="14" enum="SurfaceType">
+			Water (flowing), has parameters.
+		</constant>
+		<constant name="SURFACE_INTANGIBLE" value="18" enum="SurfaceType">
+			Intangible (Separates BBH mansion from merry-go-round, for room usage).
+		</constant>
+		<constant name="SURFACE_VERY_SLIPPERY" value="19" enum="SurfaceType">
+			Very slippery, mostly used for slides.
+		</constant>
+		<constant name="SURFACE_SLIPPERY" value="20" enum="SurfaceType">
+			Slippery.
+		</constant>
+		<constant name="SURFACE_NOT_SLIPPERY" value="21" enum="SurfaceType">
+			Non-slippery, climbable.
+		</constant>
+		<constant name="SURFACE_TTM_VINES" value="22" enum="SurfaceType">
+			TTM vines, has no action defined.
+		</constant>
+		<constant name="SURFACE_MGR_MUSIC" value="26" enum="SurfaceType">
+			Plays the Merry go round music, see [code]handle_merry_go_round_music[/code] in [code]bbh_merry_go_round.inc.c[/code] in the Super Mario 64 decompilation project for more details.
+		</constant>
+		<constant name="SURFACE_INSTANT_WARP_1B" value="27" enum="SurfaceType">
+			Instant warp to another area, used to warp between areas in WDW and the endless stairs to warp back.
+		</constant>
+		<constant name="SURFACE_INSTANT_WARP_1C" value="28" enum="SurfaceType">
+			Instant warp to another area, used to warp between areas in WDW.
+		</constant>
+		<constant name="SURFACE_INSTANT_WARP_1D" value="29" enum="SurfaceType">
+			Instant warp to another area, used to warp between areas in DDD, SSL and TTM.
+		</constant>
+		<constant name="SURFACE_INSTANT_WARP_1E" value="30" enum="SurfaceType">
+			Instant warp to another area, used to warp between areas in DDD, SSL and TTM.
+		</constant>
+		<constant name="SURFACE_SHALLOW_QUICKSAND" value="33" enum="SurfaceType">
+			Shallow Quicksand (depth of 10 units).
+		</constant>
+		<constant name="SURFACE_DEEP_QUICKSAND" value="34" enum="SurfaceType">
+			Quicksand (lethal, slow, depth of 160 units).
+		</constant>
+		<constant name="SURFACE_INSTANT_QUICKSAND" value="35" enum="SurfaceType">
+			Quicksand (lethal, instant).
+		</constant>
+		<constant name="SURFACE_DEEP_MOVING_QUICKSAND" value="36" enum="SurfaceType">
+			Moving quicksand (flowing, depth of 160 units).
+		</constant>
+		<constant name="SURFACE_SHALLOW_MOVING_QUICKSAND" value="37" enum="SurfaceType">
+			Moving quicksand (flowing, depth of 25 units).
+		</constant>
+		<constant name="SURFACE_QUICKSAND" value="38" enum="SurfaceType">
+			Moving quicksand (60 units).
+		</constant>
+		<constant name="SURFACE_MOVING_QUICKSAND" value="39" enum="SurfaceType">
+			Moving quicksand (flowing, depth of 60 units).
+		</constant>
+		<constant name="SURFACE_WALL_MISC" value="40" enum="SurfaceType">
+			Used for some walls, Cannon to adjust the camera, and some objects like Warp Pipe.
+		</constant>
+		<constant name="SURFACE_NOISE_DEFAULT" value="41" enum="SurfaceType">
+			Default floor with noise.
+		</constant>
+		<constant name="SURFACE_NOISE_SLIPPERY" value="42" enum="SurfaceType">
+			Slippery floor with noise.
+		</constant>
+		<constant name="SURFACE_HORIZONTAL_WIND" value="44" enum="SurfaceType">
+			Horizontal wind, has parameters.
+		</constant>
+		<constant name="SURFACE_INSTANT_MOVING_QUICKSAND" value="45" enum="SurfaceType">
+			Quicksand (lethal, flowing).
+		</constant>
+		<constant name="SURFACE_ICE" value="46" enum="SurfaceType">
+			Slippery Ice, in snow levels and THI's water floor.
+		</constant>
+		<constant name="SURFACE_LOOK_UP_WARP" value="47" enum="SurfaceType">
+			Look up and warp (Wing cap entrance).
+		</constant>
+		<constant name="SURFACE_HARD" value="48" enum="SurfaceType">
+			Hard floor (Always has fall damage).
+		</constant>
+		<constant name="SURFACE_WARP" value="50" enum="SurfaceType">
+			Surface warp.
+		</constant>
+		<constant name="SURFACE_TIMER_START" value="51" enum="SurfaceType">
+			Timer start (Peach's secret slide).
+		</constant>
+		<constant name="SURFACE_TIMER_END" value="52" enum="SurfaceType">
+			Timer stop (Peach's secret slide).
+		</constant>
+		<constant name="SURFACE_HARD_SLIPPERY" value="53" enum="SurfaceType">
+			Hard and slippery (Always has fall damage).
+		</constant>
+		<constant name="SURFACE_HARD_VERY_SLIPPERY" value="54" enum="SurfaceType">
+			Hard and very slippery (Always has fall damage).
+		</constant>
+		<constant name="SURFACE_HARD_NOT_SLIPPERY" value="55" enum="SurfaceType">
+			Hard and Non-slippery (Always has fall damage).
+		</constant>
+		<constant name="SURFACE_VERTICAL_WIND" value="56" enum="SurfaceType">
+			Death at bottom with vertical wind.
+		</constant>
+		<constant name="SURFACE_BOSS_FIGHT_CAMERA" value="101" enum="SurfaceType">
+			Wide camera for BOB and WF bosses.
+		</constant>
+		<constant name="SURFACE_CAMERA_FREE_ROAM" value="102" enum="SurfaceType">
+			Free roam camera for THI and TTC.
+		</constant>
+		<constant name="SURFACE_THI3_WALLKICK" value="104" enum="SurfaceType">
+			Surface where there's a wall kick section in THI 3rd area, has no action defined.
+		</constant>
+		<constant name="SURFACE_CAMERA_8_DIR" value="105" enum="SurfaceType">
+			Surface that enables far camera for platforms, used in THI.
+		</constant>
+		<constant name="SURFACE_CAMERA_MIDDLE" value="110" enum="SurfaceType">
+			Surface camera that returns to the middle, used on the 4 pillars of SSL.
+		</constant>
+		<constant name="SURFACE_CAMERA_ROTATE_RIGHT" value="111" enum="SurfaceType">
+			Surface camera that rotates to the right (Bowser 1 &amp; THI).
+		</constant>
+		<constant name="SURFACE_CAMERA_ROTATE_LEFT" value="112" enum="SurfaceType">
+			Surface camera that rotates to the left (BOB &amp; TTM).
+		</constant>
+		<constant name="SURFACE_CAMERA_BOUNDARY" value="114" enum="SurfaceType">
+			Intangible Area, only used to restrict camera movement.
+		</constant>
+		<constant name="SURFACE_NOISE_VERY_SLIPPERY_73" value="115" enum="SurfaceType">
+			Very slippery floor with noise, unused.
+		</constant>
+		<constant name="SURFACE_NOISE_VERY_SLIPPERY_74" value="116" enum="SurfaceType">
+			Very slippery floor with noise, unused.
+		</constant>
+		<constant name="SURFACE_NOISE_VERY_SLIPPERY" value="117" enum="SurfaceType">
+			Very slippery floor with noise, used in CCM.
+		</constant>
+		<constant name="SURFACE_NO_CAM_COLLISION" value="118" enum="SurfaceType">
+			Surface with no cam collision flag.
+		</constant>
+		<constant name="SURFACE_NO_CAM_COLLISION_77" value="119" enum="SurfaceType">
+			Surface with no cam collision flag, unused.
+		</constant>
+		<constant name="SURFACE_NO_CAM_COL_VERY_SLIPPERY" value="120" enum="SurfaceType">
+			Surface with no cam collision flag, very slippery with noise (THI).
+		</constant>
+		<constant name="SURFACE_NO_CAM_COL_SLIPPERY" value="121" enum="SurfaceType">
+			Surface with no cam collision flag, slippery with noise (CCM, PSS and TTM slides).
+		</constant>
+		<constant name="SURFACE_SWITCH" value="122" enum="SurfaceType">
+			Surface with no cam collision flag, non-slippery with noise, used by switches and Dorrie.
+		</constant>
+		<constant name="SURFACE_VANISH_CAP_WALLS" value="123" enum="SurfaceType">
+			Vanish cap walls, pass through them with Vanish Cap.
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_A6" value="166" enum="SurfaceType">
+			Painting wobble (BOB Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_A7" value="167" enum="SurfaceType">
+			Painting wobble (BOB Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_A8" value="168" enum="SurfaceType">
+			Painting wobble (BOB Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_A9" value="169" enum="SurfaceType">
+			Painting wobble (CCM Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_AA" value="170" enum="SurfaceType">
+			Painting wobble (CCM Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_AB" value="171" enum="SurfaceType">
+			Painting wobble (CCM Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_AC" value="172" enum="SurfaceType">
+			Painting wobble (WF Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_AD" value="173" enum="SurfaceType">
+			Painting wobble (WF Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_AE" value="174" enum="SurfaceType">
+			Painting wobble (WF Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_AF" value="175" enum="SurfaceType">
+			Painting wobble (JRB Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_B0" value="176" enum="SurfaceType">
+			Painting wobble (JRB Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_B1" value="177" enum="SurfaceType">
+			Painting wobble (JRB Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_B2" value="178" enum="SurfaceType">
+			Painting wobble (LLL Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_B3" value="179" enum="SurfaceType">
+			Painting wobble (LLL Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_B4" value="180" enum="SurfaceType">
+			Painting wobble (LLL Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_B5" value="181" enum="SurfaceType">
+			Painting wobble (SSL Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_B6" value="182" enum="SurfaceType">
+			Painting wobble (SSL Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_B7" value="183" enum="SurfaceType">
+			Painting wobble (SSL Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_B8" value="184" enum="SurfaceType">
+			Painting wobble (Unused - Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_B9" value="185" enum="SurfaceType">
+			Painting wobble (Unused - Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_BA" value="186" enum="SurfaceType">
+			Painting wobble (Unused - Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_BB" value="187" enum="SurfaceType">
+			Painting wobble (DDD - Left), makes the painting wobble if touched.
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_BC" value="188" enum="SurfaceType">
+			Painting wobble (Unused, DDD - Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_BD" value="189" enum="SurfaceType">
+			Painting wobble (Unused, DDD - Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_BE" value="190" enum="SurfaceType">
+			Painting wobble (WDW Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_BF" value="191" enum="SurfaceType">
+			Painting wobble (WDW Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_C0" value="192" enum="SurfaceType">
+			Painting wobble (WDW Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_C1" value="193" enum="SurfaceType">
+			Painting wobble (THI Tiny - Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_C2" value="194" enum="SurfaceType">
+			Painting wobble (THI Tiny - Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_C3" value="195" enum="SurfaceType">
+			Painting wobble (THI Tiny - Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_C4" value="196" enum="SurfaceType">
+			Painting wobble (TTM Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_C5" value="197" enum="SurfaceType">
+			Painting wobble (TTM Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_C6" value="198" enum="SurfaceType">
+			Painting wobble (TTM Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_C7" value="199" enum="SurfaceType">
+			Painting wobble (Unused, TTC - Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_C8" value="200" enum="SurfaceType">
+			Painting wobble (Unused, TTC - Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_C9" value="201" enum="SurfaceType">
+			Painting wobble (Unused, TTC - Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_CA" value="202" enum="SurfaceType">
+			Painting wobble (Unused, SL - Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_CB" value="203" enum="SurfaceType">
+			Painting wobble (Unused, SL - Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_CC" value="204" enum="SurfaceType">
+			Painting wobble (Unused, SL - Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_CD" value="205" enum="SurfaceType">
+			Painting wobble (THI Huge - Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_CE" value="206" enum="SurfaceType">
+			Painting wobble (THI Huge - Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_CF" value="207" enum="SurfaceType">
+			Painting wobble (THI Huge - Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_D0" value="208" enum="SurfaceType">
+			Painting wobble (HMC &amp; COTMC - Left), makes the painting wobble if touched.
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_D1" value="209" enum="SurfaceType">
+			Painting wobble (Unused, HMC &amp; COTMC - Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WOBBLE_D2" value="210" enum="SurfaceType">
+			Painting wobble (Unused, HMC &amp; COTMC - Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_D3" value="211" enum="SurfaceType">
+			Painting warp (BOB Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_D4" value="212" enum="SurfaceType">
+			Painting warp (BOB Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_D5" value="213" enum="SurfaceType">
+			Painting warp (BOB Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_D6" value="214" enum="SurfaceType">
+			Painting warp (CCM Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_D7" value="215" enum="SurfaceType">
+			Painting warp (CCM Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_D8" value="216" enum="SurfaceType">
+			Painting warp (CCM Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_D9" value="217" enum="SurfaceType">
+			Painting warp (WF Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_DA" value="218" enum="SurfaceType">
+			Painting warp (WF Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_DB" value="219" enum="SurfaceType">
+			Painting warp (WF Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_DC" value="220" enum="SurfaceType">
+			Painting warp (JRB Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_DD" value="221" enum="SurfaceType">
+			Painting warp (JRB Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_DE" value="222" enum="SurfaceType">
+			Painting warp (JRB Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_DF" value="223" enum="SurfaceType">
+			Painting warp (LLL Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_E0" value="224" enum="SurfaceType">
+			Painting warp (LLL Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_E1" value="225" enum="SurfaceType">
+			Painting warp (LLL Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_E2" value="226" enum="SurfaceType">
+			Painting warp (SSL Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_E3" value="227" enum="SurfaceType">
+			Painting warp (SSL Medium).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_E4" value="228" enum="SurfaceType">
+			Painting warp (SSL Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_E5" value="229" enum="SurfaceType">
+			Painting warp (Unused - Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_E6" value="230" enum="SurfaceType">
+			Painting warp (Unused - Medium).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_E7" value="231" enum="SurfaceType">
+			Painting warp (Unused - Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_E8" value="232" enum="SurfaceType">
+			Painting warp (DDD - Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_E9" value="233" enum="SurfaceType">
+			Painting warp (DDD - Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_EA" value="234" enum="SurfaceType">
+			Painting warp (DDD - Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_EB" value="235" enum="SurfaceType">
+			Painting warp (WDW Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_EC" value="236" enum="SurfaceType">
+			Painting warp (WDW Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_ED" value="237" enum="SurfaceType">
+			Painting warp (WDW Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_EE" value="238" enum="SurfaceType">
+			Painting warp (THI Tiny - Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_EF" value="239" enum="SurfaceType">
+			Painting warp (THI Tiny - Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_F0" value="240" enum="SurfaceType">
+			Painting warp (THI Tiny - Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_F1" value="241" enum="SurfaceType">
+			Painting warp (TTM Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_F2" value="242" enum="SurfaceType">
+			Painting warp (TTM Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_F3" value="243" enum="SurfaceType">
+			Painting warp (TTM Right).
+		</constant>
+		<constant name="SURFACE_TTC_PAINTING_1" value="244" enum="SurfaceType">
+			Painting warp (TTC Left).
+		</constant>
+		<constant name="SURFACE_TTC_PAINTING_2" value="245" enum="SurfaceType">
+			Painting warp (TTC Medium).
+		</constant>
+		<constant name="SURFACE_TTC_PAINTING_3" value="246" enum="SurfaceType">
+			Painting warp (TTC Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_F7" value="247" enum="SurfaceType">
+			Painting warp (SL Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_F8" value="248" enum="SurfaceType">
+			Painting warp (SL Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_F9" value="249" enum="SurfaceType">
+			Painting warp (SL Right).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_FA" value="250" enum="SurfaceType">
+			Painting warp (THI Tiny - Left).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_FB" value="251" enum="SurfaceType">
+			Painting warp (THI Tiny - Middle).
+		</constant>
+		<constant name="SURFACE_PAINTING_WARP_FC" value="252" enum="SurfaceType">
+			Painting warp (THI Tiny - Right).
+		</constant>
+		<constant name="SURFACE_WOBBLING_WARP" value="253" enum="SurfaceType">
+			Pool warp (HMC &amp; DDD).
+		</constant>
+		<constant name="SURFACE_TRAPDOOR" value="255" enum="SurfaceType">
+			Bowser Left trapdoor, has no action defined.
+		</constant>
+		<constant name="TERRAIN_GRASS" value="0" enum="TerrainType">
+		</constant>
+		<constant name="TERRAIN_STONE" value="1" enum="TerrainType">
+		</constant>
+		<constant name="TERRAIN_SNOW" value="2" enum="TerrainType">
+		</constant>
+		<constant name="TERRAIN_SAND" value="3" enum="TerrainType">
+		</constant>
+		<constant name="TERRAIN_SPOOKY" value="4" enum="TerrainType">
+		</constant>
+		<constant name="TERRAIN_WATER" value="5" enum="TerrainType">
+		</constant>
+		<constant name="TERRAIN_SLIDE" value="6" enum="TerrainType">
+		</constant>
+		<constant name="TERRAIN_MASK" value="7" enum="TerrainType">
+		</constant>
+		<constant name="MARIO_NORMAL_CAP" value="1" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_VANISH_CAP" value="2" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_METAL_CAP" value="4" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_WING_CAP" value="8" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_CAP_ON_HEAD" value="16" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_CAP_IN_HAND" value="32" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_METAL_SHOCK" value="64" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_TELEPORTING" value="128" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_UNKNOWN_08" value="256" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_UNKNOWN_13" value="8192" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_ACTION_SOUND_PLAYED" value="65536" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_MARIO_SOUND_PLAYED" value="131072" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_UNKNOWN_18" value="262144" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_PUNCHING" value="1048576" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_KICKING" value="2097152" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_TRIPPING" value="4194304" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_UNKNOWN_25" value="33554432" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_UNKNOWN_30" value="1073741824" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_UNKNOWN_31" value="2147483648" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_SPECIAL_CAPS" value="14" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="MARIO_CAPS" value="15" enum="MarioFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_ID_MASK" value="511" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_GROUP_MASK" value="448" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_GROUP_STATIONARY" value="0" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_GROUP_MOVING" value="64" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_GROUP_AIRBORNE" value="128" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_GROUP_SUBMERGED" value="192" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_GROUP_CUTSCENE" value="256" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_GROUP_AUTOMATIC" value="320" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_GROUP_OBJECT" value="384" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_STATIONARY" value="512" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_MOVING" value="1024" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_AIR" value="2048" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_INTANGIBLE" value="4096" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_SWIMMING" value="8192" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_METAL_WATER" value="16384" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_SHORT_HITBOX" value="32768" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_RIDING_SHELL" value="65536" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_INVULNERABLE" value="131072" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_BUTT_OR_STOMACH_SLIDE" value="262144" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_DIVING" value="524288" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_ON_POLE" value="1048576" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_HANGING" value="2097152" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_IDLE" value="4194304" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_ATTACKING" value="8388608" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION" value="16777216" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_CONTROL_JUMP_HEIGHT" value="33554432" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_ALLOW_FIRST_PERSON" value="67108864" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_PAUSE_EXIT" value="134217728" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_SWIMMING_OR_FLYING" value="268435456" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_WATER_OR_TEXT" value="536870912" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_FLAG_THROWING" value="-2147483648" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_UNINITIALIZED" value="0" enum="ActionFlags" is_bitfield="true">
+		</constant>
+		<constant name="ACT_IDLE" value="205521409" enum="ActionFlags" is_bitfield="true">
+			0x001 | ACT_FLAG_STATIONARY | ACT_FLAG_IDLE | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_START_SLEEPING" value="205521410" enum="ActionFlags" is_bitfield="true">
+			0x002 | ACT_FLAG_STATIONARY | ACT_FLAG_IDLE | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_SLEEPING" value="201327107" enum="ActionFlags" is_bitfield="true">
+			0x003 | ACT_FLAG_STATIONARY | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_WAKING_UP" value="201327108" enum="ActionFlags" is_bitfield="true">
+			0x004 | ACT_FLAG_STATIONARY | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_PANTING" value="205521413" enum="ActionFlags" is_bitfield="true">
+			0x005 | ACT_FLAG_STATIONARY | ACT_FLAG_IDLE | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_HOLD_PANTING_UNUSED" value="134218246" enum="ActionFlags" is_bitfield="true">
+			0x006 | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_HOLD_IDLE" value="134218247" enum="ActionFlags" is_bitfield="true">
+			0x007 | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_HOLD_HEAVY_IDLE" value="134218248" enum="ActionFlags" is_bitfield="true">
+			0x008 | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_STANDING_AGAINST_WALL" value="205521417" enum="ActionFlags" is_bitfield="true">
+			0x009 | ACT_FLAG_STATIONARY | ACT_FLAG_IDLE | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_COUGHING" value="205521418" enum="ActionFlags" is_bitfield="true">
+			0x00A | ACT_FLAG_STATIONARY | ACT_FLAG_IDLE | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_SHIVERING" value="205521419" enum="ActionFlags" is_bitfield="true">
+			0x00B | ACT_FLAG_STATIONARY | ACT_FLAG_IDLE | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_IN_QUICKSAND" value="131597" enum="ActionFlags" is_bitfield="true">
+			0x00D | ACT_FLAG_STATIONARY | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_UNKNOWN_0002020E" value="131598" enum="ActionFlags" is_bitfield="true">
+			0x00E | ACT_FLAG_STATIONARY | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_CROUCHING" value="201359904" enum="ActionFlags" is_bitfield="true">
+			0x020 | ACT_FLAG_STATIONARY | ACT_FLAG_SHORT_HITBOX | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_START_CROUCHING" value="201359905" enum="ActionFlags" is_bitfield="true">
+			0x021 | ACT_FLAG_STATIONARY | ACT_FLAG_SHORT_HITBOX | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_STOP_CROUCHING" value="201359906" enum="ActionFlags" is_bitfield="true">
+			0x022 | ACT_FLAG_STATIONARY | ACT_FLAG_SHORT_HITBOX | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_START_CRAWLING" value="201359907" enum="ActionFlags" is_bitfield="true">
+			0x023 | ACT_FLAG_STATIONARY | ACT_FLAG_SHORT_HITBOX | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_STOP_CRAWLING" value="201359908" enum="ActionFlags" is_bitfield="true">
+			0x024 | ACT_FLAG_STATIONARY | ACT_FLAG_SHORT_HITBOX | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_SLIDE_KICK_SLIDE_STOP" value="134218277" enum="ActionFlags" is_bitfield="true">
+			0x025 | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_SHOCKWAVE_BOUNCE" value="131622" enum="ActionFlags" is_bitfield="true">
+			0x026 | ACT_FLAG_STATIONARY | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_FIRST_PERSON" value="201327143" enum="ActionFlags" is_bitfield="true">
+			0x027 | ACT_FLAG_STATIONARY | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_BACKFLIP_LAND_STOP" value="134218287" enum="ActionFlags" is_bitfield="true">
+			0x02F | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_JUMP_LAND_STOP" value="201327152" enum="ActionFlags" is_bitfield="true">
+			0x030 | ACT_FLAG_STATIONARY | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_DOUBLE_JUMP_LAND_STOP" value="201327153" enum="ActionFlags" is_bitfield="true">
+			0x031 | ACT_FLAG_STATIONARY | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_FREEFALL_LAND_STOP" value="201327154" enum="ActionFlags" is_bitfield="true">
+			0x032 | ACT_FLAG_STATIONARY | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_SIDE_FLIP_LAND_STOP" value="201327155" enum="ActionFlags" is_bitfield="true">
+			0x033 | ACT_FLAG_STATIONARY | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_HOLD_JUMP_LAND_STOP" value="134218292" enum="ActionFlags" is_bitfield="true">
+			0x034 | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_HOLD_FREEFALL_LAND_STOP" value="134218293" enum="ActionFlags" is_bitfield="true">
+			0x035 | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_AIR_THROW_LAND" value="2147486262" enum="ActionFlags" is_bitfield="true">
+			0x036 | ACT_FLAG_STATIONARY | ACT_FLAG_AIR | ACT_FLAG_THROWING
+		</constant>
+		<constant name="ACT_TWIRL_LAND" value="411042360" enum="ActionFlags" is_bitfield="true">
+			0x038 | ACT_FLAG_STATIONARY | ACT_FLAG_ATTACKING | ACT_FLAG_PAUSE_EXIT | ACT_FLAG_SWIMMING_OR_FLYING
+		</constant>
+		<constant name="ACT_LAVA_BOOST_LAND" value="134218297" enum="ActionFlags" is_bitfield="true">
+			0x039 | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_TRIPLE_JUMP_LAND_STOP" value="134218298" enum="ActionFlags" is_bitfield="true">
+			0x03A | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_LONG_JUMP_LAND_STOP" value="134218299" enum="ActionFlags" is_bitfield="true">
+			0x03B | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_GROUND_POUND_LAND" value="8389180" enum="ActionFlags" is_bitfield="true">
+			0x03C | ACT_FLAG_STATIONARY | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_BRAKING_STOP" value="201327165" enum="ActionFlags" is_bitfield="true">
+			0x03D | ACT_FLAG_STATIONARY | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_BUTT_SLIDE_STOP" value="201327166" enum="ActionFlags" is_bitfield="true">
+			0x03E | ACT_FLAG_STATIONARY | ACT_FLAG_ALLOW_FIRST_PERSON | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_HOLD_BUTT_SLIDE_STOP" value="134218815" enum="ActionFlags" is_bitfield="true">
+			0x03F | ACT_FLAG_MOVING | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_WALKING" value="67109952" enum="ActionFlags" is_bitfield="true">
+			0x040 | ACT_FLAG_MOVING | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_HOLD_WALKING" value="1090" enum="ActionFlags" is_bitfield="true">
+			0x042 | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_TURNING_AROUND" value="1091" enum="ActionFlags" is_bitfield="true">
+			0x043 | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_FINISH_TURNING_AROUND" value="1092" enum="ActionFlags" is_bitfield="true">
+			0x044 | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_BRAKING" value="67109957" enum="ActionFlags" is_bitfield="true">
+			0x045 | ACT_FLAG_MOVING | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_RIDING_SHELL_GROUND" value="545326150" enum="ActionFlags" is_bitfield="true">
+			0x046 | ACT_FLAG_MOVING | ACT_FLAG_RIDING_SHELL | ACT_FLAG_ATTACKING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_HOLD_HEAVY_WALKING" value="1095" enum="ActionFlags" is_bitfield="true">
+			0x047 | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_CRAWLING" value="67142728" enum="ActionFlags" is_bitfield="true">
+			0x048 | ACT_FLAG_MOVING | ACT_FLAG_SHORT_HITBOX | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_BURNING_GROUND" value="132169" enum="ActionFlags" is_bitfield="true">
+			0x049 | ACT_FLAG_MOVING | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_DECELERATING" value="67109962" enum="ActionFlags" is_bitfield="true">
+			0x04A | ACT_FLAG_MOVING | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_HOLD_DECELERATING" value="1099" enum="ActionFlags" is_bitfield="true">
+			0x04B | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_BEGIN_SLIDING" value="80" enum="ActionFlags" is_bitfield="true">
+			0x050
+		</constant>
+		<constant name="ACT_HOLD_BEGIN_SLIDING" value="81" enum="ActionFlags" is_bitfield="true">
+			0x051
+		</constant>
+		<constant name="ACT_BUTT_SLIDE" value="8651858" enum="ActionFlags" is_bitfield="true">
+			0x052 | ACT_FLAG_MOVING | ACT_FLAG_BUTT_OR_STOMACH_SLIDE | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_STOMACH_SLIDE" value="9176147" enum="ActionFlags" is_bitfield="true">
+			0x053 | ACT_FLAG_MOVING | ACT_FLAG_BUTT_OR_STOMACH_SLIDE | ACT_FLAG_DIVING | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_HOLD_BUTT_SLIDE" value="8651860" enum="ActionFlags" is_bitfield="true">
+			0x054 | ACT_FLAG_MOVING | ACT_FLAG_BUTT_OR_STOMACH_SLIDE | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_HOLD_STOMACH_SLIDE" value="9176149" enum="ActionFlags" is_bitfield="true">
+			0x055 | ACT_FLAG_MOVING | ACT_FLAG_BUTT_OR_STOMACH_SLIDE | ACT_FLAG_DIVING | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_DIVE_SLIDE" value="8914006" enum="ActionFlags" is_bitfield="true">
+			0x056 | ACT_FLAG_MOVING | ACT_FLAG_DIVING | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_MOVE_PUNCHING" value="8389719" enum="ActionFlags" is_bitfield="true">
+			0x057 | ACT_FLAG_MOVING | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_CROUCH_SLIDE" value="75531353" enum="ActionFlags" is_bitfield="true">
+			0x059 | ACT_FLAG_MOVING | ACT_FLAG_SHORT_HITBOX | ACT_FLAG_ATTACKING | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_SLIDE_KICK_SLIDE" value="8389722" enum="ActionFlags" is_bitfield="true">
+			0x05A | ACT_FLAG_MOVING | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_HARD_BACKWARD_GROUND_KB" value="132192" enum="ActionFlags" is_bitfield="true">
+			0x060 | ACT_FLAG_MOVING | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_HARD_FORWARD_GROUND_KB" value="132193" enum="ActionFlags" is_bitfield="true">
+			0x061 | ACT_FLAG_MOVING | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_BACKWARD_GROUND_KB" value="132194" enum="ActionFlags" is_bitfield="true">
+			0x062 | ACT_FLAG_MOVING | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_FORWARD_GROUND_KB" value="132195" enum="ActionFlags" is_bitfield="true">
+			0x063 | ACT_FLAG_MOVING | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_SOFT_BACKWARD_GROUND_KB" value="132196" enum="ActionFlags" is_bitfield="true">
+			0x064 | ACT_FLAG_MOVING | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_SOFT_FORWARD_GROUND_KB" value="132197" enum="ActionFlags" is_bitfield="true">
+			0x065 | ACT_FLAG_MOVING | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_GROUND_BONK" value="132198" enum="ActionFlags" is_bitfield="true">
+			0x066 | ACT_FLAG_MOVING | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_DEATH_EXIT_LAND" value="132199" enum="ActionFlags" is_bitfield="true">
+			0x067 | ACT_FLAG_MOVING | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_JUMP_LAND" value="67110000" enum="ActionFlags" is_bitfield="true">
+			0x070 | ACT_FLAG_MOVING | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_FREEFALL_LAND" value="67110001" enum="ActionFlags" is_bitfield="true">
+			0x071 | ACT_FLAG_MOVING | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_DOUBLE_JUMP_LAND" value="67110002" enum="ActionFlags" is_bitfield="true">
+			0x072 | ACT_FLAG_MOVING | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_SIDE_FLIP_LAND" value="67110003" enum="ActionFlags" is_bitfield="true">
+			0x073 | ACT_FLAG_MOVING | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_HOLD_JUMP_LAND" value="1140" enum="ActionFlags" is_bitfield="true">
+			0x074 | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_HOLD_FREEFALL_LAND" value="1141" enum="ActionFlags" is_bitfield="true">
+			0x075 | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_QUICKSAND_JUMP_LAND" value="1142" enum="ActionFlags" is_bitfield="true">
+			0x076 | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_HOLD_QUICKSAND_JUMP_LAND" value="1143" enum="ActionFlags" is_bitfield="true">
+			0x077 | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_TRIPLE_JUMP_LAND" value="67110008" enum="ActionFlags" is_bitfield="true">
+			0x078 | ACT_FLAG_MOVING | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_LONG_JUMP_LAND" value="1145" enum="ActionFlags" is_bitfield="true">
+			0x079 | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_BACKFLIP_LAND" value="67110010" enum="ActionFlags" is_bitfield="true">
+			0x07A | ACT_FLAG_MOVING | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_JUMP" value="50333824" enum="ActionFlags" is_bitfield="true">
+			0x080 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_DOUBLE_JUMP" value="50333825" enum="ActionFlags" is_bitfield="true">
+			0x081 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_TRIPLE_JUMP" value="16779394" enum="ActionFlags" is_bitfield="true">
+			0x082 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_BACKFLIP" value="16779395" enum="ActionFlags" is_bitfield="true">
+			0x083 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_STEEP_JUMP" value="50333829" enum="ActionFlags" is_bitfield="true">
+			0x085 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_WALL_KICK_AIR" value="50333830" enum="ActionFlags" is_bitfield="true">
+			0x086 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_SIDE_FLIP" value="16779399" enum="ActionFlags" is_bitfield="true">
+			0x087 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_LONG_JUMP" value="50333832" enum="ActionFlags" is_bitfield="true">
+			0x088 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_WATER_JUMP" value="16779401" enum="ActionFlags" is_bitfield="true">
+			0x089 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_DIVE" value="25692298" enum="ActionFlags" is_bitfield="true">
+			0x08A | ACT_FLAG_AIR | ACT_FLAG_DIVING | ACT_FLAG_ATTACKING | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_FREEFALL" value="16779404" enum="ActionFlags" is_bitfield="true">
+			0x08C | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_TOP_OF_POLE_JUMP" value="50333837" enum="ActionFlags" is_bitfield="true">
+			0x08D | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_BUTT_SLIDE_AIR" value="50333838" enum="ActionFlags" is_bitfield="true">
+			0x08E | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_FLYING_TRIPLE_JUMP" value="50333844" enum="ActionFlags" is_bitfield="true">
+			0x094 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_SHOT_FROM_CANNON" value="8915096" enum="ActionFlags" is_bitfield="true">
+			0x098 | ACT_FLAG_AIR | ACT_FLAG_DIVING | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_FLYING" value="277350553" enum="ActionFlags" is_bitfield="true">
+			0x099 | ACT_FLAG_AIR | ACT_FLAG_DIVING | ACT_FLAG_ATTACKING | ACT_FLAG_SWIMMING_OR_FLYING
+		</constant>
+		<constant name="ACT_RIDING_SHELL_JUMP" value="42010778" enum="ActionFlags" is_bitfield="true">
+			0x09A | ACT_FLAG_AIR | ACT_FLAG_RIDING_SHELL | ACT_FLAG_ATTACKING | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_RIDING_SHELL_FALL" value="8456347" enum="ActionFlags" is_bitfield="true">
+			0x09B | ACT_FLAG_AIR | ACT_FLAG_RIDING_SHELL | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_VERTICAL_WIND" value="268961948" enum="ActionFlags" is_bitfield="true">
+			0x09C | ACT_FLAG_AIR | ACT_FLAG_DIVING | ACT_FLAG_SWIMMING_OR_FLYING
+		</constant>
+		<constant name="ACT_HOLD_JUMP" value="50333856" enum="ActionFlags" is_bitfield="true">
+			0x0A0 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_HOLD_FREEFALL" value="16779425" enum="ActionFlags" is_bitfield="true">
+			0x0A1 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_HOLD_BUTT_SLIDE_AIR" value="16779426" enum="ActionFlags" is_bitfield="true">
+			0x0A2 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_HOLD_WATER_JUMP" value="16779427" enum="ActionFlags" is_bitfield="true">
+			0x0A3 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_TWIRLING" value="276826276" enum="ActionFlags" is_bitfield="true">
+			0x0A4 | ACT_FLAG_AIR | ACT_FLAG_ATTACKING | ACT_FLAG_SWIMMING_OR_FLYING
+		</constant>
+		<constant name="ACT_FORWARD_ROLLOUT" value="16779430" enum="ActionFlags" is_bitfield="true">
+			0x0A6 | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_AIR_HIT_WALL" value="2215" enum="ActionFlags" is_bitfield="true">
+			0x0A7 | ACT_FLAG_AIR
+		</constant>
+		<constant name="ACT_RIDING_HOOT" value="1192" enum="ActionFlags" is_bitfield="true">
+			0x0A8 | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_GROUND_POUND" value="8390825" enum="ActionFlags" is_bitfield="true">
+			0x0A9 | ACT_FLAG_AIR | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_SLIDE_KICK" value="25168042" enum="ActionFlags" is_bitfield="true">
+			0x0AA | ACT_FLAG_AIR | ACT_FLAG_ATTACKING | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_AIR_THROW" value="2197817515" enum="ActionFlags" is_bitfield="true">
+			0x0AB | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT | ACT_FLAG_THROWING
+		</constant>
+		<constant name="ACT_JUMP_KICK" value="25168044" enum="ActionFlags" is_bitfield="true">
+			0x0AC | ACT_FLAG_AIR | ACT_FLAG_ATTACKING | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_BACKWARD_ROLLOUT" value="16779437" enum="ActionFlags" is_bitfield="true">
+			0x0AD | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_CRAZY_BOX_BOUNCE" value="2222" enum="ActionFlags" is_bitfield="true">
+			0x0AE | ACT_FLAG_AIR
+		</constant>
+		<constant name="ACT_SPECIAL_TRIPLE_JUMP" value="50333871" enum="ActionFlags" is_bitfield="true">
+			0x0AF | ACT_FLAG_AIR | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION | ACT_FLAG_CONTROL_JUMP_HEIGHT
+		</constant>
+		<constant name="ACT_BACKWARD_AIR_KB" value="16910512" enum="ActionFlags" is_bitfield="true">
+			0x0B0 | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_FORWARD_AIR_KB" value="16910513" enum="ActionFlags" is_bitfield="true">
+			0x0B1 | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_HARD_FORWARD_AIR_KB" value="16910514" enum="ActionFlags" is_bitfield="true">
+			0x0B2 | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_HARD_BACKWARD_AIR_KB" value="16910515" enum="ActionFlags" is_bitfield="true">
+			0x0B3 | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_BURNING_JUMP" value="16910516" enum="ActionFlags" is_bitfield="true">
+			0x0B4 | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_BURNING_FALL" value="16910517" enum="ActionFlags" is_bitfield="true">
+			0x0B5 | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_SOFT_BONK" value="16910518" enum="ActionFlags" is_bitfield="true">
+			0x0B6 | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_LAVA_BOOST" value="16910519" enum="ActionFlags" is_bitfield="true">
+			0x0B7 | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_GETTING_BLOWN" value="16910520" enum="ActionFlags" is_bitfield="true">
+			0x0B8 | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_THROWN_FORWARD" value="16910525" enum="ActionFlags" is_bitfield="true">
+			0x0BD | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION
+		</constant>
+		<constant name="ACT_THROWN_BACKWARD" value="16910526" enum="ActionFlags" is_bitfield="true">
+			0x0BE | ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ALLOW_VERTICAL_WIND
+		</constant>
+		<constant name="ACT_WATER_IDLE" value="939532992" enum="ActionFlags" is_bitfield="true">
+			0x0C0 | ACT_FLAG_STATIONARY | ACT_FLAG_SWIMMING | ACT_FLAG_PAUSE_EXIT | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_HOLD_WATER_IDLE" value="939532993" enum="ActionFlags" is_bitfield="true">
+			0x0C1 | ACT_FLAG_STATIONARY | ACT_FLAG_SWIMMING | ACT_FLAG_PAUSE_EXIT | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_WATER_ACTION_END" value="805315266" enum="ActionFlags" is_bitfield="true">
+			0x0C2 | ACT_FLAG_STATIONARY | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_HOLD_WATER_ACTION_END" value="805315267" enum="ActionFlags" is_bitfield="true">
+			0x0C3 | ACT_FLAG_STATIONARY | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_DROWNING" value="805319364" enum="ActionFlags" is_bitfield="true">
+			0x0C4 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_BACKWARD_WATER_KB" value="805446341" enum="ActionFlags" is_bitfield="true">
+			0x0C5 | ACT_FLAG_STATIONARY | ACT_FLAG_SWIMMING | ACT_FLAG_INVULNERABLE | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_FORWARD_WATER_KB" value="805446342" enum="ActionFlags" is_bitfield="true">
+			0x0C6 | ACT_FLAG_STATIONARY | ACT_FLAG_SWIMMING | ACT_FLAG_INVULNERABLE | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_WATER_DEATH" value="805319367" enum="ActionFlags" is_bitfield="true">
+			0x0C7 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_WATER_SHOCKED" value="805446344" enum="ActionFlags" is_bitfield="true">
+			0x0C8 | ACT_FLAG_STATIONARY | ACT_FLAG_SWIMMING | ACT_FLAG_INVULNERABLE | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_BREASTSTROKE" value="805315792" enum="ActionFlags" is_bitfield="true">
+			0x0D0 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_SWIMMING_END" value="805315793" enum="ActionFlags" is_bitfield="true">
+			0x0D1 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_FLUTTER_KICK" value="805315794" enum="ActionFlags" is_bitfield="true">
+			0x0D2 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_HOLD_BREASTSTROKE" value="805315795" enum="ActionFlags" is_bitfield="true">
+			0x0D3 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_HOLD_SWIMMING_END" value="805315796" enum="ActionFlags" is_bitfield="true">
+			0x0D4 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_HOLD_FLUTTER_KICK" value="805315797" enum="ActionFlags" is_bitfield="true">
+			0x0D5 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_WATER_SHELL_SWIMMING" value="805315798" enum="ActionFlags" is_bitfield="true">
+			0x0D6 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_WATER_THROW" value="805315808" enum="ActionFlags" is_bitfield="true">
+			0x0E0 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_WATER_PUNCH" value="805315809" enum="ActionFlags" is_bitfield="true">
+			0x0E1 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_WATER_PLUNGE" value="805315298" enum="ActionFlags" is_bitfield="true">
+			0x0E2 | ACT_FLAG_STATIONARY | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_CAUGHT_IN_WHIRLPOOL" value="805446371" enum="ActionFlags" is_bitfield="true">
+			0x0E3 | ACT_FLAG_STATIONARY | ACT_FLAG_SWIMMING | ACT_FLAG_INVULNERABLE | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_METAL_WATER_STANDING" value="134234864" enum="ActionFlags" is_bitfield="true">
+			0x0F0 | ACT_FLAG_STATIONARY | ACT_FLAG_METAL_WATER | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_HOLD_METAL_WATER_STANDING" value="134234865" enum="ActionFlags" is_bitfield="true">
+			0x0F1 | ACT_FLAG_STATIONARY | ACT_FLAG_METAL_WATER | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_METAL_WATER_WALKING" value="17650" enum="ActionFlags" is_bitfield="true">
+			0x0F2 | ACT_FLAG_MOVING | ACT_FLAG_METAL_WATER
+		</constant>
+		<constant name="ACT_HOLD_METAL_WATER_WALKING" value="17651" enum="ActionFlags" is_bitfield="true">
+			0x0F3 | ACT_FLAG_MOVING | ACT_FLAG_METAL_WATER
+		</constant>
+		<constant name="ACT_METAL_WATER_FALLING" value="17140" enum="ActionFlags" is_bitfield="true">
+			0x0F4 | ACT_FLAG_STATIONARY | ACT_FLAG_METAL_WATER
+		</constant>
+		<constant name="ACT_HOLD_METAL_WATER_FALLING" value="17141" enum="ActionFlags" is_bitfield="true">
+			0x0F5 | ACT_FLAG_STATIONARY | ACT_FLAG_METAL_WATER
+		</constant>
+		<constant name="ACT_METAL_WATER_FALL_LAND" value="17142" enum="ActionFlags" is_bitfield="true">
+			0x0F6 | ACT_FLAG_STATIONARY | ACT_FLAG_METAL_WATER
+		</constant>
+		<constant name="ACT_HOLD_METAL_WATER_FALL_LAND" value="17143" enum="ActionFlags" is_bitfield="true">
+			0x0F7 | ACT_FLAG_STATIONARY | ACT_FLAG_METAL_WATER
+		</constant>
+		<constant name="ACT_METAL_WATER_JUMP" value="17656" enum="ActionFlags" is_bitfield="true">
+			0x0F8 | ACT_FLAG_MOVING | ACT_FLAG_METAL_WATER
+		</constant>
+		<constant name="ACT_HOLD_METAL_WATER_JUMP" value="17657" enum="ActionFlags" is_bitfield="true">
+			0x0F9 | ACT_FLAG_MOVING | ACT_FLAG_METAL_WATER
+		</constant>
+		<constant name="ACT_METAL_WATER_JUMP_LAND" value="17658" enum="ActionFlags" is_bitfield="true">
+			0x0FA | ACT_FLAG_MOVING | ACT_FLAG_METAL_WATER
+		</constant>
+		<constant name="ACT_HOLD_METAL_WATER_JUMP_LAND" value="17659" enum="ActionFlags" is_bitfield="true">
+			0x0FB | ACT_FLAG_MOVING | ACT_FLAG_METAL_WATER
+		</constant>
+		<constant name="ACT_DISAPPEARED" value="4864" enum="ActionFlags" is_bitfield="true">
+			0x100 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_INTRO_CUTSCENE" value="67113729" enum="ActionFlags" is_bitfield="true">
+			0x101 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_ALLOW_FIRST_PERSON
+		</constant>
+		<constant name="ACT_STAR_DANCE_EXIT" value="4866" enum="ActionFlags" is_bitfield="true">
+			0x102 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_STAR_DANCE_WATER" value="4867" enum="ActionFlags" is_bitfield="true">
+			0x103 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_FALL_AFTER_STAR_GRAB" value="6404" enum="ActionFlags" is_bitfield="true">
+			0x104 | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_READING_AUTOMATIC_DIALOG" value="536875781" enum="ActionFlags" is_bitfield="true">
+			0x105 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_READING_NPC_DIALOG" value="536875782" enum="ActionFlags" is_bitfield="true">
+			0x106 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_WATER_OR_TEXT
+		</constant>
+		<constant name="ACT_STAR_DANCE_NO_EXIT" value="4871" enum="ActionFlags" is_bitfield="true">
+			0x107 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_READING_SIGN" value="4872" enum="ActionFlags" is_bitfield="true">
+			0x108 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_JUMBO_STAR_CUTSCENE" value="6409" enum="ActionFlags" is_bitfield="true">
+			0x109 | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_WAITING_FOR_DIALOG" value="4874" enum="ActionFlags" is_bitfield="true">
+			0x10A | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_DEBUG_FREE_MOVE" value="4879" enum="ActionFlags" is_bitfield="true">
+			0x10F | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_STANDING_DEATH" value="135953" enum="ActionFlags" is_bitfield="true">
+			0x111 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_QUICKSAND_DEATH" value="135954" enum="ActionFlags" is_bitfield="true">
+			0x112 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_ELECTROCUTION" value="135955" enum="ActionFlags" is_bitfield="true">
+			0x113 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_SUFFOCATION" value="135956" enum="ActionFlags" is_bitfield="true">
+			0x114 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_DEATH_ON_STOMACH" value="135957" enum="ActionFlags" is_bitfield="true">
+			0x115 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_DEATH_ON_BACK" value="135958" enum="ActionFlags" is_bitfield="true">
+			0x116 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_EATEN_BY_BUBBA" value="135959" enum="ActionFlags" is_bitfield="true">
+			0x117 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_END_PEACH_CUTSCENE" value="6424" enum="ActionFlags" is_bitfield="true">
+			0x118 | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_CREDITS_CUTSCENE" value="4889" enum="ActionFlags" is_bitfield="true">
+			0x119 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_END_WAVING_CUTSCENE" value="4890" enum="ActionFlags" is_bitfield="true">
+			0x11A | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_PULLING_DOOR" value="4896" enum="ActionFlags" is_bitfield="true">
+			0x120 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_PUSHING_DOOR" value="4897" enum="ActionFlags" is_bitfield="true">
+			0x121 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_WARP_DOOR_SPAWN" value="4898" enum="ActionFlags" is_bitfield="true">
+			0x122 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_EMERGE_FROM_PIPE" value="6435" enum="ActionFlags" is_bitfield="true">
+			0x123 | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_SPAWN_SPIN_AIRBORNE" value="6436" enum="ActionFlags" is_bitfield="true">
+			0x124 | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_SPAWN_SPIN_LANDING" value="4901" enum="ActionFlags" is_bitfield="true">
+			0x125 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_EXIT_AIRBORNE" value="6438" enum="ActionFlags" is_bitfield="true">
+			0x126 | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_EXIT_LAND_SAVE_DIALOG" value="4903" enum="ActionFlags" is_bitfield="true">
+			0x127 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_DEATH_EXIT" value="6440" enum="ActionFlags" is_bitfield="true">
+			0x128 | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_UNUSED_DEATH_EXIT" value="6441" enum="ActionFlags" is_bitfield="true">
+			0x129 | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_FALLING_DEATH_EXIT" value="6442" enum="ActionFlags" is_bitfield="true">
+			0x12A | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_SPECIAL_EXIT_AIRBORNE" value="6443" enum="ActionFlags" is_bitfield="true">
+			0x12B | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_SPECIAL_DEATH_EXIT" value="6444" enum="ActionFlags" is_bitfield="true">
+			0x12C | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_FALLING_EXIT_AIRBORNE" value="6445" enum="ActionFlags" is_bitfield="true">
+			0x12D | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_UNLOCKING_KEY_DOOR" value="4910" enum="ActionFlags" is_bitfield="true">
+			0x12E | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_UNLOCKING_STAR_DOOR" value="4911" enum="ActionFlags" is_bitfield="true">
+			0x12F | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_ENTERING_STAR_DOOR" value="4913" enum="ActionFlags" is_bitfield="true">
+			0x131 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_SPAWN_NO_SPIN_AIRBORNE" value="6450" enum="ActionFlags" is_bitfield="true">
+			0x132 | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_SPAWN_NO_SPIN_LANDING" value="4915" enum="ActionFlags" is_bitfield="true">
+			0x133 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_BBH_ENTER_JUMP" value="6452" enum="ActionFlags" is_bitfield="true">
+			0x134 | ACT_FLAG_AIR | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_BBH_ENTER_SPIN" value="5429" enum="ActionFlags" is_bitfield="true">
+			0x135 | ACT_FLAG_MOVING | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_TELEPORT_FADE_OUT" value="4918" enum="ActionFlags" is_bitfield="true">
+			0x136 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_TELEPORT_FADE_IN" value="4919" enum="ActionFlags" is_bitfield="true">
+			0x137 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_SHOCKED" value="131896" enum="ActionFlags" is_bitfield="true">
+			0x138 | ACT_FLAG_STATIONARY | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_SQUISHED" value="131897" enum="ActionFlags" is_bitfield="true">
+			0x139 | ACT_FLAG_STATIONARY | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_HEAD_STUCK_IN_GROUND" value="131898" enum="ActionFlags" is_bitfield="true">
+			0x13A | ACT_FLAG_STATIONARY | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_BUTT_STUCK_IN_GROUND" value="131899" enum="ActionFlags" is_bitfield="true">
+			0x13B | ACT_FLAG_STATIONARY | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_FEET_STUCK_IN_GROUND" value="131900" enum="ActionFlags" is_bitfield="true">
+			0x13C | ACT_FLAG_STATIONARY | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_PUTTING_ON_CAP" value="4925" enum="ActionFlags" is_bitfield="true">
+			0x13D | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_HOLDING_POLE" value="135267136" enum="ActionFlags" is_bitfield="true">
+			0x140 | ACT_FLAG_STATIONARY | ACT_FLAG_ON_POLE | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_GRAB_POLE_SLOW" value="1049409" enum="ActionFlags" is_bitfield="true">
+			0x141 | ACT_FLAG_STATIONARY | ACT_FLAG_ON_POLE
+		</constant>
+		<constant name="ACT_GRAB_POLE_FAST" value="1049410" enum="ActionFlags" is_bitfield="true">
+			0x142 | ACT_FLAG_STATIONARY | ACT_FLAG_ON_POLE
+		</constant>
+		<constant name="ACT_CLIMBING_POLE" value="1049411" enum="ActionFlags" is_bitfield="true">
+			0x143 | ACT_FLAG_STATIONARY | ACT_FLAG_ON_POLE
+		</constant>
+		<constant name="ACT_TOP_OF_POLE_TRANSITION" value="1049412" enum="ActionFlags" is_bitfield="true">
+			0x144 | ACT_FLAG_STATIONARY | ACT_FLAG_ON_POLE
+		</constant>
+		<constant name="ACT_TOP_OF_POLE" value="1049413" enum="ActionFlags" is_bitfield="true">
+			0x145 | ACT_FLAG_STATIONARY | ACT_FLAG_ON_POLE
+		</constant>
+		<constant name="ACT_START_HANGING" value="136315720" enum="ActionFlags" is_bitfield="true">
+			0x148 | ACT_FLAG_STATIONARY | ACT_FLAG_HANGING | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_HANGING" value="2097993" enum="ActionFlags" is_bitfield="true">
+			0x149 | ACT_FLAG_STATIONARY | ACT_FLAG_HANGING
+		</constant>
+		<constant name="ACT_HANG_MOVING" value="2098506" enum="ActionFlags" is_bitfield="true">
+			0x14A | ACT_FLAG_MOVING | ACT_FLAG_HANGING
+		</constant>
+		<constant name="ACT_LEDGE_GRAB" value="134218571" enum="ActionFlags" is_bitfield="true">
+			0x14B | ACT_FLAG_STATIONARY | ACT_FLAG_PAUSE_EXIT
+		</constant>
+		<constant name="ACT_LEDGE_CLIMB_SLOW_1" value="1356" enum="ActionFlags" is_bitfield="true">
+			0x14C | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_LEDGE_CLIMB_SLOW_2" value="1357" enum="ActionFlags" is_bitfield="true">
+			0x14D | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_LEDGE_CLIMB_DOWN" value="1358" enum="ActionFlags" is_bitfield="true">
+			0x14E | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_LEDGE_CLIMB_FAST" value="1359" enum="ActionFlags" is_bitfield="true">
+			0x14F | ACT_FLAG_MOVING
+		</constant>
+		<constant name="ACT_GRABBED" value="131952" enum="ActionFlags" is_bitfield="true">
+			0x170 | ACT_FLAG_STATIONARY | ACT_FLAG_INVULNERABLE
+		</constant>
+		<constant name="ACT_IN_CANNON" value="4977" enum="ActionFlags" is_bitfield="true">
+			0x171 | ACT_FLAG_STATIONARY | ACT_FLAG_INTANGIBLE
+		</constant>
+		<constant name="ACT_TORNADO_TWIRLING" value="268567410" enum="ActionFlags" is_bitfield="true">
+			0x172 | ACT_FLAG_STATIONARY | ACT_FLAG_INVULNERABLE | ACT_FLAG_SWIMMING_OR_FLYING
+		</constant>
+		<constant name="ACT_PUNCHING" value="8389504" enum="ActionFlags" is_bitfield="true">
+			0x180 | ACT_FLAG_STATIONARY | ACT_FLAG_ATTACKING
+		</constant>
+		<constant name="ACT_PICKING_UP" value="899" enum="ActionFlags" is_bitfield="true">
+			0x183 | ACT_FLAG_STATIONARY
+		</constant>
+		<constant name="ACT_DIVE_PICKING_UP" value="901" enum="ActionFlags" is_bitfield="true">
+			0x185 | ACT_FLAG_STATIONARY
+		</constant>
+		<constant name="ACT_STOMACH_SLIDE_STOP" value="902" enum="ActionFlags" is_bitfield="true">
+			0x186 | ACT_FLAG_STATIONARY
+		</constant>
+		<constant name="ACT_PLACING_DOWN" value="903" enum="ActionFlags" is_bitfield="true">
+			0x187 | ACT_FLAG_STATIONARY
+		</constant>
+		<constant name="ACT_THROWING" value="2147485064" enum="ActionFlags" is_bitfield="true">
+			0x188 | ACT_FLAG_MOVING | ACT_FLAG_THROWING
+		</constant>
+		<constant name="ACT_HEAVY_THROW" value="2147485065" enum="ActionFlags" is_bitfield="true">
+			0x189 | ACT_FLAG_MOVING | ACT_FLAG_THROWING
+		</constant>
+		<constant name="ACT_PICKING_UP_BOWSER" value="912" enum="ActionFlags" is_bitfield="true">
+			0x190 | ACT_FLAG_STATIONARY
+		</constant>
+		<constant name="ACT_HOLDING_BOWSER" value="913" enum="ActionFlags" is_bitfield="true">
+			0x191 | ACT_FLAG_STATIONARY
+		</constant>
+		<constant name="ACT_RELEASING_BOWSER" value="914" enum="ActionFlags" is_bitfield="true">
+			0x192 | ACT_FLAG_STATIONARY
+		</constant>
+		<constant name="SEQ_PLAYER_LEVEL" value="0" enum="SeqPlayer">
+			Level background music
+		</constant>
+		<constant name="SEQ_PLAYER_ENV" value="1" enum="SeqPlayer">
+			Misc music like the puzzle jingle.
+		</constant>
+		<constant name="SEQ_PLAYER_SFX" value="2" enum="SeqPlayer">
+			Sound effects.
+		</constant>
+		<constant name="SEQ_VARIATION" value="128">
+			Add this flag to a [enum SeqId] value to get the variation of the audio sequence (if aplicable).
+		</constant>
+		<constant name="SEQ_SOUND_PLAYER" value="0" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_CUTSCENE_COLLECT_STAR" value="1" enum="SeqId">
+		</constant>
+		<constant name="SEQ_MENU_TITLE_SCREEN" value="2" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_GRASS" value="3" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_INSIDE_CASTLE" value="4" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_WATER" value="5" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_HOT" value="6" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_BOSS_KOOPA" value="7" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_SNOW" value="8" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_SLIDE" value="9" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_SPOOKY" value="10" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_PIRANHA_PLANT" value="11" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_UNDERGROUND" value="12" enum="SeqId">
+		</constant>
+		<constant name="SEQ_MENU_STAR_SELECT" value="13" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_POWERUP" value="14" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_METAL_CAP" value="15" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_KOOPA_MESSAGE" value="16" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_KOOPA_ROAD" value="17" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_HIGH_SCORE" value="18" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_MERRY_GO_ROUND" value="19" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_RACE" value="20" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_CUTSCENE_STAR_SPAWN" value="21" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_BOSS" value="22" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_CUTSCENE_COLLECT_KEY" value="23" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_ENDLESS_STAIRS" value="24" enum="SeqId">
+		</constant>
+		<constant name="SEQ_LEVEL_BOSS_KOOPA_FINAL" value="25" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_CUTSCENE_CREDITS" value="26" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_SOLVE_PUZZLE" value="27" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_TOAD_MESSAGE" value="28" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_PEACH_MESSAGE" value="29" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_CUTSCENE_INTRO" value="30" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_CUTSCENE_VICTORY" value="31" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_CUTSCENE_ENDING" value="32" enum="SeqId">
+		</constant>
+		<constant name="SEQ_MENU_FILE_SELECT" value="33" enum="SeqId">
+		</constant>
+		<constant name="SEQ_EVENT_CUTSCENE_LAKITU" value="34" enum="SeqId">
+		</constant>
+		<constant name="SEQ_COUNT" value="35" enum="SeqId">
+		</constant>
+	</constants>
+</class>

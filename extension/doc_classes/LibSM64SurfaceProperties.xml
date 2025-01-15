@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="LibSM64SurfaceProperties" inherits="Resource" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Class representing the properties of the surface in the [code]libsm64[/code] world.
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="force" type="int" setter="set_force" getter="get_force" default="0">
+			The force the surface will exert over Mario. Not all [member SurfaceType] are compatible with this property.
+		</member>
+		<member name="surface_type" type="int" setter="set_surface_type" getter="get_surface_type" enum="LibSM64.SurfaceType" default="0">
+			The type of the surface.
+		</member>
+		<member name="terrain_type" type="int" setter="set_terrain_type" getter="get_terrain_type" enum="LibSM64.TerrainType" default="0">
+			The type of the terrain of the surface.
+		</member>
+	</members>
+</class>
