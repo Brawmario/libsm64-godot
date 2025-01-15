@@ -1,7 +1,6 @@
 extends Node3D
 
-
-@export var start_cap := LibSM64Mario.Caps.NORMAL
+@export var start_cap := LibSM64.MarioFlags.MARIO_NORMAL_CAP
 
 @onready var battlefield: MeshInstance3D = $Battlefield
 @onready var sm_64_mario: Node3D = $LibSM64Mario

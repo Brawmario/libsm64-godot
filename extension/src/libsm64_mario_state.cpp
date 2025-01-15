@@ -16,7 +16,7 @@ LibSM64MarioState::LibSM64MarioState()
 
 LibSM64MarioState::LibSM64MarioState(const SM64MarioState &state, real_t scale_factor)
     : position(-state.position[2] / scale_factor, state.position[1] / scale_factor, state.position[0] / scale_factor),
-      velocity(-state.velocity[2] / scale_factor, state.velocity[1] / scale_factor, state.velocity[0] / scale_factor),
+      velocity(-state.velocity[2] / (scale_factor * g_sm64_timestep_interval), state.velocity[1] / (scale_factor * g_sm64_timestep_interval), state.velocity[0] / (scale_factor * g_sm64_timestep_interval)),
       face_angle(state.faceAngle),
       health(state.health),
       action(state.action),

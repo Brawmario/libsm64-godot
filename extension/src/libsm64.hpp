@@ -588,7 +588,7 @@ public:
     // extern SM64_LIB_FN int32_t sm64_mario_create( float x, float y, float z );
     int32_t mario_create(const godot::Vector3 &p_position);
     // extern SM64_LIB_FN void sm64_mario_tick( int32_t marioId, const struct SM64MarioInputs *inputs, struct SM64MarioState *outState, struct SM64MarioGeometryBuffers *outBuffers );
-    godot::Ref<LibSM64MarioTickOutput> mario_tick(int32_t p_mario_id, const godot::Ref<LibSM64MarioInputs> &p_inputs);
+    godot::Array mario_tick(int32_t p_mario_id, const godot::Ref<LibSM64MarioInputs> &p_mario_inputs);
     // extern SM64_LIB_FN void sm64_mario_delete( int32_t marioId );
     void mario_delete(int32_t p_mario_id);
 

@@ -286,12 +286,14 @@ int32_t LibSM64::mario_create(const godot::Vector3 &p_position)
     return mario_id;
 }
 
-godot::Ref<LibSM64MarioTickOutput> LibSM64::mario_tick(int32_t p_mario_id, const godot::Ref<LibSM64MarioInputs> &p_inputs)
+godot::Array LibSM64::mario_tick(int32_t p_mario_id, const godot::Ref<LibSM64MarioInputs> &p_mario_inputs)
 {
-    ERR_FAIL_COND_V(p_mario_id < 0, nullptr);
-    ERR_FAIL_NULL_V(p_inputs, nullptr);
+    godot::Array ret;
 
-    const struct SM64MarioInputs sm64_mario_inputs = p_inputs->to_sm64();
+    ERR_FAIL_COND_V(p_mario_id < 0, ret);
+    ERR_FAIL_NULL_V(p_mario_inputs, ret);
+
+    const struct SM64MarioInputs sm64_mario_inputs = p_mario_inputs->to_sm64();
     struct SM64MarioState sm64_mario_state;
     LibSM64MarioGeometry sm64_mario_geometry;
     sm64_mario_tick(p_mario_id, &sm64_mario_inputs, &sm64_mario_state, sm64_mario_geometry.data());
@@ -320,7 +322,10 @@ godot::Ref<LibSM64MarioTickOutput> LibSM64::mario_tick(int32_t p_mario_id, const
     array_mesh_triangles[godot::ArrayMesh::ARRAY_COLOR]  = color;
     array_mesh_triangles[godot::ArrayMesh::ARRAY_TEX_UV] = uv;
 
-    return memnew(LibSM64MarioTickOutput(mario_state, array_mesh_triangles, -mario_state->get_position(), godot::Vector3(1.0 / scale_factor, 1.0 / scale_factor, 1.0 / scale_factor)));
+    ret.append(mario_state);
+    ret.append(array_mesh_triangles);
+
+    return ret;
 }
 
 void LibSM64::mario_delete(int32_t p_mario_id)
@@ -394,7 +399,7 @@ void LibSM64::set_mario_velocity(int32_t p_mario_id, const godot::Vector3 &p_vel
     ERR_FAIL_COND(p_mario_id < 0);
 
     float x, y, z;
-    godot_to_sm64(p_velocity, x, y, z, scale_factor / g_sm64_timestep_interval);
+    godot_to_sm64(p_velocity, x, y, z, scale_factor * g_sm64_timestep_interval);
     sm64_set_mario_velocity(p_mario_id, x, y, z);
 }
 
@@ -402,7 +407,7 @@ void LibSM64::set_mario_forward_velocity(int32_t p_mario_id, float p_velocity)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_set_mario_forward_velocity(p_mario_id, p_velocity / (scale_factor * g_sm64_timestep_interval));
+    sm64_set_mario_forward_velocity(p_mario_id, p_velocity * scale_factor * g_sm64_timestep_interval);
 }
 
 void LibSM64::set_mario_invincibility(int32_t p_mario_id, double p_time)
@@ -416,14 +421,14 @@ void LibSM64::set_mario_water_level(int32_t p_mario_id, real_t p_level)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_set_mario_water_level(p_mario_id, static_cast<signed int>(p_level / scale_factor));
+    sm64_set_mario_water_level(p_mario_id, static_cast<signed int>(p_level * scale_factor));
 }
 
 void LibSM64::set_mario_gas_level(int32_t p_mario_id, real_t p_level)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_set_mario_gas_level(p_mario_id, static_cast<signed int>(p_level / scale_factor));
+    sm64_set_mario_gas_level(p_mario_id, static_cast<signed int>(p_level * scale_factor));
 }
 
 void LibSM64::set_mario_health(int32_t p_mario_id, uint16_t p_health)
@@ -476,7 +481,7 @@ void LibSM64::mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position,
 
     float x, y, z;
     godot_to_sm64(p_position, x, y, z, scale_factor);
-    sm64_mario_attack(p_mario_id, x, y, z, p_hitbox_height / scale_factor);
+    sm64_mario_attack(p_mario_id, x, y, z, p_hitbox_height * scale_factor);
 }
 
 int LibSM64::surface_object_create(const godot::Vector3 &p_position, const godot::Quaternion &p_rotation, const godot::Ref<LibSM64SurfaceArray> &p_surfaces)
@@ -575,7 +580,7 @@ void LibSM64::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("static_surfaces_load", "surfaces"), &LibSM64::static_surfaces_load);
 
     godot::ClassDB::bind_method(godot::D_METHOD("mario_create", "position"), &LibSM64::mario_create);
-    godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "inputs"), &LibSM64::mario_tick);
+    godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "mario_inputs"), &LibSM64::mario_tick);
     godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &LibSM64::mario_delete);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_action", "mario_id", "action"), &LibSM64::set_mario_action);
     godot::ClassDB::bind_method(godot::D_METHOD("set_mario_action_arg", "mario_id", "action", "action_arg"), &LibSM64::set_mario_action_arg);

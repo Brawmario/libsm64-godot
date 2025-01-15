@@ -4,6 +4,8 @@
 #include <godot_cpp/classes/audio_stream_generator.hpp>
 #include <godot_cpp/classes/audio_stream_generator_playback.hpp>
 
+#include <libsm64.hpp>
+
 void LibSM64AudioStreamPlayer::audio_tick()
 {
     godot::Ref<godot::AudioStreamGeneratorPlayback> playback = get_stream_playback();

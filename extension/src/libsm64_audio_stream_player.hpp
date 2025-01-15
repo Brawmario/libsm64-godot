@@ -4,8 +4,6 @@
 #include <godot_cpp/classes/ref.hpp>
 #include <godot_cpp/classes/audio_stream_player.hpp>
 
-#include <libsm64.hpp>
-
 class LibSM64AudioStreamPlayer : public godot::AudioStreamPlayer
 {
     GDCLASS(LibSM64AudioStreamPlayer, godot::AudioStreamPlayer);
