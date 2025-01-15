@@ -10,11 +10,12 @@
 
 #include <libsm64_mario_inputs.hpp>
 #include <libsm64_mario_tick_output.hpp>
-#include <libsm64_surface_array.hpp>
 
 #include <libsm64.h>
 
 constexpr double g_sm64_timestep_interval = 1.0 / 30.0;
+
+class LibSM64SurfaceArray;
 
 class LibSM64 : public godot::Object
 {

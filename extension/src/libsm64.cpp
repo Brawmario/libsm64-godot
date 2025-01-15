@@ -4,6 +4,7 @@
 
 #include <libsm64_mario_geometry.hpp>
 #include <libsm64_mario_state.hpp>
+#include <libsm64_surface_array.hpp>
 
 // SM64 3D vector to Godot 3D vector
 // Winding order: counter-clockwise (SM64) -> clockwise (Godot)

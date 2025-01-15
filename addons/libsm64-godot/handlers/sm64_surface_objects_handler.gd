@@ -45,7 +45,7 @@ func load_surface_object(mesh_instance: MeshInstance3D) -> void:
 		var v1 = mesh_faces[i + 0]
 		var v2 = mesh_faces[i + 1]
 		var v3 = mesh_faces[i + 2]
-		libsm64_surface_array.add_triangle(v1, v2, v3, properties.surface_type, properties.terrain_type, properties.force)
+		libsm64_surface_array.add_triangle_with_properties(v1, v2, v3, properties)
 
 	var surface_object_id := LibSM64.surface_object_create(position, rotation, libsm64_surface_array)
 

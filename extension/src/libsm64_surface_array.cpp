@@ -1,7 +1,5 @@
 #include <libsm64_surface_array.hpp>
 
-#include <libsm64.hpp>
-
 void LibSM64SurfaceArray::append_surfaces(const godot::Ref<LibSM64SurfaceArray> &p_surfaces)
 {
     ERR_FAIL_NULL(p_surfaces);
@@ -11,16 +9,16 @@ void LibSM64SurfaceArray::append_surfaces(const godot::Ref<LibSM64SurfaceArray> 
     sm64_surfaces.insert(sm64_surfaces.end(), sm64_surfaces_other.begin(), sm64_surfaces_other.end());
 }
 
-void LibSM64SurfaceArray::add_triangle(const godot::Vector3 &p_vertex_1, const godot::Vector3 &p_vertex_2, const godot::Vector3 &p_vertex_3, int16_t p_surface_type, uint16_t p_terrain_type, int16_t p_force)
+void LibSM64SurfaceArray::add_triangle(const godot::Vector3 &p_vertex_1, const godot::Vector3 &p_vertex_2, const godot::Vector3 &p_vertex_3, LibSM64::SurfaceType p_surface_type, LibSM64::TerrainType p_terrain_type, int p_force)
 {
     LibSM64 *libsm64 = LibSM64::get_singleton();
     ERR_FAIL_NULL(libsm64);
     const auto scale_factor = libsm64->get_scale_factor();
 
     sm64_surfaces.push_back({
-        p_surface_type,
-        p_force,
-        p_terrain_type,
+        static_cast<int16_t>(p_surface_type),
+        static_cast<int16_t>(p_force),
+        static_cast<uint16_t>(p_terrain_type),
         {
             {
                 static_cast<int32_t>(p_vertex_2.z * scale_factor),
@@ -42,8 +40,15 @@ void LibSM64SurfaceArray::add_triangle(const godot::Vector3 &p_vertex_1, const g
 
 }
 
+void LibSM64SurfaceArray::add_triangle_with_properties(const godot::Vector3 &p_vertex_1, const godot::Vector3 &p_vertex_2, const godot::Vector3 &p_vertex_3, const godot::Ref<LibSM64SurfaceProperties> &p_properties)
+{
+    ERR_FAIL_NULL(p_properties);
+    add_triangle(p_vertex_1, p_vertex_2, p_vertex_3, p_properties->get_surface_type(), p_properties->get_terrain_type(), p_properties->get_force());
+}
+
 void LibSM64SurfaceArray::_bind_methods()
 {
     godot::ClassDB::bind_method(godot::D_METHOD("append_surfaces", "surfaces"), &LibSM64SurfaceArray::append_surfaces);
-    godot::ClassDB::bind_method(godot::D_METHOD("add_triangle", "vertex_1", "vertex_2", "vertex_3", "surface_type", "terrain_type", "force"), &LibSM64SurfaceArray::add_triangle, DEFVAL(0), DEFVAL(0), DEFVAL(0));
+    godot::ClassDB::bind_method(godot::D_METHOD("add_triangle", "vertex_1", "vertex_2", "vertex_3", "surface_type", "terrain_type", "force"), &LibSM64SurfaceArray::add_triangle, DEFVAL(LibSM64::SurfaceType::SURFACE_DEFAULT), DEFVAL(LibSM64::TerrainType::TERRAIN_GRASS), DEFVAL(0));
+    godot::ClassDB::bind_method(godot::D_METHOD("add_triangle_with_properties", "vertex_1", "vertex_2", "vertex_3", "properties"), &LibSM64SurfaceArray::add_triangle_with_properties);
 }
