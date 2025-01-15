@@ -1,5 +1,5 @@
 @icon("res://addons/libsm64-godot/mario/mario-godot.svg")
-class_name SM64Mario
+class_name LibSM64Mario
 extends Node3D
 
 ## Node that instances a Mario into a scenario
@@ -9,7 +9,7 @@ const FULL_HEALTH = 0x0880
 ## Value that represents one health wedge
 const HEALTH_WEDGE = 0x0100
 ## Special Caps mask
-const SPECIAL_CAPS = SM64Mario.Caps.VANISH | SM64Mario.Caps.METAL | SM64Mario.Caps.WING
+const SPECIAL_CAPS = LibSM64Mario.Caps.VANISH | LibSM64Mario.Caps.METAL | LibSM64Mario.Caps.WING
 
 enum TickProcessMode {
 	PHYSICS, ## Process tick during the physics process.
@@ -68,7 +68,7 @@ var action: int:
 ## Mario's action as StringName
 var action_name: StringName:
 	get:
-		return SM64MarioAction.to_action_name(_action)
+		return LibSM64MarioAction.to_action_name(_action)
 
 var _flags := 0x0:
 	set(value):
@@ -221,11 +221,11 @@ func _process(delta: float) -> void:
 	_invicibility_time = mario_state.invincibility_time
 
 	match _flags & SPECIAL_CAPS:
-		SM64Mario.Caps.VANISH:
+		LibSM64Mario.Caps.VANISH:
 			_material = _vanish_material
-		SM64Mario.Caps.METAL:
+		LibSM64Mario.Caps.METAL:
 			_material = _metal_material
-		SM64Mario.Caps.WING:
+		LibSM64Mario.Caps.WING:
 			_material = _wing_material
 		_:
 			_material = _default_material
@@ -332,7 +332,7 @@ func kill() -> void:
 	LibSM64.mario_kill(_id)
 
 
-## Equip special cap (see SM64Mario.Caps for values)
+## Equip special cap (see LibSM64Mario.Caps for values)
 func interact_cap(cap: Caps, cap_time := 0.0, play_music := true) -> void:
 	if _id < 0:
 		return

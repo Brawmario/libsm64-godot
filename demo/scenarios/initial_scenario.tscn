@@ -13,13 +13,13 @@ script = ExtResource("1_xr27b")
 
 [node name="MiniLevel" parent="." instance=ExtResource("3_j27lm")]
 
-[node name="SM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
+[node name="LibSM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 script = ExtResource("4_umvy3")
 camera = NodePath("CameraRig/Camera3D")
 
-[node name="CameraRig" parent="SM64Mario" instance=ExtResource("5_uu7a6")]
+[node name="CameraRig" parent="LibSM64Mario" instance=ExtResource("5_uu7a6")]
 
-[node name="Camera3D" parent="SM64Mario/CameraRig" index="0"]
+[node name="Camera3D" parent="LibSM64Mario/CameraRig" index="0"]
 current = false
 
 [node name="SM64StaticSurfacesHandler" type="Node" parent="."]
@@ -34,4 +34,4 @@ script = ExtResource("7_ju0gc")
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 
-[editable path="SM64Mario/CameraRig"]
+[editable path="LibSM64Mario/CameraRig"]

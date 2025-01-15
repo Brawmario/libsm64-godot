@@ -1,4 +1,4 @@
-class_name SM64MarioAction
+class_name LibSM64MarioAction
 extends Object
 
 ## Collection of Mario's Actions flags and constants.

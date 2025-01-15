@@ -1,10 +1,10 @@
 extends Node3D
 
 
-@export var start_cap := SM64Mario.Caps.NORMAL
+@export var start_cap := LibSM64Mario.Caps.NORMAL
 
 @onready var battlefield: MeshInstance3D = $Battlefield
-@onready var sm_64_mario: Node3D = $SM64Mario
+@onready var sm_64_mario: Node3D = $LibSM64Mario
 @onready var hud: HUD = $HUD
 
 func _ready() -> void:

@@ -1,9 +1,9 @@
 extends Node3D
 
 
-@export var start_cap := SM64Mario.Caps.NORMAL
+@export var start_cap := LibSM64Mario.Caps.NORMAL
 
-@onready var mario := $SM64Mario as SM64Mario
+@onready var mario := $LibSM64Mario as LibSM64Mario
 
 
 func _ready() -> void:
