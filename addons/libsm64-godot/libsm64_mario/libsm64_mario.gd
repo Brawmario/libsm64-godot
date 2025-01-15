@@ -169,10 +169,10 @@ var _array_mesh_offset := Vector3()
 
 var _mario_internal := LibSM64MarioInternal.new()
 
-var _default_material := preload("res://addons/libsm64-godot/mario/mario_default_material.tres") as StandardMaterial3D
-var _vanish_material := preload("res://addons/libsm64-godot/mario/mario_vanish_material.tres") as StandardMaterial3D
-var _metal_material := preload("res://addons/libsm64-godot/mario/mario_metal_material.tres") as StandardMaterial3D
-var _wing_material := preload("res://addons/libsm64-godot/mario/mario_wing_material.tres") as StandardMaterial3D
+var _default_material := preload("res://addons/libsm64-godot/libsm64_mario/mario_default_material.tres") as StandardMaterial3D
+var _vanish_material := preload("res://addons/libsm64-godot/libsm64_mario/mario_vanish_material.tres") as StandardMaterial3D
+var _metal_material := preload("res://addons/libsm64-godot/libsm64_mario/mario_metal_material.tres") as StandardMaterial3D
+var _wing_material := preload("res://addons/libsm64-godot/libsm64_mario/mario_wing_material.tres") as StandardMaterial3D
 var _material: StandardMaterial3D
 var _id := -1
 var _mario_inputs := LibSM64MarioInputs.new()
