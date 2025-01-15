@@ -159,7 +159,7 @@ var gas_level := -100000.0:
 var _mesh_instance: MeshInstance3D
 var _mesh: ArrayMesh
 
-var _mario_internal := LibSM64MarioInternal.new()
+var _mario_interpolator := LibSM64MarioInterpolator.new()
 
 var _default_material := preload("res://addons/libsm64-godot/libsm64_mario/libsm64_mario_default_material.tres") as StandardMaterial3D
 var _vanish_material := preload("res://addons/libsm64-godot/libsm64_mario/libsm64_mario_vanish_material.tres") as StandardMaterial3D
@@ -190,9 +190,9 @@ func _process(delta: float) -> void:
 
 	var mario_state: LibSM64MarioState
 	if interpolate:
-		mario_state = _mario_internal.interpolate_mario_state(lerp_t)
+		mario_state = _mario_interpolator.interpolate_mario_state(lerp_t)
 	else:
-		mario_state = _mario_internal.mario_state_current
+		mario_state = _mario_interpolator.mario_state_current
 
 	global_position = mario_state.position
 	_velocity = mario_state.velocity
@@ -225,9 +225,9 @@ func _process(delta: float) -> void:
 
 	var array_mesh_triangles: Array
 	if interpolate:
-		array_mesh_triangles = _mario_internal.interolate_array_mesh_triangles(lerp_t)
+		array_mesh_triangles = _mario_interpolator.interolate_array_mesh_triangles(lerp_t)
 	else:
-		array_mesh_triangles = _mario_internal.array_mesh_triangles_current
+		array_mesh_triangles = _mario_interpolator.array_mesh_triangles_current
 
 	if not array_mesh_triangles[ArrayMesh.ARRAY_VERTEX].is_empty():
 		_mesh.clear_surfaces()
@@ -244,8 +244,8 @@ func create() -> void:
 	if _id < 0:
 		return
 
-	_mario_internal.mario_state_current.position = global_position
-	_mario_internal.mario_state_previous.position = global_position
+	_mario_interpolator.mario_state_current.position = global_position
+	_mario_interpolator.mario_state_previous.position = global_position
 
 	if not _default_material.albedo_texture:
 		_default_material.albedo_texture = LibSM64Global.mario_texture
@@ -268,11 +268,11 @@ func teleport(to_global_position: Vector3) -> void:
 		return
 	LibSM64.set_mario_position(_id, to_global_position)
 	global_position = to_global_position
-	_mario_internal.mario_state_current.position = to_global_position
+	_mario_interpolator.mario_state_current.position = to_global_position
 
 	# Reset interpolation
-	_mario_internal.mario_state_previous = _mario_internal.mario_state_current
-	_mario_internal.array_mesh_triangles_previous = _mario_internal.array_mesh_triangles_current
+	_mario_interpolator.mario_state_previous = _mario_interpolator.mario_state_current
+	_mario_interpolator.array_mesh_triangles_previous = _mario_interpolator.array_mesh_triangles_current
 
 
 ## Set angle of mario in the libsm64 world
@@ -347,10 +347,10 @@ func _tick() -> void:
 
 	var mario_inputs := _make_mario_inputs()
 
-	_mario_internal.mario_state_previous = _mario_internal.mario_state_current
-	_mario_internal.array_mesh_triangles_previous = _mario_internal.array_mesh_triangles_current
+	_mario_interpolator.mario_state_previous = _mario_interpolator.mario_state_current
+	_mario_interpolator.array_mesh_triangles_previous = _mario_interpolator.array_mesh_triangles_current
 
 	var mario_tick_output := LibSM64.mario_tick(_id, mario_inputs)
 
-	_mario_internal.mario_state_current = mario_tick_output[0]
-	_mario_internal.array_mesh_triangles_current = mario_tick_output[1]
+	_mario_interpolator.mario_state_current = mario_tick_output[0]
+	_mario_interpolator.array_mesh_triangles_current = mario_tick_output[1]

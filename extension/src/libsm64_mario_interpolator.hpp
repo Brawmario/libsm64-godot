@@ -1,5 +1,5 @@
-#ifndef LIBSM64GD_LIBSM64MARIOINTERNAL_H
-#define LIBSM64GD_LIBSM64MARIOINTERNAL_H
+#ifndef LIBSM64GD_LIBSM64MARIOINTERPOLATOR_H
+#define LIBSM64GD_LIBSM64MARIOINTERPOLATOR_H
 
 #include <godot_cpp/classes/ref.hpp>
 
@@ -9,12 +9,12 @@
 #include <windows.h>
 #endif
 
-class LibSM64MarioInternal : public godot::RefCounted
+class LibSM64MarioInterpolator : public godot::RefCounted
 {
-    GDCLASS(LibSM64MarioInternal, godot::RefCounted);
+    GDCLASS(LibSM64MarioInterpolator, godot::RefCounted);
 
 public:
-    LibSM64MarioInternal();
+    LibSM64MarioInterpolator();
 
     void set_array_mesh_triangles_current(const godot::Array &p_value);
     godot::Array get_array_mesh_triangles_current() const;
@@ -41,4 +41,4 @@ private:
     godot::Ref<LibSM64MarioState> mario_state_previous;
 };
 
-#endif // LIBSM64GD_LIBSM64MARIOINTERNAL_H
+#endif // LIBSM64GD_LIBSM64MARIOINTERPOLATOR_H
