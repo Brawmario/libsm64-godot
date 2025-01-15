@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="LibSM64SurfaceArray" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="add_triangle">
+			<return type="void" />
+			<param index="0" name="vertex_1" type="Vector3" />
+			<param index="1" name="vertex_2" type="Vector3" />
+			<param index="2" name="vertex_3" type="Vector3" />
+			<param index="3" name="surface_type" type="int" enum="LibSM64.SurfaceType" default="0" />
+			<param index="4" name="terrain_type" type="int" enum="LibSM64.TerrainType" default="0" />
+			<param index="5" name="force" type="int" default="0" />
+			<description>
+			</description>
+		</method>
+		<method name="add_triangle_with_properties">
+			<return type="void" />
+			<param index="0" name="vertex_1" type="Vector3" />
+			<param index="1" name="vertex_2" type="Vector3" />
+			<param index="2" name="vertex_3" type="Vector3" />
+			<param index="3" name="properties" type="LibSM64SurfaceProperties" />
+			<description>
+			</description>
+		</method>
+		<method name="append_surfaces">
+			<return type="void" />
+			<param index="0" name="surfaces" type="LibSM64SurfaceArray" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

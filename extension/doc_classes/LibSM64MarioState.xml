@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="LibSM64MarioState" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="action" type="int" setter="set_action" getter="get_action" default="0">
+		</member>
+		<member name="face_angle" type="float" setter="set_face_angle" getter="get_face_angle" default="0.0">
+		</member>
+		<member name="flags" type="int" setter="set_flags" getter="get_flags" default="0">
+		</member>
+		<member name="health" type="int" setter="set_health" getter="get_health" default="0">
+		</member>
+		<member name="invincibility_time" type="float" setter="set_invincibility_time" getter="get_invincibility_time" default="0.0">
+		</member>
+		<member name="particle_flags" type="int" setter="set_particle_flags" getter="get_particle_flags" default="0">
+		</member>
+		<member name="position" type="Vector3" setter="set_position" getter="get_position" default="Vector3(0, 0, 0)">
+		</member>
+		<member name="velocity" type="Vector3" setter="set_velocity" getter="get_velocity" default="Vector3(0, 0, 0)">
+		</member>
+	</members>
+</class>
