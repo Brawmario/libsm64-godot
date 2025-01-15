@@ -7,7 +7,7 @@
 	<tutorials>
 	</tutorials>
 	<methods>
-		<method name="interolate_array_mesh_triangles" qualifiers="const">
+		<method name="interpolate_array_mesh_triangles" qualifiers="const">
 			<return type="Array" />
 			<param index="0" name="t" type="float" />
 			<description>
