@@ -85,8 +85,8 @@ godot::Array LibSM64MarioInterpolator::interpolate_array_mesh_triangles(double p
 
     auto vertex_count = godot::MIN(vertices_current.size(), vertices_previous.size());
 
-    ret[godot::ArrayMesh::ARRAY_VERTEX] = lerp(vertices_previous.ptr(), vertices_current.ptr(), vertex_count, static_cast<float>(p_t));
-    ret[godot::ArrayMesh::ARRAY_NORMAL] = lerp(normals_previous.ptr(), normals_current.ptr(), vertex_count, static_cast<float>(p_t));
+    ret[godot::ArrayMesh::ARRAY_VERTEX] = lerp(vertices_previous.ptr(), vertices_current.ptr(), vertex_count, static_cast<real_t>(p_t));
+    ret[godot::ArrayMesh::ARRAY_NORMAL] = lerp(normals_previous.ptr(), normals_current.ptr(), vertex_count, static_cast<real_t>(p_t));
 
     const godot::PackedColorArray colors_current = array_mesh_triangles_current[godot::ArrayMesh::ARRAY_COLOR];
     const godot::PackedVector2Array uvs_current = array_mesh_triangles_current[godot::ArrayMesh::ARRAY_TEX_UV];

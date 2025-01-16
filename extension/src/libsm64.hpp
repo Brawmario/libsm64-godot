@@ -13,8 +13,6 @@
 
 #include <libsm64.h>
 
-constexpr double g_sm64_timestep_interval = 1.0 / 30.0;
-
 class LibSM64SurfaceArray;
 
 class LibSM64 : public godot::Object
@@ -28,6 +26,8 @@ public:
     ~LibSM64();
 
     static LibSM64 *get_singleton();
+
+    static constexpr double tick_delta_time = 1.0 / 30.0;
 
     // SurfaceType and TerrainType are from "libsm64/src/decomp/include/surface_terrains.h"
 
@@ -560,7 +560,7 @@ public:
     void set_scale_factor(real_t p_value);
     real_t get_scale_factor() const;
 
-    double get_sm64_timestep_interval() const;
+    double get_tick_delta_time() const;
 
     // typedef void (*SM64DebugPrintFunctionPtr)( const char * );
     // extern SM64_LIB_FN void sm64_register_debug_print_function( SM64DebugPrintFunctionPtr debugPrintFunction );

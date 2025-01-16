@@ -53,9 +53,9 @@ void LibSM64AudioStreamPlayer::_process(double delta)
         return;
 
     time_since_last_tick += delta;
-    while (time_since_last_tick >= g_sm64_timestep_interval)
+    while (time_since_last_tick >= LibSM64::tick_delta_time)
     {
         audio_tick();
-        time_since_last_tick -= g_sm64_timestep_interval;
+        time_since_last_tick -= LibSM64::tick_delta_time;
     }
 }

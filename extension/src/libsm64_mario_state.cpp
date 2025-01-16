@@ -16,13 +16,13 @@ LibSM64MarioState::LibSM64MarioState()
 
 LibSM64MarioState::LibSM64MarioState(const SM64MarioState &state, real_t scale_factor)
     : position(-state.position[2] / scale_factor, state.position[1] / scale_factor, state.position[0] / scale_factor),
-      velocity(-state.velocity[2] / (scale_factor * g_sm64_timestep_interval), state.velocity[1] / (scale_factor * g_sm64_timestep_interval), state.velocity[0] / (scale_factor * g_sm64_timestep_interval)),
+      velocity(-state.velocity[2] / (scale_factor * LibSM64::tick_delta_time), state.velocity[1] / (scale_factor * LibSM64::tick_delta_time), state.velocity[0] / (scale_factor * LibSM64::tick_delta_time)),
       face_angle(state.faceAngle),
       health(state.health),
       action(state.action),
       flags(state.flags),
       particle_flags(state.particleFlags),
-      invincibility_time(state.invincTimer * g_sm64_timestep_interval) {}
+      invincibility_time(state.invincTimer * LibSM64::tick_delta_time) {}
 
 void LibSM64MarioState::set_position(godot::Vector3 p_value)
 {

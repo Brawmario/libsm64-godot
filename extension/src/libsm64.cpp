@@ -198,9 +198,9 @@ real_t LibSM64::get_scale_factor() const
     return scale_factor;
 }
 
-double LibSM64::get_sm64_timestep_interval() const
+double LibSM64::get_tick_delta_time() const
 {
-    return g_sm64_timestep_interval;
+    return tick_delta_time;
 }
 
 void LibSM64::register_debug_print_function(const godot::Callable &p_callback)
@@ -399,7 +399,7 @@ void LibSM64::set_mario_velocity(int32_t p_mario_id, const godot::Vector3 &p_vel
     ERR_FAIL_COND(p_mario_id < 0);
 
     float x, y, z;
-    godot_to_sm64(p_velocity, x, y, z, scale_factor * g_sm64_timestep_interval);
+    godot_to_sm64(p_velocity, x, y, z, scale_factor * tick_delta_time);
     sm64_set_mario_velocity(p_mario_id, x, y, z);
 }
 
@@ -407,14 +407,14 @@ void LibSM64::set_mario_forward_velocity(int32_t p_mario_id, float p_velocity)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_set_mario_forward_velocity(p_mario_id, p_velocity * scale_factor * g_sm64_timestep_interval);
+    sm64_set_mario_forward_velocity(p_mario_id, p_velocity * scale_factor * tick_delta_time);
 }
 
 void LibSM64::set_mario_invincibility(int32_t p_mario_id, double p_time)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_set_mario_invincibility(p_mario_id, static_cast<int16_t>(p_time / g_sm64_timestep_interval));
+    sm64_set_mario_invincibility(p_mario_id, static_cast<int16_t>(p_time / tick_delta_time));
 }
 
 void LibSM64::set_mario_water_level(int32_t p_mario_id, real_t p_level)
@@ -465,14 +465,14 @@ void LibSM64::mario_interact_cap(int32_t p_mario_id, uint32_t p_cap_flag, double
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_mario_interact_cap(p_mario_id, p_cap_flag, static_cast<uint16_t>(p_cap_time / g_sm64_timestep_interval), static_cast<uint8_t>(p_play_music));
+    sm64_mario_interact_cap(p_mario_id, p_cap_flag, static_cast<uint16_t>(p_cap_time / tick_delta_time), static_cast<uint8_t>(p_play_music));
 }
 
 void LibSM64::mario_extend_cap(int32_t p_mario_id, double p_cap_time)
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    sm64_mario_extend_cap(p_mario_id, static_cast<uint16_t>(p_cap_time / g_sm64_timestep_interval));
+    sm64_mario_extend_cap(p_mario_id, static_cast<uint16_t>(p_cap_time / tick_delta_time));
 }
 
 void LibSM64::mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position, float p_hitbox_height)
@@ -519,12 +519,12 @@ void LibSM64::surface_object_delete(uint32_t p_object_id)
 
 void LibSM64::seq_player_play_sequence(uint8_t p_player, uint8_t p_seq_id, double p_fade_in_time)
 {
-    sm64_seq_player_play_sequence(p_player, p_seq_id, p_fade_in_time / g_sm64_timestep_interval);
+    sm64_seq_player_play_sequence(p_player, p_seq_id, p_fade_in_time / tick_delta_time);
 }
 
 void LibSM64::play_music(uint8_t p_player, uint16_t p_seq_args, double p_fade_in_time)
 {
-    sm64_play_music(p_player, p_seq_args, p_fade_in_time / g_sm64_timestep_interval);
+    sm64_play_music(p_player, p_seq_args, p_fade_in_time / tick_delta_time);
 }
 
 void LibSM64::stop_background_music(uint16_t p_seq_id)
@@ -534,7 +534,7 @@ void LibSM64::stop_background_music(uint16_t p_seq_id)
 
 void LibSM64::fadeout_background_music(uint16_t p_seq_id, double p_fade_out_time)
 {
-    sm64_fadeout_background_music(p_seq_id, p_fade_out_time / g_sm64_timestep_interval);
+    sm64_fadeout_background_music(p_seq_id, p_fade_out_time / tick_delta_time);
 }
 
 uint16_t LibSM64::get_current_background_music()
@@ -565,8 +565,8 @@ void LibSM64::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("get_scale_factor"), &LibSM64::get_scale_factor);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "scale_factor"), "set_scale_factor", "get_scale_factor");
 
-    godot::ClassDB::bind_method(godot::D_METHOD("get_sm64_timestep_interval"), &LibSM64::get_sm64_timestep_interval);
-    ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "sm64_timestep_interval"), "", "get_sm64_timestep_interval");
+    godot::ClassDB::bind_method(godot::D_METHOD("get_tick_delta_time"), &LibSM64::get_tick_delta_time);
+    ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "tick_delta_time"), "", "get_tick_delta_time");
 
     godot::ClassDB::bind_method(godot::D_METHOD("register_debug_print_function", "callback"), &LibSM64::register_debug_print_function);
     godot::ClassDB::bind_method(godot::D_METHOD("register_play_sound_function", "callback"), &LibSM64::register_play_sound_function);
