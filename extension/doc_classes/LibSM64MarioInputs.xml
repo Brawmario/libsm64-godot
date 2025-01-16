@@ -4,6 +4,7 @@
 		Class representing the Nintendo 64 controller input.
 	</brief_description>
 	<description>
+		This class is used to represent the Nintendo 64 controller input for use in the [method LibSM64.mario_tick] method.
 	</description>
 	<tutorials>
 	</tutorials>

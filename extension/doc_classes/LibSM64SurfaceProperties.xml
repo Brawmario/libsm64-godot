@@ -9,7 +9,7 @@
 	</tutorials>
 	<members>
 		<member name="force" type="int" setter="set_force" getter="get_force" default="0">
-			The force the surface will exert over Mario. Not all [member SurfaceType] are compatible with this property.
+			The force the surface will exert over Mario. Not all [enum LibSM64.SurfaceType] values are compatible with this property.
 		</member>
 		<member name="surface_type" type="int" setter="set_surface_type" getter="get_surface_type" enum="LibSM64.SurfaceType" default="0">
 			The type of the surface.
