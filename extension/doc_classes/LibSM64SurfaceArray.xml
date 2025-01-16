@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="LibSM64SurfaceArray" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		An array of surface triangles for use with [code]libsm64[/code].
 	</brief_description>
 	<description>
+		An array specifically designed to hold the internal surface triangles format used by [code]libsm64[/code]. Added triangles will automatically be converted from Godot to the internal [code]libsm64[/code] format and added to the array. The array's public interface only allows for elements to be added; the array's contents are only to be consumed internally by [code]libsm64[/code]. The elements are tightly packed, so larger arrays are still performant.
+		See [method LibSM64.static_surfaces_load] and [method LibSM64.surface_object_create].
 	</description>
 	<tutorials>
 	</tutorials>
@@ -16,6 +19,7 @@
 			<param index="4" name="terrain_type" type="int" enum="LibSM64.TerrainType" default="0" />
 			<param index="5" name="force" type="int" default="0" />
 			<description>
+				Adds a new surface triangle to the array (the vertices should be in Godot's standard clockwise order). Optionally allows you to specify the [param surface_type], [param terrain_type], and [param force] of the surface.
 			</description>
 		</method>
 		<method name="add_triangle_with_properties">
@@ -25,12 +29,14 @@
 			<param index="2" name="vertex_3" type="Vector3" />
 			<param index="3" name="properties" type="LibSM64SurfaceProperties" />
 			<description>
+				Adds a new surface triangle to the array with the provided [param properties] (the vertices should be in Godot's standard clockwise order).
 			</description>
 		</method>
 		<method name="append_surfaces">
 			<return type="void" />
 			<param index="0" name="surfaces" type="LibSM64SurfaceArray" />
 			<description>
+				Appends the surfaces from another [LibSM64SurfaceArray] to the end this one.
 			</description>
 		</method>
 	</methods>

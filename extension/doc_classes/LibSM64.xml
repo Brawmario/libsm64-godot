@@ -118,7 +118,7 @@
 			<description>
 				Advances the Mario state by one frame.
 				Returns an array where the first element is the new [LibSM64MarioState] and the second element is the triangle data array for rendering Mario with [ArrayMesh] (see [method ArrayMesh.add_surface_from_arrays]).
-				[b]Note:[/b] This function should be called at the fixed rate of 30 times per second. See [member tick_delta_time].
+				[b]Note:[/b] This method should be called at the fixed rate of 30 times per second. See [member tick_delta_time].
 			</description>
 		</method>
 		<method name="play_music">
@@ -272,6 +272,9 @@
 			<return type="void" />
 			<param index="0" name="surfaces" type="LibSM64SurfaceArray" />
 			<description>
+				Loads the static [param surfaces] into the [code]libsm64[/code] world.
+				[b]Note:[/b] calling this function multiple times will overwrite the previous calls.
+				[b]Warning:[/b] there should be at least one plane that spans the entire playing area at the bottom of the map.
 			</description>
 		</method>
 		<method name="stop_background_music">
@@ -286,12 +289,15 @@
 			<param index="1" name="rotation" type="Quaternion" />
 			<param index="2" name="surfaces" type="LibSM64SurfaceArray" />
 			<description>
+				Creates a surface object with the provided [param surfaces] at [param postion] with [param rotation] in the [code]libsm64[/code] world.
+				Returns the internal object ID of the created surface object.
 			</description>
 		</method>
 		<method name="surface_object_delete">
 			<return type="void" />
 			<param index="0" name="object_id" type="int" />
 			<description>
+				Deletes the surface object identified by [param object_id] in the [code]libsm64[/code] world.
 			</description>
 		</method>
 		<method name="surface_object_move">
@@ -300,6 +306,8 @@
 			<param index="1" name="position" type="Vector3" />
 			<param index="2" name="rotation" type="Quaternion" />
 			<description>
+				Moves the surface object identified by [param object_id] in the [code]libsm64[/code] world to a new [param position] with a [param rotation].
+				[b]Note:[/b] If moving an object continuously over time (like a moving platform), this method should be called at the fixed rate of 30 times per second. See [member tick_delta_time].
 			</description>
 		</method>
 	</methods>
