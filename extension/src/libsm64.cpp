@@ -3,6 +3,7 @@
 #include <godot_cpp/classes/array_mesh.hpp>
 
 #include <libsm64_mario_geometry.hpp>
+#include <libsm64_mario_inputs.hpp>
 #include <libsm64_mario_state.hpp>
 #include <libsm64_surface_array.hpp>
 
