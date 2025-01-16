@@ -8,11 +8,9 @@
 
 #include <godot_cpp/variant/callable.hpp>
 
-#include <libsm64_mario_inputs.hpp>
-#include <libsm64_mario_tick_output.hpp>
-
 #include <libsm64.h>
 
+class LibSM64MarioInputs;
 class LibSM64SurfaceArray;
 
 class LibSM64 : public godot::Object

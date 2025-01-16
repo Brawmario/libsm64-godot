@@ -11,7 +11,6 @@
 #include <libsm64_surface_properties.hpp>
 #include <libsm64_mario_inputs.hpp>
 #include <libsm64_mario_state.hpp>
-#include <libsm64_mario_tick_output.hpp>
 #include <libsm64_surface_array.hpp>
 #include <libsm64_mario_interpolator.hpp>
 #include <libsm64_audio_stream_player.hpp>
@@ -29,7 +28,6 @@ void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<LibSM64SurfaceProperties>();
     ClassDB::register_class<LibSM64MarioInputs>();
     ClassDB::register_class<LibSM64MarioState>();
-    ClassDB::register_class<LibSM64MarioTickOutput>();
     ClassDB::register_class<LibSM64SurfaceArray>();
     ClassDB::register_class<LibSM64MarioInterpolator>();
     ClassDB::register_class<LibSM64AudioStreamPlayer>();
