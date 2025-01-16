@@ -555,6 +555,9 @@ public:
         SEQ_COUNT
     };
 
+    // From "libsm64/src/decomp/game/interaction.h"
+    #define INT_SUBTYPE_BIG_KNOCKBACK 0x00000008 /* Used by Bowser, sets Mario's forward velocity to 40 on hit */
+
     void set_scale_factor(real_t p_value);
     real_t get_scale_factor() const;
 
@@ -591,15 +594,15 @@ public:
     void mario_delete(int32_t p_mario_id);
 
     // extern SM64_LIB_FN void sm64_set_mario_action(int32_t marioId, uint32_t action);
-    void set_mario_action(int32_t p_mario_id, uint32_t p_action);
+    void set_mario_action(int32_t p_mario_id, godot::BitField<ActionFlags> p_action);
     // extern SM64_LIB_FN void sm64_set_mario_action_arg(int32_t marioId, uint32_t action, uint32_t actionArg);
-    void set_mario_action_arg(int32_t p_mario_id, uint32_t p_action, uint32_t p_action_arg);
+    void set_mario_action_arg(int32_t p_mario_id, godot::BitField<ActionFlags> p_action, uint32_t p_action_arg);
     // extern SM64_LIB_FN void sm64_set_mario_animation(int32_t marioId, int32_t animID);
     void set_mario_animation(int32_t p_mario_id, int32_t p_anim_id);
     // extern SM64_LIB_FN void sm64_set_mario_anim_frame(int32_t marioId, int16_t animFrame);
     void set_mario_anim_frame(int32_t p_mario_id, int16_t p_anim_frame);
     // extern SM64_LIB_FN void sm64_set_mario_state(int32_t marioId, uint32_t flags);
-    void set_mario_state(int32_t p_mario_id, uint32_t p_flags);
+    void set_mario_state(int32_t p_mario_id, godot::BitField<MarioFlags> p_flags);
     // extern SM64_LIB_FN void sm64_set_mario_position(int32_t marioId, float x, float y, float z);
     void set_mario_position(int32_t p_mario_id, const godot::Vector3 &p_position);
     // extern SM64_LIB_FN void sm64_set_mario_angle(int32_t marioId, float x, float y, float z);
@@ -625,11 +628,11 @@ public:
     // extern SM64_LIB_FN void sm64_mario_kill(int32_t marioId);
     void mario_kill(int32_t p_mario_id);
     // extern SM64_LIB_FN void sm64_mario_interact_cap(int32_t marioId, uint32_t capFlag, uint16_t capTime, uint8_t playMusic);
-    void mario_interact_cap(int32_t p_mario_id, uint32_t p_cap_flag, double p_cap_time = 0.0, bool p_play_music = true);
+    void mario_interact_cap(int32_t p_mario_id, godot::BitField<MarioFlags> p_cap_flag, double p_cap_time = 0.0, bool p_play_music = true);
     // extern SM64_LIB_FN void sm64_mario_extend_cap(int32_t marioId, uint16_t capTime);
     void mario_extend_cap(int32_t p_mario_id, double p_cap_time);
     // extern SM64_LIB_FN bool sm64_mario_attack(int32_t marioId, float x, float y, float z, float hitboxHeight);
-    void mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position, float p_hitbox_height);
+    void mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position, real_t p_hitbox_height);
 
     // extern SM64_LIB_FN uint32_t sm64_surface_object_create( const struct SM64SurfaceObject *surfaceObject );
     int surface_object_create(const godot::Vector3 &p_position, const godot::Quaternion &p_rotation, const godot::Ref<LibSM64SurfaceArray> &p_surfaces);
@@ -648,15 +651,15 @@ public:
     // extern SM64_LIB_FN float sm64_surface_find_poison_gas_level( float x, float z );
 
     // extern SM64_LIB_FN void sm64_seq_player_play_sequence(uint8_t player, uint8_t seqId, uint16_t arg2);
-    void seq_player_play_sequence(uint8_t p_player, uint8_t p_seq_id, double p_fade_in_time = 0.0);
+    void seq_player_play_sequence(SeqPlayer p_player, SeqId p_seq_id, double p_fade_in_time = 0.0);
     // extern SM64_LIB_FN void sm64_play_music(uint8_t player, uint16_t seqArgs, uint16_t fadeTimer);
-    void play_music(uint8_t p_player, uint16_t p_seq_args, double p_fade_in_time = 0.0);
+    void play_music(SeqPlayer p_player, uint16_t p_seq_args, double p_fade_in_time = 0.0);
     // extern SM64_LIB_FN void sm64_stop_background_music(uint16_t seqId);
-    void stop_background_music(uint16_t p_seq_id);
+    void stop_background_music(SeqId p_seq_id);
     // extern SM64_LIB_FN void sm64_fadeout_background_music(uint16_t arg0, uint16_t fadeOut);
-    void fadeout_background_music(uint16_t p_seq_id, double p_fade_out_time);
+    void fadeout_background_music(SeqId p_seq_id, double p_fade_out_time);
     // extern SM64_LIB_FN uint16_t sm64_get_current_background_music();
-    uint16_t get_current_background_music();
+    SeqId get_current_background_music();
     // extern SM64_LIB_FN void sm64_play_sound(int32_t soundBits, float *pos);
     void play_sound(int32_t p_sound_bits, const godot::Vector3 &p_position);
     // extern SM64_LIB_FN void sm64_play_sound_global(int32_t soundBits);
