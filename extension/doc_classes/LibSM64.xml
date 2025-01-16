@@ -65,6 +65,9 @@
 			<return type="int" />
 			<param index="0" name="position" type="Vector3" />
 			<description>
+				Creates a Mario inside the [code]libsm64[/code] world in [param position].
+				Returns the created Mario's ID or [code]-1[/code] if the Mario could not be created.
+				[b]Note:[/b] [method static_surfaces_load] must be called before calling this function. [param position] must be directly above the loaded static surfaces.
 			</description>
 		</method>
 		<method name="mario_delete">
@@ -272,9 +275,9 @@
 			<return type="void" />
 			<param index="0" name="surfaces" type="LibSM64SurfaceArray" />
 			<description>
-				Loads the static [param surfaces] into the [code]libsm64[/code] world.
+				Loads the static [param surfaces] into the [code]libsm64[/code] world. This function should be called before any calls to [method mario_create].
 				[b]Note:[/b] calling this function multiple times will overwrite the previous calls.
-				[b]Warning:[/b] there should be at least one plane that spans the entire playing area at the bottom of the map.
+				[b]Warning:[/b] These surfaces will delimit the bounderies of the [code]libsm64[/code] world in the XZ plane. This means that Mario can only be above theses surfaces and will hit "invisible walls" at the edges of the world.
 			</description>
 		</method>
 		<method name="stop_background_music">
