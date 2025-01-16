@@ -3,7 +3,7 @@ extends Node
 
 ## Node that handles adding and updating MeshInstance3D nodes as Surface Objects for libsm64.
 
-var sm64_delta := LibSM64.sm64_timestep_interval
+var sm64_delta := LibSM64.tick_delta_time
 
 ## Group name that contains the MeshInstance3D that are part of the scene's surface objects
 @export var surface_objects_group := &"libsm64_surface_objects"

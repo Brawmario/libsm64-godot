@@ -182,11 +182,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_time_since_last_tick += delta
-	while _time_since_last_tick >= LibSM64.sm64_timestep_interval:
+	while _time_since_last_tick >= LibSM64.tick_delta_time:
 		_tick()
-		_time_since_last_tick -= LibSM64.sm64_timestep_interval
+		_time_since_last_tick -= LibSM64.tick_delta_time
 
-	var lerp_t = _time_since_last_tick / LibSM64.sm64_timestep_interval
+	var lerp_t = _time_since_last_tick / LibSM64.tick_delta_time
 
 	var mario_state: LibSM64MarioState
 	if interpolate:
