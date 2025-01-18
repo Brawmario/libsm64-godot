@@ -3,7 +3,7 @@
 
 #include <godot_cpp/classes/ref.hpp>
 
-#include <libsm64.h>
+#include <libsm64.hpp>
 
 #ifdef WIN32
 #include <windows.h>
@@ -31,14 +31,14 @@ public:
     void set_health(int p_value);
     int get_health() const;
 
-    void set_action(int p_value);
-    int get_action() const;
+    void set_action(godot::BitField<LibSM64::ActionFlags> p_value);
+    godot::BitField<LibSM64::ActionFlags> get_action() const;
 
-    void set_flags(int p_value);
-    int get_flags() const;
+    void set_flags(godot::BitField<LibSM64::MarioFlags> p_value);
+    godot::BitField<LibSM64::MarioFlags> get_flags() const;
 
-    void set_particle_flags(int p_value);
-    int get_particle_flags() const;
+    void set_particle_flags(godot::BitField<LibSM64::ParticleFlags> p_value);
+    godot::BitField<LibSM64::ParticleFlags> get_particle_flags() const;
 
     void set_invincibility_time(double p_value);
     double get_invincibility_time() const;
@@ -51,9 +51,9 @@ private:
     godot::Vector3 velocity;
     float face_angle;
     int health;
-    int action;
-    int flags;
-    int particle_flags;
+    godot::BitField<LibSM64::ActionFlags> action;
+    godot::BitField<LibSM64::MarioFlags> flags;
+    godot::BitField<LibSM64::ParticleFlags> particle_flags;
     double invincibility_time;
 };
 

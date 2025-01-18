@@ -12,6 +12,7 @@ const HEALTH_WEDGE = 0x0100
 
 signal action_changed(action: LibSM64.ActionFlags)
 signal flags_changed(flags: LibSM64.MarioFlags)
+signal particle_flags_changed(particle_flags: LibSM64.ParticleFlags)
 signal health_changed(health: int)
 signal health_wedges_changed(health_wedges: int)
 
@@ -47,8 +48,9 @@ var id: int:
 
 var _action := LibSM64.ActionFlags.ACT_UNINITIALIZED:
 	set(value):
-		_action = value
-		action_changed.emit(_action)
+		if value != _action:
+			_action = value
+			action_changed.emit(_action)
 ## Mario's action flags
 var action: LibSM64.ActionFlags:
 	get:
@@ -64,10 +66,11 @@ var action_name: StringName:
 	get:
 		return LibSM64MarioAction.to_action_name(_action)
 
-var _flags := LibSM64.MarioFlags.MARIO_NORMAL_CAP:
+var _flags := 0 as LibSM64.MarioFlags:
 	set(value):
-		_flags = value
-		flags_changed.emit(_flags)
+		if value != _flags:
+			_flags = value
+			flags_changed.emit(_flags)
 ## Mario's state flags
 var flags: LibSM64.MarioFlags:
 	get:
@@ -77,6 +80,16 @@ var flags: LibSM64.MarioFlags:
 			return
 		LibSM64.set_mario_state(_id, value)
 		_flags = value
+
+var _particle_flags := 0 as LibSM64.ParticleFlags:
+	set(value):
+		if value != _particle_flags:
+			_particle_flags = value
+			particle_flags_changed.emit(_particle_flags)
+## Mario's particle flags
+var particle_flags: LibSM64.ParticleFlags:
+	get:
+		return _particle_flags
 
 var _velocity := Vector3()
 ## Mario's velocity in the libsm64 world
@@ -105,9 +118,10 @@ var face_angle: float:
 
 var _health := FULL_HEALTH:
 	set(value):
-		_health = value
-		health_changed.emit(_health)
-		health_wedges_changed.emit(health_wedges)
+		if value != _health:
+			_health = value
+			health_changed.emit(_health)
+			health_wedges_changed.emit(health_wedges)
 ## Mario's health (2 bytes, upper byte is the number of health wedges, lower byte portion of next wedge)
 var health: int:
 	get:
@@ -141,7 +155,7 @@ var invicibility_time: float:
 		_invicibility_time = value
 
 ## Mario's water level
-var water_level := -100000.0:
+var water_level := -100000.0 / LibSM64.scale_factor:
 	set(value):
 		if _id < 0:
 			return
@@ -149,7 +163,7 @@ var water_level := -100000.0:
 		water_level = value
 
 ## Mario's gas level
-var gas_level := -100000.0:
+var gas_level := -100000.0 / LibSM64.scale_factor:
 	set(value):
 		if _id < 0:
 			return
@@ -193,19 +207,6 @@ func _process(delta: float) -> void:
 	global_position = mario_state.position
 	_velocity = mario_state.velocity
 	_face_angle = mario_state.face_angle
-
-	var new_health := mario_state.health
-	if new_health != _health:
-		_health = new_health
-
-	var new_action := mario_state.action
-	if new_action != _action:
-		_action = new_action
-
-	var new_flags := mario_state.flags
-	if new_flags != _flags:
-		_flags = new_flags
-
 	_invicibility_time = mario_state.invincibility_time
 
 	var material: StandardMaterial3D
@@ -237,6 +238,12 @@ func _physics_process(delta):
 		_tick()
 		_last_tick_usec = Time.get_ticks_usec()
 		_time_since_last_tick -= LibSM64.tick_delta_time
+
+		# Update the members that aren't interpolated
+		_health = _mario_interpolator.mario_state_current.health;
+		_action = _mario_interpolator.mario_state_current.action;
+		_flags = _mario_interpolator.mario_state_current.flags;
+		_particle_flags = _mario_interpolator.mario_state_current.particle_flags;
 
 
 ## Create Mario (requires initializing the libsm64 via the global_init function)

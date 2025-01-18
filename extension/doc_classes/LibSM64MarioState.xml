@@ -7,17 +7,17 @@
 	<tutorials>
 	</tutorials>
 	<members>
-		<member name="action" type="int" setter="set_action" getter="get_action" default="0">
+		<member name="action" type="int" setter="set_action" getter="get_action" enum="LibSM64.ActionFlags" is_bitfield="true" default="0">
 		</member>
 		<member name="face_angle" type="float" setter="set_face_angle" getter="get_face_angle" default="0.0">
 		</member>
-		<member name="flags" type="int" setter="set_flags" getter="get_flags" default="0">
+		<member name="flags" type="int" setter="set_flags" getter="get_flags" enum="LibSM64.MarioFlags" is_bitfield="true" default="0">
 		</member>
 		<member name="health" type="int" setter="set_health" getter="get_health" default="0">
 		</member>
 		<member name="invincibility_time" type="float" setter="set_invincibility_time" getter="get_invincibility_time" default="0.0">
 		</member>
-		<member name="particle_flags" type="int" setter="set_particle_flags" getter="get_particle_flags" default="0">
+		<member name="particle_flags" type="int" setter="set_particle_flags" getter="get_particle_flags" enum="LibSM64.ParticleFlags" is_bitfield="true" default="0">
 		</member>
 		<member name="position" type="Vector3" setter="set_position" getter="get_position" default="Vector3(0, 0, 0)">
 		</member>
