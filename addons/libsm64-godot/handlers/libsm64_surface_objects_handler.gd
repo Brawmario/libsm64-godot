@@ -13,11 +13,11 @@ var _surface_objects_refs: Array[Node3D] = []
 var _time_since_last_tick := 0.0
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	_time_since_last_tick += delta
-	while _time_since_last_tick >= LibSM64.tick_delta_time:
+	if _time_since_last_tick >= LibSM64.tick_delta_time:
 		_update_surface_objects()
-		_time_since_last_tick -= LibSM64.tick_delta_time
+		_time_since_last_tick = 0.0
 
 
 func _update_surface_objects() -> void:
