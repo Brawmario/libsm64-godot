@@ -2,8 +2,6 @@
 
 #include <godot_cpp/core/class_db.hpp>
 
-#include <libsm64.hpp>
-
 LibSM64MarioState::LibSM64MarioState()
     : position(0.0, 0.0, 0.0),
       velocity(0.0, 0.0, 0.0),
@@ -64,32 +62,32 @@ int LibSM64MarioState::get_health() const
     return health;
 }
 
-void LibSM64MarioState::set_action(int p_value)
+void LibSM64MarioState::set_action(godot::BitField<LibSM64::ActionFlags> p_value)
 {
     action = p_value;
 }
 
-int LibSM64MarioState::get_action() const
+godot::BitField<LibSM64::ActionFlags> LibSM64MarioState::get_action() const
 {
     return action;
 }
 
-void LibSM64MarioState::set_flags(int p_value)
+void LibSM64MarioState::set_flags(godot::BitField<LibSM64::MarioFlags> p_value)
 {
     flags = p_value;
 }
 
-int LibSM64MarioState::get_flags() const
+godot::BitField<LibSM64::MarioFlags> LibSM64MarioState::get_flags() const
 {
     return flags;
 }
 
-void LibSM64MarioState::set_particle_flags(int p_value)
+void LibSM64MarioState::set_particle_flags(godot::BitField<LibSM64::ParticleFlags> p_value)
 {
     particle_flags = p_value;
 }
 
-int LibSM64MarioState::get_particle_flags() const
+godot::BitField<LibSM64::ParticleFlags> LibSM64MarioState::get_particle_flags() const
 {
     return particle_flags;
 }
