@@ -782,6 +782,46 @@
 		</constant>
 		<constant name="TERRAIN_MASK" value="7" enum="TerrainType">
 		</constant>
+		<constant name="PARTICLE_DUST" value="1" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_VERTICAL_STAR" value="2" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_2" value="4" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_SPARKLES" value="8" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_HORIZONTAL_STAR" value="16" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_BUBBLE" value="32" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_WATER_SPLASH" value="64" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_IDLE_WATER_WAVE" value="128" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_SHALLOW_WATER_WAVE" value="256" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_PLUNGE_BUBBLE" value="512" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_WAVE_TRAIL" value="1024" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_FIRE" value="2048" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_SHALLOW_WATER_SPLASH" value="4096" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_LEAF" value="8192" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_SNOW" value="16384" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_DIRT" value="32768" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_MIST_CIRCLE" value="65536" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_BREATH" value="131072" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_TRIANGLE" value="262144" enum="ParticleFlags" is_bitfield="true">
+		</constant>
+		<constant name="PARTICLE_19" value="524288" enum="ParticleFlags" is_bitfield="true">
+		</constant>
 		<constant name="MARIO_NORMAL_CAP" value="1" enum="MarioFlags" is_bitfield="true">
 		</constant>
 		<constant name="MARIO_VANISH_CAP" value="2" enum="MarioFlags" is_bitfield="true">
