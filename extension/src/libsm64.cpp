@@ -97,7 +97,7 @@ static _FORCE_INLINE_ void sm64_3d_to_godot(const float *sm64_vec_arr, godot::Ve
 // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
 // SM64 color(r, g, b) -> Godot color(r, g, b, a)
 
-static _FORCE_INLINE_ godot::Color sm64_color_to_godot(const float *sm64_color, float alpha = 1.0f)
+static _FORCE_INLINE_ godot::Color sm64_color_to_godot(const float *sm64_color, float alpha)
 {
     return godot::Color(sm64_color[0], sm64_color[1], sm64_color[2], alpha);
 }
@@ -313,7 +313,7 @@ godot::Array LibSM64::mario_tick(int32_t p_mario_id, const godot::Ref<LibSM64Mar
 
     sm64_3d_to_godot(sm64_mario_geometry.position.data(), position.ptrw(), vertex_count, scale_factor);
     sm64_3d_to_godot(sm64_mario_geometry.normal.data(), normal.ptrw(), vertex_count);
-    sm64_color_to_godot(sm64_mario_geometry.color.data(), color.ptrw(), vertex_count, sm64_mario_state.flags & 0x8);
+    sm64_color_to_godot(sm64_mario_geometry.color.data(), color.ptrw(), vertex_count, sm64_mario_state.flags & MARIO_WING_CAP);
     sm64_2d_to_godot(sm64_mario_geometry.uv.data(), uv.ptrw(), vertex_count);
 
     godot::Array array_mesh_triangles;

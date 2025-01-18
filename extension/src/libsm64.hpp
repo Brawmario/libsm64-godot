@@ -556,6 +556,7 @@ public:
     };
 
     // From "libsm64/src/decomp/game/interaction.h"
+    #define INT_SUBTYPE_DELAY_INVINCIBILITY 0x00000002
     #define INT_SUBTYPE_BIG_KNOCKBACK 0x00000008 /* Used by Bowser, sets Mario's forward velocity to 40 on hit */
 
     void set_scale_factor(real_t p_value);
