@@ -192,7 +192,31 @@ public:
         TERRAIN_MASK   = 0x0007,
     };
 
-    // MarioFlags and ActionFlags are from "libsm64/src/decomp/include/surface_terrains.h"
+    // ParticleFlags, MarioFlags, ActionFlags are from "libsm64/src/decomp/include/sm64.h"
+
+    enum ParticleFlags
+    {
+        PARTICLE_DUST                 /* 0x00000001 */ = (1 <<  0),
+        PARTICLE_VERTICAL_STAR        /* 0x00000002 */ = (1 <<  1),
+        PARTICLE_2                    /* 0x00000004 */ = (1 <<  2),
+        PARTICLE_SPARKLES             /* 0x00000008 */ = (1 <<  3),
+        PARTICLE_HORIZONTAL_STAR      /* 0x00000010 */ = (1 <<  4),
+        PARTICLE_BUBBLE               /* 0x00000020 */ = (1 <<  5),
+        PARTICLE_WATER_SPLASH         /* 0x00000040 */ = (1 <<  6),
+        PARTICLE_IDLE_WATER_WAVE      /* 0x00000080 */ = (1 <<  7),
+        PARTICLE_SHALLOW_WATER_WAVE   /* 0x00000100 */ = (1 <<  8),
+        PARTICLE_PLUNGE_BUBBLE        /* 0x00000200 */ = (1 <<  9),
+        PARTICLE_WAVE_TRAIL           /* 0x00000400 */ = (1 << 10),
+        PARTICLE_FIRE                 /* 0x00000800 */ = (1 << 11),
+        PARTICLE_SHALLOW_WATER_SPLASH /* 0x00001000 */ = (1 << 12),
+        PARTICLE_LEAF                 /* 0x00002000 */ = (1 << 13),
+        PARTICLE_SNOW                 /* 0x00004000 */ = (1 << 14),
+        PARTICLE_DIRT                 /* 0x00008000 */ = (1 << 15),
+        PARTICLE_MIST_CIRCLE          /* 0x00010000 */ = (1 << 16),
+        PARTICLE_BREATH               /* 0x00020000 */ = (1 << 17),
+        PARTICLE_TRIANGLE             /* 0x00040000 */ = (1 << 18),
+        PARTICLE_19                   /* 0x00080000 */ = (1 << 19),
+    };
 
     enum MarioFlags
     {
@@ -681,6 +705,7 @@ private:
 VARIANT_ENUM_CAST(LibSM64::SurfaceType);
 VARIANT_ENUM_CAST(LibSM64::TerrainType);
 
+VARIANT_BITFIELD_CAST(LibSM64::ParticleFlags);
 VARIANT_BITFIELD_CAST(LibSM64::MarioFlags);
 VARIANT_BITFIELD_CAST(LibSM64::ActionFlags);
 
