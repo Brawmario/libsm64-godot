@@ -17,6 +17,7 @@ func _physics_process(delta: float) -> void:
 	_time_since_last_tick += delta
 	if _time_since_last_tick >= LibSM64.tick_delta_time:
 		_update_surface_objects()
+		# We don't want to update the surface objects more than once per tick.
 		_time_since_last_tick = 0.0
 
 

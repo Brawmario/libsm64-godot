@@ -47,7 +47,7 @@ env.Append(CPPPATH=["libsm64/dist/include/"])
 env.Append(LIBPATH=["libsm64/dist/"])
 env.Append(LIBS=["libsm64"])
 
-# remove -static flag from LINKFLAGS if present
+# remove -static flag from LINKFLAGS if present to prevent errors when linking to sm64.dll
 if env["platform"] == "windows":
     env["LINKFLAGS"] = [x for x in env["LINKFLAGS"] if x != "-static"]
 

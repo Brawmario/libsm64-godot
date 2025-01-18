@@ -14,7 +14,7 @@
 			<param index="0" name="rom" type="PackedByteArray" />
 			<description>
 				Initialize [code]libsm64[/code]'s audio system with the given loaded ROM.
-				[b]Warning:[/b] Calling this function with the wrong ROM will cause the game to crash!
+				[b]Warning:[/b] Calling this function with the wrong ROM will cause the game to crash! The expected ROM is the US version of Super Mario 64. The expected SHA-256 hash of the ROM is [code]17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91[/code].
 			</description>
 		</method>
 		<method name="audio_tick">
@@ -28,13 +28,13 @@
 		</method>
 		<method name="fadeout_background_music">
 			<return type="void" />
-			<param index="0" name="seq_id" type="int" />
+			<param index="0" name="seq_id" type="int" enum="LibSM64.SeqId" />
 			<param index="1" name="fade_out_time" type="float" />
 			<description>
 			</description>
 		</method>
 		<method name="get_current_background_music">
-			<return type="int" />
+			<return type="int" enum="LibSM64.SeqId" />
 			<description>
 			</description>
 		</method>
@@ -44,7 +44,7 @@
 			<description>
 				Initialize [code]libsm64[/code] with the given loaded ROM.
 				Returns the Mario's [Image] resource extracted from the ROM file.
-				[b]Warning:[/b] Calling this function with the wrong ROM will cause the game to crash!
+				[b]Warning:[/b] Calling this function with the wrong ROM will cause the game to crash! The expected ROM is the US version of Super Mario 64. The expected SHA-256 hash of the ROM is [code]17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91[/code].
 			</description>
 		</method>
 		<method name="global_terminate">
@@ -93,7 +93,7 @@
 		<method name="mario_interact_cap">
 			<return type="void" />
 			<param index="0" name="mario_id" type="int" />
-			<param index="1" name="cap_flag" type="int" />
+			<param index="1" name="cap_flag" type="int" enum="LibSM64.MarioFlags" is_bitfield="true" />
 			<param index="2" name="cap_time" type="float" default="0.0" />
 			<param index="3" name="play_music" type="bool" default="true" />
 			<description>
@@ -126,7 +126,7 @@
 		</method>
 		<method name="play_music">
 			<return type="void" />
-			<param index="0" name="player" type="int" />
+			<param index="0" name="player" type="int" enum="LibSM64.SeqPlayer" />
 			<param index="1" name="seq_args" type="int" />
 			<param index="2" name="fade_in_time" type="float" default="0.0" />
 			<description>
@@ -159,8 +159,8 @@
 		</method>
 		<method name="seq_player_play_sequence">
 			<return type="void" />
-			<param index="0" name="player" type="int" />
-			<param index="1" name="seq_id" type="int" />
+			<param index="0" name="player" type="int" enum="LibSM64.SeqPlayer" />
+			<param index="1" name="seq_id" type="int" enum="LibSM64.SeqId" />
 			<param index="2" name="fade_in_time" type="float" default="0.0" />
 			<description>
 			</description>
@@ -168,14 +168,14 @@
 		<method name="set_mario_action">
 			<return type="void" />
 			<param index="0" name="mario_id" type="int" />
-			<param index="1" name="action" type="int" />
+			<param index="1" name="action" type="int" enum="LibSM64.ActionFlags" is_bitfield="true" />
 			<description>
 			</description>
 		</method>
 		<method name="set_mario_action_arg">
 			<return type="void" />
 			<param index="0" name="mario_id" type="int" />
-			<param index="1" name="action" type="int" />
+			<param index="1" name="action" type="int" enum="LibSM64.ActionFlags" is_bitfield="true" />
 			<param index="2" name="action_arg" type="int" />
 			<description>
 			</description>
@@ -246,7 +246,7 @@
 		<method name="set_mario_state">
 			<return type="void" />
 			<param index="0" name="mario_id" type="int" />
-			<param index="1" name="flags" type="int" />
+			<param index="1" name="flags" type="int" enum="LibSM64.MarioFlags" is_bitfield="true" />
 			<description>
 			</description>
 		</method>
@@ -282,7 +282,7 @@
 		</method>
 		<method name="stop_background_music">
 			<return type="void" />
-			<param index="0" name="seq_id" type="int" />
+			<param index="0" name="seq_id" type="int" enum="LibSM64.SeqId" />
 			<description>
 			</description>
 		</method>
