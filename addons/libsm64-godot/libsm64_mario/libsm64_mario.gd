@@ -167,6 +167,7 @@ var _metal_material := preload("res://addons/libsm64-godot/libsm64_mario/libsm64
 var _wing_material := preload("res://addons/libsm64-godot/libsm64_mario/libsm64_mario_wing_material.tres") as StandardMaterial3D
 
 var _time_since_last_tick := 0.0
+var _last_tick_usec := Time.get_ticks_usec()
 
 
 func _ready() -> void:
@@ -181,12 +182,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_time_since_last_tick += delta
-	while _time_since_last_tick >= LibSM64.tick_delta_time:
-		_tick()
-		_time_since_last_tick -= LibSM64.tick_delta_time
-
-	var lerp_t = _time_since_last_tick / LibSM64.tick_delta_time
+	var lerp_t = (Time.get_ticks_usec() - _last_tick_usec) / (LibSM64.tick_delta_time * 1000000.0)
 
 	var mario_state: LibSM64MarioState
 	if interpolate:
@@ -233,6 +229,14 @@ func _process(delta: float) -> void:
 		_mesh.clear_surfaces()
 		_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, array_mesh_triangles)
 		_mesh_instance.set_surface_override_material(0, material)
+
+
+func _physics_process(delta):
+	_time_since_last_tick += delta
+	while _time_since_last_tick >= LibSM64.tick_delta_time:
+		_tick()
+		_last_tick_usec = Time.get_ticks_usec()
+		_time_since_last_tick -= LibSM64.tick_delta_time
 
 
 ## Create Mario (requires initializing the libsm64 via the global_init function)
