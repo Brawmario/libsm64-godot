@@ -1,10 +1,14 @@
 extends Node3D
 
+
+const BombOmbMinimalSurfaces = preload("res://demo/scenarios/bob-omb_minimal/bob-omb_minimal_surfaces.gd")
+
 @export var start_cap := LibSM64.MarioFlags.MARIO_NORMAL_CAP
 
 @onready var battlefield: MeshInstance3D = $Battlefield
 @onready var sm_64_mario: Node3D = $LibSM64Mario
 @onready var hud: HUD = $HUD
+
 
 func _ready() -> void:
 	if not LibSM64Global.init():
