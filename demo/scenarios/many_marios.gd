@@ -1,7 +1,10 @@
 extends Node3D
 
 func _ready() -> void:
-	LibSM64Global.init()
+	if not LibSM64Global.init():
+		push_error("Failed to initialize LibSM64Global")
+		return
+
 	$LibSM64StaticSurfacesHandler.load_static_surfaces()
 	$LibSM64SurfaceObjectsHandler.load_all_surface_objects()
 
