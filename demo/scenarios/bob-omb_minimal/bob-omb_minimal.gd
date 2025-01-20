@@ -7,7 +7,6 @@ const BombOmbMinimalSurfaces = preload("res://demo/scenarios/bob-omb_minimal/bob
 
 @onready var battlefield: MeshInstance3D = $Battlefield
 @onready var sm_64_mario: Node3D = $LibSM64Mario
-@onready var hud: HUD = $HUD
 
 
 func _ready() -> void:
@@ -22,7 +21,7 @@ func _ready() -> void:
 	sm_64_mario.create()
 	sm_64_mario.interact_cap(start_cap)
 
-	hud.mario = sm_64_mario
+	$HUD.mario = sm_64_mario
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
