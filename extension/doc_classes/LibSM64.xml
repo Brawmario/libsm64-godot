@@ -34,7 +34,7 @@
 			</description>
 		</method>
 		<method name="get_current_background_music">
-			<return type="int" enum="LibSM64.SeqId" />
+			<return type="int" />
 			<description>
 			</description>
 		</method>

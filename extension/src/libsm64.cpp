@@ -538,9 +538,9 @@ void LibSM64::fadeout_background_music(SeqId p_seq_id, double p_fade_out_time)
     sm64_fadeout_background_music(static_cast<uint16_t>(p_seq_id), p_fade_out_time / tick_delta_time);
 }
 
-LibSM64::SeqId LibSM64::get_current_background_music()
+uint16_t LibSM64::get_current_background_music()
 {
-    return static_cast<SeqId>(sm64_get_current_background_music() && 0xFF);
+    return sm64_get_current_background_music();
 }
 
 void LibSM64::play_sound(int32_t p_sound_bits, const godot::Vector3 &p_position)
