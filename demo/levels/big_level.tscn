@@ -20,16 +20,16 @@ albedo_texture = ExtResource("1_pr5n2")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_qrbky"]
 material = SubResource("StandardMaterial3D_l68y1")
-size = Vector2(100, 100)
+size = Vector2(75, 75)
 
 [sub_resource type="BoxMesh" id="BoxMesh_xlgjx"]
 size = Vector3(2, 2, 2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ukkr4"]
-size = Vector3(20, 8, 20)
+size = Vector3(15, 6, 15)
 
 [sub_resource type="BoxMesh" id="BoxMesh_yfan3"]
-size = Vector3(5, 4, 20)
+size = Vector3(3, 3, 15)
 
 [node name="BigLevel" type="Node3D"]
 
@@ -48,13 +48,13 @@ transform = Transform3D(0.860466, 0, -0.509507, 0, 1, 0, 0.509507, 0, 0.860466, 
 mesh = SubResource("BoxMesh_xlgjx")
 
 [node name="Plaform" type="MeshInstance3D" parent="." groups=["libsm64_static_surfaces"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 40)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 30)
 mesh = SubResource("BoxMesh_ukkr4")
 
 [node name="Steps" type="MeshInstance3D" parent="." groups=["libsm64_static_surfaces"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 2, 40)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1.5, 30)
 mesh = SubResource("BoxMesh_yfan3")
 
 [node name="Steps2" type="MeshInstance3D" parent="." groups=["libsm64_static_surfaces"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 2, 40)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1.5, 30)
 mesh = SubResource("BoxMesh_yfan3")

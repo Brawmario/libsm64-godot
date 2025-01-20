@@ -62,7 +62,7 @@ script = ExtResource("4_umvy3")
 camera = NodePath("../Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.516309, 0.856402, 0, -0.856402, 0.516309, 0, 23.9055, 16.654)
+transform = Transform3D(1, 0, 0, 0, 0.516309, 0.856402, 0, -0.856402, 0.516309, 0, 17.93, 12.491)
 current = true
 
 [node name="LibSM64StaticSurfacesHandler" type="Node" parent="."]

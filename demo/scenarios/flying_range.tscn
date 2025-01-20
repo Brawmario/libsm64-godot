@@ -15,7 +15,7 @@ start_cap = 8
 [node name="BigLevel" parent="." instance=ExtResource("3_ihbeb")]
 
 [node name="LibSM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.5, 49)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 27)
 script = ExtResource("4_umvy3")
 camera = NodePath("CameraRig/Camera3D")
 

@@ -696,7 +696,7 @@ protected:
     static void _bind_methods();
 
 private:
-    real_t scale_factor = 75.0;
+    real_t scale_factor = 100.0;
 
     godot::Callable debug_print_function;
     godot::Callable play_sound_function;
