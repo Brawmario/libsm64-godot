@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://cedir682bcs2s"]
 
-[ext_resource type="Texture2D" uid="uid://d0ipccf6g5cxx" path="res://icon.svg" id="1_pr5n2"]
+[ext_resource type="Texture2D" uid="uid://d0ipccf6g5cxx" path="res://icon.svg" id="1_m2w7j"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jd0mv"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -16,7 +16,7 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l68y1"]
-albedo_texture = ExtResource("1_pr5n2")
+albedo_texture = ExtResource("1_m2w7j")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_qrbky"]
 material = SubResource("StandardMaterial3D_l68y1")

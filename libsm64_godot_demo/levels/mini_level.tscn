@@ -1,9 +1,9 @@
 [gd_scene load_steps=21 format=3 uid="uid://cqv1tkr0q2m7i"]
 
 [ext_resource type="Texture2D" uid="uid://d0ipccf6g5cxx" path="res://icon.svg" id="1_4h8ry"]
-[ext_resource type="Script" path="res://demo/levels/mini_level.gd" id="1_d0u5v"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/levels/mini_level.gd" id="1_d0u5v"]
 [ext_resource type="Script" path="res://addons/libsm64-godot/components/libsm64_surface_properties_component.gd" id="3_6l4ud"]
-[ext_resource type="LibSM64SurfaceProperties" uid="uid://bs00vmksj0yos" path="res://demo/libsm64_resources/burning_libsm64_surface_properties.tres" id="4_uwnwp"]
+[ext_resource type="LibSM64SurfaceProperties" uid="uid://bs00vmksj0yos" path="res://libsm64_godot_demo/libsm64_resources/burning_libsm64_surface_properties.tres" id="4_uwnwp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7ddi4"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -19,7 +19,7 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="BoxMesh" id="8"]
-size = Vector3(3, 2, 3)
+size = Vector3(3, 7, 3)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pcbbo"]
 albedo_texture = ExtResource("1_4h8ry")
@@ -128,7 +128,7 @@ environment = SubResource("Environment_m3obt")
 [node name="StaticSurfaces" type="Node3D" parent="."]
 
 [node name="Wall" type="MeshInstance3D" parent="StaticSurfaces" groups=["libsm64_static_surfaces"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 3.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 3.5, 0)
 mesh = SubResource("8")
 skeleton = NodePath("../../..")
 

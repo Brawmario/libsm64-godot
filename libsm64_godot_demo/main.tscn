@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bjw13uwutue3a"]
 
-[ext_resource type="Script" path="res://demo/main.gd" id="1_w76b2"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/main.gd" id="1_w76b2"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -66,6 +66,8 @@ text = "Flying Range"
 [node name="BobOmbBattlefieldButton" type="Button" parent="DemoSelection"]
 layout_mode = 2
 text = "Bob-Omb Battlefield"
+
+[node name="LevelContainer" type="Node3D" parent="."]
 
 [connection signal="file_selected" from="RomPickerDialog" to="." method="_on_rom_picker_dialog_file_selected"]
 [connection signal="confirmed" from="InvalidRomDialog" to="." method="_on_invalid_rom_dialog_confirmed"]

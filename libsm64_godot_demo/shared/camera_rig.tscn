@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://yt8kbrfd41gi"]
 
-[ext_resource type="Script" path="res://demo/shared/camera_rig.gd" id="1_2hp1r"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/shared/camera_rig.gd" id="1_2hp1r"]
 
 [node name="CameraRig" type="Node3D"]
 top_level = true

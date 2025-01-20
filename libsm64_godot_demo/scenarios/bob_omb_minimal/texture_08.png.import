@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dukvdj5t6efgk"
-path.s3tc="res://.godot/imported/texture_08.png-9f10423014bb26c5c3dedf720f5a5bd4.s3tc.ctex"
-path.etc2="res://.godot/imported/texture_08.png-9f10423014bb26c5c3dedf720f5a5bd4.etc2.ctex"
+path.s3tc="res://.godot/imported/texture_08.png-61c85728a29ed6a21d2201937a4cd462.s3tc.ctex"
+path.etc2="res://.godot/imported/texture_08.png-61c85728a29ed6a21d2201937a4cd462.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://demo/scenarios/bob-omb_minimal/texture_08.png"
-dest_files=["res://.godot/imported/texture_08.png-9f10423014bb26c5c3dedf720f5a5bd4.s3tc.ctex", "res://.godot/imported/texture_08.png-9f10423014bb26c5c3dedf720f5a5bd4.etc2.ctex"]
+source_file="res://libsm64_godot_demo/scenarios/bob_omb_minimal/texture_08.png"
+dest_files=["res://.godot/imported/texture_08.png-61c85728a29ed6a21d2201937a4cd462.s3tc.ctex", "res://.godot/imported/texture_08.png-61c85728a29ed6a21d2201937a4cd462.etc2.ctex"]
 
 [params]
 

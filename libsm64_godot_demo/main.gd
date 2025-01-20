@@ -10,6 +10,16 @@ func _ready() -> void:
 		rom_picker_dialog.popup_centered_ratio()
 
 
+func return_to_menu() -> void:
+	$LevelContainer.get_child(0).queue_free()
+	show()
+
+
+func load_level(scene: PackedScene) -> void:
+	$LevelContainer.add_child(scene.instantiate())
+	hide()
+
+
 func _on_rom_picker_dialog_file_selected(path: String) -> void:
 	if not LibSM64Global.load_rom_file(path):
 		invalid_rom_dialog.popup_centered()
@@ -24,16 +34,16 @@ func _on_pick_rom_button_pressed() -> void:
 
 
 func _on_initial_scenario_button_pressed() -> void:
-	get_tree().change_scene_to_packed(preload("res://demo/scenarios/initial_scenario.tscn"))
+	load_level(preload("./scenarios/initial_scenario.tscn"))
 
 
 func _on_many_marios_button_pressed():
-	get_tree().change_scene_to_packed(preload("res://demo/scenarios/many_marios.tscn"))
+	load_level(preload("./scenarios/many_marios.tscn"))
 
 
 func _on_flying_range_button_pressed() -> void:
-	get_tree().change_scene_to_packed(preload("res://demo/scenarios/flying_range.tscn"))
+	load_level(preload("./scenarios/flying_range.tscn"))
 
 
 func _on_bob_omb_battlefield_button_pressed():
-	get_tree().change_scene_to_packed(preload("res://demo/scenarios/bob-omb_minimal/bob-omb_minimal.tscn"))
+	load_level(preload("./scenarios/bob_omb_minimal/bob_omb_minimal.tscn"))

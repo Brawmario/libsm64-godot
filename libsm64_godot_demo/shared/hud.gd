@@ -23,4 +23,4 @@ func _process(_delta: float) -> void:
 
 
 func _on_return_button_pressed() -> void:
-	get_tree().change_scene_to_packed(load("res://demo/main.tscn"))
+	get_tree().root.get_child(-1).return_to_menu()

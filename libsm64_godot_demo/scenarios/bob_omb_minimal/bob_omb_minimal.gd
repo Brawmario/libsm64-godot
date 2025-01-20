@@ -1,7 +1,7 @@
 extends Node3D
 
 
-const BombOmbMinimalSurfaces = preload("res://demo/scenarios/bob-omb_minimal/bob-omb_minimal_surfaces.gd")
+const BombOmbMinimalSurfaces = preload("./bob_omb_minimal_surfaces.gd")
 
 @export var start_cap := LibSM64.MarioFlags.MARIO_NORMAL_CAP
 
@@ -15,7 +15,7 @@ func _ready() -> void:
 		return
 
 	battlefield.mesh = BombOmbMinimalSurfaces.generate_godot_mesh()
-	battlefield.mesh.surface_set_material(0, preload("res://demo/scenarios/bob-omb_minimal/bob-omb_minimal_material.tres"))
+	battlefield.mesh.surface_set_material(0, preload("./bob_omb_minimal_material.tres"))
 	BombOmbMinimalSurfaces.load_static_surfaces()
 
 	sm_64_mario.create()
