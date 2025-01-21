@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bhiuog3b3iyge"
-path="res://.godot/imported/libsm64_mario.svg-50c316339c821b78c0d8fa329ceae197.ctex"
+path="res://.godot/imported/libsm64_mario.svg-32ef7a69fcb48e77b2855cf788040f33.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/libsm64-godot/libsm64_mario/libsm64_mario.svg"
-dest_files=["res://.godot/imported/libsm64_mario.svg-50c316339c821b78c0d8fa329ceae197.ctex"]
+source_file="res://addons/libsm64_godot/libsm64_mario/libsm64_mario.svg"
+dest_files=["res://.godot/imported/libsm64_mario.svg-32ef7a69fcb48e77b2855cf788040f33.ctex"]
 
 [params]
 

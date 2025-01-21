@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bdc44nveigt7k"]
 
 [ext_resource type="Script" path="res://libsm64_godot_demo/scenarios/bob_omb_minimal/bob_omb_minimal.gd" id="1_no06y"]
-[ext_resource type="Script" path="res://addons/libsm64-godot/libsm64_mario/libsm64_mario.gd" id="2_eljv2"]
+[ext_resource type="Script" path="res://addons/libsm64_godot/libsm64_mario/libsm64_mario.gd" id="2_eljv2"]
 [ext_resource type="PackedScene" uid="uid://yt8kbrfd41gi" path="res://libsm64_godot_demo/shared/camera_rig.tscn" id="3_lc572"]
 [ext_resource type="PackedScene" uid="uid://dprpekyttg0g6" path="res://libsm64_godot_demo/shared/hud.tscn" id="4_8fya1"]
 

@@ -1,4 +1,4 @@
-@icon("res://addons/libsm64-godot/libsm64_mario/libsm64_mario.svg")
+@icon("res://addons/libsm64_godot/libsm64_mario/libsm64_mario.svg")
 class_name LibSM64Mario
 extends Node3D
 
@@ -175,10 +175,10 @@ var _mesh: ArrayMesh
 
 var _mario_interpolator := LibSM64MarioInterpolator.new()
 
-var _default_material := preload("res://addons/libsm64-godot/libsm64_mario/libsm64_mario_default_material.tres") as StandardMaterial3D
-var _vanish_material := preload("res://addons/libsm64-godot/libsm64_mario/libsm64_mario_vanish_material.tres") as StandardMaterial3D
-var _metal_material := preload("res://addons/libsm64-godot/libsm64_mario/libsm64_mario_metal_material.tres") as StandardMaterial3D
-var _wing_material := preload("res://addons/libsm64-godot/libsm64_mario/libsm64_mario_wing_material.tres") as StandardMaterial3D
+var _default_material := preload("res://addons/libsm64_godot/libsm64_mario/libsm64_mario_default_material.tres") as StandardMaterial3D
+var _vanish_material := preload("res://addons/libsm64_godot/libsm64_mario/libsm64_mario_vanish_material.tres") as StandardMaterial3D
+var _metal_material := preload("res://addons/libsm64_godot/libsm64_mario/libsm64_mario_metal_material.tres") as StandardMaterial3D
+var _wing_material := preload("res://addons/libsm64_godot/libsm64_mario/libsm64_mario_wing_material.tres") as StandardMaterial3D
 
 var _time_since_last_tick := 0.0
 var _last_tick_usec := Time.get_ticks_usec()

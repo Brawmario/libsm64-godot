@@ -98,8 +98,8 @@ jobs:
 
       - name: Copy libsm64 binary
         run: |
-          mkdir -p addons/libsm64-godot/extension/bin
-          cp extension/libsm64/dist/* addons/libsm64-godot/extension/bin/ | true
+          mkdir -p addons/libsm64_godot/extension/bin
+          cp extension/libsm64/dist/* addons/libsm64_godot/extension/bin/ | true
 
       - name: Compile extension
         run: |
@@ -109,7 +109,7 @@ jobs:
       - name: (macOS) Resolve liniking
         if: ${{ matrix.platform == 'macos' }}
         run: |
-          cd addons/libsm64-godot/extension/bin
+          cd addons/libsm64_godot/extension/bin
 
           mkdir libsm64.framework
           mv libsm64.dylib libsm64.framework/libsm64
@@ -145,7 +145,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.${{ matrix.platform }}.${{ matrix.target }}
-          path: ${{ github.workspace }}/addons/libsm64-godot/extension/bin
+          path: ${{ github.workspace }}/addons/libsm64_godot/extension/bin
 
   output-artifacts:
     name: Build the addon, project and export demo
@@ -163,12 +163,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}*
-          path: ${{ github.workspace }}/addons/libsm64-godot/extension/bin
+          path: ${{ github.workspace }}/addons/libsm64_godot/extension/bin
           merge-multiple: true
 
       - name: Copy extra files to addon
         run: |
-          cp -n '${{ github.workspace }}/LICENSE' '${{ github.workspace }}/addons/libsm64-godot/'
+          cp -n '${{ github.workspace }}/LICENSE' '${{ github.workspace }}/addons/libsm64_godot/'
 
       - name: Clean extra files
         run: |
@@ -235,7 +235,7 @@ jobs:
       - name: Archive project and addon
         run: |
           7z a -tzip ${{ github.event.repository.name }}-project.${{ env.ref_name }}.zip ${{ github.workspace }}
-          7z a -tzip ${{ github.event.repository.name }}-addon.${{ env.ref_name }}.zip ${{ github.workspace }}/addons/libsm64-godot
+          7z a -tzip ${{ github.event.repository.name }}-addon.${{ env.ref_name }}.zip ${{ github.workspace }}/addons/libsm64_godot
 
       - name: Make release
         if: startsWith(github.ref, 'refs/tags/')
