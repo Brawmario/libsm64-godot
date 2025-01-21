@@ -155,6 +155,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
+      release_name: ${{ github.event.repository.name }}.${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
@@ -170,25 +171,18 @@ jobs:
         run: |
           cp -n '${{ github.workspace }}/LICENSE' '${{ github.workspace }}/addons/libsm64_godot/'
 
-      - name: Clean extra files
+      - name: Make release zip
         run: |
-          rm -rf extension
-          rm -rf .git
-          rm -rf .github
-          rm -rf .vscode
-          rm .git*
+          mkdir ${{ env.release_name }}
+          cp -r addons ${{ env.release_name }}
+          cp -r libsm64_godot_demo ${{ env.release_name }}
+          7z a -tzip ${{ env.release_name }}.zip ${{ env.release_name }}
 
-      - name: Upload demo project
+      - name: Upload release
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-project.${{ env.ref_name }}
-          path: ${{ github.workspace }}
-
-      - name: Upload addon folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.event.repository.name }}-addon.${{ env.ref_name }}
-          path: ${{ github.workspace }}/addons
+          name: ${{ env.release_name }}.zip
+          path: ${{ env.release_name }}.zip
 
       - name: Install Wine
         id: wine_install
@@ -232,16 +226,11 @@ jobs:
           mv "macOS.zip"           "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.mac.zip"
           mv "LinuxX11.zip"        "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.linux.zip"
 
-      - name: Archive project and addon
-        run: |
-          7z a -tzip ${{ github.event.repository.name }}-project.${{ env.ref_name }}.zip ${{ github.workspace }}
-          7z a -tzip ${{ github.event.repository.name }}-addon.${{ env.ref_name }}.zip ${{ github.workspace }}/addons/libsm64_godot
-
       - name: Make release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
+          body: See [CHANGES.md](https://github.com/Brawmario/libsm64-godot/blob/master/CHANGES.md) for details.
           files: |
-            ${{ github.event.repository.name }}-addon.${{ env.ref_name }}.zip
-            ${{ github.event.repository.name }}-project.${{ env.ref_name }}.zip
+            ${{ env.release_name }}.zip
             ${{ steps.demo_export.outputs.archive_directory }}/*
