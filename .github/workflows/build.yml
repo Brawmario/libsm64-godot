@@ -167,23 +167,6 @@ jobs:
           path: ${{ github.workspace }}/addons/libsm64_godot/extension/bin
           merge-multiple: true
 
-      - name: Copy extra files to addon
-        run: |
-          cp -n '${{ github.workspace }}/LICENSE' '${{ github.workspace }}/addons/libsm64_godot/'
-
-      - name: Make release zip
-        run: |
-          mkdir ${{ env.release_name }}
-          cp -r addons ${{ env.release_name }}
-          cp -r libsm64_godot_demo ${{ env.release_name }}
-          7z a -tzip ${{ env.release_name }}.zip ${{ env.release_name }}
-
-      - name: Upload release
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.release_name }}.zip
-          path: ${{ env.release_name }}.zip
-
       - name: Install Wine
         id: wine_install
         run: |
@@ -225,6 +208,23 @@ jobs:
           mv "Windows Desktop.zip" "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.windows.zip"
           mv "macOS.zip"           "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.mac.zip"
           mv "LinuxX11.zip"        "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.linux.zip"
+
+      - name: Copy extra files to addon
+        run: |
+          cp -n '${{ github.workspace }}/LICENSE' '${{ github.workspace }}/addons/libsm64_godot/'
+
+      - name: Make release zip
+        run: |
+          mkdir ${{ env.release_name }}
+          cp -r addons ${{ env.release_name }}
+          cp -r libsm64_godot_demo ${{ env.release_name }}
+          7z a -tzip ${{ env.release_name }}.zip ${{ env.release_name }}
+
+      - name: Upload release
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.release_name }}.zip
+          path: ${{ env.release_name }}.zip
 
       - name: Make release
         if: startsWith(github.ref, 'refs/tags/')
