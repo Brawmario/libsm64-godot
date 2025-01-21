@@ -24,6 +24,8 @@ void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
         return;
     }
 
+    LibSM64::register_project_settings();
+
     ClassDB::register_class<LibSM64>();
     ClassDB::register_class<LibSM64SurfaceProperties>();
     ClassDB::register_class<LibSM64MarioInputs>();

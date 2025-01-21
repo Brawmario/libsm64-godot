@@ -317,8 +317,9 @@
 	<members>
 		<member name="scale_factor" type="float" setter="set_scale_factor" getter="get_scale_factor" default="100.0">
 			The scale factor used to convert Godot values into [code]libsm64[/code] values (and vice-versa). When passing Godot's metric values to [LibSM64] methods, they will be multiplied internaly by [member scale_factor]. When [LibSM64] methods return SM64's unit values, they will be divided by [member scale_factor]. The bigger the scale, the smaller Mario will be in the Godot scene.
-			In SM64 units, Mario's hitbox is 161 units tall. Therefore, at 100.0 scale, Mario's hitbox will be 1.61 meters tall in the Godot scene.
-			[b]Note:[/b] This value should be set before [code]libsm64[/code] is initialized.
+			In SM64 units, Mario's hitbox is 161 units tall and 100 units wide. Therefore, at 100.0 scale, Mario's hitbox will be 1.61 meters tall and 1.0 meter wide in the Godot scene.
+			This property can be configured in the [code]"libsm64/scale_factor"[/code] project setting (but can only be changed at runtime directly).
+			[b]Warning:[/b] This value should only be changed before [method global_init] is called (or between [method global_terminate] and [method global_init] calls), otherwise strange things will happen.
 		</member>
 		<member name="tick_delta_time" type="float" setter="" getter="get_tick_delta_time" default="0.0333333">
 			The delta time that [code]libsm64[/code] expects to be ticked at in seconds (fixed at 1/30th of a second). All time values used as inputs and outputs are converted between Godot's seconds and [code]libsm64[/code]'s fixed frametime using this value.

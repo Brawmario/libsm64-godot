@@ -1,11 +1,14 @@
 #include <libsm64.hpp>
 
 #include <godot_cpp/classes/array_mesh.hpp>
+#include <godot_cpp/classes/project_settings.hpp>
 
 #include <libsm64_mario_geometry.hpp>
 #include <libsm64_mario_inputs.hpp>
 #include <libsm64_mario_state.hpp>
 #include <libsm64_surface_array.hpp>
+
+constexpr char SCALE_FACTOR_SETTING_NAME[] = "libsm64/scale_factor";
 
 // SM64 3D vector to Godot 3D vector
 // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
@@ -135,6 +138,48 @@ static _FORCE_INLINE_ void sm64_2d_to_godot(const float *sm64_vec_arr, godot::Ve
     }
 }
 
+// Project setting functions adapted from Godot Jolt addon
+
+static void register_project_setting(const char *p_name, godot::Variant::Type p_type, const godot::Variant &p_default_value)
+{
+    auto *project_settings = godot::ProjectSettings::get_singleton();
+
+    if (!project_settings->has_setting(p_name))
+    {
+        project_settings->set(p_name, p_default_value);
+    }
+
+    auto setting = godot::Dictionary();
+    setting["name"] = p_name;
+    setting["type"] = p_type;
+
+    project_settings->add_property_info(setting);
+    project_settings->set_initial_value(p_name, p_default_value);
+}
+
+template<typename T>
+static T get_project_setting(const char *p_name, T p_default_value = {})
+{
+    const auto* project_settings = godot::ProjectSettings::get_singleton();
+
+    const godot::Variant setting_value = project_settings->get_setting_with_override(p_name);
+    const godot::Variant::Type setting_type = setting_value.get_type();
+    const godot::Variant::Type expected_type = godot::Variant(T()).get_type();
+
+    ERR_FAIL_COND_V_MSG(
+        setting_type != expected_type,
+        p_default_value,
+        godot::vformat(
+            "Unexpected type for setting '%s'. Expected type '%s' but found '%s'.",
+            p_name,
+            godot::Variant::get_type_name(expected_type),
+            godot::Variant::get_type_name(setting_type)
+        )
+    );
+
+    return setting_value;
+}
+
 static void SM64DebugPrintFunction(const char *msg)
 {
     LibSM64 *libsm64 = LibSM64::get_singleton();
@@ -171,6 +216,8 @@ LibSM64::LibSM64()
 {
     ERR_FAIL_COND(singleton != nullptr);
     singleton = this;
+
+    scale_factor = get_project_setting<real_t>(SCALE_FACTOR_SETTING_NAME, 100.0);
 }
 
 LibSM64::~LibSM64()
@@ -187,6 +234,11 @@ LibSM64::~LibSM64()
 LibSM64 *LibSM64::get_singleton()
 {
     return singleton;
+}
+
+void LibSM64::register_project_settings()
+{
+    register_project_setting(SCALE_FACTOR_SETTING_NAME, godot::Variant::FLOAT, 100.0);
 }
 
 void LibSM64::set_scale_factor(real_t p_value)

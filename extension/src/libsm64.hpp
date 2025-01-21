@@ -24,6 +24,7 @@ public:
     ~LibSM64();
 
     static LibSM64 *get_singleton();
+    static void register_project_settings();
 
     static constexpr double tick_delta_time = 1.0 / 30.0;
 
@@ -697,7 +698,7 @@ protected:
     static void _bind_methods();
 
 private:
-    real_t scale_factor = 100.0;
+    real_t scale_factor;
 
     godot::Callable debug_print_function;
     godot::Callable play_sound_function;

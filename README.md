@@ -17,9 +17,9 @@ Currently compatible with Godot 4.3.x, with binaries compiled for Windows (x86_6
 
 If you just clone the project throught Git and attempt to run it, you'll get errors complaining about the lack of the GDExtension library (the project zip file in the Releases page already has the necessary binaries packaged).
 
-First, [build libsm64](https://github.com/libsm64/libsm64?tab=readme-ov-file#building-on-windows) and then copy (don't move) the genereated dynamic library from the `extension/libsm64/dist/` folder into `addons/libsm64-godot/extension/bin`.
+First, [build libsm64](https://github.com/libsm64/libsm64?tab=readme-ov-file#building-on-windows) and then copy (don't move) the genereated dynamic library from the `extension/libsm64/dist/` folder into `addons/libsm64_godot/extension/bin`.
 
-Setup the [requirements for building Godot for your platform of choice](https://docs.godotengine.org/en/stable/contributing/development/compiling/index.html#toc-devel-compiling) (If compiling for Windows, use the MinGW 64 enviroment you used to compile libsm64). Then, run the following command from inside of the `extension` folder to compile the GDExtension. It will automatically copy the generated binary into `addons/libsm64-godot/extension/bin`.
+Setup the [requirements for building Godot for your platform of choice](https://docs.godotengine.org/en/stable/contributing/development/compiling/index.html#toc-devel-compiling) (If compiling for Windows, use the MinGW 64 enviroment you used to compile libsm64). Then, run the following command from inside of the `extension` folder to compile the GDExtension. It will automatically copy the generated binary into `addons/libsm64_godot/extension/bin`.
 
 - For debug build: `scons target=template_debug use_mingw=yes`
 - For release build: `scons target=template_release use_mingw=yes`
@@ -58,6 +58,10 @@ And a node for audio:
 
 ## Simple steps for basic use
 
+On the Project Settings:
+
+1. Set the `libsm64/scale_factor` setting to the desired value (at default value of 100.0, the spawned Mario hitbox will be 1.61 meters tall and 1 meter wide).
+
 When creating the scene:
 
 1. Add a `LibSM64StaticSurfaceHandler` node to the scene.
@@ -67,10 +71,9 @@ When creating the scene:
 
 Then do the following on the scene's main script:
 
-1. Configure the `LibSM64Global.scale_factor` property if necessary (try default value first).
-2. Call the `LibSM64Global.load_rom_file()` function with the file path to the Super Mario 64 ROM file (the SHA-256 of the file will be checked against the known good ROM).
-3. Call the `LibSM64Global.init()` function.
-4. Call `LibStaticSurfaceHandler.load_static_surfaces()` on your instanced `LibSM64StaticSurfaceHandler` node.
-5. Call `LibSM64Mario.create()` on your instanced `SM64Mario` node(s).
+1. Call the `LibSM64Global.load_rom_file()` function with the file path to the Super Mario 64 ROM file (the SHA-256 of the file will be checked against the known good ROM).
+2. Call the `LibSM64Global.init()` function.
+3. Call `LibStaticSurfaceHandler.load_static_surfaces()` on your instanced `LibSM64StaticSurfaceHandler` node.
+4. Call `LibSM64Mario.create()` on your instanced `SM64Mario` node(s).
 
 For more detailed instructions refer to the [manual](docs/manual.md).

@@ -10,7 +10,7 @@ If done correctly, the addon should show up under `Project Settings > Plugins`. 
 
 ![Enable the LibSM64 Godot addon](enable-addon.png)
 
-Note: You might get a `Error loading extension: res://addons/libsm64-godot/extension/libsm64.gd.gdextension` message. Try relaoding the project or re-adding the addon, this error seems inconsistent.
+Note: You might get a `Error loading extension: res://addons/libsm64_godot/extension/libsm64.gd.gdextension` message. Try reloading the project or re-adding the addon, this error seems inconsistent.
 
 ## How to setup basic use
 
@@ -76,10 +76,6 @@ func _ready() -> void:
 	if not LibSM64Global.load_rom_file(rom_filepath):
 		push_error("Failed to load SM64 ROM file.")
 		return
-
-	# Set the scale of the internal `libsm64` world. The bigger the scale, the smaller Mario will be in the Godot scene.
-	# At 75.0 scale, Mario will be just below 2 meters tall in the Godot scene.
-	LibSM64.scale_factor = 75.0
 
 	# Init the `libsm64` world.
 	LibSM64Global.init()
