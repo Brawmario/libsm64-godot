@@ -18,7 +18,7 @@ func _process(delta: float) -> void:
 	global_transform.origin = player.global_transform.origin
 
 	var look_direction := get_look_direction()
-	var move_direction := get_move_direction()
+	var _move_direction := get_move_direction()
 
 	if _input_relative.length() > 0:
 		update_rotation(_input_relative * sensitivity_mouse * delta)
