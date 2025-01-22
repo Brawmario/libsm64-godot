@@ -23,6 +23,7 @@ mono_crash.*.json
 
 # Scons artifacts
 .sconsign.dblite
+.scons_cache/
 
 # Godot exports
 export/

@@ -31,32 +31,32 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Linux (debug)
+          - name: 🐧 Linux (debug)
             target: template_debug
             platform: linux
             arch: x86_64
             os: ubuntu-latest
-          - name: Linux (release)
+          - name: 🐧 Linux (release)
             target: template_release
             platform: linux
             arch: x86_64
             os: ubuntu-latest
-          - name: Windows (debug)
+          - name: 🏁 Windows (debug)
             target: template_debug
             platform: windows
             arch: x86_64
             os: ubuntu-latest
-          - name: Windows (release)
+          - name: 🏁 Windows (release)
             target: template_release
             platform: windows
             arch: x86_64
             os: ubuntu-latest
-          - name: macOS (debug)
+          - name: 🍎 macOS (debug)
             target: template_debug
             platform: macos
             arch: universal
             os: macos-latest
-          - name: macOS (release)
+          - name: 🍎 macOS (release)
             target: template_release
             platform: macos
             arch: universal
@@ -64,6 +64,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
+      SCONS_CACHE: ${{ github.workspace }}/extension/.scons-cache/
     steps:
       - name: (Windows) Set up MinGW
         if: ${{ matrix.platform == 'windows' }}
@@ -84,6 +85,20 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Get godot-cpp SHA
+        id: godot_cpp_sha
+        run: |
+          echo "sha=$(git rev-parse @:./extension/godot-cpp)" >> $GITHUB_OUTPUT
+
+      - name: Restore .scons_cache directory
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{env.SCONS_CACHE}}
+          key: ${{github.job}}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}-${{steps.godot_cpp_sha.outputs.sha}}-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            ${{github.job}}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}-${{steps.godot_cpp_sha.outputs.sha}}-${{github.ref}}
+            ${{github.job}}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}-${{steps.godot_cpp_sha.outputs.sha}}
 
       - name: (Windows) Prepare cross compilation
         if: ${{ matrix.platform == 'windows' }}
@@ -146,6 +161,12 @@ jobs:
         with:
           name: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.${{ matrix.platform }}.${{ matrix.target }}
           path: ${{ github.workspace }}/addons/libsm64_godot/extension/bin
+
+      - name: Save .scons_cache directory
+        uses: actions/cache/save@v4
+        with:
+          path: ${{env.SCONS_CACHE}}
+          key: ${{github.job}}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}-${{steps.godot_cpp_sha.outputs.sha}}-${{github.ref}}-${{github.sha}}
 
   output-artifacts:
     name: Build the addon, project and export demo
