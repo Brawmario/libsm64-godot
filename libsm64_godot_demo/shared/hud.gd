@@ -23,4 +23,6 @@ func _process(_delta: float) -> void:
 
 
 func _on_return_button_pressed() -> void:
-	get_tree().root.get_child(-1).return_to_menu()
+	var main_node := get_tree().root.get_child(-1)
+	if main_node.has_method(&"return_to_menu"):
+		main_node.return_to_menu()
