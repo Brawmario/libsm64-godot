@@ -108,7 +108,10 @@
                 "clear": false
             },
             "options": {
-                "cwd": "${workspaceFolder}/extension"
+                "cwd": "${workspaceFolder}/extension",
+                "env": {
+                    "SCONS_CACHE": "${workspaceFolder}/extension/.scons_cache"
+                }
             },
             "problemMatcher": {
                 "base": "$gcc",
@@ -128,7 +131,10 @@
                 "clear": false
             },
             "options": {
-                "cwd": "${workspaceFolder}/extension"
+                "cwd": "${workspaceFolder}/extension",
+                "env": {
+                    "SCONS_CACHE": "${workspaceFolder}/extension/.scons_cache"
+                }
             },
             "problemMatcher": {
                 "base": "$gcc",
