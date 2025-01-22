@@ -92,6 +92,7 @@ jobs:
           echo "sha=$(git rev-parse @:./extension/godot-cpp)" >> $GITHUB_OUTPUT
 
       - name: Restore .scons_cache directory
+        id: scons_cache_restore
         uses: actions/cache/restore@v4
         with:
           path: ${{env.SCONS_CACHE}}
@@ -166,7 +167,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ${{env.SCONS_CACHE}}
-          key: ${{github.job}}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}-${{steps.godot_cpp_sha.outputs.sha}}-${{github.ref}}-${{github.sha}}
+          key: ${{steps.scons_cache_restore.outputs.cache-primary-key}}
 
   output-artifacts:
     name: Build the addon, project and export demo
