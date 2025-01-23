@@ -21,9 +21,9 @@
 		</method>
 	</methods>
 	<members>
-		<member name="array_mesh_triangles_current" type="Array" setter="set_array_mesh_triangles_current" getter="get_array_mesh_triangles_current" default="[PackedVector3Array(), PackedVector3Array(), null, PackedColorArray(), PackedVector2Array(), null, null, null, null, null, null, null, null]">
+		<member name="array_mesh_triangles_current" type="Array" setter="set_array_mesh_triangles_current" getter="get_array_mesh_triangles_current" default="[]">
 		</member>
-		<member name="array_mesh_triangles_previous" type="Array" setter="set_array_mesh_triangles_previous" getter="get_array_mesh_triangles_previous" default="[PackedVector3Array(), PackedVector3Array(), null, PackedColorArray(), PackedVector2Array(), null, null, null, null, null, null, null, null]">
+		<member name="array_mesh_triangles_previous" type="Array" setter="set_array_mesh_triangles_previous" getter="get_array_mesh_triangles_previous" default="[]">
 		</member>
 		<member name="mario_state_current" type="LibSM64MarioState" setter="set_mario_state_current" getter="get_mario_state_current">
 		</member>

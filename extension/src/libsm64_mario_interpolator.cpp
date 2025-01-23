@@ -16,23 +16,6 @@ static godot::PackedVector3Array lerp(const godot::Vector3 *a, const godot::Vect
     return ret;
 }
 
-LibSM64MarioInterpolator::LibSM64MarioInterpolator()
-{
-    array_mesh_triangles_current.resize(godot::ArrayMesh::ARRAY_MAX);
-    array_mesh_triangles_current[godot::ArrayMesh::ARRAY_VERTEX] = godot::PackedVector3Array();
-    array_mesh_triangles_current[godot::ArrayMesh::ARRAY_NORMAL] = godot::PackedVector3Array();
-    array_mesh_triangles_current[godot::ArrayMesh::ARRAY_COLOR] = godot::PackedColorArray();
-    array_mesh_triangles_current[godot::ArrayMesh::ARRAY_TEX_UV] = godot::PackedVector2Array();
-    array_mesh_triangles_previous.resize(godot::ArrayMesh::ARRAY_MAX);
-    array_mesh_triangles_previous[godot::ArrayMesh::ARRAY_VERTEX] = godot::PackedVector3Array();
-    array_mesh_triangles_previous[godot::ArrayMesh::ARRAY_NORMAL] = godot::PackedVector3Array();
-    array_mesh_triangles_previous[godot::ArrayMesh::ARRAY_COLOR] = godot::PackedColorArray();
-    array_mesh_triangles_previous[godot::ArrayMesh::ARRAY_TEX_UV] = godot::PackedVector2Array();
-
-    mario_state_current.instantiate();
-    mario_state_previous.instantiate();
-}
-
 void LibSM64MarioInterpolator::set_array_mesh_triangles_current(const godot::Array &p_value)
 {
     array_mesh_triangles_current = p_value;
@@ -75,21 +58,24 @@ godot::Ref<LibSM64MarioState> LibSM64MarioInterpolator::get_mario_state_previous
 
 godot::Array LibSM64MarioInterpolator::interpolate_array_mesh_triangles(double p_t) const
 {
+    ERR_FAIL_COND_V(array_mesh_triangles_current.size() != godot::ArrayMesh::ARRAY_MAX, godot::Array());
+    ERR_FAIL_COND_V(array_mesh_triangles_previous.size() != godot::ArrayMesh::ARRAY_MAX, godot::Array());
+
     auto ret = godot::Array();
     ret.resize(godot::ArrayMesh::ARRAY_MAX);
 
-    const godot::PackedVector3Array vertices_current = array_mesh_triangles_current[godot::ArrayMesh::ARRAY_VERTEX];
-    const godot::PackedVector3Array vertices_previous = array_mesh_triangles_previous[godot::ArrayMesh::ARRAY_VERTEX];
-    const godot::PackedVector3Array normals_current = array_mesh_triangles_current[godot::ArrayMesh::ARRAY_NORMAL];
-    const godot::PackedVector3Array normals_previous = array_mesh_triangles_previous[godot::ArrayMesh::ARRAY_NORMAL];
+    const godot::PackedVector3Array &vertices_current = array_mesh_triangles_current[godot::ArrayMesh::ARRAY_VERTEX];
+    const godot::PackedVector3Array &vertices_previous = array_mesh_triangles_previous[godot::ArrayMesh::ARRAY_VERTEX];
+    const godot::PackedVector3Array &normals_current = array_mesh_triangles_current[godot::ArrayMesh::ARRAY_NORMAL];
+    const godot::PackedVector3Array &normals_previous = array_mesh_triangles_previous[godot::ArrayMesh::ARRAY_NORMAL];
 
-    auto vertex_count = godot::MIN(vertices_current.size(), vertices_previous.size());
+    const auto vertex_count = godot::MIN(vertices_current.size(), vertices_previous.size());
 
     ret[godot::ArrayMesh::ARRAY_VERTEX] = lerp(vertices_previous.ptr(), vertices_current.ptr(), vertex_count, static_cast<real_t>(p_t));
     ret[godot::ArrayMesh::ARRAY_NORMAL] = lerp(normals_previous.ptr(), normals_current.ptr(), vertex_count, static_cast<real_t>(p_t));
 
-    const godot::PackedColorArray colors_current = array_mesh_triangles_current[godot::ArrayMesh::ARRAY_COLOR];
-    const godot::PackedVector2Array uvs_current = array_mesh_triangles_current[godot::ArrayMesh::ARRAY_TEX_UV];
+    const godot::PackedColorArray &colors_current = array_mesh_triangles_current[godot::ArrayMesh::ARRAY_COLOR];
+    const godot::PackedVector2Array &uvs_current = array_mesh_triangles_current[godot::ArrayMesh::ARRAY_TEX_UV];
 
     ret[godot::ArrayMesh::ARRAY_COLOR] = colors_current.slice(0, vertex_count);
     ret[godot::ArrayMesh::ARRAY_TEX_UV] = uvs_current.slice(0, vertex_count);

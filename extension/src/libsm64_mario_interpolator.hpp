@@ -14,7 +14,7 @@ class LibSM64MarioInterpolator : public godot::RefCounted
     GDCLASS(LibSM64MarioInterpolator, godot::RefCounted);
 
 public:
-    LibSM64MarioInterpolator();
+    LibSM64MarioInterpolator() = default;
 
     void set_array_mesh_triangles_current(const godot::Array &p_value);
     godot::Array get_array_mesh_triangles_current() const;
