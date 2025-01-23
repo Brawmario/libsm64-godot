@@ -101,6 +101,9 @@ var velocity: Vector3:
 			return
 		LibSM64.set_mario_velocity(_id, value)
 		_velocity = value
+		if _mario_interpolator.mario_state_current:
+			_mario_interpolator.mario_state_current.velocity = _velocity
+			_mario_interpolator.mario_state_previous.velocity = _velocity
 
 var _face_angle := 0.0:
 	set(value):
@@ -115,6 +118,9 @@ var face_angle: float:
 			return
 		LibSM64.set_mario_face_angle(_id, value)
 		_face_angle = value
+		if _mario_interpolator.mario_state_current:
+			_mario_interpolator.mario_state_current.face_angle = _face_angle
+			_mario_interpolator.mario_state_previous.face_angle = _face_angle
 
 var _health := FULL_HEALTH:
 	set(value):
@@ -153,6 +159,9 @@ var invicibility_time: float:
 			return
 		LibSM64.set_mario_invincibility(_id, value)
 		_invicibility_time = value
+		if _mario_interpolator.mario_state_current:
+			_mario_interpolator.mario_state_current.invicibility_time = _invicibility_time
+			_mario_interpolator.mario_state_previous.invicibility_time = _invicibility_time
 
 ## Mario's water level
 var water_level := -100000.0 / LibSM64.scale_factor:
@@ -182,6 +191,7 @@ var _wing_material := preload("res://addons/libsm64_godot/libsm64_mario/libsm64_
 
 var _time_since_last_tick := 0.0
 var _last_tick_usec := Time.get_ticks_usec()
+var _reset_interpolation_next_tick := false
 
 
 func _ready() -> void:
@@ -196,6 +206,9 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if _id < 0:
+		return
+
 	var lerp_t = (Time.get_ticks_usec() - _last_tick_usec) / (LibSM64.tick_delta_time * 1000000.0)
 
 	var mario_state: LibSM64MarioState
@@ -233,6 +246,9 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta):
+	if _id < 0:
+		return
+
 	_time_since_last_tick += delta
 	while _time_since_last_tick >= LibSM64.tick_delta_time:
 		_tick()
@@ -254,9 +270,18 @@ func create() -> void:
 	_id = LibSM64.mario_create(global_position)
 	if _id < 0:
 		return
+	face_angle = global_rotation.y
 
+	_mario_interpolator.mario_state_current = LibSM64MarioState.new()
 	_mario_interpolator.mario_state_current.position = global_position
-	_mario_interpolator.mario_state_previous.position = global_position
+	_mario_interpolator.mario_state_current.face_angle = _face_angle
+	_mario_interpolator.mario_state_current.health = FULL_HEALTH
+	_mario_interpolator.array_mesh_triangles_current = [PackedVector3Array(), PackedVector3Array(), null, PackedColorArray(), PackedVector2Array(), null, null, null, null, null, null, null, null]
+
+	_mario_interpolator.mario_state_previous = _mario_interpolator.mario_state_current
+	_mario_interpolator.array_mesh_triangles_previous = _mario_interpolator.array_mesh_triangles_current
+
+	reset_interpolation()
 
 	if not _default_material.albedo_texture:
 		_default_material.albedo_texture = LibSM64Global.mario_texture
@@ -279,11 +304,9 @@ func teleport(to_global_position: Vector3) -> void:
 		return
 	LibSM64.set_mario_position(_id, to_global_position)
 	global_position = to_global_position
-	_mario_interpolator.mario_state_current.position = to_global_position
-
-	# Reset interpolation
-	_mario_interpolator.mario_state_previous = _mario_interpolator.mario_state_current
-	_mario_interpolator.array_mesh_triangles_previous = _mario_interpolator.array_mesh_triangles_current
+	_mario_interpolator.mario_state_current.position = global_position
+	_mario_interpolator.mario_state_previous.position = global_position
+	reset_interpolation()
 
 
 ## Set angle of mario in the libsm64 world
@@ -291,8 +314,10 @@ func set_angle(to_global_rotation: Quaternion) -> void:
 	if _id < 0:
 		return
 	LibSM64.set_mario_angle(_id, to_global_rotation)
-	# TODO: check this out
-	# global_rotation = to_global_rotation
+	_face_angle = to_global_rotation.get_euler().y
+	_mario_interpolator.mario_state_current.face_angle = _face_angle
+	_mario_interpolator.mario_state_previous.face_angle = _face_angle
+	reset_interpolation()
 
 
 ## Set Mario's forward velocity in the libsm64 world
@@ -337,6 +362,11 @@ func extend_cap(cap_time: float) -> void:
 	LibSM64.mario_extend_cap(_id, cap_time)
 
 
+## Reset interpolation next tick
+func reset_interpolation() -> void:
+	_reset_interpolation_next_tick = true
+
+
 func _make_mario_inputs() -> LibSM64MarioInputs:
 	var mario_inputs := LibSM64MarioInputs.new()
 
@@ -365,6 +395,11 @@ func _tick() -> void:
 
 	_mario_interpolator.mario_state_current = mario_tick_output[0]
 	_mario_interpolator.array_mesh_triangles_current = mario_tick_output[1]
+
+	if _reset_interpolation_next_tick:
+		_mario_interpolator.mario_state_previous = _mario_interpolator.mario_state_current
+		_mario_interpolator.array_mesh_triangles_previous = _mario_interpolator.array_mesh_triangles_current
+		_reset_interpolation_next_tick = false
 
 
 static func _to_action_name(action: int) -> StringName:
