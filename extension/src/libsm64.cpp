@@ -21,13 +21,6 @@ static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float *p_a
     p_arr_out[2] = -p_vec.x * p_scale_factor;
 }
 
-static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float *p_arr_out)
-{
-    p_arr_out[0] = p_vec.z;
-    p_arr_out[1] = p_vec.y;
-    p_arr_out[2] = -p_vec.x;
-}
-
 static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float &p_x_out, float &p_y_out, float &p_z_out, real_t p_scale_factor)
 {
     p_x_out =  p_vec.z * p_scale_factor;
@@ -35,29 +28,22 @@ static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float &p_x
     p_z_out = -p_vec.x * p_scale_factor;
 }
 
-static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float &p_x_out, float &p_y_out, float &p_z_out)
+static _FORCE_INLINE_ void godot_to_sm64_mario_angle(const godot::Quaternion &p_rotation, float &p_x_out, float &p_y_out, float &p_z_out)
 {
-    p_x_out = p_vec.z;
-    p_y_out = p_vec.y;
-    p_z_out = -p_vec.x;
+    godot::Vector3 euler_rot = godot::Basis(p_rotation).get_euler(godot::EULER_ORDER_YZX);
+
+    p_x_out =  euler_rot.z;
+    p_y_out =  euler_rot.y;
+    p_z_out = -euler_rot.x;
 }
 
-static _FORCE_INLINE_ void godot_to_sm64_angle(const godot::Quaternion &p_rotation, float *p_arr_out)
+static _FORCE_INLINE_ void godot_to_sm64_object_rotation(const godot::Quaternion &p_rotation, float *p_arr_out)
 {
-    godot::Vector3 rotation_vec = godot::Basis(p_rotation).get_euler(godot::EULER_ORDER_YZX);
+    godot::Vector3 euler_rot = godot::Basis(p_rotation).get_euler(godot::EULER_ORDER_YZX);
 
-    p_arr_out[0] = -godot::Math::rad_to_deg(rotation_vec.z);
-    p_arr_out[1] = -godot::Math::rad_to_deg(rotation_vec.y);
-    p_arr_out[2] = godot::Math::rad_to_deg(rotation_vec.x);
-}
-
-static _FORCE_INLINE_ void godot_to_sm64_angle(const godot::Quaternion &p_rotation, float &p_x_out, float &p_y_out, float &p_z_out)
-{
-    godot::Vector3 rotation_vec = godot::Basis(p_rotation).get_euler(godot::EULER_ORDER_YZX);
-
-    p_x_out = -godot::Math::rad_to_deg(rotation_vec.z);
-    p_y_out = -godot::Math::rad_to_deg(rotation_vec.y);
-    p_z_out =  godot::Math::rad_to_deg(rotation_vec.x);
+    p_arr_out[0] = -godot::Math::rad_to_deg(euler_rot.z);
+    p_arr_out[1] = -godot::Math::rad_to_deg(euler_rot.y);
+    p_arr_out[2] =  godot::Math::rad_to_deg(euler_rot.x);
 }
 
 static _FORCE_INLINE_ godot::Vector3 sm64_3d_to_godot(const float *p_arr)
@@ -436,8 +422,9 @@ void LibSM64::set_mario_angle(int32_t p_mario_id, const godot::Quaternion &p_ang
 {
     ERR_FAIL_COND(p_mario_id < 0);
 
-    godot::Vector3 rotation_vec = godot::Basis(p_angle).get_euler(godot::EULER_ORDER_YZX);
-    sm64_set_mario_angle(p_mario_id, rotation_vec.x, rotation_vec.y, rotation_vec.z);
+    float x, y, z;
+    godot_to_sm64_mario_angle(p_angle, x, y, z);
+    sm64_set_mario_angle(p_mario_id, x, y, z);
 }
 
 void LibSM64::set_mario_face_angle(int32_t p_mario_id, float p_y)
@@ -543,7 +530,7 @@ int LibSM64::surface_object_create(const godot::Vector3 &p_position, const godot
 
     struct SM64ObjectTransform object_transform;
     godot_to_sm64(p_position, object_transform.position, scale_factor);
-    godot_to_sm64_angle(p_rotation, object_transform.eulerRotation);
+    godot_to_sm64_object_rotation(p_rotation, object_transform.eulerRotation);
 
     const struct SM64SurfaceObject object = {
         object_transform,
@@ -560,7 +547,7 @@ void LibSM64::surface_object_move(uint32_t p_object_id, const godot::Vector3 &p_
 
     struct SM64ObjectTransform object_transform;
     godot_to_sm64(p_position, object_transform.position, scale_factor);
-    godot_to_sm64_angle(p_rotation, object_transform.eulerRotation);
+    godot_to_sm64_object_rotation(p_rotation, object_transform.eulerRotation);
 
     sm64_surface_object_move(p_object_id, &object_transform);
 }
