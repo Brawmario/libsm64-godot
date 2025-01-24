@@ -37,7 +37,7 @@ func _camera_event(event: InputEvent) -> void:
 
 
 func _toggle_mouse_lock() -> void:
-	if Input.is_action_just_pressed("toggle_mouse_lock"):
+	if Input.is_action_just_pressed(&"ui_cancel"):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		else:

@@ -30,7 +30,7 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("toggle_mouse_lock"):
+	if event.is_action_pressed(&"ui_cancel"):
 		_toggle_mouse_lock()
 
 

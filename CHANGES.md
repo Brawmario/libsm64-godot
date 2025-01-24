@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix internal angle conversion in the `LibSM64.set_mario_angle()` function.
+- Remove `toggle_mouse_lock` input action from the example project. Replace its usage with `ui_cancel`.
 
 ## [2.2.0] - 2025-01-22
 
