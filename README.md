@@ -13,11 +13,11 @@ You can get the addon from the [Godot Asset Library](https://godotengine.org/ass
 
 ## Current Godot compatibility
 
-Currently compatible with Godot 4.3.x, with binaries compiled for Windows (x86_64), macOS (universal) and Linux (x86_64). Check the [Releases](https://github.com/Brawmario/libsm64-godot/releases) for the files.
+Currently compatible with Godot 4.3.x, with binaries compiled for Windows (x86_64), macOS (universal) and Linux (x86_64).
 
 ## How to compile the GDExtension
 
-If you just clone the project throught Git and attempt to run it, you'll get errors complaining about the lack of the GDExtension library (the project zip file in the Releases page already has the necessary binaries packaged).
+If you just clone the project throught Git and attempt to run it, you'll get errors complaining about the lack of the GDExtension library (the package in the [GitHub releases page](https://github.com/Brawmario/libsm64-godot/releases) already includes the compiled GDExtension).
 
 First, [build libsm64](https://github.com/libsm64/libsm64?tab=readme-ov-file#building-on-windows) and then copy (don't move) the genereated dynamic library from the `extension/libsm64/dist/` folder into `addons/libsm64_godot/extension/bin`.
 
