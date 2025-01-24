@@ -1,10 +1,10 @@
-# LibSM64 Godot addon manual
+# Libsm64 Godot addon manual
 
 NOTE: the node names in the screenshots in this manual are outdated, they should be prefixed with `LibSM64` instead of `SM64`.
 
 ## Installation
 
-Grab the latest [release](https://github.com/Brawmario/libsm64-godot/releases) (the `libsm64-godot-addon.vX.Y.Z.zip` file). Unzip the `libsm64-godot` into a `addons` folder on the root of your project folder.
+You can get the addon from the [Godot Asset Library](https://godotengine.org/asset-library/asset/3653) or from the [GitHub releases page](https://github.com/Brawmario/libsm64-godot/releases). You should have the `addons/libsm64_godot` folder in your project folder.
 
 If done correctly, the addon should show up under `Project Settings > Plugins`. Enable the addon on this same screen.
 
