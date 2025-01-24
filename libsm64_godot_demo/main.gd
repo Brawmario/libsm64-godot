@@ -2,7 +2,6 @@ extends Control
 
 
 @onready var rom_picker_dialog := $RomPickerDialog as FileDialog
-@onready var invalid_rom_dialog : = $InvalidRomDialog as AcceptDialog
 
 
 func _ready() -> void:
@@ -18,15 +17,6 @@ func return_to_menu() -> void:
 func load_level(scene: PackedScene) -> void:
 	$LevelContainer.add_child(scene.instantiate())
 	hide()
-
-
-func _on_rom_picker_dialog_file_selected(path: String) -> void:
-	if not LibSM64Global.load_rom_file(path):
-		invalid_rom_dialog.popup_centered()
-
-
-func _on_invalid_rom_dialog_confirmed() -> void:
-	rom_picker_dialog.popup_centered_ratio()
 
 
 func _on_pick_rom_button_pressed() -> void:

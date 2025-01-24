@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://b14covao5gpeh"]
+
+[ext_resource type="Script" path="res://libsm64_godot_demo/shared/rom_picker_dialog.gd" id="1_nlost"]
+
+[node name="RomPickerDialog" type="FileDialog"]
+auto_translate_mode = 1
+title = "Pick Super Mario 64 ROM file"
+size = Vector2i(335, 180)
+visible = true
+ok_button_text = "Open"
+mode_overrides_title = false
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.n64", "*.z64")
+script = ExtResource("1_nlost")
+
+[node name="InvalidRomDialog" type="AcceptDialog" parent="."]
+unique_name_in_owner = true
+auto_translate_mode = 1
+size = Vector2i(378, 100)
+dialog_text = "Selected file is not a valid Super Mario 64 ROM. File will not be loaded"
+dialog_close_on_escape = false
+
+[connection signal="file_selected" from="." to="." method="_on_file_selected"]

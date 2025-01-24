@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- All demo scenes can now be run directly from the editor. They will now query the user for the path to the SM64 ROM if it hasn't been loaded yet.
+
 ### Fixed
 
 - Fix internal angle conversion in the `LibSM64.set_mario_angle()` function.

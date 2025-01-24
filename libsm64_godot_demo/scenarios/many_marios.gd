@@ -1,7 +1,30 @@
 extends Node3D
 
+
+var _libsm64_was_init := false
+
+
 func _ready() -> void:
-	if not LibSM64Global.init():
+	if LibSM64Global.rom.is_empty():
+		%RomPickerDialog.popup_centered_ratio()
+	else:
+		_init_libsm64()
+
+
+func _on_tree_exiting() -> void:
+	if _libsm64_was_init:
+		LibSM64.stop_background_music(LibSM64.get_current_background_music())
+		for node in get_tree().get_nodes_in_group("libsm64_mario"):
+			var mario := node as LibSM64Mario
+			if not mario:
+				continue
+			mario.delete()
+		LibSM64Global.terminate()
+
+
+func _init_libsm64() -> void:
+	_libsm64_was_init = LibSM64Global.init()
+	if not _libsm64_was_init:
 		push_error("Failed to initialize LibSM64Global")
 		return
 
@@ -18,11 +41,5 @@ func _ready() -> void:
 	$LibSM64AudioStreamPlayer.play()
 
 
-func _on_tree_exiting() -> void:
-	LibSM64.stop_background_music(LibSM64.get_current_background_music())
-	for node in get_tree().get_nodes_in_group("libsm64_mario"):
-		var mario := node as LibSM64Mario
-		if not mario:
-			continue
-		mario.delete()
-	LibSM64Global.terminate()
+func _on_rom_picker_dialog_rom_loaded() -> void:
+	_init_libsm64()

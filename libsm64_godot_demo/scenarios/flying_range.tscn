@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://r4bm048fq4b2"]
+[gd_scene load_steps=9 format=3 uid="uid://r4bm048fq4b2"]
 
 [ext_resource type="Script" path="res://libsm64_godot_demo/scenarios/initial_scenario.gd" id="1_xr27b"]
 [ext_resource type="PackedScene" uid="uid://cedir682bcs2s" path="res://libsm64_godot_demo/levels/big_level.tscn" id="3_ihbeb"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://addons/libsm64_godot/handlers/libsm64_static_surfaces_handler.gd" id="6_41tpo"]
 [ext_resource type="Script" path="res://addons/libsm64_godot/handlers/libsm64_surface_objects_handler.gd" id="7_ju0gc"]
 [ext_resource type="PackedScene" uid="uid://dprpekyttg0g6" path="res://libsm64_godot_demo/shared/hud.tscn" id="8_f016e"]
+[ext_resource type="PackedScene" uid="uid://b14covao5gpeh" path="res://libsm64_godot_demo/shared/rom_picker_dialog.tscn" id="8_op17q"]
 
 [node name="FlyingRange" type="Node3D"]
 script = ExtResource("1_xr27b")
@@ -27,10 +28,25 @@ script = ExtResource("6_41tpo")
 [node name="LibSM64SurfaceObjectsHandler" type="Node" parent="."]
 script = ExtResource("7_ju0gc")
 
-[node name="HUD" parent="." instance=ExtResource("8_f016e")]
-
 [node name="LibSM64AudioStreamPlayer" type="LibSM64AudioStreamPlayer" parent="."]
 
+[node name="Interface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HUD" parent="Interface" instance=ExtResource("8_f016e")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 173.0
+offset_bottom = 136.0
+
+[node name="RomPickerDialog" parent="Interface" instance=ExtResource("8_op17q")]
+unique_name_in_owner = true
+visible = false
+
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
+[connection signal="rom_loaded" from="Interface/RomPickerDialog" to="." method="_on_rom_picker_dialog_rom_loaded"]
 
 [editable path="LibSM64Mario/CameraRig"]

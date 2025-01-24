@@ -8,25 +8,17 @@ const BombOmbMinimalSurfaces = preload("./bob_omb_minimal_surfaces.gd")
 @onready var battlefield: MeshInstance3D = $Battlefield
 @onready var sm_64_mario: Node3D = $LibSM64Mario
 
+var _libsm64_was_init := false
+
 
 func _ready() -> void:
-	if not LibSM64Global.init():
-		push_error("Failed to initialize LibSM64Global")
-		return
-
 	battlefield.mesh = BombOmbMinimalSurfaces.generate_godot_mesh()
 	battlefield.mesh.surface_set_material(0, preload("./bob_omb_minimal_material.tres"))
-	BombOmbMinimalSurfaces.load_static_surfaces()
 
-	sm_64_mario.create()
-	sm_64_mario.interact_cap(start_cap)
-
-	$HUD.mario = sm_64_mario
-
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
-	LibSM64.play_music(LibSM64.SEQ_PLAYER_LEVEL, LibSM64.SEQ_LEVEL_GRASS)
-	$LibSM64AudioStreamPlayer.play()
+	if LibSM64Global.rom.is_empty():
+		%RomPickerDialog.popup_centered_ratio()
+	else:
+		_init_libsm64()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -42,6 +34,30 @@ func _toggle_mouse_lock() -> void:
 
 
 func _on_tree_exiting():
-	LibSM64.stop_background_music(LibSM64.SEQ_LEVEL_GRASS)
-	sm_64_mario.delete()
-	LibSM64Global.terminate()
+	if _libsm64_was_init:
+		LibSM64.stop_background_music(LibSM64.SEQ_LEVEL_GRASS)
+		sm_64_mario.delete()
+		LibSM64Global.terminate()
+
+
+func _init_libsm64() -> void:
+	_libsm64_was_init = LibSM64Global.init()
+	if not _libsm64_was_init:
+		push_error("Failed to initialize LibSM64Global")
+		return
+
+	BombOmbMinimalSurfaces.load_static_surfaces()
+
+	sm_64_mario.create()
+	sm_64_mario.interact_cap(start_cap)
+
+	%HUD.mario = sm_64_mario
+
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	LibSM64.play_music(LibSM64.SEQ_PLAYER_LEVEL, LibSM64.SEQ_LEVEL_GRASS)
+	$LibSM64AudioStreamPlayer.play()
+
+
+func _on_rom_picker_dialog_rom_loaded() -> void:
+	_init_libsm64()

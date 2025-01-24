@@ -5,24 +5,14 @@ extends Node3D
 
 @onready var mario := $LibSM64Mario as LibSM64Mario
 
+var _libsm64_was_init := false
+
 
 func _ready() -> void:
-	if not LibSM64Global.init():
-		push_error("Failed to initialize LibSM64Global")
-		return
-
-	$LibSM64StaticSurfacesHandler.load_static_surfaces()
-	$LibSM64SurfaceObjectsHandler.load_all_surface_objects()
-
-	mario.create()
-	mario.water_level = 0.0
-	mario.interact_cap(start_cap)
-
-	$HUD.mario = mario
-
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
-	$LibSM64AudioStreamPlayer.play()
+	if LibSM64Global.rom.is_empty():
+		%RomPickerDialog.popup_centered_ratio()
+	else:
+		_init_libsm64()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -38,6 +28,31 @@ func _toggle_mouse_lock() -> void:
 
 
 func _on_tree_exiting() -> void:
-	LibSM64.stop_background_music(LibSM64.get_current_background_music())
-	mario.delete()
-	LibSM64Global.terminate()
+	if _libsm64_was_init:
+		LibSM64.stop_background_music(LibSM64.get_current_background_music())
+		mario.delete()
+		LibSM64Global.terminate()
+
+
+func _init_libsm64() -> void:
+	_libsm64_was_init = LibSM64Global.init()
+	if not _libsm64_was_init:
+		push_error("Failed to initialize LibSM64Global")
+		return
+
+	$LibSM64StaticSurfacesHandler.load_static_surfaces()
+	$LibSM64SurfaceObjectsHandler.load_all_surface_objects()
+
+	mario.create()
+	mario.water_level = 0.0
+	mario.interact_cap(start_cap)
+
+	%HUD.mario = mario
+
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	$LibSM64AudioStreamPlayer.play()
+
+
+func _on_rom_picker_dialog_rom_loaded() -> void:
+	_init_libsm64()
