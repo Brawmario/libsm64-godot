@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://btpew2m8io0tm"]
+[gd_scene load_steps=10 format=3 uid="uid://btpew2m8io0tm"]
 
 [ext_resource type="Script" path="res://libsm64_godot_demo/scenarios/initial_scenario.gd" id="1_xr27b"]
 [ext_resource type="PackedScene" uid="uid://cqv1tkr0q2m7i" path="res://libsm64_godot_demo/levels/mini_level.tscn" id="3_j27lm"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://addons/libsm64_godot/handlers/libsm64_surface_objects_handler.gd" id="7_ju0gc"]
 [ext_resource type="PackedScene" uid="uid://dprpekyttg0g6" path="res://libsm64_godot_demo/shared/hud.tscn" id="8_f016e"]
 [ext_resource type="PackedScene" uid="uid://b14covao5gpeh" path="res://libsm64_godot_demo/shared/rom_picker_dialog.tscn" id="8_qdi6u"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/shared/input_config.gd" id="9_q6d7v"]
 
 [node name="InitialScenario" type="Node3D"]
 script = ExtResource("1_xr27b")
@@ -50,6 +51,9 @@ offset_bottom = 136.0
 [node name="RomPickerDialog" parent="Interface" instance=ExtResource("8_qdi6u")]
 unique_name_in_owner = true
 visible = false
+
+[node name="InputConfig" type="Node" parent="."]
+script = ExtResource("9_q6d7v")
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="rom_loaded" from="Interface/RomPickerDialog" to="." method="_on_rom_picker_dialog_rom_loaded"]
