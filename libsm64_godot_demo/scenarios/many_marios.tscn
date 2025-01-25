@@ -67,12 +67,15 @@ transform = Transform3D(1, 0, 0, 0, 0.516309, 0.856402, 0, -0.856402, 0.516309, 
 current = true
 
 [node name="LibSM64StaticSurfacesHandler" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("6_41tpo")
 
 [node name="LibSM64SurfaceObjectsHandler" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("7_ju0gc")
 
 [node name="LibSM64AudioStreamPlayer" type="LibSM64AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
 
 [node name="Interface" type="Control" parent="."]
 layout_mode = 3

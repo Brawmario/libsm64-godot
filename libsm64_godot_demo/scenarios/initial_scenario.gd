@@ -3,8 +3,6 @@ extends Node3D
 
 @export var start_cap := LibSM64.MarioFlags.MARIO_NORMAL_CAP
 
-@onready var mario := $LibSM64Mario as LibSM64Mario
-
 var _libsm64_was_init := false
 
 
@@ -30,7 +28,7 @@ func _toggle_mouse_lock() -> void:
 func _on_tree_exiting() -> void:
 	if _libsm64_was_init:
 		LibSM64.stop_background_music(LibSM64.get_current_background_music())
-		mario.delete()
+		%LibSM64Mario.delete()
 		LibSM64Global.terminate()
 
 
@@ -40,18 +38,18 @@ func _init_libsm64() -> void:
 		push_error("Failed to initialize LibSM64Global")
 		return
 
-	$LibSM64StaticSurfacesHandler.load_static_surfaces()
-	$LibSM64SurfaceObjectsHandler.load_all_surface_objects()
+	%LibSM64StaticSurfacesHandler.load_static_surfaces()
+	%LibSM64SurfaceObjectsHandler.load_all_surface_objects()
 
-	mario.create()
-	mario.water_level = 0.0
-	mario.interact_cap(start_cap)
+	%LibSM64Mario.create()
+	%LibSM64Mario.water_level = 0.0
+	%LibSM64Mario.interact_cap(start_cap)
 
-	%HUD.mario = mario
+	%HUD.mario = %LibSM64Mario
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-	$LibSM64AudioStreamPlayer.play()
+	%LibSM64AudioStreamPlayer.play()
 
 
 func _on_rom_picker_dialog_rom_loaded() -> void:

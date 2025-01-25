@@ -15,6 +15,7 @@ script = ExtResource("1_xr27b")
 [node name="MiniLevel" parent="." instance=ExtResource("3_j27lm")]
 
 [node name="LibSM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
+unique_name_in_owner = true
 script = ExtResource("4_umvy3")
 camera = NodePath("CameraRig/Camera3D")
 
@@ -24,12 +25,15 @@ camera = NodePath("CameraRig/Camera3D")
 current = false
 
 [node name="LibSM64StaticSurfacesHandler" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("6_41tpo")
 
 [node name="LibSM64SurfaceObjectsHandler" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("7_ju0gc")
 
 [node name="LibSM64AudioStreamPlayer" type="LibSM64AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
 
 [node name="Interface" type="Control" parent="."]
 layout_mode = 3

@@ -29,9 +29,11 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_wxohf")
 
-[node name="Battlefield" type="MeshInstance3D" parent="."]
+[node name="BattlefieldMesh" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
 
 [node name="LibSM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.3144, 11.8729, -21.092)
 script = ExtResource("2_eljv2")
 camera = NodePath("CameraRig/Camera3D")
@@ -39,6 +41,7 @@ camera = NodePath("CameraRig/Camera3D")
 [node name="CameraRig" parent="LibSM64Mario" instance=ExtResource("3_lc572")]
 
 [node name="LibSM64AudioStreamPlayer" type="LibSM64AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
 
 [node name="Interface" type="Control" parent="."]
 layout_mode = 3
