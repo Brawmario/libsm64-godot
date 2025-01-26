@@ -124,11 +124,11 @@ jobs:
         run: |
           cd extension/libsm64
           cc --version
-          ifeq (${{ matrix.platform }},web)
-            emmake make -j $(nproc) CC=emcc
+          if [[ "${{ matrix.platform }}" == "web" ]]; then
+              emmake make -j $(nproc) CC=emcc
           else
-            make -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
-          endif
+              make -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
+          fi
 
       - name: Create GDExtension folder
         run: |
