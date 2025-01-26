@@ -21,3 +21,5 @@ macos.debug = "res://addons/libsm64_godot/extension/bin/libsm64gd.macos.template
 macos.release = "res://addons/libsm64_godot/extension/bin/libsm64gd.macos.template_release.framework"
 linux.debug.x86_64 = "res://addons/libsm64_godot/extension/bin/libsm64gd.linux.template_debug.x86_64.so"
 linux.release.x86_64 = "res://addons/libsm64_godot/extension/bin/libsm64gd.linux.template_release.x86_64.so"
+web.debug = "res://addons/libsm64_godot/extension/bin/libsm64gd.web.template_debug.x86_64.wasm"
+web.release = "res://addons/libsm64_godot/extension/bin/libsm64gd.web.template_release.x86_64.wasm"
