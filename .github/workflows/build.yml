@@ -61,6 +61,16 @@ jobs:
             platform: macos
             arch: universal
             os: macos-latest
+          - name: 🌐 Web (debug)
+            target: template_debug
+            platform: web
+            arch: ""
+            os: ubuntu-latest
+          - name: 🌐 Web (release)
+            target: template_release
+            platform: web
+            arch: ""
+            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
     env:
       ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
@@ -69,6 +79,10 @@ jobs:
       - name: (Windows) Set up MinGW
         if: ${{ matrix.platform == 'windows' }}
         uses: egor-tensin/setup-mingw@v2
+
+      - name: (Web) Set up Emscripten
+        if: ${{ matrix.platform == 'web' }}
+        uses: mymindstorm/setup-emsdk@v14
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -110,11 +124,19 @@ jobs:
         run: |
           cd extension/libsm64
           cc --version
-          make -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
+          ifeq (${{ matrix.platform }},web)
+            emmake make -j $(nproc) CC=emcc
+          else
+            make -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
+          endif
 
-      - name: Copy libsm64 binary
+      - name: Create GDExtension folder
         run: |
           mkdir -p addons/libsm64_godot/extension/bin
+
+      - name: Copy libsm64 binary
+        if: ${{ matrix.platform != 'web' }}
+        run: |
           cp extension/libsm64/dist/* addons/libsm64_godot/extension/bin/ | true
 
       - name: Compile extension
@@ -224,12 +246,19 @@ jobs:
           name: ${{ github.event.repository.name }}-demo.${{ env.ref_name }}.macos
           path: ${{ steps.demo_export.outputs.build_directory }}/macOS
 
+      - name: Upload Web demo
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-demo.${{ env.ref_name }}.web
+          path: ${{ steps.demo_export.outputs.build_directory }}/Web
+
       - name: Rename archives
         run: |
           cd ${{ steps.demo_export.outputs.archive_directory }}
           mv "Windows Desktop.zip" "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.windows.zip"
           mv "macOS.zip"           "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.mac.zip"
           mv "LinuxX11.zip"        "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.linux.zip"
+          mv "Web.zip"             "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.web.zip"
 
       - name: Copy extra files to addon
         run: |
