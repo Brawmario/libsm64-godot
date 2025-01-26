@@ -1,6 +1,6 @@
 [gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b4ydlmdj7yy2l"]
 
-[ext_resource type="Texture2D" uid="uid://dukvdj5t6efgk" path="res://libsm64_godot_demo/scenarios/bob_omb_minimal/texture_08.png" id="1_xxwu4"]
+[ext_resource type="Texture2D" uid="uid://dukvdj5t6efgk" path="res://libsm64_godot_demo/resources/texture_08.png" id="1_xxwu4"]
 
 [resource]
 albedo_texture = ExtResource("1_xxwu4")

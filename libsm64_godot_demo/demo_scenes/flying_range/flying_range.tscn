@@ -1,0 +1,59 @@
+[gd_scene load_steps=10 format=3 uid="uid://r4bm048fq4b2"]
+
+[ext_resource type="Script" path="res://libsm64_godot_demo/demo_scenes/initial_scenario/initial_scenario.gd" id="1_n0cyg"]
+[ext_resource type="PackedScene" uid="uid://cedir682bcs2s" path="res://libsm64_godot_demo/levels/big_level/big_level.tscn" id="2_rvew3"]
+[ext_resource type="Script" path="res://addons/libsm64_godot/libsm64_mario/libsm64_mario.gd" id="3_dklwj"]
+[ext_resource type="PackedScene" uid="uid://yt8kbrfd41gi" path="res://libsm64_godot_demo/shared/camera_rig/camera_rig.tscn" id="4_xdvyq"]
+[ext_resource type="Script" path="res://addons/libsm64_godot/handlers/libsm64_static_surfaces_handler.gd" id="5_p0p46"]
+[ext_resource type="Script" path="res://addons/libsm64_godot/handlers/libsm64_surface_objects_handler.gd" id="6_nhmls"]
+[ext_resource type="PackedScene" uid="uid://dprpekyttg0g6" path="res://libsm64_godot_demo/shared/hud/hud.tscn" id="7_1cfvq"]
+[ext_resource type="PackedScene" uid="uid://b14covao5gpeh" path="res://libsm64_godot_demo/shared/rom_picker_dialog/rom_picker_dialog.tscn" id="8_glkck"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/shared/input_config/input_config.gd" id="9_jl2t8"]
+
+[node name="FlyingRange" type="Node3D"]
+script = ExtResource("1_n0cyg")
+start_cap = 8
+
+[node name="BigLevel" parent="." instance=ExtResource("2_rvew3")]
+
+[node name="LibSM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 27)
+script = ExtResource("3_dklwj")
+camera = NodePath("CameraRig/Camera3D")
+
+[node name="CameraRig" parent="LibSM64Mario" instance=ExtResource("4_xdvyq")]
+
+[node name="LibSM64StaticSurfacesHandler" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_p0p46")
+
+[node name="LibSM64SurfaceObjectsHandler" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("6_nhmls")
+
+[node name="LibSM64AudioStreamPlayer" type="LibSM64AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+
+[node name="Interface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HUD" parent="Interface" instance=ExtResource("7_1cfvq")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 173.0
+offset_bottom = 136.0
+
+[node name="RomPickerDialog" parent="Interface" instance=ExtResource("8_glkck")]
+unique_name_in_owner = true
+visible = false
+
+[node name="InputConfig" type="Node" parent="."]
+script = ExtResource("9_jl2t8")
+
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
+[connection signal="rom_loaded" from="Interface/RomPickerDialog" to="." method="_on_rom_picker_dialog_rom_loaded"]
+
+[editable path="LibSM64Mario/CameraRig"]

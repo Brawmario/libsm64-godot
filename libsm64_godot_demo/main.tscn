@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bjw13uwutue3a"]
 
 [ext_resource type="Script" path="res://libsm64_godot_demo/main.gd" id="1_w76b2"]
-[ext_resource type="PackedScene" uid="uid://b14covao5gpeh" path="res://libsm64_godot_demo/shared/rom_picker_dialog.tscn" id="2_kbqeo"]
+[ext_resource type="PackedScene" uid="uid://b14covao5gpeh" path="res://libsm64_godot_demo/shared/rom_picker_dialog/rom_picker_dialog.tscn" id="2_kbqeo"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -13,6 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_w76b2")
 
 [node name="RomPickerDialog" parent="." instance=ExtResource("2_kbqeo")]
+unique_name_in_owner = true
 visible = false
 
 [node name="DemoSelection" type="VBoxContainer" parent="."]
@@ -57,6 +58,7 @@ layout_mode = 2
 text = "Bob-Omb Battlefield"
 
 [node name="LevelContainer" type="Node3D" parent="."]
+unique_name_in_owner = true
 
 [connection signal="pressed" from="DemoSelection/PickRomButton" to="." method="_on_pick_rom_button_pressed"]
 [connection signal="pressed" from="DemoSelection/InitialScenarioButton" to="." method="_on_initial_scenario_button_pressed"]

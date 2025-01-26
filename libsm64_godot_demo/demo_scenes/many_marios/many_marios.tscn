@@ -1,66 +1,66 @@
 [gd_scene load_steps=9 format=3 uid="uid://cqvmbm6qi3wl0"]
 
-[ext_resource type="Script" path="res://libsm64_godot_demo/scenarios/many_marios.gd" id="1_5i202"]
-[ext_resource type="PackedScene" uid="uid://cqv1tkr0q2m7i" path="res://libsm64_godot_demo/levels/mini_level.tscn" id="3_j27lm"]
-[ext_resource type="Script" path="res://addons/libsm64_godot/libsm64_mario/libsm64_mario.gd" id="4_umvy3"]
-[ext_resource type="Script" path="res://addons/libsm64_godot/handlers/libsm64_static_surfaces_handler.gd" id="6_41tpo"]
-[ext_resource type="Script" path="res://addons/libsm64_godot/handlers/libsm64_surface_objects_handler.gd" id="7_ju0gc"]
-[ext_resource type="PackedScene" uid="uid://b14covao5gpeh" path="res://libsm64_godot_demo/shared/rom_picker_dialog.tscn" id="7_xl0ww"]
-[ext_resource type="PackedScene" uid="uid://dprpekyttg0g6" path="res://libsm64_godot_demo/shared/hud.tscn" id="8_f016e"]
-[ext_resource type="Script" path="res://libsm64_godot_demo/shared/input_config.gd" id="8_i1j6m"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/demo_scenes/many_marios/many_marios.gd" id="1_shb34"]
+[ext_resource type="PackedScene" uid="uid://cqv1tkr0q2m7i" path="res://libsm64_godot_demo/levels/mini_level/mini_level.tscn" id="2_6etiy"]
+[ext_resource type="Script" path="res://addons/libsm64_godot/libsm64_mario/libsm64_mario.gd" id="3_dklk7"]
+[ext_resource type="Script" path="res://addons/libsm64_godot/handlers/libsm64_static_surfaces_handler.gd" id="4_7esa6"]
+[ext_resource type="Script" path="res://addons/libsm64_godot/handlers/libsm64_surface_objects_handler.gd" id="5_ouawe"]
+[ext_resource type="PackedScene" uid="uid://dprpekyttg0g6" path="res://libsm64_godot_demo/shared/hud/hud.tscn" id="6_wqu8u"]
+[ext_resource type="PackedScene" uid="uid://b14covao5gpeh" path="res://libsm64_godot_demo/shared/rom_picker_dialog/rom_picker_dialog.tscn" id="7_qhq2m"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/shared/input_config/input_config.gd" id="8_hfxaw"]
 
 [node name="ManyMarios" type="Node3D"]
-script = ExtResource("1_5i202")
+script = ExtResource("1_shb34")
 
-[node name="MiniLevel" parent="." instance=ExtResource("3_j27lm")]
+[node name="MiniLevel" parent="." instance=ExtResource("2_6etiy")]
 
 [node name="LibSM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
-script = ExtResource("4_umvy3")
+script = ExtResource("3_dklk7")
 camera = NodePath("../Camera3D")
 
 [node name="LibSM64Mario2" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.73193, 0, 0)
-script = ExtResource("4_umvy3")
+script = ExtResource("3_dklk7")
 camera = NodePath("../Camera3D")
 
 [node name="LibSM64Mario3" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.73193, 0, 7.00453)
-script = ExtResource("4_umvy3")
+script = ExtResource("3_dklk7")
 camera = NodePath("../Camera3D")
 
 [node name="LibSM64Mario4" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00564098, 0, 7.00453)
-script = ExtResource("4_umvy3")
+script = ExtResource("3_dklk7")
 camera = NodePath("../Camera3D")
 
 [node name="LibSM64Mario5" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.1527, 0, 7.00453)
-script = ExtResource("4_umvy3")
+script = ExtResource("3_dklk7")
 camera = NodePath("../Camera3D")
 
 [node name="LibSM64Mario6" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.74708, 0, -10.8375)
-script = ExtResource("4_umvy3")
+script = ExtResource("3_dklk7")
 camera = NodePath("../Camera3D")
 
 [node name="LibSM64Mario7" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.81391, 0, -10.8375)
-script = ExtResource("4_umvy3")
+script = ExtResource("3_dklk7")
 camera = NodePath("../Camera3D")
 
 [node name="LibSM64Mario8" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.81391, 0, -4.56066)
-script = ExtResource("4_umvy3")
+script = ExtResource("3_dklk7")
 camera = NodePath("../Camera3D")
 
 [node name="LibSM64Mario9" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.29249, 0, -4.56066)
-script = ExtResource("4_umvy3")
+script = ExtResource("3_dklk7")
 camera = NodePath("../Camera3D")
 
 [node name="LibSM64Mario10" type="Node3D" parent="." node_paths=PackedStringArray("camera") groups=["libsm64_mario"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.29249, 0, 3.2726)
-script = ExtResource("4_umvy3")
+script = ExtResource("3_dklk7")
 camera = NodePath("../Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -69,11 +69,11 @@ current = true
 
 [node name="LibSM64StaticSurfacesHandler" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("6_41tpo")
+script = ExtResource("4_7esa6")
 
 [node name="LibSM64SurfaceObjectsHandler" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("7_ju0gc")
+script = ExtResource("5_ouawe")
 
 [node name="LibSM64AudioStreamPlayer" type="LibSM64AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
@@ -84,18 +84,18 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="HUD" parent="Interface" instance=ExtResource("8_f016e")]
+[node name="HUD" parent="Interface" instance=ExtResource("6_wqu8u")]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 173.0
 offset_bottom = 136.0
 
-[node name="RomPickerDialog" parent="Interface" instance=ExtResource("7_xl0ww")]
+[node name="RomPickerDialog" parent="Interface" instance=ExtResource("7_qhq2m")]
 unique_name_in_owner = true
 visible = false
 
 [node name="InputConfig" type="Node" parent="."]
-script = ExtResource("8_i1j6m")
+script = ExtResource("8_hfxaw")
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="rom_loaded" from="Interface/RomPickerDialog" to="." method="_on_rom_picker_dialog_rom_loaded"]

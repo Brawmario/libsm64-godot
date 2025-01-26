@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b5sgdqypxdpcl"]
 
-[ext_resource type="Script" path="res://libsm64_godot_demo/shared/third_person_camera.gd" id="1_7wgks"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/shared/third_person_camera/third_person_camera.gd" id="1_7wgks"]
 
 [node name="ThirdPersonCamera" type="Marker3D"]
 script = ExtResource("1_7wgks")

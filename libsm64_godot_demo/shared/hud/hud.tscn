@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dprpekyttg0g6"]
 
-[ext_resource type="Script" path="res://libsm64_godot_demo/shared/hud.gd" id="1_gwlej"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/shared/hud/hud.gd" id="1_gwlej"]
 
 [node name="HUD" type="PanelContainer"]
 offset_right = 150.0

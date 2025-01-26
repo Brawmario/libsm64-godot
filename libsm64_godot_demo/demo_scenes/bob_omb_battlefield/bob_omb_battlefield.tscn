@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://bdc44nveigt7k"]
 
-[ext_resource type="Script" path="res://libsm64_godot_demo/scenarios/bob_omb_minimal/bob_omb_minimal.gd" id="1_no06y"]
-[ext_resource type="Script" path="res://addons/libsm64_godot/libsm64_mario/libsm64_mario.gd" id="2_eljv2"]
-[ext_resource type="PackedScene" uid="uid://yt8kbrfd41gi" path="res://libsm64_godot_demo/shared/camera_rig.tscn" id="3_lc572"]
-[ext_resource type="PackedScene" uid="uid://dprpekyttg0g6" path="res://libsm64_godot_demo/shared/hud.tscn" id="4_8fya1"]
-[ext_resource type="PackedScene" uid="uid://b14covao5gpeh" path="res://libsm64_godot_demo/shared/rom_picker_dialog.tscn" id="5_uej2g"]
-[ext_resource type="Script" path="res://libsm64_godot_demo/shared/input_config.gd" id="6_ru1nl"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/demo_scenes/bob_omb_battlefield/bob_omb_battlefield.gd" id="1_k4bkk"]
+[ext_resource type="Script" path="res://addons/libsm64_godot/libsm64_mario/libsm64_mario.gd" id="2_uah3x"]
+[ext_resource type="PackedScene" uid="uid://yt8kbrfd41gi" path="res://libsm64_godot_demo/shared/camera_rig/camera_rig.tscn" id="3_x3dge"]
+[ext_resource type="PackedScene" uid="uid://dprpekyttg0g6" path="res://libsm64_godot_demo/shared/hud/hud.tscn" id="4_e6d56"]
+[ext_resource type="PackedScene" uid="uid://b14covao5gpeh" path="res://libsm64_godot_demo/shared/rom_picker_dialog/rom_picker_dialog.tscn" id="5_oe0ua"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/shared/input_config/input_config.gd" id="6_5b41d"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_w06lu"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -21,7 +21,8 @@ tonemap_mode = 2
 glow_enabled = true
 
 [node name="Bob-OmbMinimal" type="Node3D"]
-script = ExtResource("1_no06y")
+script = ExtResource("1_k4bkk")
+start_cap = null
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 0, 0)
@@ -34,12 +35,11 @@ environment = SubResource("Environment_wxohf")
 unique_name_in_owner = true
 
 [node name="LibSM64Mario" type="Node3D" parent="." node_paths=PackedStringArray("camera")]
-unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.3144, 11.8729, -21.092)
-script = ExtResource("2_eljv2")
+script = ExtResource("2_uah3x")
 camera = NodePath("CameraRig/Camera3D")
 
-[node name="CameraRig" parent="LibSM64Mario" instance=ExtResource("3_lc572")]
+[node name="CameraRig" parent="LibSM64Mario" instance=ExtResource("3_x3dge")]
 
 [node name="LibSM64AudioStreamPlayer" type="LibSM64AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
@@ -50,18 +50,18 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="HUD" parent="Interface" instance=ExtResource("4_8fya1")]
+[node name="HUD" parent="Interface" instance=ExtResource("4_e6d56")]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 173.0
 offset_bottom = 136.0
 
-[node name="RomPickerDialog" parent="Interface" instance=ExtResource("5_uej2g")]
+[node name="RomPickerDialog" parent="Interface" instance=ExtResource("5_oe0ua")]
 unique_name_in_owner = true
 visible = false
 
 [node name="InputConfig" type="Node" parent="."]
-script = ExtResource("6_ru1nl")
+script = ExtResource("6_5b41d")
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="rom_loaded" from="Interface/RomPickerDialog" to="." method="_on_rom_picker_dialog_rom_loaded"]

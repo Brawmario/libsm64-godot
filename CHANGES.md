@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - All demo scenes can now be run directly from the editor. They will now query the user for the path to the SM64 ROM if it hasn't been loaded yet and set the necessary input actions at runtime.
+- Completely reorganize the demo project to make it more discorverable.
 
 ### Fixed
 

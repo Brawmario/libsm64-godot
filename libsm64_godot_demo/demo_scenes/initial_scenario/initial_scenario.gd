@@ -3,6 +3,8 @@ extends Node3D
 
 @export var start_cap := LibSM64.MarioFlags.MARIO_NORMAL_CAP
 
+@onready var lib_sm_64_mario: LibSM64Mario = $LibSM64Mario
+
 var _libsm64_was_init := false
 
 
@@ -28,7 +30,7 @@ func _toggle_mouse_lock() -> void:
 func _on_tree_exiting() -> void:
 	if _libsm64_was_init:
 		LibSM64.stop_background_music(LibSM64.get_current_background_music())
-		%LibSM64Mario.delete()
+		lib_sm_64_mario.delete()
 		LibSM64Global.terminate()
 
 
@@ -41,11 +43,11 @@ func _init_libsm64() -> void:
 	%LibSM64StaticSurfacesHandler.load_static_surfaces()
 	%LibSM64SurfaceObjectsHandler.load_all_surface_objects()
 
-	%LibSM64Mario.create()
-	%LibSM64Mario.water_level = 0.0
-	%LibSM64Mario.interact_cap(start_cap)
+	lib_sm_64_mario.create()
+	lib_sm_64_mario.water_level = 0.0
+	lib_sm_64_mario.interact_cap(start_cap)
 
-	%HUD.mario = %LibSM64Mario
+	%HUD.mario = lib_sm_64_mario
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 

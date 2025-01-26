@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b14covao5gpeh"]
 
-[ext_resource type="Script" path="res://libsm64_godot_demo/shared/rom_picker_dialog.gd" id="1_nlost"]
+[ext_resource type="Script" path="res://libsm64_godot_demo/shared/rom_picker_dialog/rom_picker_dialog.gd" id="1_3jctg"]
 
 [node name="RomPickerDialog" type="FileDialog"]
 auto_translate_mode = 1
@@ -12,7 +12,7 @@ mode_overrides_title = false
 file_mode = 0
 access = 2
 filters = PackedStringArray("*.n64", "*.z64")
-script = ExtResource("1_nlost")
+script = ExtResource("1_3jctg")
 
 [node name="InvalidRomDialog" type="AcceptDialog" parent="."]
 unique_name_in_owner = true
