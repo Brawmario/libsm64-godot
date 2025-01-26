@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d0ipccf6g5cxx"
-path.s3tc="res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.s3tc.ctex"
-path.etc2="res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.etc2.ctex"
+path.s3tc="res://.godot/imported/icon.svg-869e040969f016cf7f1c09a680e2b9f8.s3tc.ctex"
+path.etc2="res://.godot/imported/icon.svg-869e040969f016cf7f1c09a680e2b9f8.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://icon.svg"
-dest_files=["res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.s3tc.ctex", "res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.etc2.ctex"]
+source_file="res://libsm64_godot_demo/resources/icon.svg"
+dest_files=["res://.godot/imported/icon.svg-869e040969f016cf7f1c09a680e2b9f8.s3tc.ctex", "res://.godot/imported/icon.svg-869e040969f016cf7f1c09a680e2b9f8.etc2.ctex"]
 
 [params]
 
