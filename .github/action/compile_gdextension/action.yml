@@ -1,0 +1,147 @@
+# Adapted from https://github.com/DmitriySalnikov/godot_debug_draw_3d/blob/master/.github/workflows/gdextension_build.yml
+
+name: Build Libsm64 Godot GDExtension
+description: Build Libsm64 Godot GDExtension
+inputs:
+  platform:
+    description: Target platform (linux|macos|windows|android|ios|web)
+    required: true
+  target:
+    description: Compilation target (editor|template_release|template_debug)
+    required: true
+    default: "release"
+  arch:
+    description: Arch (universal|x86_32|x86_64|arm32|arm64|rv64|ppc32|ppc64|wasm32)
+    required: true
+    default: ""
+  artifact:
+    description: Artifact name. This name will be used for caching.
+    required: true
+    default: "bin"
+  additional:
+    description: Any additional arguments
+    default: ""
+  use_cache:
+    description: Use cache
+    default: "true"
+runs:
+  using: composite
+  steps:
+    - name: Get godot-cpp SHA
+      shell: bash
+      id: get_godot_cpp_sha
+      run: |
+        echo "sha=$(git rev-parse @:./extension/godot-cpp)" >> $GITHUB_OUTPUT
+
+    - name: Restore .scons_cache directory
+      if: inputs.use_cache != 'false'
+      id: restore_scons_cache
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{env.SCONS_CACHE}}
+        key: ${{github.job}}-${{inputs.artifact}}-${{steps.get_godot_cpp_sha.outputs.sha}}-${{github.ref}}-${{github.sha}}
+        restore-keys: |
+          ${{github.job}}-${{inputs.artifact}}-${{steps.get_godot_cpp_sha.outputs.sha}}-${{github.ref}}
+          ${{github.job}}-${{inputs.artifact}}-${{steps.get_godot_cpp_sha.outputs.sha}}
+
+    - name: (Windows) Set up MinGW
+      if: inputs.platform == 'windows'
+      uses: egor-tensin/setup-mingw@v2
+
+    - name: (Web) Set up Emscripten
+      if: inputs.platform == 'web'
+      uses: mymindstorm/setup-emsdk@v14
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Set up SCons
+      shell: bash
+      run: |
+        python -c "import sys; print(sys.version)"
+        python -m pip install scons
+        scons --version
+
+    - name: (Windows) Prepare cross compilation
+      shell: bash
+      if: inputs.platform == 'windows'
+      run: |
+        echo "OS=Windows_NT" >> $GITHUB_ENV
+
+    - name: Compile libsm64
+      shell: bash
+      run: |
+        cd extension/libsm64
+        cc --version
+        if [[ "${{inputs.platform}}" == "web" ]]; then
+            emmake make -j $(nproc) CC=emcc
+        else
+            make -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
+        fi
+
+    - name: Create GDExtension folder
+      shell: bash
+      run: |
+        mkdir -p addons/libsm64_godot/extension/bin
+
+    - name: Copy libsm64 binary
+      shell: bash
+      if: inputs.platform != 'web'
+      run: |
+        cp extension/libsm64/dist/* addons/libsm64_godot/extension/bin/ | true
+
+    - name: Compile GDExtension
+      shell: bash
+      run: |
+        cd extension
+        scons platform=${{inputs.platform}} arch=${{inputs.arch}} target=${{inputs.target}} ${{inputs.additional}}
+
+    - name: (macOS) Resolve liniking
+      shell: bash
+      if: inputs.platform == 'macos'
+      run: |
+        cd addons/libsm64_godot/extension/bin
+
+        mkdir libsm64.framework
+        mv libsm64.dylib libsm64.framework/libsm64
+
+        function fix_id() {
+            local library_name=$1
+
+            lipo "${library_name}.framework/${library_name}" -thin arm64 -output "${library_name}-arm64"
+            lipo "${library_name}.framework/${library_name}" -thin x86_64 -output "${library_name}-x86_64"
+            install_name_tool -id "@rpath/${library_name}.framework/${library_name}" "${library_name}-arm64"
+            install_name_tool -id "@rpath/${library_name}.framework/${library_name}" "${library_name}-x86_64"
+            lipo -create -output "${library_name}.framework/${library_name}" "${library_name}-arm64" "${library_name}-x86_64"
+            rm "${library_name}-arm64" "${library_name}-x86_64"
+        }
+
+        fix_id libsm64
+        fix_id libsm64gd.macos.${{ matrix.target }}
+
+        function solve_libsm64_load() {
+            local library_name=$1
+
+            lipo "${library_name}.framework/${library_name}" -thin arm64 -output "${library_name}-arm64"
+            lipo "${library_name}.framework/${library_name}" -thin x86_64 -output "${library_name}-x86_64"
+            install_name_tool -change "dist/libsm64.dylib.arm64" "@rpath/libsm64.framework/libsm64" "${library_name}-arm64"
+            install_name_tool -change "dist/libsm64.dylib.x86_64" "@rpath/libsm64.framework/libsm64" "${library_name}-x86_64"
+            lipo -create -output "${library_name}.framework/${library_name}" "${library_name}-arm64" "${library_name}-x86_64"
+            rm "${library_name}-arm64" "${library_name}-x86_64"
+        }
+
+        solve_libsm64_load libsm64gd.macos.${{ matrix.target }}
+
+    - name: Upload binaries
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{inputs.artifact}}
+        path: addons/libsm64_godot/extension/bin
+
+    - name: Save .scons_cache directory
+      uses: actions/cache/save@v4
+      with:
+        path: ${{env.SCONS_CACHE}}
+        key: ${{steps.restore_scons_cache.outputs.cache-primary-key}}
