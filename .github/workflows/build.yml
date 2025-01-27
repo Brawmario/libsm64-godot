@@ -8,6 +8,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  SCONS_CACHE: ${{ github.workspace }}/extension/.scons-cache/
+
 jobs:
   sanitize_ref_name:
     name: Sanitize "ref_name"
@@ -24,176 +27,132 @@ jobs:
           echo "Sanitized ref_name: $SANITIZED_REF_NAME"
           echo "new_ref_name=$SANITIZED_REF_NAME" >> $GITHUB_OUTPUT;
 
-  build-gdextension:
-    name: Build GDExtension files for ${{ matrix.name }}
-    needs: sanitize_ref_name
+  # ============================================
+
+  windows-gdextension:
+    name: 🏁 Windows
+    runs-on: ubuntu-latest
+    needs: [sanitize_ref_name]
+    env:
+      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
+
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - name: 🐧 Linux (debug)
-            target: template_debug
-            platform: linux
-            arch: x86_64
-            os: ubuntu-latest
-          - name: 🐧 Linux (release)
-            target: template_release
-            platform: linux
-            arch: x86_64
-            os: ubuntu-latest
-          - name: 🏁 Windows (debug)
-            target: template_debug
-            platform: windows
-            arch: x86_64
-            os: ubuntu-latest
-          - name: 🏁 Windows (release)
-            target: template_release
-            platform: windows
-            arch: x86_64
-            os: ubuntu-latest
-          - name: 🍎 macOS (debug)
-            target: template_debug
-            platform: macos
-            arch: universal
-            os: macos-latest
-          - name: 🍎 macOS (release)
-            target: template_release
-            platform: macos
-            arch: universal
-            os: macos-latest
-          - name: 🌐 Web (debug)
-            target: template_debug
-            platform: web
-            arch: ""
-            os: ubuntu-latest
-          - name: 🌐 Web (release)
-            target: template_release
-            platform: web
-            arch: ""
-            os: ubuntu-latest
-    runs-on: ${{ matrix.os }}
-    env:
-      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
-      SCONS_CACHE: ${{ github.workspace }}/extension/.scons-cache/
+        arch: [x86_64]
+        target: [template_debug, template_release]
+
     steps:
-      - name: (Windows) Set up MinGW
-        if: ${{ matrix.platform == 'windows' }}
-        uses: egor-tensin/setup-mingw@v2
-
-      - name: (Web) Set up Emscripten
-        if: ${{ matrix.platform == 'web' }}
-        uses: mymindstorm/setup-emsdk@v14
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: Set up SCons
-        run: |
-          python -c "import sys; print(sys.version)"
-          python -m pip install scons
-          scons --version
-
-      - name: Checkout project
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Get godot-cpp SHA
-        id: godot_cpp_sha
-        run: |
-          echo "sha=$(git rev-parse @:./extension/godot-cpp)" >> $GITHUB_OUTPUT
-
-      - name: Restore .scons_cache directory
-        id: scons_cache_restore
-        uses: actions/cache/restore@v4
+      - name: Compile GDExtension
+        uses: ./.github/actions/compile_gdextension
         with:
-          path: ${{env.SCONS_CACHE}}
-          key: ${{github.job}}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}-${{steps.godot_cpp_sha.outputs.sha}}-${{github.ref}}-${{github.sha}}
-          restore-keys: |
-            ${{github.job}}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}-${{steps.godot_cpp_sha.outputs.sha}}-${{github.ref}}
-            ${{github.job}}-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.target }}-${{steps.godot_cpp_sha.outputs.sha}}
+          platform: windows
+          target: ${{ matrix.target }}
+          arch: ${{ matrix.arch }}
+          artifact: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.windows.${{ matrix.target }}.${{ matrix.arch }}
+          additional: lto=auto
 
-      - name: (Windows) Prepare cross compilation
-        if: ${{ matrix.platform == 'windows' }}
-        run: |
-          echo "OS=Windows_NT" >> $GITHUB_ENV
+  # ============================================
 
-      - name: Compile libsm64
-        run: |
-          cd extension/libsm64
-          cc --version
-          if [[ "${{ matrix.platform }}" == "web" ]]; then
-              emmake make -j $(nproc) CC=emcc
-          else
-              make -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
-          fi
+  linux-gdextension:
+    name: 🐧 Linux
+    runs-on: ubuntu-latest
+    needs: [sanitize_ref_name]
+    env:
+      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
 
-      - name: Create GDExtension folder
-        run: |
-          mkdir -p addons/libsm64_godot/extension/bin
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x86_64]
+        target: [template_debug, template_release]
 
-      - name: Copy libsm64 binary
-        if: ${{ matrix.platform != 'web' }}
-        run: |
-          cp extension/libsm64/dist/* addons/libsm64_godot/extension/bin/ | true
-
-      - name: Compile extension
-        run: |
-          cd extension
-          scons target=${{ matrix.target }} platform=${{ matrix.platform }} arch=${{ matrix.arch }} use_mingw=yes
-
-      - name: (macOS) Resolve liniking
-        if: ${{ matrix.platform == 'macos' }}
-        run: |
-          cd addons/libsm64_godot/extension/bin
-
-          mkdir libsm64.framework
-          mv libsm64.dylib libsm64.framework/libsm64
-
-          function fix_id() {
-              local library_name=$1
-
-              lipo "${library_name}.framework/${library_name}" -thin arm64 -output "${library_name}-arm64"
-              lipo "${library_name}.framework/${library_name}" -thin x86_64 -output "${library_name}-x86_64"
-              install_name_tool -id "@rpath/${library_name}.framework/${library_name}" "${library_name}-arm64"
-              install_name_tool -id "@rpath/${library_name}.framework/${library_name}" "${library_name}-x86_64"
-              lipo -create -output "${library_name}.framework/${library_name}" "${library_name}-arm64" "${library_name}-x86_64"
-              rm "${library_name}-arm64" "${library_name}-x86_64"
-          }
-
-          fix_id libsm64
-          fix_id libsm64gd.macos.${{ matrix.target }}
-
-          function solve_libsm64_load() {
-              local library_name=$1
-
-              lipo "${library_name}.framework/${library_name}" -thin arm64 -output "${library_name}-arm64"
-              lipo "${library_name}.framework/${library_name}" -thin x86_64 -output "${library_name}-x86_64"
-              install_name_tool -change "dist/libsm64.dylib.arm64" "@rpath/libsm64.framework/libsm64" "${library_name}-arm64"
-              install_name_tool -change "dist/libsm64.dylib.x86_64" "@rpath/libsm64.framework/libsm64" "${library_name}-x86_64"
-              lipo -create -output "${library_name}.framework/${library_name}" "${library_name}-arm64" "${library_name}-x86_64"
-              rm "${library_name}-arm64" "${library_name}-x86_64"
-          }
-
-          solve_libsm64_load libsm64gd.macos.${{ matrix.target }}
-
-      - name: Upload binaries
-        uses: actions/upload-artifact@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          name: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.${{ matrix.platform }}.${{ matrix.target }}
-          path: ${{ github.workspace }}/addons/libsm64_godot/extension/bin
+          submodules: recursive
 
-      - name: Save .scons_cache directory
-        uses: actions/cache/save@v4
+      - name: Compile GDExtension
+        uses: ./.github/actions/compile_gdextension
         with:
-          path: ${{env.SCONS_CACHE}}
-          key: ${{steps.scons_cache_restore.outputs.cache-primary-key}}
+          platform: linux
+          target: ${{ matrix.target }}
+          arch: ${{ matrix.arch }}
+          artifact: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.linux.${{ matrix.target }}.${{ matrix.arch }}
+          additional: lto=auto
+
+  # ============================================
+
+  macos-gdextension:
+    name: 🍏 MacOS
+    runs-on: macos-latest
+    needs: [sanitize_ref_name]
+    env:
+      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [universal]
+        target: [template_debug, template_release]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Compile GDExtension
+        uses: ./.github/actions/compile_gdextension
+        with:
+          platform: macos
+          target: ${{ matrix.target }}
+          arch: ${{ matrix.arch }}
+          artifact: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.macos.${{ matrix.target }}.${{ matrix.arch }}
+          additional: lto=auto
+
+  # ============================================
+
+  web-gdextension:
+    name: 🕸 Web
+    runs-on: ubuntu-latest
+    needs: [sanitize_ref_name]
+    env:
+      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [wasm32]
+        target: [template_debug, template_release]
+        threads: [yes, no]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Compile GDExtension
+        uses: ./.github/actions/compile_gdextension
+        with:
+          platform: web
+          target: ${{ matrix.target }}
+          arch: ${{ matrix.arch }}
+          artifact: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.web.${{ matrix.target }}.${{ matrix.arch }}.threads_${{ matrix.threads }}
+          additional: lto=auto threads=${{ matrix.threads }}
+
+  # ============================================
 
   output-artifacts:
     name: Build the addon, project and export demo
-    needs: [sanitize_ref_name, build-gdextension]
+    needs: [sanitize_ref_name, windows-gdextension, linux-gdextension, macos-gdextension, web-gdextension]
     permissions:
       contents: write
     runs-on: ubuntu-latest
