@@ -35,6 +35,7 @@ export/
 *.dll
 *.dylib
 *.framework
+*.wasm
 
 # N64 ROM files
 *.z64
