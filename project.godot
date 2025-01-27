@@ -17,7 +17,7 @@ config/icon="res://libsm64_mario_icon.png"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/FileAccessWeb/plugin.cfg", "res://addons/libsm64_godot/plugin.cfg")
+enabled=PackedStringArray("res://addons/libsm64_godot/plugin.cfg")
 
 [input]
 
