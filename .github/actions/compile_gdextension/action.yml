@@ -90,7 +90,7 @@ runs:
       shell: bash
       if: inputs.platform != 'web'
       run: |
-        cp extension/libsm64/dist/* addons/libsm64_godot/extension/bin/ | true
+        cp extension/libsm64/dist/*sm64* addons/libsm64_godot/extension/bin/
 
     - name: Compile GDExtension
       shell: bash
