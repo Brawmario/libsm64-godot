@@ -6,7 +6,7 @@ var _libsm64_was_init := false
 
 func _ready() -> void:
 	if LibSM64Global.rom.is_empty():
-		%RomPickerDialog.popup_centered_ratio()
+		%RomPickerDialog.pick_rom()
 	else:
 		_init_libsm64()
 

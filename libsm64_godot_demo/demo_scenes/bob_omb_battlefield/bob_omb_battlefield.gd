@@ -15,7 +15,7 @@ func _ready() -> void:
 	%BattlefieldMesh.mesh.surface_set_material(0, preload("res://libsm64_godot_demo/resources/bob_omb_battlefield_material.tres"))
 
 	if LibSM64Global.rom.is_empty():
-		%RomPickerDialog.popup_centered_ratio()
+		%RomPickerDialog.pick_rom()
 	else:
 		_init_libsm64()
 
