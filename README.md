@@ -2,6 +2,8 @@
 
 Addon that binds [libsm64](https://github.com/libsm64/libsm64) to Godot via GDExtension, allowing to integrate Mario from the Super Mario 64 engine into any Godot 4 project.
 
+Try out the online demo at [itch.io](https://brawmario.itch.io/libsm64-godot-demo).
+
 You can get the addon from the [Godot Asset Library](https://godotengine.org/asset-library/asset/3653) or from the [GitHub releases page](https://github.com/Brawmario/libsm64-godot/releases).
 
 ![SM64 Mario in GDQuest demo](docs/sm64-mario-gdquest-demo.png)
