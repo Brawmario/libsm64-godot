@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - extension/**
+      - .github/actions/**
       - .github/workflows/**
   pull_request:
   workflow_dispatch:
