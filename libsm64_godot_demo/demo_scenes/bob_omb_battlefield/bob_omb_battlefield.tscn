@@ -20,9 +20,8 @@ sky = SubResource("Sky_fjdmo")
 tonemap_mode = 2
 glow_enabled = true
 
-[node name="Bob-OmbMinimal" type="Node3D"]
+[node name="BobOmbBattlefield" type="Node3D"]
 script = ExtResource("1_k4bkk")
-start_cap = null
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 0, 0)
