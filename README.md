@@ -15,7 +15,7 @@ You can get the addon from the [Godot Asset Library](https://godotengine.org/ass
 
 ## Current Godot compatibility
 
-Currently compatible with Godot 4.3.x, with binaries compiled for Windows (x86_64), macOS (universal) and Linux (x86_64).
+Currently compatible with Godot 4.3.x, with binaries compiled for Windows (x86_64), macOS (universal), Linux (x86_64) and Web (threaded and no threads builds).
 
 ## How to compile the GDExtension
 
