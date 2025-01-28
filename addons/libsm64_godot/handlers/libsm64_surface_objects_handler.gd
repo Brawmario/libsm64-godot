@@ -8,8 +8,7 @@ extends LibSM64SurfaceHandlerBase
 @export var surface_objects_group := &"libsm64_surface_objects"
 
 
-var _surface_objects_ids: Array[int] = []
-var _surface_objects_refs: Array[Node3D] = []
+var _surface_objects_map := {}
 var _time_since_last_tick := 0.0
 
 
@@ -22,9 +21,9 @@ func _physics_process(delta: float) -> void:
 
 
 func _update_surface_objects() -> void:
-	for i in range(_surface_objects_ids.size()):
-		var id := _surface_objects_ids[i]
-		var transform := _surface_objects_refs[i].global_transform
+	for node in _surface_objects_map:
+		var id := _surface_objects_map[node] as int
+		var transform := node.global_transform as Transform3D
 		var position := transform.origin
 		var rotation := transform.basis.get_rotation_quaternion()
 		LibSM64.surface_object_move(id, position, rotation)
@@ -35,6 +34,10 @@ func load_surface_object(node: Node3D) -> void:
 	var libsm64_surface_array := LibSM64SurfaceArray.new()
 
 	var faces := get_faces_from_node(node)
+	if faces.is_empty():
+		push_error("Node %s has no faces." % node.name)
+		return
+
 	var transform := node.global_transform
 	var position := transform.origin
 	var rotation := transform.basis.get_rotation_quaternion()
@@ -51,8 +54,7 @@ func load_surface_object(node: Node3D) -> void:
 
 	var surface_object_id := LibSM64.surface_object_create(position, rotation, libsm64_surface_array)
 
-	_surface_objects_ids.push_back(surface_object_id)
-	_surface_objects_refs.push_back(node)
+	_surface_objects_map[node] = surface_object_id
 
 	# Clean up automaticaly if [Node3D] is removed from tree or freed
 	node.tree_exiting.connect(delete_surface_object.bind(node), CONNECT_ONE_SHOT)
@@ -70,20 +72,18 @@ func load_all_surface_objects() -> void:
 
 ## Delete a surface object created from the given [param node_3d] from the [code]libsm64[/code] world if present.
 func delete_surface_object(node_3d: Node3D) -> void:
-	var index := _surface_objects_refs.find(node_3d)
-	if index == -1:
+	var id := _surface_objects_map.get(node_3d, -1) as int
+	if id == -1:
+		push_error("Node %s not found in surface objects map" % node_3d.name)
 		return
 
-	var id := _surface_objects_ids[index]
 	LibSM64.surface_object_delete(id)
-	_surface_objects_refs.remove_at(index)
-	_surface_objects_ids.remove_at(index)
+	_surface_objects_map.erase(node_3d)
 
 
 ## Delete all surface objects from the [code]libsm64[/code] world.
 func delete_all_surface_objects() -> void:
-	for id in _surface_objects_ids:
+	for id in _surface_objects_map.values():
 		LibSM64.surface_object_delete(id)
 
-	_surface_objects_refs.clear()
-	_surface_objects_ids.clear()
+	_surface_objects_map.clear()
