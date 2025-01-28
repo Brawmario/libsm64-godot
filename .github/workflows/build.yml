@@ -33,9 +33,6 @@ jobs:
   windows-gdextension:
     name: 🏁 Windows
     runs-on: ubuntu-latest
-    needs: [sanitize_ref_name]
-    env:
-      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
 
     strategy:
       fail-fast: false
@@ -55,7 +52,7 @@ jobs:
           platform: windows
           target: ${{ matrix.target }}
           arch: ${{ matrix.arch }}
-          artifact: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.windows.${{ matrix.target }}.${{ matrix.arch }}
+          artifact: ${{ github.event.repository.name }}-gdextension.windows.${{ matrix.target }}.${{ matrix.arch }}
           additional: lto=auto
 
   # ============================================
@@ -63,9 +60,6 @@ jobs:
   linux-gdextension:
     name: 🐧 Linux
     runs-on: ubuntu-latest
-    needs: [sanitize_ref_name]
-    env:
-      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
 
     strategy:
       fail-fast: false
@@ -85,7 +79,7 @@ jobs:
           platform: linux
           target: ${{ matrix.target }}
           arch: ${{ matrix.arch }}
-          artifact: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.linux.${{ matrix.target }}.${{ matrix.arch }}
+          artifact: ${{ github.event.repository.name }}-gdextension.linux.${{ matrix.target }}.${{ matrix.arch }}
           additional: lto=auto
 
   # ============================================
@@ -93,9 +87,6 @@ jobs:
   macos-gdextension:
     name: 🍏 MacOS
     runs-on: macos-latest
-    needs: [sanitize_ref_name]
-    env:
-      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
 
     strategy:
       fail-fast: false
@@ -115,7 +106,7 @@ jobs:
           platform: macos
           target: ${{ matrix.target }}
           arch: ${{ matrix.arch }}
-          artifact: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.macos.${{ matrix.target }}.${{ matrix.arch }}
+          artifact: ${{ github.event.repository.name }}-gdextension.macos.${{ matrix.target }}.${{ matrix.arch }}
           additional: lto=auto
 
   # ============================================
@@ -123,9 +114,6 @@ jobs:
   web-gdextension:
     name: 🕸 Web
     runs-on: ubuntu-latest
-    needs: [sanitize_ref_name]
-    env:
-      ref_name: ${{ needs.sanitize_ref_name.outputs.sanitized_ref_name }}
 
     strategy:
       fail-fast: false
@@ -146,7 +134,7 @@ jobs:
           platform: web
           target: ${{ matrix.target }}
           arch: ${{ matrix.arch }}
-          artifact: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}.web.${{ matrix.target }}.${{ matrix.arch }}.threads_${{ matrix.threads }}
+          artifact: ${{ github.event.repository.name }}-gdextension.web.${{ matrix.target }}.${{ matrix.arch }}.threads_${{ matrix.threads }}
           additional: lto=auto threads=${{ matrix.threads }}
 
   # ============================================
@@ -167,7 +155,7 @@ jobs:
       - name: Download GDExtension binaries
         uses: actions/download-artifact@v4
         with:
-          pattern: ${{ github.event.repository.name }}-gdextension.${{ env.ref_name }}*
+          pattern: ${{ github.event.repository.name }}-gdextension.*
           path: ${{ github.workspace }}/addons/libsm64_godot/extension/bin
           merge-multiple: true
 
