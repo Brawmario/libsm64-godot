@@ -8,8 +8,10 @@ reloadable = true
 
 windows.debug = {"res://addons/libsm64_godot/extension/bin/sm64.dll" : ""}
 windows.release = {"res://addons/libsm64_godot/extension/bin/sm64.dll" : ""}
+
 macos.debug = {"res://addons/libsm64_godot/extension/bin/libsm64.framework" : "Contents/Frameworks"}
 macos.release = {"res://addons/libsm64_godot/extension/bin/libsm64.framework" : "Contents/Frameworks"}
+
 linux.debug = {"res://addons/libsm64_godot/extension/bin/libsm64.so" : ""}
 linux.release = {"res://addons/libsm64_godot/extension/bin/libsm64.so" : ""}
 
@@ -17,9 +19,14 @@ linux.release = {"res://addons/libsm64_godot/extension/bin/libsm64.so" : ""}
 
 windows.debug.x86_64 = "res://addons/libsm64_godot/extension/bin/libsm64gd.windows.template_debug.x86_64.dll"
 windows.release.x86_64 = "res://addons/libsm64_godot/extension/bin/libsm64gd.windows.template_release.x86_64.dll"
+
 macos.debug = "res://addons/libsm64_godot/extension/bin/libsm64gd.macos.template_debug.framework"
 macos.release = "res://addons/libsm64_godot/extension/bin/libsm64gd.macos.template_release.framework"
+
 linux.debug.x86_64 = "res://addons/libsm64_godot/extension/bin/libsm64gd.linux.template_debug.x86_64.so"
 linux.release.x86_64 = "res://addons/libsm64_godot/extension/bin/libsm64gd.linux.template_release.x86_64.so"
+
 web.debug = "res://addons/libsm64_godot/extension/bin/libsm64gd.web.template_debug.wasm32.wasm"
 web.release = "res://addons/libsm64_godot/extension/bin/libsm64gd.web.template_release.wasm32.wasm"
+web.debug.nothreads = "res://addons/libsm64_godot/extension/bin/libsm64gd.web.template_debug.wasm32.nothreads.wasm"
+web.release.nothreads = "res://addons/libsm64_godot/extension/bin/libsm64gd.web.template_release.wasm32.nothreads.wasm"
