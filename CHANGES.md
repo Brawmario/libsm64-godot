@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Use a dictionary internally in `LibSM64SurfaceObjectsHandler` instead of two arrays.
-- Update `libsm64` to latest commit. Includes the changes necessary to avoid exposing its public functions in the WebAssembly build.
+- Update `libsm64` to latest commit. Includes the changes necessary to avoid exposing its public functions in the WebAssembly build (didn't work lol).
+- Passing a null `Callable` to `LibSM64.register_debug_print_function` and `LibSM64.register_play_sound_function` now silently deactivates them.
 
 ## [2.3.0] - 2025-01-27
 

@@ -245,7 +245,7 @@ double LibSM64::get_tick_delta_time() const
 void LibSM64::register_debug_print_function(const godot::Callable &p_callback)
 {
     debug_print_function = p_callback;
-    sm64_register_debug_print_function(SM64DebugPrintFunction);
+    sm64_register_debug_print_function(p_callback.is_null() ? NULL : SM64DebugPrintFunction);
 }
 
 const godot::Callable &LibSM64::get_debug_print_function() const
@@ -256,7 +256,7 @@ const godot::Callable &LibSM64::get_debug_print_function() const
 void LibSM64::register_play_sound_function(const godot::Callable &p_callback)
 {
     play_sound_function = p_callback;
-    sm64_register_play_sound_function(SM64PlaySoundFunction);
+    sm64_register_play_sound_function(p_callback.is_null() ? NULL : SM64PlaySoundFunction);
 }
 
 const godot::Callable &LibSM64::get_play_sound_function() const
