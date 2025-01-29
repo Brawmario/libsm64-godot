@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Use a dictionary internally in `LibSM64SurfaceObjectsHandler` instead of two arrays.
+- Update `libsm64` to latest commit. Includes the changes necessary to avoid exposing its public functions in the WebAssembly build.
 
 ## [2.3.0] - 2025-01-27
 
