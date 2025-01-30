@@ -27,11 +27,11 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Get godot-cpp SHA
+    - name: Get godot-cpp and libsm64 SHA
       shell: bash
-      id: get_godot_cpp_sha
+      id: get_submodules_sha
       run: |
-        echo "sha=$(git rev-parse @:./extension/godot-cpp)" >> $GITHUB_OUTPUT
+        echo "sha=$(git rev-parse @:./extension/godot-cpp)-$(git rev-parse @:./extension/libsm64)" >> $GITHUB_OUTPUT
 
     - name: Restore .scons_cache directory
       if: inputs.use_cache != 'false'
@@ -39,10 +39,10 @@ runs:
       uses: actions/cache/restore@v4
       with:
         path: ${{env.SCONS_CACHE}}
-        key: ${{github.job}}-${{inputs.artifact}}-${{steps.get_godot_cpp_sha.outputs.sha}}-${{github.ref}}-${{github.sha}}
+        key: ${{github.job}}-${{inputs.artifact}}-${{steps.get_submodules_sha.outputs.sha}}-${{github.ref}}-${{github.sha}}
         restore-keys: |
-          ${{github.job}}-${{inputs.artifact}}-${{steps.get_godot_cpp_sha.outputs.sha}}-${{github.ref}}
-          ${{github.job}}-${{inputs.artifact}}-${{steps.get_godot_cpp_sha.outputs.sha}}
+          ${{github.job}}-${{inputs.artifact}}-${{steps.get_submodules_sha.outputs.sha}}-${{github.ref}}
+          ${{github.job}}-${{inputs.artifact}}-${{steps.get_submodules_sha.outputs.sha}}
 
     - name: (Windows) Set up MinGW
       if: inputs.platform == 'windows'
