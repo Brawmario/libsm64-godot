@@ -12,6 +12,7 @@ You can get the addon from the [Godot Asset Library](https://godotengine.org/ass
 
 | [Infinite Mario 64 (by TwilightPB)](https://twilightpb.itch.io/infinite-mario-64) | [![Infinite Mario 64 (by TwilightPB)](https://img.itch.zone/aW1hZ2UvMjU1NjA1Ni8xNTIxMDcwOC5naWY=/original/XL2MU5.gif)](https://twilightpb.itch.io/infinite-mario-64) |
 |-------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Infinite Mario 64 Ever (Multiplatform fork)](https://brawmario.itch.io/infinite-mario-64-ever) | |
 
 ## Current Godot compatibility
 
