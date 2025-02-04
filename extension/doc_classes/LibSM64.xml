@@ -149,12 +149,14 @@
 			<return type="void" />
 			<param index="0" name="callback" type="Callable" />
 			<description>
+				Registers the internal debug print function for [code]libsm64[/code]. The provided [param callback] should be a function that takes one parameter of type [String]. Providing a null [Callable] will unregister the debug print function.
 			</description>
 		</method>
 		<method name="register_play_sound_function">
 			<return type="void" />
 			<param index="0" name="callback" type="Callable" />
 			<description>
+				Registers the callback function for when [code]libsm64[/code] plays a sound. The provided [param callback] should be a function that takes two parameters, the first of type [enum SoundBits] and the second of type [Vector3]. Providing a null [Callable] will unregister the callback function.
 			</description>
 		</method>
 		<method name="seq_player_play_sequence">
@@ -2577,10 +2579,10 @@
 			[b]Example:[/b]
 			[codeblocks]
 			[gdscript]
-			func play_secret_collected(secret_collected: int) -&gt; void:
-			    assert(secret_collected &gt;= 1 &amp;&amp; secret_collected &lt;= 5)
+			func play_secret_collected(secrets_collected: int) -&gt; void:
+			    assert(secrets_collected &gt;= 1 &amp;&amp; secrets_collected &lt;= 5)
 			    var collect_secret_sound_bits = LibSM64.SOUND_MENU_COLLECT_SECRET + (
-			        (secret_collected - 1) &lt;&lt; LibSM64.SOUNDARGS_SHIFT_SOUNDID)
+			        (secrets_collected - 1) &lt;&lt; LibSM64.SOUNDARGS_SHIFT_SOUNDID)
 			    LibSM64.play_sound_global(collect_secret_sound_bits)
 			[/gdscript]
 			[/codeblocks]
