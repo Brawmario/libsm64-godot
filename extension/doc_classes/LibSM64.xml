@@ -134,14 +134,14 @@
 		</method>
 		<method name="play_sound">
 			<return type="void" />
-			<param index="0" name="sound_bits" type="int" />
+			<param index="0" name="sound_bits" type="int" enum="LibSM64.SoundBits" is_bitfield="true" />
 			<param index="1" name="position" type="Vector3" />
 			<description>
 			</description>
 		</method>
 		<method name="play_sound_global">
 			<return type="void" />
-			<param index="0" name="sound_bits" type="int" />
+			<param index="0" name="sound_bits" type="int" enum="LibSM64.SoundBits" is_bitfield="true" />
 			<description>
 			</description>
 		</method>
@@ -277,7 +277,7 @@
 			<description>
 				Loads the static [param surfaces] into the [code]libsm64[/code] world. This function should be called before any calls to [method mario_create].
 				[b]Note:[/b] calling this function multiple times will overwrite the previous calls.
-				[b]Warning:[/b] These surfaces will delimit the bounderies of the [code]libsm64[/code] world in the XZ plane. This means that Mario can only be above theses surfaces and will hit "invisible walls" at the edges of the world.
+				[b]Note:[/b] These surfaces will delimit the bounderies of the [code]libsm64[/code] world in the XZ plane. This means that Mario can only be above theses surfaces and will hit "invisible walls" at the edges of the world.
 			</description>
 		</method>
 		<method name="stop_background_music">
@@ -1708,6 +1708,950 @@
 		<constant name="SEQ_EVENT_CUTSCENE_LAKITU" value="34" enum="SeqId">
 		</constant>
 		<constant name="SEQ_COUNT" value="35" enum="SeqId">
+		</constant>
+		<constant name="SOUNDARGS_SHIFT_SOUNDID" value="16">
+			Number of bits to shift a value before adding it to a [enum SoundBits] value in order to modify the Sound ID.
+			[b]Example:[/b]
+			[codeblocks]
+			[gdscript]
+			# Play the sound that Mario produces when he jumps on snow
+			var jump_on_snow_sound_bits = LibSM64.SOUND_ACTION_TERRAIN_JUMP + (
+			    LibSM64.SOUND_TERRAIN_SNOW &lt;&lt; LibSM64.SOUNDARGS_SHIFT_SOUNDID)
+			LibSM64.play_sound_global(jump_on_snow_sound_bits)
+			[/gdscript]
+			[/codeblocks]
+		</constant>
+		<constant name="SOUND_TERRAIN_DEFAULT" value="0" enum="SoundTerrain">
+		</constant>
+		<constant name="SOUND_TERRAIN_GRASS" value="1" enum="SoundTerrain">
+		</constant>
+		<constant name="SOUND_TERRAIN_WATER" value="2" enum="SoundTerrain">
+		</constant>
+		<constant name="SOUND_TERRAIN_STONE" value="3" enum="SoundTerrain">
+		</constant>
+		<constant name="SOUND_TERRAIN_SPOOKY" value="4" enum="SoundTerrain">
+		</constant>
+		<constant name="SOUND_TERRAIN_SNOW" value="5" enum="SoundTerrain">
+		</constant>
+		<constant name="SOUND_TERRAIN_ICE" value="6" enum="SoundTerrain">
+		</constant>
+		<constant name="SOUND_TERRAIN_SAND" value="7" enum="SoundTerrain">
+		</constant>
+		<constant name="SOUND_ACTION_TERRAIN_JUMP" value="67141761" enum="SoundBits" is_bitfield="true">
+			Terrain-dependent moving sound. A value from [code]0[/code] to [code]7[/code] (see [enum SoundTerrain] for value description) can be added to the Sound ID bits before playing (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_ACTION_TERRAIN_LANDING" value="67666049" enum="SoundBits" is_bitfield="true">
+			Terrain-dependent moving sound. A value from [code]0[/code] to [code]7[/code] (see [enum SoundTerrain] for value description) can be added to the Sound ID bits before playing (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_ACTION_TERRAIN_STEP" value="101744769" enum="SoundBits" is_bitfield="true">
+			Terrain-dependent moving sound. A value from [code]0[/code] to [code]7[/code] (see [enum SoundTerrain] for value description) can be added to the Sound ID bits before playing (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_ACTION_TERRAIN_BODY_HIT_GROUND" value="68714625" enum="SoundBits" is_bitfield="true">
+			Terrain-dependent moving sound. A value from [code]0[/code] to [code]7[/code] (see [enum SoundTerrain] for value description) can be added to the Sound ID bits before playing (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_ACTION_TERRAIN_STEP_TIPTOE" value="102793345" enum="SoundBits" is_bitfield="true">
+			Terrain-dependent moving sound. A value from [code]0[/code] to [code]7[/code] (see [enum SoundTerrain] for value description) can be added to the Sound ID bits before playing (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_ACTION_TERRAIN_STUCK_IN_GROUND" value="71860353" enum="SoundBits" is_bitfield="true">
+			Terrain-dependent moving sound. A value from [code]0[/code] to [code]7[/code] (see [enum SoundTerrain] for value description) can be added to the Sound ID bits before playing (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_ACTION_TERRAIN_HEAVY_LANDING" value="73433217" enum="SoundBits" is_bitfield="true">
+			Terrain-dependent moving sound. A value from [code]0[/code] to [code]7[/code] (see [enum SoundTerrain] for value description) can be added to the Sound ID bits before playing (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_ACTION_METAL_JUMP" value="69767297" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_METAL_LANDING" value="69832833" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_METAL_STEP" value="69898369" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_METAL_HEAVY_LANDING" value="69963905" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_CLAP_HANDS_COLD" value="103547009" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_HANGING_STEP" value="70099073" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_QUICKSAND_STEP" value="70123649" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_METAL_STEP_TIPTOE" value="70226049" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNKNOWN430" value="70303873" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNKNOWN431" value="70344833" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNKNOWN432" value="70418561" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_SWIM" value="70484097" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNKNOWN434" value="70549633" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_THROW" value="70615169" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_KEY_SWISH" value="70680705" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_SPIN" value="70746241" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_TWIRL" value="70811777" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_CLIMB_UP_TREE" value="70942849" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_CLIMB_DOWN_TREE" value="3866625" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNK3C" value="3932161" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNKNOWN43D" value="71139457" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNKNOWN43E" value="71204993" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_PAT_BACK" value="71270529" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_BRUSH_HAIR" value="71336065" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_CLIMB_UP_POLE" value="71401601" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_METAL_BONK" value="71467137" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNSTUCK_FROM_GROUND" value="71532673" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_HIT" value="71614593" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_HIT_2" value="71610497" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_HIT_3" value="71606401" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_BONK" value="71671937" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_SHRINK_INTO_BBH" value="71737473" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_SWIM_FAST" value="71803009" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_METAL_JUMP_WATER" value="72388737" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_METAL_LAND_WATER" value="72454273" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_METAL_STEP_WATER" value="72519809" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNK53" value="5439489" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNK54" value="5505025" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNK55" value="5570561" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_FLYING_FAST" value="72777857" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_TELEPORT" value="72859777" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNKNOWN458" value="72917121" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_BOUNCE_OFF_OBJECT" value="72986753" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_SIDE_FLIP_UNK" value="73040001" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_READ_SIGN" value="73138049" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNKNOWN45C" value="73171073" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_UNK5D" value="6094849" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_INTRO_UNK45E" value="73302145" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ACTION_INTRO_UNK45F" value="73367681" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MOVING_TERRAIN_SLIDE" value="335544321" enum="SoundBits" is_bitfield="true">
+			Terrain-dependent moving sound. A value from [code]0[/code] to [code]7[/code] (see [enum SoundTerrain] for value description) can be added to the Sound ID bits before playing (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_MOVING_TERRAIN_RIDING_SHELL" value="337641473" enum="SoundBits" is_bitfield="true">
+			Terrain-dependent moving sound. A value from [code]0[/code] to [code]7[/code] (see [enum SoundTerrain] for value description) can be added to the Sound ID bits before playing (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_MOVING_LAVA_BURN" value="336592897" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MOVING_SLIDE_DOWN_POLE" value="336658433" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MOVING_SLIDE_DOWN_TREE" value="336756737" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MOVING_QUICKSAND_DEATH" value="336855041" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MOVING_SHOCKED" value="336986113" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MOVING_FLYING" value="337051649" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MOVING_ALMOST_DROWNING" value="471334913" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MOVING_AIM_CANNON" value="488185857" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MOVING_UNK1A" value="270139393" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MOVING_RIDING_SHELL_LAVA" value="338165761" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_YAH_WAH_HOO" value="604012673" enum="SoundBits" is_bitfield="true">
+			A number from [code]0[/code] to [code]2[/code] can be added to the Sound ID bits before playing, producing Yah/Wah/Hoo (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_MARIO_HOOHOO" value="604209281" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_YAHOO" value="604274817" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_UH" value="604340353" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_HRMM" value="604405889" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_WAH2" value="604471425" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_WHOA" value="604553345" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_EEUH" value="604602497" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_ATTACKED" value="604700545" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_OOOF" value="604733569" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_OOOF2" value="604754049" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_HERE_WE_GO" value="604799105" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_YAWNING" value="604864641" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_SNORING1" value="604930177" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_SNORING2" value="604995713" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_WAAAOOOW" value="605077633" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_HAHA" value="605126785" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_HAHA_2" value="605155457" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_UH2" value="605278337" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_UH2_2" value="605257857" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_ON_FIRE" value="605331585" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_DYING" value="605421441" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_PANTING_COLD" value="605454465" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_PANTING" value="605585537" enum="SoundBits" is_bitfield="true">
+			A number from [code]0[/code] to [code]2[/code] can be added to the Sound ID bits before playing (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_MARIO_COUGHING1" value="605782145" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_COUGHING2" value="605847681" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_COUGHING3" value="605913217" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_PUNCH_YAH" value="605978753" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_PUNCH_HOO" value="606044289" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_MAMA_MIA" value="606109825" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_OKEY_DOKEY" value="539033601" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_GROUND_POUND_WAH" value="606240897" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_DROWNING" value="606335105" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_PUNCH_WAH" value="606371969" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_PEACH_DEAR_MARIO" value="606666625" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_YAHOO_WAHA_YIPPEE" value="606830721" enum="SoundBits" is_bitfield="true">
+			A number from [code]0[/code] to [code]4[/code] can be added to the Sound ID bits before playing, producing one of "Yahoo!" (values [code]0[/code] to [code]2[/code]), "Waha!" (value of [code]3[/code]), or "Yippee!" (value of [code]4[/code]) (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+		</constant>
+		<constant name="SOUND_MARIO_DOH" value="607158401" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_GAME_OVER" value="607256449" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_HELLO" value="607321985" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_PRESS_START_TO_PLAY" value="607387553" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_TWIRL_BOUNCE" value="607420545" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_SNORING3" value="607518593" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_SO_LONGA_BOWSER" value="607551617" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MARIO_IMA_TIRED" value="607617153" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_PEACH_MARIO" value="607715201" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_PEACH_POWER_OF_THE_STARS" value="607780737" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_PEACH_THANKS_TO_YOU" value="607846273" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_PEACH_THANK_YOU_MARIO" value="607911809" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_PEACH_SOMETHING_SPECIAL" value="607977345" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_PEACH_BAKE_A_CAKE" value="608042881" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_PEACH_FOR_MARIO" value="608108417" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_PEACH_MARIO2" value="608173953" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_ACTIVATE_CAP_SWITCH" value="805339265" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_FLAME_OUT" value="805535873" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_OPEN_WOOD_DOOR" value="805617793" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_CLOSE_WOOD_DOOR" value="805683329" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_OPEN_IRON_DOOR" value="805748865" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_CLOSE_IRON_DOOR" value="805814401" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BUBBLES" value="805830657" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_MOVING_WATER" value="805896321" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SWISH_WATER" value="805961857" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_QUIET_BUBBLE" value="806027393" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_VOLCANO_EXPLOSION" value="806125697" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_QUIET_BUBBLE2" value="806158465" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_CASTLE_TRAP_OPEN" value="806256769" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_WALL_EXPLOSION" value="806289537" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_COIN" value="940671105" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_COIN_WATER" value="940736641" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SHORT_STAR" value="806748305" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BIG_CLOCK" value="806813825" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_LOUD_POUND" value="806879233" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_LOUD_POUND2" value="806944769" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SHORT_POUND1" value="807010305" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SHORT_POUND2" value="807075841" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SHORT_POUND3" value="807141377" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SHORT_POUND4" value="807206913" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SHORT_POUND5" value="807272449" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SHORT_POUND6" value="807337985" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_OPEN_CHEST" value="824213633" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_CLAM_SHELL1" value="824344705" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOX_LANDING" value="807665793" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOX_LANDING_2" value="841220225" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_UNKNOWN1" value="807731329" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_UNKNOWN1_2" value="841285761" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_CLAM_SHELL2" value="807813249" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_CLAM_SHELL3" value="807878785" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_PAINTING_EJECT" value="958922881" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_LEVEL_SELECT_CHANGE" value="808124545" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_PLATFORM" value="808288385" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_DONUT_PLATFORM_EXPLOSION" value="808329345" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOWSER_BOMB_EXPLOSION" value="825163905" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_COIN_SPURT" value="942669953" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_EXPLOSION6" value="808517633" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_UNK32" value="808583169" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOAT_TILT1" value="808730753" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOAT_TILT2" value="808796289" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_COIN_DROP" value="808861825" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_UNKNOWN3" value="943161473" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_PENDULUM_SWING" value="808976513" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_CHAIN_CHOMP1" value="809042049" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_CHAIN_CHOMP2" value="809107585" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_DOOR_TURN_KEY" value="809173121" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_MOVING_IN_SAND" value="809238657" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_UNKNOWN4_LOWPRIO" value="809304193" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_UNKNOWN4" value="809336961" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_MOVING_PLATFORM_SWITCH" value="809369729" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_CAGE_OPEN" value="809476225" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_QUIET_POUND1_LOWPRIO" value="809500801" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_QUIET_POUND1" value="809517185" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BREAK_BOX" value="809615489" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_DOOR_INSERT_KEY" value="809631873" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_QUIET_POUND2" value="809697409" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BIG_POUND" value="809762945" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_UNK45" value="809828481" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_UNK46" value="809926785" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_CANNON_UP" value="809992321" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_GRINDEL_ROLL" value="810025089" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_EXPLOSION7" value="810090497" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SHAKE_COFFIN" value="810156033" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_RACE_GUN_SHOT" value="827146369" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_STAR_DOOR_OPEN" value="810467457" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_STAR_DOOR_CLOSE" value="810532993" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_POUND_ROCK" value="810942593" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_STAR_APPEARS" value="811073425" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_COLLECT_1UP" value="811138945" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BUTTON_PRESS_LOWPRIO" value="811204737" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BUTTON_PRESS" value="811221121" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BUTTON_PRESS_2_LOWPRIO" value="827981953" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BUTTON_PRESS_2" value="827998337" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_ELEVATOR_MOVE" value="811270273" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_ELEVATOR_MOVE_2" value="828047489" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SWISH_AIR" value="811335809" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SWISH_AIR_2" value="828113025" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_HAUNTED_CHAIR" value="811401345" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SOFT_LANDING" value="811466881" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_HAUNTED_CHAIR_MOVE" value="811532417" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOWSER_PLATFORM" value="811761793" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOWSER_PLATFORM_2" value="828539009" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_HEART_SPIN" value="811909249" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_POUND_WOOD_POST" value="811974785" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_WATER_LEVEL_TRIG" value="812023937" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SWITCH_DOOR_OPEN" value="812097665" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_RED_COIN" value="812159105" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BIRDS_FLY_AWAY" value="812187777" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_METAL_POUND" value="812351617" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOING1" value="812400769" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOING2_LOWPRIO" value="812458113" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOING2" value="812466305" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_YOSHI_WALK" value="812523649" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_ENEMY_ALERT1" value="812593281" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_YOSHI_TALK" value="812658817" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_SPLATTERING" value="812724353" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOING3" value="812777473" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_GRAND_STAR" value="812843137" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_GRAND_STAR_JUMP" value="812908673" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_BOAT_ROCK" value="812974209" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL_VANISH_SFX" value="813047937" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_WATERFALL1" value="1073741825" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_WATERFALL2" value="1073807361" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_ELEVATOR1" value="1073872897" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_DRONING1" value="1090715649" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_DRONING2" value="1074003969" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_WIND1" value="1074069505" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_MOVING_SAND_SNOW" value="1074135041" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_UNK07" value="1074200577" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_ELEVATOR2" value="1074266113" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_WATER" value="1074331649" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_UNKNOWN2" value="1074397185" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_BOAT_ROCKING1" value="1074462721" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_ELEVATOR3" value="1074528257" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_ELEVATOR4" value="1074593793" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_ELEVATOR4_2" value="1091371009" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_MOVINGSAND" value="1074659329" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_MERRY_GO_ROUND_CREAKING" value="1074741249" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_WIND2" value="1074823169" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_UNK12" value="1074921473" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_SLIDING" value="1074987009" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_STAR" value="1075052561" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_MOVING_BIG_PLATFORM" value="1091895297" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_WATER_DRAIN" value="1091960833" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_METAL_BOX_PUSH" value="1075281921" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_ENV_SINK_QUICKSAND" value="1075347457" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SUSHI_SHARK_WATER_SOUND" value="1342210177" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_MRI_SHOOT" value="1342242945" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BABY_PENGUIN_WALK" value="1342308481" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOWSER_WALK" value="1342374017" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOWSER_TAIL_PICKUP" value="1342505089" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOWSER_DEFEATED" value="1342570625" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOWSER_SPINNING" value="1342636161" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOWSER_INHALING" value="1342701697" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BIG_PENGUIN_WALK" value="1342800001" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOO_BOUNCE_TOP" value="1342832769" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOO_LAUGH_SHORT" value="1342898305" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_THWOMP" value="1343004801" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_CANNON1" value="1343090817" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_CANNON2" value="1343156353" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_CANNON3" value="1343221889" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_JUMP_WALK_WATER" value="1343356929" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_UNKNOWN2" value="1343422593" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_MRI_DEATH" value="1343488129" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_POUNDING1" value="1343574145" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_POUNDING1_HIGHPRIO" value="1343586433" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_WHOMP" value="1343643777" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KING_BOBOMB" value="1343651969" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BULLY_METAL" value="1343717505" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BULLY_EXPLODE" value="1343791233" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BULLY_EXPLODE_2" value="1360568449" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_POUNDING_CANNON" value="1343901825" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BULLY_WALK" value="1343959169" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_UNKNOWN3" value="1344110721" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_UNKNOWN4" value="1344184449" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BABY_PENGUIN_DIVE" value="1344225409" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_GOOMBA_WALK" value="1344274561" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_UKIKI_CHATTER_LONG" value="1344340097" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_MONTY_MOLE_ATTACK" value="1344405633" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_EVIL_LAKITU_THROW" value="1344413825" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_UNK23" value="1344471041" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_DYING_ENEMY1" value="1344553089" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_CANNON4" value="1344618625" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_DYING_ENEMY2" value="1344667649" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOBOMB_WALK" value="1344733313" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SOMETHING_LANDING" value="1344831617" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_DIVING_IN_WATER" value="1344905345" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SNOW_SAND1" value="1344929921" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SNOW_SAND2" value="1344995457" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_DEFAULT_DEATH" value="1345093761" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BIG_PENGUIN_YELL" value="1345126529" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_WATER_BOMB_BOUNCING" value="1345224833" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_GOOMBA_ALERT" value="1345257601" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_WIGGLER_JUMP" value="1345282177" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_STOMPED" value="1345355905" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_UNKNOWN6" value="1345388673" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_DIVING_INTO_WATER" value="1345470593" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_PIRANHA_PLANT_SHRINK" value="1345536129" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KOOPA_THE_QUICK_WALK" value="1345593473" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KOOPA_WALK" value="1345650817" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BULLY_WALKING" value="1345740929" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_DORRIE" value="1345806465" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOWSER_LAUGH" value="1345880193" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_UKIKI_CHATTER_SHORT" value="1345912961" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_UKIKI_CHATTER_IDLE" value="1345978497" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_UKIKI_STEP_DEFAULT" value="1346044033" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_UKIKI_STEP_LEAVES" value="1346109569" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KOOPA_TALK" value="1346216065" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KOOPA_DAMAGE" value="1346281601" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KLEPTO1" value="1346322561" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KLEPTO2" value="1346396289" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KING_BOBOMB_TALK" value="1346437249" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KING_BOBOMB_JUMP" value="1346797697" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KING_WHOMP_DEATH" value="1363656833" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOO_LAUGH_LONG" value="1346896001" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_EEL" value="1347027073" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_EEL_2" value="1380581505" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_EYEROK_SHOW_EYE" value="1380647041" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_MR_BLIZZARD_ALERT" value="1347158145" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SNUFIT_SHOOT" value="1347223681" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SKEETER_WALK" value="1347289217" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_WALKING_WATER" value="1347354753" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BIRD_CHIRP3" value="1347502081" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_PIRANHA_PLANT_APPEAR" value="1347690625" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_FLAME_BLOWN" value="1347780737" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_MAD_PIANO_CHOMPING" value="1381384321" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOBOMB_BUDDY_TALK" value="1347960961" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SPINY_UNK59" value="1348014209" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_WIGGLER_HIGH_PITCH" value="1348223105" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_HEAVEHO_TOSSED" value="1348288641" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_WIGGLER_DEATH" value="1348337665" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BOWSER_INTRO_LAUGH" value="1348436113" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_ENEMY_DEATH_HIGH" value="1348513921" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_ENEMY_DEATH_LOW" value="1348579457" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SWOOP_DEATH" value="1348644993" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_KOOPA_FLYGUY_DEATH" value="1348710529" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_POKEY_DEATH" value="1348714625" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SNOWMAN_BOUNCE" value="1348780161" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SNOWMAN_EXPLODE" value="1348849793" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_POUNDING_LOUD" value="1349009537" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_MIPS_RABBIT" value="1349124225" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_MIPS_RABBIT_WATER" value="1349255297" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_EYEROK_EXPLODE" value="1349320833" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_CHUCKYA_DEATH" value="1366163585" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_WIGGLER_TALK" value="1349451905" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_WIGGLER_ATTACKED" value="1349542017" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_WIGGLER_LOW_PITCH" value="1349591169" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_SNUFIT_SKEETER_DEATH" value="1349697665" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_BUBBA_CHOMP" value="1349730433" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ_ENEMY_DEFEAT_SHRINK" value="1349795969" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_BOWSER_SPIT_FIRE" value="1610612737" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_UNK01" value="1610678273" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_LAKITU_FLY" value="1610776577" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_LAKITU_FLY_HIGHPRIO" value="1610809089" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_AMP_BUZZ" value="1610825729" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_BLOW_FIRE" value="1610907649" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_BLOW_WIND" value="1610891265" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_ROUGH_SLIDE" value="1610940417" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_HEAVEHO_MOVE" value="1611022337" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_UNK07" value="1611071489" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_BOBOMB_LIT_FUSE" value="1611161601" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_HOWLING_WIND" value="1611235329" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_CHUCKYA_MOVE" value="1611284481" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_PEACH_TWINKLE" value="1611350017" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_AIR_CASTLE_OUTDOORS_AMBIENT" value="1611677697" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_CHANGE_SELECT" value="1879111809" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_REVERSE_PAUSE" value="1879113729" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_PAUSE" value="1879244673" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_PAUSE_2" value="1879310209" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_MESSAGE_APPEAR" value="1879310465" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_MESSAGE_DISAPPEAR" value="1879376001" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_CAMERA_ZOOM_IN" value="1879441537" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_CAMERA_ZOOM_OUT" value="1879507073" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_PINCH_MARIO_FACE" value="1879572609" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_LET_GO_MARIO_FACE" value="1879638145" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_HAND_APPEAR" value="1879703681" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_HAND_DISAPPEAR" value="1879769217" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_UNK0C" value="1879834753" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_POWER_METER" value="1879900289" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_CAMERA_BUZZ" value="1879965825" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_CAMERA_TURN" value="1880031361" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_UNK10" value="1880096769" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_CLICK_FILE_SELECT" value="1880162433" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_MESSAGE_NEXT_PAGE" value="1880293505" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_COIN_ITS_A_ME_MARIO" value="1880359041" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_YOSHI_GAIN_LIVES" value="1880424577" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_ENTER_PIPE" value="1880531073" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_EXIT_PIPE" value="1880596609" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_BOWSER_LAUGH" value="1880653953" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_ENTER_HOLE" value="1897496705" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_CLICK_CHANGE_VIEW" value="1880785025" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_CAMERA_UNUSED1" value="1880817665" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_CAMERA_UNUSED2" value="1880883201" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_MARIO_CASTLE_WARP" value="1880993921" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_STAR_SOUND" value="1881079681" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_THANK_YOU_PLAYING_MY_GAME" value="1881145217" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_READ_A_SIGN" value="1881145345" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_EXIT_A_SIGN" value="1881210881" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_MARIO_CASTLE_WARP2" value="1881284737" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_STAR_SOUND_OKEY_DOKEY" value="1881407361" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_STAR_SOUND_LETS_A_GO" value="1881472897" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_MENU_COLLECT_RED_COIN" value="2015924353" enum="SoundBits" is_bitfield="true">
+			A number from [code]0[/code] to [code]7[/code] can be added to the Sound ID bits before playing, producing the same sound with different pitch (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+			[b]Example:[/b]
+			[codeblocks]
+			[gdscript]
+			func play_red_coin_collected(red_coins_collected: int) -&gt; void:
+			    assert(red_coins_collected &gt;= 1 &amp;&amp; red_coins_collected &lt;= 8)
+			    var collect_red_coin_sound_bits = LibSM64.SOUND_MENU_COLLECT_RED_COIN + (
+			        (red_coins_collected - 1) &lt;&lt; LibSM64.SOUNDARGS_SHIFT_SOUNDID)
+			    LibSM64.play_sound_global(collect_red_coin_sound_bits)
+			[/gdscript]
+			[/codeblocks]
+		</constant>
+		<constant name="SOUND_MENU_COLLECT_SECRET" value="1882202241" enum="SoundBits" is_bitfield="true">
+			A number from [code]0[/code] to [code]4[/code] can be added to the Sound ID bits before playing, producing the same sound with different pitch (see [constant SOUNDARGS_SHIFT_SOUNDID]).
+			[b]Example:[/b]
+			[codeblocks]
+			[gdscript]
+			func play_secret_collected(secret_collected: int) -&gt; void:
+			    assert(secret_collected &gt;= 1 &amp;&amp; secret_collected &lt;= 5)
+			    var collect_secret_sound_bits = LibSM64.SOUND_MENU_COLLECT_SECRET + (
+			        (secret_collected - 1) &lt;&lt; LibSM64.SOUNDARGS_SHIFT_SOUNDID)
+			    LibSM64.play_sound_global(collect_secret_sound_bits)
+			[/gdscript]
+			[/codeblocks]
+		</constant>
+		<constant name="SOUND_GENERAL2_BOBOMB_EXPLOSION" value="2150506625" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_PURPLE_SWITCH" value="2151596161" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_ROTATING_BLOCK_CLICK" value="2151678081" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_SPINDEL_ROLL" value="2152210561" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_PYRAMID_TOP_SPIN" value="2169233537" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_PYRAMID_TOP_EXPLOSION" value="2169303169" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_BIRD_CHIRP2" value="2152742913" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_SWITCH_TICK_FAST" value="2153050129" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_SWITCH_TICK_SLOW" value="2153115665" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_STAR_APPEARS" value="2153250705" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_ROTATING_BLOCK_ALERT" value="2153316481" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_BOWSER_EXPLODE" value="2153775233" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_BOWSER_KEY" value="2153840769" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_1UP_APPEAR" value="2154025089" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_GENERAL2_RIGHT_ANSWER" value="2154471553" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_BOWSER_ROAR" value="2416181377" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_PIRANHA_PLANT_BITE" value="2416988289" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_PIRANHA_PLANT_DYING" value="2417057921" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_BOWSER_PUZZLE_PIECE_MOVE" value="2417565825" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_BULLY_ATTACKED" value="2417754241" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_KING_BOBOMB_DAMAGE" value="2437038209" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_SCUTTLEBUG_WALK" value="2420326529" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_SCUTTLEBUG_ALERT" value="2420392065" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_BABY_PENGUIN_YELL" value="2420441217" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_SWOOP" value="2420703361" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_BIRD_CHIRP1" value="2421309441" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_LARGE_BULLY_ATTACKED" value="2421620865" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_EYEROK_SOUND_SHORT" value="2472149121" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_WHOMP_SOUND_SHORT" value="2472198273" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_EYEROK_SOUND_LONG" value="2455437441" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_BOWSER_TELEPORT" value="2422636673" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_MONTY_MOLE_APPEAR" value="2422702209" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_BOSS_DIALOG_GRUNT" value="2422816897" enum="SoundBits" is_bitfield="true">
+		</constant>
+		<constant name="SOUND_OBJ2_MRI_SPINNING" value="2422931585" enum="SoundBits" is_bitfield="true">
 		</constant>
 	</constants>
 </class>
