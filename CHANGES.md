@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `LibSM64.SoundBits` enum, defining all avalible sounds in `libsm64`. `LibSM64.play_sound` and `LibSM64.play_sound_global` now use this enum.
 
+### Fixed
+
+- Fix `LibSM64Mario.invicibility_time` typo to `LibSM64Mario.invincibility_time`.
+
 ## [2.3.1] - 2025-01-29
 
 ### Changed

@@ -149,19 +149,19 @@ var health_wedges: int:
 		LibSM64.set_mario_health(_id, new_health)
 		_health = new_health
 
-var _invicibility_time := 0.0
+var _invincibility_time := 0.0
 ## Mario's invincibility time in seconds
-var invicibility_time: float:
+var invincibility_time: float:
 	get:
-		return _invicibility_time
+		return _invincibility_time
 	set(value):
 		if _id < 0:
 			return
 		LibSM64.set_mario_invincibility(_id, value)
-		_invicibility_time = value
+		_invincibility_time = value
 		if _mario_interpolator.mario_state_current:
-			_mario_interpolator.mario_state_current.invicibility_time = _invicibility_time
-			_mario_interpolator.mario_state_previous.invicibility_time = _invicibility_time
+			_mario_interpolator.mario_state_current.invincibility_time = _invincibility_time
+			_mario_interpolator.mario_state_previous.invincibility_time = _invincibility_time
 
 ## Mario's water level
 var water_level := -100000.0 / LibSM64.scale_factor:
@@ -220,7 +220,7 @@ func _process(delta: float) -> void:
 	global_position = mario_state.position
 	_velocity = mario_state.velocity
 	_face_angle = mario_state.face_angle
-	_invicibility_time = mario_state.invincibility_time
+	_invincibility_time = mario_state.invincibility_time
 
 	var material: StandardMaterial3D
 	match _flags & LibSM64.MARIO_SPECIAL_CAPS:

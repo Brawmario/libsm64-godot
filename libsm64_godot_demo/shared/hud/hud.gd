@@ -18,7 +18,7 @@ func _process(_delta: float) -> void:
 		mario_info_label.text = MARIO_INFO_FORMAT % [
 				mario.action_name,
 				mario.health_wedges,
-				mario.invicibility_time,
+				mario.invincibility_time,
 				rad_to_deg(mario.face_angle)]
 
 
