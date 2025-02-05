@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="LibSM64MarioState" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Represents the current state of a Mario instance in the [code]libsm64[/code] world.
 	</brief_description>
 	<description>
+		[LibSM64MarioState] contains all the essential information about Mario's current state, including his position, movement, health, and various status flags.
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="action" type="int" setter="set_action" getter="get_action" enum="LibSM64.ActionFlags" is_bitfield="true" default="0">
+			The current action state of Mario. This determines his animation and behavior state (e.g., jumping, running, swimming).
 		</member>
 		<member name="face_angle" type="float" setter="set_face_angle" getter="get_face_angle" default="0.0">
+			The angle (in radians) that Mario is facing in the horizontal plane. [code]0.0[/code] points along the negative X axis.
 		</member>
 		<member name="flags" type="int" setter="set_flags" getter="get_flags" enum="LibSM64.MarioFlags" is_bitfield="true" default="0">
+			Various status flags that affect Mario's state and behavior (e.g., cap status, metal state, invincibility).
 		</member>
 		<member name="health" type="int" setter="set_health" getter="get_health" default="0">
+			Mario's current health value. This is a 16 bit value: upper byte is the number of health wedges; the lower byte is the portion of next wedge.
 		</member>
 		<member name="invincibility_time" type="float" setter="set_invincibility_time" getter="get_invincibility_time" default="0.0">
+			The remaining time (in seconds) of Mario's invincibility state.
 		</member>
 		<member name="particle_flags" type="int" setter="set_particle_flags" getter="get_particle_flags" enum="LibSM64.ParticleFlags" is_bitfield="true" default="0">
+			Flags indicating which particles should be spawned around Mario (e.g., dust, bubbles, sparkles).
 		</member>
 		<member name="position" type="Vector3" setter="set_position" getter="get_position" default="Vector3(0, 0, 0)">
+			Mario's current position in 3D global space.
 		</member>
 		<member name="velocity" type="Vector3" setter="set_velocity" getter="get_velocity" default="Vector3(0, 0, 0)">
+			Mario's current velocity vector, indicating both the direction and speed of his movement.
 		</member>
 	</members>
 </class>

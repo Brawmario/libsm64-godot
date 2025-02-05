@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="LibSM64MarioInterpolator" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Handles interpolation between two Mario states for smooth rendering and continuous positional and time data between physics updates.
 	</brief_description>
 	<description>
+		The [LibSM64MarioInterpolator] class provides functionality to interpolate between previous and current Mario states and mesh data. This is particularly useful for achieving smooth rendering when calling [method LibSM64.mario_tick] at apropriate rate of 30 times per second (see [member LibSM64.tick_delta_time]). The interpolator maintains both the current and previous states of Mario's state and mesh data.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -11,23 +13,29 @@
 			<return type="Array" />
 			<param index="0" name="t" type="float" />
 			<description>
+				Interpolates between the previous and current mesh triangle arrays using the given interpolation factor [param t]. Returns an array of interpolated mesh triangles for smooth mesh animation rendering with [ArrayMesh] (see [method ArrayMesh.add_surface_from_arrays]).
 			</description>
 		</method>
 		<method name="interpolate_mario_state" qualifiers="const">
 			<return type="LibSM64MarioState" />
 			<param index="0" name="t" type="float" />
 			<description>
+				Creates an interpolated LibSM64MarioState between the previous and current states using the given interpolation factor [param t]. This includes position, rotation, velocity and time interpolation.
 			</description>
 		</method>
 	</methods>
 	<members>
 		<member name="array_mesh_triangles_current" type="Array" setter="set_array_mesh_triangles_current" getter="get_array_mesh_triangles_current" default="[]">
+			The current frame's mesh triangle data array for rendering Mario with [ArrayMesh] (see [method ArrayMesh.add_surface_from_arrays]).
 		</member>
 		<member name="array_mesh_triangles_previous" type="Array" setter="set_array_mesh_triangles_previous" getter="get_array_mesh_triangles_previous" default="[]">
+			The previous frame's mesh triangle data array for rendering Mario with [ArrayMesh] (see [method ArrayMesh.add_surface_from_arrays]).
 		</member>
 		<member name="mario_state_current" type="LibSM64MarioState" setter="set_mario_state_current" getter="get_mario_state_current">
+			The current frame's Mario state containing position, rotation, and animation data.
 		</member>
 		<member name="mario_state_previous" type="LibSM64MarioState" setter="set_mario_state_previous" getter="get_mario_state_previous">
+			The previous frame's Mario state containing position, rotation, and animation data.
 		</member>
 	</members>
 </class>
