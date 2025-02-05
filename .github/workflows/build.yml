@@ -207,6 +207,8 @@ jobs:
           mv "macOS.zip"           "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.mac.zip"
           mv "LinuxX11.zip"        "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.linux.zip"
           mv "Web.zip"             "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.web.zip"
+          mv "Web(PWA).zip"        "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.web.pwa.zip"
+          mv "Web(nothreads).zip"  "${{ github.event.repository.name }}-demo.${{ env.ref_name }}.web.nothreads.zip"
 
       - name: Copy extra files to addon
         run: |
@@ -233,3 +235,34 @@ jobs:
           files: |
             ${{ env.release_name }}.zip
             ${{ steps.demo_export.outputs.archive_directory }}/*
+
+      - name: Install Butler
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          curl -L -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          7z x butler.zip
+          sudo cp butler /usr/bin
+          sudo chmod +x /usr/bin/butler
+          butler -V
+
+      - name: Butler upload
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          ITCH_USER: brawmario
+          ITCH_GAME: libsm64-godot-demo
+          WINDOWS_ARCHIVE: ${{ steps.demo_export.outputs.archive_directory }}/${{ github.event.repository.name }}-demo.${{ env.ref_name }}.windows.zip
+          MACOS_ARCHIVE: ${{ steps.demo_export.outputs.archive_directory }}/${{ github.event.repository.name }}-demo.${{ env.ref_name }}.mac.zip
+          LINUX_ARCHIVE: ${{ steps.demo_export.outputs.archive_directory }}/${{ github.event.repository.name }}-demo.${{ env.ref_name }}.linux.zip
+          WEB_ARCHIVE: ${{ steps.demo_export.outputs.archive_directory }}/${{ github.event.repository.name }}-demo.${{ env.ref_name }}.web.zip
+        run: |
+          butler push "${{ env.WINDOWS_ARCHIVE }}" ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:windows --userversion ${{ env.ref_name }}
+          butler push "${{ env.MACOS_ARCHIVE }}"   ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:mac     --userversion ${{ env.ref_name }}
+          butler push "${{ env.LINUX_ARCHIVE }}"   ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:linux   --userversion ${{ env.ref_name }}
+          butler push "${{ env.WEB_ARCHIVE }}"     ${{ env.ITCH_USER }}/${{ env.ITCH_GAME }}:web     --userversion ${{ env.ref_name }}
+
+      - name: Deploy to Github Pages
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: ${{ steps.demo_export.outputs.build_directory }}/Web(PWA)
