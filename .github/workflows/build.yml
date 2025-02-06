@@ -141,7 +141,14 @@ jobs:
 
   output-artifacts:
     name: Build the addon, project and export demo
-    needs: [sanitize_ref_name, windows-gdextension, linux-gdextension, macos-gdextension, web-gdextension]
+    needs:
+      [
+        sanitize_ref_name,
+        windows-gdextension,
+        linux-gdextension,
+        macos-gdextension,
+        web-gdextension,
+      ]
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -159,11 +166,11 @@ jobs:
           path: ${{ github.workspace }}/addons/libsm64_godot/extension/bin
           merge-multiple: true
 
-      - name: Install Wine
-        id: wine_install
-        run: |
-          sudo apt update && sudo apt install wine64
-          echo "wine_path=$(which wine64)" >> $GITHUB_OUTPUT
+#     - name: Install Wine
+#       id: wine_install
+#       run: |
+#         sudo apt update && sudo apt install wine64
+#         echo "wine_path=$(which wine64)" >> $GITHUB_OUTPUT
 
       - name: Export demo
         id: demo_export
@@ -174,7 +181,7 @@ jobs:
           relative_project_path: ./
           archive_output: true
           cache: true
-          wine_path: ${{ steps.wine_install.outputs.wine_path }}
+#         wine_path: ${{ steps.wine_install.outputs.wine_path }}
 
       - name: Upload Windows demo
         uses: actions/upload-artifact@v4
