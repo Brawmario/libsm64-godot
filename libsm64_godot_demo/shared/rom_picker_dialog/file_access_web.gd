@@ -88,7 +88,7 @@ func _on_file_progress(args: Array) -> void:
 	var total_bytes: int = args[1]
 	progress.emit(current_bytes, total_bytes)
 
-func _on_file_error(args: Array) -> void:
+func _on_file_error(_args: Array) -> void:
 	error.emit()
 
 const js_source_code = """
