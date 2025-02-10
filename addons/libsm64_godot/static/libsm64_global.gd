@@ -1,6 +1,5 @@
 class_name LibSM64Global
 extends Object
-
 ## A helper class for managing the global state of the [code]libsm64[/code] library.
 ##
 ## Provides functionality to load and initialize the Super Mario 64 ROM file,
@@ -20,10 +19,10 @@ const ROM_BASE64_ENCODED_SHA256 := "4a07a7862d48234293aa2c47f1feb4672671c3ffa825
 
 ## The loaded ROM file.
 ## The ROM file should be loaded using [method load_rom_file] or [method load_rom_from_base64_string] before calling [method init].
-static var rom := PackedByteArray()
+static var rom: PackedByteArray
 
 ## Mario's texture resource. This texture is created when [method init] is called sucessfully. [LibSM64Mario] will automatically use this texture.
-static var mario_texture := ImageTexture.new()
+static var mario_texture: ImageTexture
 
 static var _audio_init_once := false
 
