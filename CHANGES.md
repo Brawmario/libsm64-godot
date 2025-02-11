@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.1] - 2025-02-10
+
+### Changed
+
+- Add `.clang-format`, `.clang-tidy`, and `.editorconfig` files (copied from the Godot Engine project) to project and apply their formating.
+- Improve documentation in `LibSM64Global` and avoid creating default objects explicitly.
+- Improve `LibSM64Mario` documentation and better segment the process functions behaviour in auxiliary functions.
+
 ## [2.4.0] - 2025-02-04
 
 ### Added
