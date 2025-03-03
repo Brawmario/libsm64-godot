@@ -43,14 +43,10 @@ func load_surface_object(node: Node3D) -> void:
 	var rotation := transform.basis.get_rotation_quaternion()
 	var properties := find_surface_properties(node)
 
-	for i in range(0, faces.size(), 3):
-		var v1 := faces[i + 0]
-		var v2 := faces[i + 1]
-		var v3 := faces[i + 2]
-		if properties:
-			libsm64_surface_array.add_triangle_with_properties(v1, v2, v3, properties)
-		else:
-			libsm64_surface_array.add_triangle(v1, v2, v3)
+	if properties:
+		libsm64_surface_array.add_triangles_with_properties(faces, properties)
+	else:
+		libsm64_surface_array.add_triangles(faces)
 
 	var surface_object_id := LibSM64.surface_object_create(position, rotation, libsm64_surface_array)
 

@@ -26,13 +26,12 @@ func load_static_surfaces() -> void:
 			push_error("Faces array empty, skipping node %s" % node_3d.name)
 			continue
 
-		for i in range(0, faces.size(), 3):
-			var v1 := node_3d.global_transform * faces[i + 0]
-			var v2 := node_3d.global_transform * faces[i + 1]
-			var v3 := node_3d.global_transform * faces[i + 2]
-			if properties:
-				libsm64_surface_array.add_triangle_with_properties(v1, v2, v3, properties)
-			else:
-				libsm64_surface_array.add_triangle(v1, v2, v3)
+		for i in range(faces.size()):
+			faces[i] = node_3d.global_transform * faces[i]
+
+		if properties:
+			libsm64_surface_array.add_triangles_with_properties(faces, properties)
+		else:
+			libsm64_surface_array.add_triangles(faces)
 
 	LibSM64.static_surfaces_load(libsm64_surface_array)
