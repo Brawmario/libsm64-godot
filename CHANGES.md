@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Add `LibSM64.MarioAnimID` enum, defining all avalible animations for Mario. `LibSM64.set_mario_animation` now uses this enum.
+
 ### Changed
 
-- Update godot-cpp to latest commit in the 4.3 branch.
+- Update godot-cpp to latest commit in the 4.3 branch. Notably, LTO optimization has been added to the build options (set to auto).
 
 ## [2.4.1] - 2025-02-10
 

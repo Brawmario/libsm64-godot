@@ -199,7 +199,7 @@
 		<method name="set_mario_animation">
 			<return type="void" />
 			<param index="0" name="mario_id" type="int" />
-			<param index="1" name="anim_id" type="int" />
+			<param index="1" name="anim_id" type="int" enum="LibSM64.MarioAnimID" />
 			<description>
 			</description>
 		</method>
@@ -1626,6 +1626,424 @@
 		</constant>
 		<constant name="ACT_RELEASING_BOWSER" value="914" enum="ActionFlags" is_bitfield="true">
 			0x192 | ACT_FLAG_STATIONARY
+		</constant>
+		<constant name="MARIO_ANIM_SLOW_LEDGE_GRAB" value="0" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FALL_OVER_BACKWARDS" value="1" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_BACKWARD_AIR_KB" value="2" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_DYING_ON_BACK" value="3" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_BACKFLIP" value="4" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CLIMB_UP_POLE" value="5" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GRAB_POLE_SHORT" value="6" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GRAB_POLE_SWING_PART1" value="7" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GRAB_POLE_SWING_PART2" value="8" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_HANDSTAND_IDLE" value="9" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_HANDSTAND_JUMP" value="10" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_HANDSTAND" value="11" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_RETURN_FROM_HANDSTAND" value="12" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_IDLE_ON_POLE" value="13" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_A_POSE" value="14" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SKID_ON_GROUND" value="15" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STOP_SKID" value="16" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CROUCH_FROM_FAST_LONGJUMP" value="17" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CROUCH_FROM_SLOW_LONGJUMP" value="18" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FAST_LONGJUMP" value="19" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLOW_LONGJUMP" value="20" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_AIRBORNE_ON_STOMACH" value="21" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WALK_WITH_LIGHT_OBJ" value="22" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_RUN_WITH_LIGHT_OBJ" value="23" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLOW_WALK_WITH_LIGHT_OBJ" value="24" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SHIVERING_WARMING_HAND" value="25" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SHIVERING_RETURN_TO_IDLE" value="26" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SHIVERING" value="27" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CLIMB_DOWN_LEDGE" value="28" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CREDITS_WAVING" value="29" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CREDITS_LOOK_UP" value="30" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CREDITS_RETURN_FROM_LOOK_UP" value="31" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CREDITS_RAISE_HAND" value="32" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CREDITS_LOWER_HAND" value="33" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CREDITS_TAKE_OFF_CAP" value="34" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CREDITS_START_WALK_LOOK_UP" value="35" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CREDITS_LOOK_BACK_THEN_RUN" value="36" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FINAL_BOWSER_RAISE_HAND_SPIN" value="37" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FINAL_BOWSER_WING_CAP_TAKE_OFF" value="38" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CREDITS_PEACE_SIGN" value="39" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STAND_UP_FROM_LAVA_BOOST" value="40" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FIRE_LAVA_BURN" value="41" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WING_CAP_FLY" value="42" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_HANG_ON_OWL" value="43" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_LAND_ON_STOMACH" value="44" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_AIR_FORWARD_KB" value="45" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_DYING_ON_STOMACH" value="46" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SUFFOCATING" value="47" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_COUGHING" value="48" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_THROW_CATCH_KEY" value="49" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_DYING_FALL_OVER" value="50" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_IDLE_ON_LEDGE" value="51" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FAST_LEDGE_GRAB" value="52" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_HANG_ON_CEILING" value="53" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_PUT_CAP_ON" value="54" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_TAKE_CAP_OFF_THEN_ON" value="55" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_QUICKLY_PUT_CAP_ON" value="56" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_HEAD_STUCK_IN_GROUND" value="57" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GROUND_POUND_LANDING" value="58" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_TRIPLE_JUMP_GROUND_POUND" value="59" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_GROUND_POUND" value="60" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GROUND_POUND" value="61" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_BOTTOM_STUCK_IN_GROUND" value="62" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_IDLE_WITH_LIGHT_OBJ" value="63" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_JUMP_LAND_WITH_LIGHT_OBJ" value="64" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_JUMP_WITH_LIGHT_OBJ" value="65" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FALL_LAND_WITH_LIGHT_OBJ" value="66" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FALL_WITH_LIGHT_OBJ" value="67" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FALL_FROM_SLIDING_WITH_LIGHT_OBJ" value="68" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLIDING_ON_BOTTOM_WITH_LIGHT_OBJ" value="69" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STAND_UP_FROM_SLIDING_WITH_LIGHT_OBJ" value="70" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_RIDING_SHELL" value="71" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WALKING" value="72" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FORWARD_FLIP" value="73" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_JUMP_RIDING_SHELL" value="74" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_LAND_FROM_DOUBLE_JUMP" value="75" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_DOUBLE_JUMP_FALL" value="76" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SINGLE_JUMP" value="77" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_LAND_FROM_SINGLE_JUMP" value="78" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_AIR_KICK" value="79" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_DOUBLE_JUMP_RISE" value="80" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_FORWARD_SPINNING" value="81" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_THROW_LIGHT_OBJECT" value="82" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FALL_FROM_SLIDE_KICK" value="83" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_BEND_KNESS_RIDING_SHELL" value="84" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_LEGS_STUCK_IN_GROUND" value="85" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GENERAL_FALL" value="86" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GENERAL_LAND" value="87" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_BEING_GRABBED" value="88" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GRAB_HEAVY_OBJECT" value="89" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLOW_LAND_FROM_DIVE" value="90" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FLY_FROM_CANNON" value="91" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_MOVE_ON_WIRE_NET_RIGHT" value="92" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_MOVE_ON_WIRE_NET_LEFT" value="93" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_MISSING_CAP" value="94" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_PULL_DOOR_WALK_IN" value="95" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_PUSH_DOOR_WALK_IN" value="96" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_UNLOCK_DOOR" value="97" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_REACH_POCKET" value="98" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_REACH_POCKET" value="99" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STOP_REACH_POCKET" value="100" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GROUND_THROW" value="101" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GROUND_KICK" value="102" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FIRST_PUNCH" value="103" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SECOND_PUNCH" value="104" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FIRST_PUNCH_FAST" value="105" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SECOND_PUNCH_FAST" value="106" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_PICK_UP_LIGHT_OBJ" value="107" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_PUSHING" value="108" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_RIDING_SHELL" value="109" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_PLACE_LIGHT_OBJ" value="110" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FORWARD_SPINNING" value="111" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_BACKWARD_SPINNING" value="112" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_BREAKDANCE" value="113" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_RUNNING" value="114" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_RUNNING_UNUSED" value="115" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SOFT_BACK_KB" value="116" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SOFT_FRONT_KB" value="117" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_DYING_IN_QUICKSAND" value="118" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_IDLE_IN_QUICKSAND" value="119" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_MOVE_IN_QUICKSAND" value="120" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_ELECTROCUTION" value="121" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SHOCKED" value="122" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_BACKWARD_KB" value="123" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FORWARD_KB" value="124" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_IDLE_HEAVY_OBJ" value="125" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STAND_AGAINST_WALL" value="126" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SIDESTEP_LEFT" value="127" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SIDESTEP_RIGHT" value="128" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_SLEEP_IDLE" value="129" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_SLEEP_SCRATCH" value="130" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_SLEEP_YAWN" value="131" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_SLEEP_SITTING" value="132" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLEEP_IDLE" value="133" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLEEP_START_LYING" value="134" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLEEP_LYING" value="135" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_DIVE" value="136" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLIDE_DIVE" value="137" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GROUND_BONK" value="138" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STOP_SLIDE_LIGHT_OBJ" value="139" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLIDE_KICK" value="140" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CROUCH_FROM_SLIDE_KICK" value="141" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLIDE_MOTIONLESS" value="142" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STOP_SLIDE" value="143" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FALL_FROM_SLIDE" value="144" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLIDE" value="145" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_TIPTOE" value="146" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_TWIRL_LAND" value="147" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_TWIRL" value="148" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_TWIRL" value="149" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STOP_CROUCHING" value="150" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_CROUCHING" value="151" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CROUCHING" value="152" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_CRAWLING" value="153" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STOP_CRAWLING" value="154" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_CRAWLING" value="155" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SUMMON_STAR" value="156" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_RETURN_STAR_APPROACH_DOOR" value="157" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_BACKWARDS_WATER_KB" value="158" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SWIM_WITH_OBJ_PART1" value="159" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SWIM_WITH_OBJ_PART2" value="160" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FLUTTERKICK_WITH_OBJ" value="161" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_ACTION_END_WITH_OBJ" value="162" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STOP_GRAB_OBJ_WATER" value="163" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_IDLE_WITH_OBJ" value="164" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_DROWNING_PART1" value="165" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_DROWNING_PART2" value="166" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_DYING" value="167" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_FORWARD_KB" value="168" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FALL_FROM_WATER" value="169" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SWIM_PART1" value="170" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SWIM_PART2" value="171" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FLUTTERKICK" value="172" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_ACTION_END" value="173" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_PICK_UP_OBJ" value="174" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_GRAB_OBJ_PART2" value="175" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_GRAB_OBJ_PART1" value="176" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_THROW_OBJ" value="177" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_IDLE" value="178" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WATER_STAR_DANCE" value="179" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_RETURN_FROM_WATER_STAR_DANCE" value="180" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_GRAB_BOWSER" value="181" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SWINGING_BOWSER" value="182" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_RELEASE_BOWSER" value="183" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_HOLDING_BOWSER" value="184" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_HEAVY_THROW" value="185" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WALK_PANTING" value="186" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WALK_WITH_HEAVY_OBJ" value="187" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_TURNING_PART1" value="188" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_TURNING_PART2" value="189" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLIDEFLIP_LAND" value="190" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLIDEFLIP" value="191" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_TRIPLE_JUMP_LAND" value="192" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_TRIPLE_JUMP" value="193" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FIRST_PERSON" value="194" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_IDLE_HEAD_LEFT" value="195" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_IDLE_HEAD_RIGHT" value="196" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_IDLE_HEAD_CENTER" value="197" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_HANDSTAND_LEFT" value="198" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_HANDSTAND_RIGHT" value="199" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WAKE_FROM_SLEEP" value="200" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_WAKE_FROM_LYING" value="201" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_TIPTOE" value="202" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_SLIDEJUMP" value="203" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_START_WALLKICK" value="204" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_STAR_DANCE" value="205" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_RETURN_FROM_STAR_DANCE" value="206" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_FORWARD_SPINNING_FLIP" value="207" enum="MarioAnimID">
+		</constant>
+		<constant name="MARIO_ANIM_TRIPLE_JUMP_FLY" value="208" enum="MarioAnimID">
 		</constant>
 		<constant name="SEQ_PLAYER_LEVEL" value="0" enum="SeqPlayer">
 			Level background music
