@@ -2,7 +2,7 @@
 
 #include <godot_cpp/core/class_db.hpp>
 
-LibSM64MarioState::LibSM64MarioState(const SM64MarioState &state, real_t scale_factor) :
+LibSM64MarioState::LibSM64MarioState(const SM64MarioState &state, godot::real_t scale_factor) :
 		position(-state.position[2] / scale_factor, state.position[1] / scale_factor, state.position[0] / scale_factor),
 		velocity(-state.velocity[2] / (scale_factor * LibSM64::tick_delta_time), state.velocity[1] / (scale_factor * LibSM64::tick_delta_time), state.velocity[0] / (scale_factor * LibSM64::tick_delta_time)),
 		face_angle(state.faceAngle),

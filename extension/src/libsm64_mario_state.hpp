@@ -12,7 +12,7 @@ class LibSM64MarioState : public godot::RefCounted {
 
 public:
 	LibSM64MarioState() = default;
-	LibSM64MarioState(const struct SM64MarioState &state, real_t scale_factor);
+	LibSM64MarioState(const struct SM64MarioState &state, godot::real_t scale_factor);
 
 	void set_position(const godot::Vector3 &p_value);
 	godot::Vector3 get_position() const;

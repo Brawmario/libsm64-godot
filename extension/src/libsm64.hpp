@@ -1385,8 +1385,8 @@ public:
 	#define INT_SUBTYPE_BIG_KNOCKBACK 0x00000008 /* Used by Bowser, sets Mario's forward velocity to 40 on hit */
 	// clang-format on
 
-	void set_scale_factor(real_t p_value);
-	real_t get_scale_factor() const;
+	void set_scale_factor(godot::real_t p_value);
+	godot::real_t get_scale_factor() const;
 
 	double get_tick_delta_time() const;
 
@@ -1443,9 +1443,9 @@ public:
 	// extern SM64_LIB_FN void sm64_set_mario_invincibility(int32_t marioId, int16_t timer);
 	void set_mario_invincibility(int32_t p_mario_id, double p_time);
 	// extern SM64_LIB_FN void sm64_set_mario_water_level(int32_t marioId, signed int level);
-	void set_mario_water_level(int32_t p_mario_id, real_t p_level);
+	void set_mario_water_level(int32_t p_mario_id, godot::real_t p_level);
 	// extern SM64_LIB_FN void sm64_set_mario_gas_level(int32_t marioId, signed int level);
-	void set_mario_gas_level(int32_t p_mario_id, real_t p_level);
+	void set_mario_gas_level(int32_t p_mario_id, godot::real_t p_level);
 	// extern SM64_LIB_FN void sm64_set_mario_health(int32_t marioId, uint16_t health);
 	void set_mario_health(int32_t p_mario_id, uint16_t p_health);
 	// extern SM64_LIB_FN void sm64_mario_take_damage(int32_t marioId, uint32_t damage, uint32_t subtype, float x, float y, float z);
@@ -1459,7 +1459,7 @@ public:
 	// extern SM64_LIB_FN void sm64_mario_extend_cap(int32_t marioId, uint16_t capTime);
 	void mario_extend_cap(int32_t p_mario_id, double p_cap_time);
 	// extern SM64_LIB_FN bool sm64_mario_attack(int32_t marioId, float x, float y, float z, float hitboxHeight);
-	void mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position, real_t p_hitbox_height);
+	void mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position, godot::real_t p_hitbox_height);
 
 	// extern SM64_LIB_FN uint32_t sm64_surface_object_create( const struct SM64SurfaceObject *surfaceObject );
 	int surface_object_create(const godot::Vector3 &p_position, const godot::Quaternion &p_rotation, const godot::Ref<LibSM64SurfaceArray> &p_surfaces);
@@ -1498,7 +1498,7 @@ protected:
 	static void _bind_methods();
 
 private:
-	real_t scale_factor;
+	godot::real_t scale_factor;
 
 	godot::Callable debug_print_function;
 	godot::Callable play_sound_function;

@@ -14,13 +14,13 @@ constexpr char SCALE_FACTOR_SETTING_NAME[] = "libsm64/scale_factor";
 // Winding order: counter-clockwise (SM64) -> clockwise (Godot)
 // SM64 vector(x, y, z) -> Godot vector(-z, y, x)
 
-static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float *p_arr_out, real_t p_scale_factor) {
+static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float *p_arr_out, godot::real_t p_scale_factor) {
 	p_arr_out[0] = p_vec.z * p_scale_factor;
 	p_arr_out[1] = p_vec.y * p_scale_factor;
 	p_arr_out[2] = -p_vec.x * p_scale_factor;
 }
 
-static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float &p_x_out, float &p_y_out, float &p_z_out, real_t p_scale_factor) {
+static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float &p_x_out, float &p_y_out, float &p_z_out, godot::real_t p_scale_factor) {
 	p_x_out = p_vec.z * p_scale_factor;
 	p_y_out = p_vec.y * p_scale_factor;
 	p_z_out = -p_vec.x * p_scale_factor;
@@ -46,7 +46,7 @@ static _FORCE_INLINE_ godot::Vector3 sm64_3d_to_godot(const float *p_arr) {
 	return godot::Vector3(-p_arr[2], p_arr[1], p_arr[0]);
 }
 
-static _FORCE_INLINE_ godot::Vector3 sm64_3d_to_godot(const float *p_arr, real_t scale_factor) {
+static _FORCE_INLINE_ godot::Vector3 sm64_3d_to_godot(const float *p_arr, godot::real_t scale_factor) {
 	return godot::Vector3(-p_arr[2] / scale_factor, p_arr[1] / scale_factor, p_arr[0] / scale_factor);
 }
 
@@ -61,7 +61,7 @@ static _FORCE_INLINE_ void sm64_3d_to_godot(const float *sm64_vec_arr, godot::Ve
 	}
 }
 
-static _FORCE_INLINE_ void sm64_3d_to_godot(const float *sm64_vec_arr, godot::Vector3 *godot_vec_arr, int vertex_count, real_t scale_factor) {
+static _FORCE_INLINE_ void sm64_3d_to_godot(const float *sm64_vec_arr, godot::Vector3 *godot_vec_arr, int vertex_count, godot::real_t scale_factor) {
 	for (int i = 0; i < vertex_count; i += 3) {
 		godot::Vector3 *godot_vec = &godot_vec_arr[i];
 		const float *sm64_vec = &sm64_vec_arr[3 * i];
@@ -177,7 +177,7 @@ LibSM64::LibSM64() {
 	ERR_FAIL_COND(singleton != nullptr);
 	singleton = this;
 
-	scale_factor = get_project_setting<real_t>(SCALE_FACTOR_SETTING_NAME, 100.0);
+	scale_factor = get_project_setting<godot::real_t>(SCALE_FACTOR_SETTING_NAME, 100.0);
 }
 
 LibSM64::~LibSM64() {
@@ -198,11 +198,11 @@ void LibSM64::register_project_settings() {
 	register_project_setting(SCALE_FACTOR_SETTING_NAME, godot::Variant::FLOAT, 100.0);
 }
 
-void LibSM64::set_scale_factor(real_t p_value) {
+void LibSM64::set_scale_factor(godot::real_t p_value) {
 	scale_factor = p_value;
 }
 
-real_t LibSM64::get_scale_factor() const {
+godot::real_t LibSM64::get_scale_factor() const {
 	return scale_factor;
 }
 
@@ -259,8 +259,8 @@ godot::PackedVector2Array LibSM64::audio_tick(int p_queued_frames, int p_desired
 	for (int i = 0; i < frame_count; i++) {
 		auto &frame = frames_ptrw[i];
 		auto *audio_buffer_frame_pair = &audio_buffer[2 * i];
-		frame.x = static_cast<real_t>(audio_buffer_frame_pair[0]) / 32767.0;
-		frame.y = static_cast<real_t>(audio_buffer_frame_pair[1]) / 32767.0;
+		frame.x = static_cast<godot::real_t>(audio_buffer_frame_pair[0]) / 32767.0;
+		frame.y = static_cast<godot::real_t>(audio_buffer_frame_pair[1]) / 32767.0;
 	}
 
 	return frames;
@@ -401,13 +401,13 @@ void LibSM64::set_mario_invincibility(int32_t p_mario_id, double p_time) {
 	sm64_set_mario_invincibility(p_mario_id, static_cast<int16_t>(p_time / tick_delta_time));
 }
 
-void LibSM64::set_mario_water_level(int32_t p_mario_id, real_t p_level) {
+void LibSM64::set_mario_water_level(int32_t p_mario_id, godot::real_t p_level) {
 	ERR_FAIL_COND(p_mario_id < 0);
 
 	sm64_set_mario_water_level(p_mario_id, static_cast<signed int>(p_level * scale_factor));
 }
 
-void LibSM64::set_mario_gas_level(int32_t p_mario_id, real_t p_level) {
+void LibSM64::set_mario_gas_level(int32_t p_mario_id, godot::real_t p_level) {
 	ERR_FAIL_COND(p_mario_id < 0);
 
 	sm64_set_mario_gas_level(p_mario_id, static_cast<signed int>(p_level * scale_factor));
@@ -451,7 +451,7 @@ void LibSM64::mario_extend_cap(int32_t p_mario_id, double p_cap_time) {
 	sm64_mario_extend_cap(p_mario_id, static_cast<uint16_t>(p_cap_time / tick_delta_time));
 }
 
-void LibSM64::mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position, real_t p_hitbox_height) {
+void LibSM64::mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position, godot::real_t p_hitbox_height) {
 	ERR_FAIL_COND(p_mario_id < 0);
 
 	float x, y, z;
