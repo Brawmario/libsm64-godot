@@ -27,7 +27,7 @@ static _FORCE_INLINE_ void godot_to_sm64(const godot::Vector3 &p_vec, float &p_x
 }
 
 static _FORCE_INLINE_ void godot_to_sm64_mario_angle(const godot::Quaternion &p_rotation, float &p_x_out, float &p_y_out, float &p_z_out) {
-	godot::Vector3 euler_rot = godot::Basis(p_rotation).get_euler(godot::EULER_ORDER_YZX);
+	godot::Vector3 euler_rot = p_rotation.get_euler(godot::EULER_ORDER_YZX);
 
 	p_x_out = euler_rot.z;
 	p_y_out = euler_rot.y;
@@ -35,7 +35,7 @@ static _FORCE_INLINE_ void godot_to_sm64_mario_angle(const godot::Quaternion &p_
 }
 
 static _FORCE_INLINE_ void godot_to_sm64_object_rotation(const godot::Quaternion &p_rotation, float *p_arr_out) {
-	godot::Vector3 euler_rot = godot::Basis(p_rotation).get_euler(godot::EULER_ORDER_YZX);
+	godot::Vector3 euler_rot = p_rotation.get_euler(godot::EULER_ORDER_YZX);
 
 	p_arr_out[0] = -godot::Math::rad_to_deg(euler_rot.z);
 	p_arr_out[1] = -godot::Math::rad_to_deg(euler_rot.y);
