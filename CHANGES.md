@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Fixed
+
+- Use `render_priority` in Mario's materials to make sure that the textures render over the vertices' colors. Not using this property was breaking Mario's texture rendering in Godot 4.4 ([#32](https://github.com/Brawmario/libsm64-godot/issues/32)).
+
 ## [2.5.0] - 2025-03-10
 
 ### Added

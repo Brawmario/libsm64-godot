@@ -6,6 +6,7 @@ metallic = 1.0
 roughness = 0.1
 
 [resource]
+render_priority = 1
 next_pass = SubResource("StandardMaterial3D_eylyr")
 transparency = 2
 alpha_scissor_threshold = 0.5
