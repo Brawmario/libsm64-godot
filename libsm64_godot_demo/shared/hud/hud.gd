@@ -5,8 +5,7 @@ const MARIO_INFO_FORMAT := """\
 Action: %s
 Health wedges: %d
 Invicibility Time: %.2f
-Face angle: %dº
-"""
+Face angle: %dº"""
 
 var mario: LibSM64Mario
 

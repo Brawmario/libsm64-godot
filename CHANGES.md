@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Use `render_priority` in Mario's materials to make sure that the textures render over the vertices' colors. Not using this property was breaking Mario's texture rendering in Godot 4.4 ([#32](https://github.com/Brawmario/libsm64-godot/issues/32)).
+- Remove the final newline in the `MARIO_INFO_FORMAT` format constant in `hud.gd`. This was causing an extra blank line in the HUD in Godot 4.4.
 
 ## [2.5.0] - 2025-03-10
 
