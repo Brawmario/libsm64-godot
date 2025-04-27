@@ -41,7 +41,7 @@ This addon has 2 interfaces: A lower level interface that exposes the `libsm64` 
 
 ### Lower level interface
 
-The `LibSM64` singleton exposes the same constants and functions as the `libsm64` C API. All of the inputs and outputs of `LibSM64` are internally converted back and forth between Godot's and `libsm64`'s types, acconting for the differences in the coordinate systems, using [member scale_factor] to convert between Godot's metric system and `libsm64`'s internal units, and converting time between Godot's seconds and `libsm64`'s frames (assuming `libsm64` is ticked at a frame rate of 30 frames per second, see `LibSM64.tick_delta_time`). The functions and constants exposed in `LibSM64` are meant to be as one-to-one as possible with `libsm64`'s C API.
+The `LibSM64` singleton exposes the same constants and functions as the `libsm64` C API. All of the inputs and outputs of `LibSM64` are internally converted back and forth between Godot's and `libsm64`'s types, acconting for the differences in the coordinate systems, using `LibSM64.scale_factor` to convert between Godot's metric system and `libsm64`'s internal units, and converting time between Godot's seconds and `libsm64`'s frames (assuming `libsm64` is ticked at a frame rate of 30 frames per second, see `LibSM64.tick_delta_time`). The functions and constants exposed in `LibSM64` are meant to be as one-to-one as possible with `libsm64`'s C API.
 
 ### Higher level interface
 
@@ -50,7 +50,7 @@ The project in this repository acts as a demo and example of how to use the high
 This add-on consists of two main components:
 
 - `LibSM64Global`: Static class that exposes the `init()` and `terminate()` functions of the `libsm64` library. Also implements a `load_rom_file()` to load the ROM file with SHA-256 checksum verification.
-- `LibSM64Mario`: Extends Node3D; can have multiple the scene.
+- `LibSM64Mario`: Extends Node3D; can have multiple in the scene.
 
 It also adds two helper nodes:
 
