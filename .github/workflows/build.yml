@@ -166,22 +166,24 @@ jobs:
           path: ${{ github.workspace }}/addons/libsm64_godot/extension/bin
           merge-multiple: true
 
-#     - name: Install Wine
-#       id: wine_install
-#       run: |
-#         sudo apt update && sudo apt install wine64
-#         echo "wine_path=$(which wine64)" >> $GITHUB_OUTPUT
+      - name: Install wine
+        id: wine_install
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
+          sudo apt install -y wine64 wine32
+          echo "WINE_PATH=$(which wine)" >> $GITHUB_OUTPUT
 
       - name: Export demo
         id: demo_export
-        uses: firebelley/godot-export@v6.0.0
+        uses: firebelley/godot-export@v7.0.0
         with:
           godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
           relative_project_path: ./
           archive_output: true
           cache: true
-#         wine_path: ${{ steps.wine_install.outputs.wine_path }}
+          wine_path: ${{ steps.wine_install.outputs.wine_path }}
 
       - name: Upload Windows demo
         uses: actions/upload-artifact@v4
