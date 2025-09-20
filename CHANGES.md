@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+- Update godot-cpp to the latest commit in the 4.3 branch.
+
 ## [2.5.1] - 2025-03-18
 
 ### Fixed
@@ -20,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update godot-cpp to latest commit in the 4.3 branch. Notably, LTO optimization has been added to the build options (set to auto).
+- Update godot-cpp to the latest commit in the 4.3 branch. Notably, LTO optimization has been added to the build options (set to auto).
 
 ## [2.4.1] - 2025-02-10
 
