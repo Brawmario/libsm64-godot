@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Breaking Changes
+
+- Removed `LibSM64Mario.set_forward_velocity()` function in favor of a `LibSM64Mario.forward_velocity` property. Replace all calls to this function with a statement to set the new property.
+
 ### Added
 
 - Added `forward_velocity`, `anim_id`, and `anim_frame` properties to `LibSM64MarioState`.
+- Added `forward_velocity`, `anim_id`, and `anim_frame` properties to `LibSM64Mario`.
+
+### Removed
+
+- Removed `LibSM64Mario.set_forward_velocity()` function (replaced by `LibSM64Mario.forward_velocity` property).
 
 ### Changed
 

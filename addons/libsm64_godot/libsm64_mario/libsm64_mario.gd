@@ -75,6 +75,28 @@ var action_name: StringName:
 	get:
 		return _to_action_name(_action)
 
+var _anim_id := LibSM64.MarioAnimID.MARIO_ANIM_SLOW_LEDGE_GRAB
+## The ID of the current animation being played for Mario. This corresponds to specific animations defined in [enum LibSM64.MarioAnimID].
+var anim_id: LibSM64.MarioAnimID:
+	get:
+		return _anim_id
+	set(value):
+		if _id < 0:
+			return
+		LibSM64.set_mario_animation(_id, value)
+		_anim_id = value
+
+var _anim_frame := 0
+## The current frame of Mario's animation. This value is used to track the progress of the current animation sequence.
+var anim_frame: int:
+	get:
+		return _anim_frame
+	set(value):
+		if _id < 0:
+			return
+		LibSM64.set_mario_anim_frame(_id, value)
+		_anim_frame = value
+
 var _flags := 0 as LibSM64.MarioFlags:
 	set(value):
 		if value != _flags:
@@ -113,6 +135,20 @@ var velocity: Vector3:
 		if _mario_interpolator.mario_state_current:
 			_mario_interpolator.mario_state_current.velocity = _velocity
 			_mario_interpolator.mario_state_previous.velocity = _velocity
+
+var _forward_velocity := 0.0
+## Mario's current forward velocity (in meters per second). This value indicates how fast Mario is moving in the direction he is facing.
+var forward_velocity: float:
+	get:
+		return _forward_velocity
+	set(value):
+		if _id < 0:
+			return
+		LibSM64.set_mario_forward_velocity(_id, value)
+		_forward_velocity = value
+		if _mario_interpolator.mario_state_current:
+			_mario_interpolator.mario_state_current.forward_velocity = _forward_velocity
+			_mario_interpolator.mario_state_previous.forward_velocity = _forward_velocity
 
 var _face_angle := 0.0:
 	set(value):
@@ -240,6 +276,7 @@ func _update_lerped_members_from_mario_state(lerp_t: float) -> void:
 
 	global_position = mario_state.position
 	_velocity = mario_state.velocity
+	_forward_velocity = mario_state.forward_velocity
 	_face_angle = mario_state.face_angle
 	_invincibility_time = mario_state.invincibility_time
 
@@ -281,10 +318,12 @@ func _physics_process(delta):
 
 
 func _update_non_lerped_members_from_mario_state() -> void:
-	_health = _mario_interpolator.mario_state_current.health;
-	_action = _mario_interpolator.mario_state_current.action;
-	_flags = _mario_interpolator.mario_state_current.flags;
-	_particle_flags = _mario_interpolator.mario_state_current.particle_flags;
+	_health = _mario_interpolator.mario_state_current.health
+	_action = _mario_interpolator.mario_state_current.action
+	_anim_id = _mario_interpolator.mario_state_current.anim_id
+	_anim_frame = _mario_interpolator.mario_state_current.anim_frame
+	_flags = _mario_interpolator.mario_state_current.flags
+	_particle_flags = _mario_interpolator.mario_state_current.particle_flags
 
 
 ## Create Mario (requires initializing [code]libsm64[/code] via the [method LibSM64Global.init] method).
@@ -342,13 +381,6 @@ func set_angle(to_global_rotation: Quaternion) -> void:
 	_mario_interpolator.mario_state_current.face_angle = _face_angle
 	_mario_interpolator.mario_state_previous.face_angle = _face_angle
 	reset_interpolation()
-
-
-## Set Mario's forward velocity in the [code]libsm64[/code] world.
-func set_forward_velocity(velocity: float) -> void:
-	if _id < 0:
-		return
-	LibSM64.set_mario_forward_velocity(_id, velocity)
 
 
 ## Make Mario take damage in amount of health wedges from a source position.

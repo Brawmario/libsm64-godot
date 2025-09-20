@@ -13,10 +13,11 @@ layout_mode = 2
 [node name="MarioInfoLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Lives: %d
+text = "Action: %s
 Health wedges: %d
 Invicibility Time: %.2f
-Face angle: %dº"
+Face angle: %dº
+Forward velocity: %.2f"
 
 [node name="ReturnButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2

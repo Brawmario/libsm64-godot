@@ -5,7 +5,8 @@ const MARIO_INFO_FORMAT := """\
 Action: %s
 Health wedges: %d
 Invicibility Time: %.2f
-Face angle: %dº"""
+Face angle: %dº
+Forward velocity: %.2f"""
 
 var mario: LibSM64Mario
 
@@ -18,7 +19,8 @@ func _process(_delta: float) -> void:
 				mario.action_name,
 				mario.health_wedges,
 				mario.invincibility_time,
-				rad_to_deg(mario.face_angle)]
+				rad_to_deg(mario.face_angle),
+				mario.forward_velocity]
 
 
 func _on_return_button_pressed() -> void:
