@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Added `forward_velocity`, `anim_id`, and `anim_frame` properties to `LibSM64MarioState`.
+
 ### Changed
 
 - Update `godot-cpp` to the latest commit in the 4.3 branch.
-- Update `libsm64` to latest commit. This latest commit exposes `forwardVelocity`, `animID`, and animFrame in `outState`.
+- Update `libsm64` to latest commit. This latest commit exposes `forwardVelocity`, `animID`, and `animFrame` in `outState`.
 
 ## [2.5.1] - 2025-03-18
 

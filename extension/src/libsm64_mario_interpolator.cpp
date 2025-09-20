@@ -80,10 +80,13 @@ godot::Ref<LibSM64MarioState> LibSM64MarioInterpolator::interpolate_mario_state(
 
 	ret->position = mario_state_previous->position.lerp(mario_state_current->position, p_t);
 	ret->velocity = mario_state_previous->velocity.lerp(mario_state_current->velocity, p_t);
+	ret->forward_velocity = godot::Math::lerp(mario_state_previous->forward_velocity, mario_state_current->forward_velocity, static_cast<float>(p_t));
 	ret->face_angle = godot::Math::lerp_angle(mario_state_previous->face_angle, mario_state_current->face_angle, static_cast<float>(p_t));
 
 	ret->health = mario_state_current->health;
 	ret->action = mario_state_current->action;
+	ret->anim_id = mario_state_current->anim_id;
+	ret->anim_frame = mario_state_current->anim_frame;
 	ret->flags = mario_state_current->flags;
 	ret->particle_flags = mario_state_current->particle_flags;
 

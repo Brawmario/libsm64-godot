@@ -12,11 +12,20 @@
 		<member name="action" type="int" setter="set_action" getter="get_action" enum="LibSM64.ActionFlags" is_bitfield="true" default="0">
 			The current action state of Mario. This determines his animation and behavior state (e.g., jumping, running, swimming).
 		</member>
+		<member name="anim_frame" type="int" setter="set_anim_frame" getter="get_anim_frame" default="0">
+			The current frame of Mario's animation. This value is used to track the progress of the current animation sequence.
+		</member>
+		<member name="anim_id" type="int" setter="set_anim_id" getter="get_anim_id" enum="LibSM64.MarioAnimID" default="0">
+			The ID of the current animation being played for Mario. This corresponds to specific animations defined in [enum LibSM64.MarioAnimID].
+		</member>
 		<member name="face_angle" type="float" setter="set_face_angle" getter="get_face_angle" default="0.0">
 			The angle (in radians) that Mario is facing in the horizontal plane. [code]0.0[/code] points along the negative X axis.
 		</member>
 		<member name="flags" type="int" setter="set_flags" getter="get_flags" enum="LibSM64.MarioFlags" is_bitfield="true" default="0">
 			Various status flags that affect Mario's state and behavior (e.g., cap status, metal state, invincibility).
+		</member>
+		<member name="forward_velocity" type="float" setter="set_forward_velocity" getter="get_forward_velocity" default="0.0">
+			Mario's current forward velocity (in meters per second). This value indicates how fast Mario is moving in the direction he is facing.
 		</member>
 		<member name="health" type="int" setter="set_health" getter="get_health" default="0">
 			Mario's current health value. This is a 16 bit value: upper byte is the number of health wedges; the lower byte is the portion of next wedge.
