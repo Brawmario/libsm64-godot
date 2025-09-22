@@ -347,10 +347,10 @@ func create() -> void:
 
 	reset_interpolation()
 
-	_default_material.albedo_texture = LibSM64Global.mario_texture
-	_wing_material.albedo_texture = LibSM64Global.mario_texture
-	_metal_material.albedo_texture = LibSM64Global.mario_texture
-	_vanish_material.albedo_texture = LibSM64Global.mario_texture
+	_default_material.next_pass.albedo_texture = LibSM64Global.mario_texture
+	_wing_material.next_pass.albedo_texture = LibSM64Global.mario_texture
+	_metal_material.next_pass.albedo_texture = LibSM64Global.mario_texture
+	_vanish_material.next_pass.albedo_texture = LibSM64Global.mario_texture
 
 
 ## Delete mario inside the [code]libsm64[/code] world.
