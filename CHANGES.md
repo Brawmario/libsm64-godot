@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Breaking Changes
+
+- Removed `LibSM64.register_debug_print_function()` and `LibSM64.register_play_sound_function()` methods. They were replaced with equivalent `LibSM64.debug_print_function` and `LibSM64.play_sound_function` properties.
+
 ### Changed
 
 - CI: compile the GNU/Linux GDExtension binaries in Ubuntu 22.04. This ensures that the release binaries works on glibc 2.35+ systems.

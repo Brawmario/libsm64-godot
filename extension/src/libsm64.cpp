@@ -210,7 +210,7 @@ double LibSM64::get_tick_delta_time() const {
 	return tick_delta_time;
 }
 
-void LibSM64::register_debug_print_function(const godot::Callable &p_callback) {
+void LibSM64::set_debug_print_function(const godot::Callable &p_callback) {
 	debug_print_function = p_callback;
 	sm64_register_debug_print_function(p_callback.is_null() ? nullptr : SM64DebugPrintFunction);
 }
@@ -219,7 +219,7 @@ const godot::Callable &LibSM64::get_debug_print_function() const {
 	return debug_print_function;
 }
 
-void LibSM64::register_play_sound_function(const godot::Callable &p_callback) {
+void LibSM64::set_play_sound_function(const godot::Callable &p_callback) {
 	play_sound_function = p_callback;
 	sm64_register_play_sound_function(p_callback.is_null() ? nullptr : SM64PlaySoundFunction);
 }
@@ -531,8 +531,13 @@ void LibSM64::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("get_tick_delta_time"), &LibSM64::get_tick_delta_time);
 	ADD_PROPERTY(godot::PropertyInfo(godot::Variant::FLOAT, "tick_delta_time"), "", "get_tick_delta_time");
 
-	godot::ClassDB::bind_method(godot::D_METHOD("register_debug_print_function", "callback"), &LibSM64::register_debug_print_function);
-	godot::ClassDB::bind_method(godot::D_METHOD("register_play_sound_function", "callback"), &LibSM64::register_play_sound_function);
+	godot::ClassDB::bind_method(godot::D_METHOD("set_debug_print_function", "value"), &LibSM64::set_debug_print_function);
+	godot::ClassDB::bind_method(godot::D_METHOD("get_debug_print_function"), &LibSM64::get_debug_print_function);
+	ADD_PROPERTY(godot::PropertyInfo(godot::Variant::CALLABLE, "debug_print_function"), "set_debug_print_function", "get_debug_print_function");
+
+	godot::ClassDB::bind_method(godot::D_METHOD("set_play_sound_function", "value"), &LibSM64::set_play_sound_function);
+	godot::ClassDB::bind_method(godot::D_METHOD("get_play_sound_function"), &LibSM64::get_play_sound_function);
+	ADD_PROPERTY(godot::PropertyInfo(godot::Variant::CALLABLE, "play_sound_function"), "set_play_sound_function", "get_play_sound_function");
 
 	godot::ClassDB::bind_method(godot::D_METHOD("global_init", "rom"), &LibSM64::global_init);
 	godot::ClassDB::bind_method(godot::D_METHOD("global_terminate"), &LibSM64::global_terminate);

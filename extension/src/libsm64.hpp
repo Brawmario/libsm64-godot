@@ -1392,12 +1392,12 @@ public:
 
 	// typedef void (*SM64DebugPrintFunctionPtr)( const char * );
 	// extern SM64_LIB_FN void sm64_register_debug_print_function( SM64DebugPrintFunctionPtr debugPrintFunction );
-	void register_debug_print_function(const godot::Callable &p_callback);
+	void set_debug_print_function(const godot::Callable &p_callback);
 	const godot::Callable &get_debug_print_function() const;
 
 	// typedef void (*SM64PlaySoundFunctionPtr)( uint32_t soundBits, float *pos );
 	// extern SM64_LIB_FN void sm64_register_play_sound_function( SM64PlaySoundFunctionPtr playSoundFunction );
-	void register_play_sound_function(const godot::Callable &p_callback);
+	void set_play_sound_function(const godot::Callable &p_callback);
 	const godot::Callable &get_play_sound_function() const;
 
 	// extern SM64_LIB_FN void sm64_global_init( const uint8_t *rom, uint8_t *outTexture );
