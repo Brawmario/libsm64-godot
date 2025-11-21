@@ -4,6 +4,7 @@
 		Class representing the properties of the surface in the [code]libsm64[/code] world.
 	</brief_description>
 	<description>
+		[LibSM64SurfaceProperties] is a resource class that encapsulates the physical properties of a surface in the [code]libsm64[/code] world. It combines three key properties that define how Mario interacts with surfaces: the surface type (affecting Mario's behavior), terrain type (affecting sound effects), and force (for surfaces like quicksand that can move Mario). This class is primarily used with [LibSM64SurfaceArray] to define surfaces for use in the game world.
 	</description>
 	<tutorials>
 	</tutorials>

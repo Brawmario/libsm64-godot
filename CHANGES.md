@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed `LibSM64.register_debug_print_function()` and `LibSM64.register_play_sound_function()` methods. They were replaced with equivalent `LibSM64.debug_print_function` and `LibSM64.play_sound_function` properties.
 
+## Added
+
+- More functions in the GDExtension module have been documented.
+
 ### Changed
 
 - CI: compile the GNU/Linux GDExtension binaries in Ubuntu 22.04. This ensures that the release binaries works on glibc 2.35+ systems.
@@ -56,7 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `LibSM64.MarioAnimID` enum, defining all avalible animations for Mario. `LibSM64.set_mario_animation` now uses this enum.
+- Add `LibSM64.MarioAnimID` enum, defining all available animations for Mario. `LibSM64.set_mario_animation` now uses this enum.
 
 ### Changed
 
@@ -74,7 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `LibSM64.SoundBits` enum, defining all avalible sounds in `libsm64`. `LibSM64.play_sound` and `LibSM64.play_sound_global` now use this enum.
+- Add `LibSM64.SoundBits` enum, defining all available sounds in `libsm64`. `LibSM64.play_sound` and `LibSM64.play_sound_global` now use this enum.
 - Add documentation for `LibSM64MarioState` and `LibSM64MarioInterpolator`.
 
 ### Fixed

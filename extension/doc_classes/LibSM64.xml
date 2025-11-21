@@ -31,11 +31,13 @@
 			<param index="0" name="seq_id" type="int" enum="LibSM64.SeqId" />
 			<param index="1" name="fade_out_time" type="float" />
 			<description>
+				Fades out the background music sequence with the given [param seq_id] over the specified [param fade_out_time] in seconds.
 			</description>
 		</method>
 		<method name="get_current_background_music">
 			<return type="int" />
 			<description>
+				Returns the ID of the currently playing background music sequence. Returns [code]0[/code] if no background music is playing.
 			</description>
 		</method>
 		<method name="global_init">
@@ -59,6 +61,7 @@
 			<param index="1" name="position" type="Vector3" />
 			<param index="2" name="hitbox_height" type="float" />
 			<description>
+				Triggers an attack from the Mario instance with the given [param mario_id] at the given [param position] with the specified [param hitbox_height].
 			</description>
 		</method>
 		<method name="mario_create">
@@ -74,6 +77,7 @@
 			<return type="void" />
 			<param index="0" name="mario_id" type="int" />
 			<description>
+				Removes the Mario instance with the given [param mario_id] from the [code]libsm64[/code] world.
 			</description>
 		</method>
 		<method name="mario_extend_cap">
@@ -81,6 +85,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="cap_time" type="float" />
 			<description>
+				Extends the duration of the Mario instance with the given [param mario_id] cap power-up (Wing, Metal, or Vanish) by the specified [param cap_time] in seconds. This method is typically used when Mario collects a power-up that extends his current cap ability.
 			</description>
 		</method>
 		<method name="mario_heal">
@@ -88,6 +93,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="heal_counter" type="int" />
 			<description>
+				Heals the Mario instance with the given [param mario_id] by the specified [param heal_counter] amount, increasing his health.
 			</description>
 		</method>
 		<method name="mario_interact_cap">
@@ -97,12 +103,14 @@
 			<param index="2" name="cap_time" type="float" default="0.0" />
 			<param index="3" name="play_music" type="bool" default="true" />
 			<description>
+				Gives the Mario instance with the given [param mario_id] a cap power-up based on the provided [param cap_flag] (Wing, Metal, or Vanish cap). The cap will last for [param cap_time] seconds or for the default Super Mario 64 time if [param cap_time] is [code]0.0[/code]. If [param play_music] is [code]true[/code], the appropriate power-up music will be played.
 			</description>
 		</method>
 		<method name="mario_kill">
 			<return type="void" />
 			<param index="0" name="mario_id" type="int" />
 			<description>
+				Kills the Mario instance with the given [param mario_id]. This will trigger Mario's death animation and set his action to a death state.
 			</description>
 		</method>
 		<method name="mario_take_damage">
@@ -112,6 +120,7 @@
 			<param index="2" name="subtype" type="int" />
 			<param index="3" name="position" type="Vector3" />
 			<description>
+				Applies damage to the Mario instance with the given [param mario_id]. The [param damage] value determines the amount of damage taken, [param subtype] specifies the type of damage, and [param position] indicates the location where the damage occurred, which may affect knockback direction.
 			</description>
 		</method>
 		<method name="mario_tick">
@@ -130,6 +139,7 @@
 			<param index="1" name="seq_args" type="int" />
 			<param index="2" name="fade_in_time" type="float" default="0.0" />
 			<description>
+				Plays music using the specified [param player] for background sounds, sound effects, or other audio channels. The [param seq_args] parameter contains encoded sequence information to identify the specific music track. The music will fade in over [param fade_in_time] seconds.
 			</description>
 		</method>
 		<method name="play_sound">
@@ -137,12 +147,14 @@
 			<param index="0" name="sound_bits" type="int" enum="LibSM64.SoundBits" is_bitfield="true" />
 			<param index="1" name="position" type="Vector3" />
 			<description>
+				Plays a positioned sound effect at the given [param position]. The [param sound_bits] parameter specifies which specific sound to play using [enum SoundBits] flags. The sound will be spatialized based on the [param position] relative to the audio listener.
 			</description>
 		</method>
 		<method name="play_sound_global">
 			<return type="void" />
 			<param index="0" name="sound_bits" type="int" enum="LibSM64.SoundBits" is_bitfield="true" />
 			<description>
+				Plays a non-positioned (global) sound effect. The [param sound_bits] parameter specifies which specific sound to play using [enum SoundBits] flags. Since this sound is global, it will play at full volume regardless of the player's position in the world.
 			</description>
 		</method>
 		<method name="seq_player_play_sequence">
@@ -151,6 +163,7 @@
 			<param index="1" name="seq_id" type="int" enum="LibSM64.SeqId" />
 			<param index="2" name="fade_in_time" type="float" default="0.0" />
 			<description>
+				Plays a background music sequence using the specified [param player] . The [param seq_id] parameter specifies which sequence to play from the [enum SeqId] enumeration. The music will fade in over [param fade_in_time] seconds.
 			</description>
 		</method>
 		<method name="set_mario_action">
@@ -158,6 +171,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="action" type="int" enum="LibSM64.ActionFlags" is_bitfield="true" />
 			<description>
+				Forces Mario to change to the specified [param action]. The action is defined using [enum ActionFlags] bitfield values and determines Mario's current behavior, animation, and physics properties (e.g., walking, jumping, swimming).
 			</description>
 		</method>
 		<method name="set_mario_action_arg">
@@ -166,6 +180,7 @@
 			<param index="1" name="action" type="int" enum="LibSM64.ActionFlags" is_bitfield="true" />
 			<param index="2" name="action_arg" type="int" />
 			<description>
+			Forces Mario to change to the specified [param action] with the extra [param action_arg] parameter. The action is defined using [enum ActionFlags] bitfield values and determines Mario's current behavior, animation, and physics properties (e.g., walking, jumping, swimming).
 			</description>
 		</method>
 		<method name="set_mario_angle">
@@ -173,6 +188,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="angle" type="Quaternion" />
 			<description>
+				Sets Mario's body rotation using the provided [param angle] as a quaternion.
 			</description>
 		</method>
 		<method name="set_mario_anim_frame">
@@ -180,6 +196,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="anim_frame" type="int" />
 			<description>
+				Sets the current animation frame for Mario's current animation. The [param anim_frame] parameter specifies which frame of the animation sequence to display.
 			</description>
 		</method>
 		<method name="set_mario_animation">
@@ -187,6 +204,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="anim_id" type="int" enum="LibSM64.MarioAnimID" />
 			<description>
+				Sets the current animation for Mario using the specified [param anim_id] from the [enum MarioAnimID] enumeration.
 			</description>
 		</method>
 		<method name="set_mario_face_angle">
@@ -194,6 +212,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="y" type="float" />
 			<description>
+				Sets the horizontal facing angle of Mario in radians around the Y-axis.
 			</description>
 		</method>
 		<method name="set_mario_forward_velocity">
@@ -201,6 +220,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="velocity" type="float" />
 			<description>
+				Sets the forward velocity of Mario in meters per second. This determines how fast Mario moves in the direction he is facing, independent of his actual facing direction.
 			</description>
 		</method>
 		<method name="set_mario_gas_level">
@@ -208,6 +228,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="level" type="float" />
 			<description>
+				Sets the gas level in the [code]libsm64[/code] world for the specified Mario.
 			</description>
 		</method>
 		<method name="set_mario_health">
@@ -215,6 +236,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="health" type="int" />
 			<description>
+				Sets the current health value of Mario. The health value is a 16-bit integer where the upper byte represents the number of health wedges and the lower byte represents the portion of the next wedge. Higher values represent more health.
 			</description>
 		</method>
 		<method name="set_mario_invincibility">
@@ -222,6 +244,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="time" type="float" />
 			<description>
+				Makes Mario invincible for the specified [param time] in seconds. During this time, Mario will not take damage from enemies or environmental hazards.
 			</description>
 		</method>
 		<method name="set_mario_position">
@@ -229,6 +252,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="position" type="Vector3" />
 			<description>
+				Sets the 3D position of Mario in the [code]libsm64[/code] world. The [param position] parameter specifies the new location for Mario using Godot's coordinate system, which will be automatically converted to [code]libsm64[/code] coordinates.
 			</description>
 		</method>
 		<method name="set_mario_state">
@@ -236,6 +260,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="flags" type="int" enum="LibSM64.MarioFlags" is_bitfield="true" />
 			<description>
+				Sets Mario's state flags using the provided [param flags] from the [enum MarioFlags] bitfield. These flags control various aspects of Mario's state such as cap status, metal state, invincibility, and other status conditions.
 			</description>
 		</method>
 		<method name="set_mario_velocity">
@@ -243,6 +268,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="velocity" type="Vector3" />
 			<description>
+				Sets Mario's velocity vector, controlling both the direction and speed of his movement. The [param velocity] parameter specifies the rate of change in Mario's position in 3D space in meters per second.
 			</description>
 		</method>
 		<method name="set_mario_water_level">
@@ -250,6 +276,7 @@
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="level" type="float" />
 			<description>
+				Sets the water level for the specified Mario in the [code]libsm64[/code] world.
 			</description>
 		</method>
 		<method name="set_sound_volume">
@@ -272,6 +299,7 @@
 			<return type="void" />
 			<param index="0" name="seq_id" type="int" enum="LibSM64.SeqId" />
 			<description>
+				Stops the background music sequence with the given [param seq_id]. This will immediately halt the specified music track if it is currently playing.
 			</description>
 		</method>
 		<method name="surface_object_create">
