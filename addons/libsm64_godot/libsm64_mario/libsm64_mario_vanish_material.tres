@@ -9,3 +9,4 @@ alpha_antialiasing_mode = 0
 [resource]
 next_pass = SubResource("StandardMaterial3D_eylyr")
 vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true

@@ -11,13 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed `LibSM64.register_debug_print_function()` and `LibSM64.register_play_sound_function()` methods. They were replaced with equivalent `LibSM64.debug_print_function` and `LibSM64.play_sound_function` properties.
 
-## Added
+### Added
 
 - More functions in the GDExtension module have been documented.
 
 ### Changed
 
 - CI: compile the GNU/Linux GDExtension binaries in Ubuntu 22.04. This ensures that the release binaries works on glibc 2.35+ systems.
+
+### Fixed
+
+- Set `vertex_color_is_srgb property` to `true` on Mario's materials. He should look less pale now.
 
 ## [2.6.1] - 2025-09-22
 

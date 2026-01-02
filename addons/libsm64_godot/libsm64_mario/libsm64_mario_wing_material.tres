@@ -13,3 +13,4 @@ transparency = 2
 alpha_scissor_threshold = 0.5
 alpha_antialiasing_mode = 0
 vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
