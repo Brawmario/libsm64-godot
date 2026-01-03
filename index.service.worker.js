@@ -4,7 +4,7 @@
 // Incrementing CACHE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
 /** @type {string} */
-const CACHE_VERSION = '1758554558|3390639';
+const CACHE_VERSION = '1767400196|3434579';
 /** @type {string} */
 const CACHE_PREFIX = 'LibSM64 Godot De-sw-cache-';
 const CACHE_NAME = CACHE_PREFIX + CACHE_VERSION;
