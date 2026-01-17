@@ -9,10 +9,13 @@
 
 class LibSM64MarioGeometry {
 public:
-	LibSM64MarioGeometry();
+	// NOLINTBEGIN(cppcoreguidelines-pro-type-member-init)
+	_FORCE_INLINE_ LibSM64MarioGeometry() :
+			geometry({ position.data(), normal.data(), color.data(), uv.data(), 0 }) {}
+	// NOLINTEND(cppcoreguidelines-pro-type-member-init)
 
-	_FORCE_INLINE_ struct SM64MarioGeometryBuffers *data() { return &geometry; }
-	_FORCE_INLINE_ int triangles() const { return geometry.numTrianglesUsed; }
+	_FORCE_INLINE_ constexpr struct SM64MarioGeometryBuffers *data() { return &geometry; }
+	_FORCE_INLINE_ constexpr int triangles() const { return geometry.numTrianglesUsed; }
 
 	std::array<float, 9 * SM64_GEO_MAX_TRIANGLES> position;
 	std::array<float, 9 * SM64_GEO_MAX_TRIANGLES> normal;
