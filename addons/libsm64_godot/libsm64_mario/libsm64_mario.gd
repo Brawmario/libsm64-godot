@@ -240,8 +240,7 @@ var _vanish_material := preload("res://addons/libsm64_godot/libsm64_mario/libsm6
 var _metal_material := preload("res://addons/libsm64_godot/libsm64_mario/libsm64_mario_metal_material.tres") as StandardMaterial3D
 var _wing_material := preload("res://addons/libsm64_godot/libsm64_mario/libsm64_mario_wing_material.tres") as StandardMaterial3D
 
-var _time_since_last_tick := 0.0
-var _last_tick_usec := Time.get_ticks_usec()
+var _physics_time_since_last_tick := 0.0
 var _reset_interpolation_next_tick := false
 
 
@@ -261,10 +260,16 @@ func _process(delta: float) -> void:
 	if _id < 0:
 		return
 
-	var lerp_t = (Time.get_ticks_usec() - _last_tick_usec) / (LibSM64.tick_delta_time * 1000000.0)
-
+	var lerp_t := _calculate_lerp_t()
 	_update_lerped_members_from_mario_state(lerp_t)
 	_update_mesh(lerp_t)
+
+
+func _calculate_lerp_t() -> float:
+	var sm64_ticks_per_physics_tick := Engine.physics_ticks_per_second * LibSM64.tick_delta_time
+	var sm64_tick_fraction := _physics_time_since_last_tick / LibSM64.tick_delta_time
+	var physics_fraction := Engine.get_physics_interpolation_fraction() / sm64_ticks_per_physics_tick
+	return sm64_tick_fraction + physics_fraction
 
 
 func _update_lerped_members_from_mario_state(lerp_t: float) -> void:
@@ -284,9 +289,9 @@ func _update_lerped_members_from_mario_state(lerp_t: float) -> void:
 func _update_mesh(lerp_t: float) -> void:
 	var material: StandardMaterial3D
 	match _flags & LibSM64.MARIO_SPECIAL_CAPS:
-		LibSM64.MARIO_VANISH_CAP :
+		LibSM64.MARIO_VANISH_CAP:
 			material = _vanish_material
-		LibSM64.MARIO_METAL_CAP :
+		LibSM64.MARIO_METAL_CAP:
 			material = _metal_material
 		LibSM64.MARIO_WING_CAP:
 			material = _wing_material
@@ -305,15 +310,14 @@ func _update_mesh(lerp_t: float) -> void:
 		_mesh_instance.set_surface_override_material(0, material)
 
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	if _id < 0:
 		return
 
-	_time_since_last_tick += delta
-	while _time_since_last_tick >= LibSM64.tick_delta_time:
+	_physics_time_since_last_tick += delta
+	while _physics_time_since_last_tick >= LibSM64.tick_delta_time:
 		_tick()
-		_last_tick_usec = Time.get_ticks_usec()
-		_time_since_last_tick -= LibSM64.tick_delta_time
+		_physics_time_since_last_tick -= LibSM64.tick_delta_time
 		_update_non_lerped_members_from_mario_state()
 
 

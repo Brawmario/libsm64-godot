@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Fixed
+
+- Fixed `LibSM64Mario`'s linear intepolation calculations, so that it doesn't rely on the raw tick number of the Godot Engine. In practice, this means that interpolation will now behave properly when pausing the `LibSM64Mario` node or when `Engine.time_scale` is diferrent than `1.0`.
+
 ## [2.7.0] - 2026-01-02
 
 ### Breaking Changes
