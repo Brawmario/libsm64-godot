@@ -1440,6 +1440,12 @@ public:
 	void set_mario_velocity(int32_t p_mario_id, const godot::Vector3 &p_velocity);
 	// extern SM64_LIB_FN void sm64_set_mario_forward_velocity(int32_t marioId, float vel);
 	void set_mario_forward_velocity(int32_t p_mario_id, float p_velocity);
+	// extern SM64_LIB_FN int32_t sm64_pole_create(float x, float y, float z, float height, float downOffset, int16_t pitch, int16_t roll);
+	int32_t pole_create(const godot::Vector3 &p_position, godot::real_t p_height, godot::real_t p_down_offset = 0.0, float p_pitch = 0.0f, float p_roll = 0.0f);
+	// extern SM64_LIB_FN void sm64_pole_destroy(int32_t poleHandle);
+	void pole_destroy(int32_t p_pole_handle);
+	// extern SM64_LIB_FN void sm64_mario_attach_to_pole(int32_t marioId, int32_t poleHandle, int32_t grabFast);
+	void mario_attach_to_pole(int32_t p_mario_id, int32_t p_pole_handle, bool p_grab_fast);
 	// extern SM64_LIB_FN void sm64_set_mario_invincibility(int32_t marioId, int16_t timer);
 	void set_mario_invincibility(int32_t p_mario_id, double p_time);
 	// extern SM64_LIB_FN void sm64_set_mario_water_level(int32_t marioId, signed int level);
