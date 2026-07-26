@@ -395,6 +395,23 @@ void LibSM64::set_mario_forward_velocity(int32_t p_mario_id, float p_velocity) {
 	sm64_set_mario_forward_velocity(p_mario_id, p_velocity * scale_factor * tick_delta_time);
 }
 
+int32_t LibSM64::pole_create(const godot::Vector3 &p_position, godot::real_t p_height, godot::real_t p_down_offset, float p_pitch, float p_roll) {
+	float x, y, z;
+	godot_to_sm64(p_position, x, y, z, scale_factor);
+
+	return sm64_pole_create(x, y, z, p_height * scale_factor, p_down_offset * scale_factor, static_cast<int16_t>(p_pitch), static_cast<int16_t>(p_roll));
+}
+
+void LibSM64::pole_destroy(int32_t p_pole_handle) {
+	sm64_pole_destroy(p_pole_handle);
+}
+
+void LibSM64::mario_attach_to_pole(int32_t p_mario_id, int32_t p_pole_handle, bool p_grab_fast) {
+	ERR_FAIL_COND(p_mario_id < 0);
+
+	sm64_mario_attach_to_pole(p_mario_id, p_pole_handle, p_grab_fast ? 1 : 0);
+}
+
 void LibSM64::set_mario_invincibility(int32_t p_mario_id, double p_time) {
 	ERR_FAIL_COND(p_mario_id < 0);
 
@@ -551,6 +568,9 @@ void LibSM64::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("mario_tick", "mario_id", "mario_inputs"), &LibSM64::mario_tick);
 	godot::ClassDB::bind_method(godot::D_METHOD("mario_delete", "mario_id"), &LibSM64::mario_delete);
 	godot::ClassDB::bind_method(godot::D_METHOD("set_mario_action", "mario_id", "action"), &LibSM64::set_mario_action);
+	godot::ClassDB::bind_method(godot::D_METHOD("pole_create", "position", "height", "down_offset", "pitch", "roll"), &LibSM64::pole_create, DEFVAL(0.0), DEFVAL(0.0f), DEFVAL(0.0f));
+	godot::ClassDB::bind_method(godot::D_METHOD("pole_destroy", "pole_handle"), &LibSM64::pole_destroy);
+	godot::ClassDB::bind_method(godot::D_METHOD("mario_attach_to_pole", "mario_id", "pole_handle", "grab_fast"), &LibSM64::mario_attach_to_pole);
 	godot::ClassDB::bind_method(godot::D_METHOD("set_mario_action_arg", "mario_id", "action", "action_arg"), &LibSM64::set_mario_action_arg);
 	godot::ClassDB::bind_method(godot::D_METHOD("set_mario_animation", "mario_id", "anim_id"), &LibSM64::set_mario_animation);
 	godot::ClassDB::bind_method(godot::D_METHOD("set_mario_anim_frame", "mario_id", "anim_frame"), &LibSM64::set_mario_anim_frame);
