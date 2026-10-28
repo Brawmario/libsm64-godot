@@ -54,7 +54,7 @@ This add-on consists of two main components:
 
 It also adds two helper nodes:
 
-- `LibSM64StaticSurfaceHandler`: Extends Node; provides helper functions to load all the meshes under the `libsm64_static_surfaces` group into the `libsm64` world.
+- `LibSM64StaticSurfacesHandler`: Extends Node; provides helper functions to load all the meshes under the `libsm64_static_surfaces` group into the `libsm64` world.
 - `LibSM64SurfaceObjectsHandler`: Extends Node; provides helper functions to load and update all the meshes under the `libsm64_surface_objects` group into the `libsm64` world.
 
 And a node for audio:
@@ -69,7 +69,7 @@ On the Project Settings:
 
 When creating the scene:
 
-1. Add a `LibSM64StaticSurfaceHandler` node to the scene.
+1. Add a `LibSM64StaticSurfacesHandler` node to the scene.
 2. Add the meshes that compose the world to the `libsm64_static_surfaces` group (NOTICE: use simple, low-polycount meshes for best results).
 3. Add a `LibSM64Mario` node and set its camera property with an `Camera3D` node.
 4. Create the action names that are in the `LibSM64Mario` node's `Mario Inputs Actions` export group in the project's Input Map and bind them to the appropriate axes/buttons/keys. Alternatively, change the action names in the `LibSM64Mario` node's `Mario Inputs Actions` export group to match already existing action names in the project's Input Map.
@@ -78,7 +78,7 @@ Then do the following on the scene's main script:
 
 1. Call the `LibSM64Global.load_rom_file()` function with the file path to the Super Mario 64 ROM file (the SHA-256 of the file will be checked against the known good ROM).
 2. Call the `LibSM64Global.init()` function.
-3. Call `LibStaticSurfaceHandler.load_static_surfaces()` on your instanced `LibSM64StaticSurfaceHandler` node.
+3. Call `LibSM64StaticSurfacesHandler.load_static_surfaces()` on your instanced `LibSM64StaticSurfacesHandler` node.
 4. Call `LibSM64Mario.create()` on your instanced `SM64Mario` node(s).
 
 For more detailed instructions refer to the [manual](docs/manual.md).
