@@ -302,6 +302,88 @@
 				Stops the background music sequence with the given [param seq_id]. This will immediately halt the specified music track if it is currently playing.
 			</description>
 		</method>
+		<method name="surface_find_ceil">
+			<return type="Dictionary" />
+			<param index="0" name="position" type="Vector3" />
+			<description>
+				Returns the ceiling above [param position], as a [Dictionary] with the keys [code]height[/code] ([float]) and [code]surface[/code] ([LibSM64SurfaceCollisionData]).
+				The [code]surface[/code] is [code]null[/code] and the [code]height[/code] is [code]INF[/code] (positive infinity) when there is no ceiling above [param position].
+			</description>
+		</method>
+		<method name="surface_find_ceil_height">
+			<return type="float" />
+			<param index="0" name="position" type="Vector3" />
+			<description>
+				Returns the height of the ceiling above [param position], in Godot's units, or [code]INF[/code] (positive infinity) if there is no ceiling above it.
+				This is equivalent to reading the [code]height[/code] key of [method surface_find_ceil] without allocating the surface data.
+			</description>
+		</method>
+		<method name="surface_find_floor">
+			<return type="Dictionary" />
+			<param index="0" name="position" type="Vector3" />
+			<description>
+				Returns the floor below [param position], as a [Dictionary] with the keys [code]height[/code] ([float]) and [code]surface[/code] ([LibSM64SurfaceCollisionData]).
+				The [code]surface[/code] is [code]null[/code] and the [code]height[/code] is [code]-INF[/code] (negative infinity) when there is no floor below [param position].
+				[b]Note:[/b] Only the surfaces loaded into the [code]libsm64[/code] world are considered, not the collision shapes of the Godot scene.
+			</description>
+		</method>
+		<method name="surface_find_floor_height">
+			<return type="float" />
+			<param index="0" name="position" type="Vector3" />
+			<description>
+				Returns the height of the floor below [param position], in Godot's units, or [code]-INF[/code] (negative infinity) if there is no floor below it.
+				This is equivalent to reading the [code]height[/code] key of [method surface_find_floor] without allocating the surface data.
+			</description>
+		</method>
+		<method name="surface_find_floor_height_and_data">
+			<return type="Dictionary" />
+			<param index="0" name="position" type="Vector3" />
+			<description>
+				Returns the floor below [param position] along with its plane data, as a [Dictionary] with the keys [code]height[/code] ([float]), [code]normal[/code] ([Vector3]) and [code]origin_offset[/code] ([float]).
+				The [code]height[/code] is [code]-INF[/code] (negative infinity) when there is no floor, in which case [code]normal[/code] is [code]Vector3.ZERO[/code] and [code]origin_offset[/code] is [code]0.0[/code].
+				This is useful to detect slopes: a floor whose [code]normal[/code] is not close to [code]Vector3.UP[/code] is steep enough for Mario to slide on.
+			</description>
+		</method>
+		<method name="surface_find_poison_gas_level">
+			<return type="float" />
+			<param index="0" name="x" type="float" />
+			<param index="1" name="z" type="float" />
+			<description>
+				Returns the height of the poison gas below the given [param x] and [param z] coordinates, in Godot's units.
+				[b]Note:[/b] [code]libsm64[/code] does not implement poison gas yet, so this method always returns [code]-INF[/code] (negative infinity). Do not build gameplay on it.
+			</description>
+		</method>
+		<method name="surface_find_wall_collision">
+			<return type="Dictionary" />
+			<param index="0" name="position" type="Vector3" />
+			<param index="1" name="offset_y" type="float" />
+			<param index="2" name="radius" type="float" />
+			<description>
+				Pushes a cylinder with the given [param radius] and [param offset_y] out of the walls around [param position].
+				Returns a [Dictionary] with the keys [code]num_walls[/code] ([int]) and [code]position[/code] ([Vector3]), the latter being the resulting position. When [code]num_walls[/code] is [code]0[/code], [code]position[/code] is unchanged.
+				[b]Note:[/b] [param radius] is clamped to 200 [code]libsm64[/code] units (2 meters at the default scale) by the engine.
+			</description>
+		</method>
+		<method name="surface_find_wall_collisions">
+			<return type="Array" />
+			<param index="0" name="position" type="Vector3" />
+			<param index="1" name="offset_y" type="float" />
+			<param index="2" name="radius" type="float" />
+			<description>
+				Returns the walls overlapping a cylinder with the given [param radius] and [param offset_y] around [param position], as an [Array] of up to [code]4[/code] [LibSM64SurfaceCollisionData] objects.
+				The array is empty when there are no walls.
+				[b]Note:[/b] [param radius] is clamped to 200 [code]libsm64[/code] units (2 meters at the default scale) by the engine.
+			</description>
+		</method>
+		<method name="surface_find_water_level">
+			<return type="float" />
+			<param index="0" name="x" type="float" />
+			<param index="1" name="z" type="float" />
+			<description>
+				Returns the height of the water below the given [param x] and [param z] coordinates, in Godot's units.
+				[b]Note:[/b] [code]libsm64[/code] does not implement water surfaces yet, so this method always returns [code]-INF[/code] (negative infinity). Use [member LibSM64Mario.water_level] to make Mario swim instead.
+			</description>
+		</method>
 		<method name="surface_object_create">
 			<return type="int" />
 			<param index="0" name="position" type="Vector3" />

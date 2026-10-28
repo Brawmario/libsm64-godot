@@ -6,7 +6,10 @@
 #include <godot_cpp/classes/image.hpp>
 #include <godot_cpp/classes/object.hpp>
 
+#include <godot_cpp/variant/array.hpp>
 #include <godot_cpp/variant/callable.hpp>
+#include <godot_cpp/variant/dictionary.hpp>
+#include <godot_cpp/variant/packed_vector3_array.hpp>
 
 #include <libsm64.h>
 
@@ -1469,13 +1472,39 @@ public:
 	void surface_object_delete(int32_t p_object_id);
 
 	// extern SM64_LIB_FN int32_t sm64_surface_find_wall_collision( float *xPtr, float *yPtr, float *zPtr, float offsetY, float radius );
+	// Returns a Dictionary with the keys "num_walls" (int) and "position" (Vector3), the latter being the
+	// position pushed out of the walls. [param offset_y] and [param radius] are in Godot's units.
+	godot::Dictionary surface_find_wall_collision(const godot::Vector3 &p_position, godot::real_t p_offset_y, godot::real_t p_radius);
+
 	// extern SM64_LIB_FN int32_t sm64_surface_find_wall_collisions( struct SM64WallCollisionData *colData );
+	// Returns an Array of up to 4 LibSM64SurfaceCollisionData.
+	godot::Array surface_find_wall_collisions(const godot::Vector3 &p_position, godot::real_t p_offset_y, godot::real_t p_radius);
+
 	// extern SM64_LIB_FN float sm64_surface_find_ceil( float posX, float posY, float posZ, struct SM64SurfaceCollisionData **pceil );
+	// Returns +INF if there is no ceiling above the position.
+	godot::real_t surface_find_ceil_height(const godot::Vector3 &p_position);
+	// Returns a Dictionary with the keys "height" (float) and "surface" (LibSM64SurfaceCollisionData or null).
+	godot::Dictionary surface_find_ceil(const godot::Vector3 &p_position);
+
 	// extern SM64_LIB_FN float sm64_surface_find_floor_height_and_data( float xPos, float yPos, float zPos, struct SM64FloorCollisionData **floorGeo );
+	// Returns a Dictionary with the keys "height" (float), "normal" (Vector3) and "origin_offset" (float).
+	godot::Dictionary surface_find_floor_height_and_data(const godot::Vector3 &p_position);
+
 	// extern SM64_LIB_FN float sm64_surface_find_floor_height( float x, float y, float z );
+	// Returns -INF if there is no floor below the position.
+	godot::real_t surface_find_floor_height(const godot::Vector3 &p_position);
+
 	// extern SM64_LIB_FN float sm64_surface_find_floor( float xPos, float yPos, float zPos, struct SM64SurfaceCollisionData **pfloor );
+	// Returns a Dictionary with the keys "height" (float) and "surface" (LibSM64SurfaceCollisionData or null).
+	godot::Dictionary surface_find_floor(const godot::Vector3 &p_position);
+
 	// extern SM64_LIB_FN float sm64_surface_find_water_level( float x, float z );
+	// libsm64 does not implement water surfaces yet, so this always returns -INF.
+	godot::real_t surface_find_water_level(godot::real_t p_x, godot::real_t p_z);
+
 	// extern SM64_LIB_FN float sm64_surface_find_poison_gas_level( float x, float z );
+	// libsm64 does not implement poison gas yet, so this always returns -INF.
+	godot::real_t surface_find_poison_gas_level(godot::real_t p_x, godot::real_t p_z);
 
 	// extern SM64_LIB_FN void sm64_seq_player_play_sequence(uint8_t player, uint8_t seqId, uint16_t arg2);
 	void seq_player_play_sequence(SeqPlayer p_player, SeqId p_seq_id, double p_fade_in_time = 0.0);

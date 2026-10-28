@@ -13,6 +13,7 @@
 #include <libsm64_mario_interpolator.hpp>
 #include <libsm64_mario_state.hpp>
 #include <libsm64_surface_array.hpp>
+#include <libsm64_surface_collision_data.hpp>
 #include <libsm64_surface_properties.hpp>
 
 using namespace godot;
@@ -32,6 +33,7 @@ void initialize_libsm64gd_module(ModuleInitializationLevel p_level) {
 	ClassDB::register_class<LibSM64MarioInterpolator>();
 	ClassDB::register_class<LibSM64MarioState>();
 	ClassDB::register_class<LibSM64SurfaceArray>();
+	ClassDB::register_class<LibSM64SurfaceCollisionData>();
 	ClassDB::register_class<LibSM64SurfaceProperties>();
 
 	s_libsm64 = memnew(LibSM64);

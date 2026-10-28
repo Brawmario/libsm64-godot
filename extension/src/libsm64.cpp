@@ -1,3 +1,5 @@
+#include <limits>
+
 #include <libsm64.hpp>
 
 #include <godot_cpp/classes/array_mesh.hpp>
@@ -7,6 +9,7 @@
 #include <libsm64_mario_inputs.hpp>
 #include <libsm64_mario_state.hpp>
 #include <libsm64_surface_array.hpp>
+#include <libsm64_surface_collision_data.hpp>
 
 constexpr char SCALE_FACTOR_SETTING_NAME[] = "libsm64/scale_factor";
 
@@ -143,6 +146,36 @@ static T get_project_setting(const char *p_name, T p_default_value = {}) {
 					godot::Variant::get_type_name(setting_type)));
 
 	return setting_value;
+}
+
+// Sentinels used by libsm64's collision queries (see libsm64/src/decomp/engine/surface_collision.h).
+static constexpr float SM64_FLOOR_LOWER_LIMIT = -110000.0f;
+static constexpr float SM64_CELL_HEIGHT_LIMIT = 100000.0f;
+// libsm64 currently stubs its water and poison gas level queries to return this constant.
+static constexpr float SM64_NO_LIQUID_LEVEL = -10000.0f;
+
+// libsm64 reports "no floor" with a huge negative height. Expose that as -INF in Godot's units, since a
+// large negative number is easy to mistake for a real height.
+static _FORCE_INLINE_ godot::real_t sm64_floor_height_to_godot(float p_height, godot::real_t p_scale_factor) {
+	if (p_height <= SM64_FLOOR_LOWER_LIMIT) {
+		return -std::numeric_limits<godot::real_t>::infinity();
+	}
+	return static_cast<godot::real_t>(p_height) / p_scale_factor;
+}
+
+// Same as above, but libsm64 reports "no ceiling" with a huge positive height.
+static _FORCE_INLINE_ godot::real_t sm64_ceil_height_to_godot(float p_height, godot::real_t p_scale_factor) {
+	if (p_height >= SM64_CELL_HEIGHT_LIMIT) {
+		return std::numeric_limits<godot::real_t>::infinity();
+	}
+	return static_cast<godot::real_t>(p_height) / p_scale_factor;
+}
+
+static _FORCE_INLINE_ godot::Ref<LibSM64SurfaceCollisionData> make_collision_data(const struct SM64SurfaceCollisionData *p_data, godot::real_t p_scale_factor) {
+	if (p_data == nullptr) {
+		return godot::Ref<LibSM64SurfaceCollisionData>();
+	}
+	return godot::Ref<LibSM64SurfaceCollisionData>(memnew(LibSM64SurfaceCollisionData(*p_data, p_scale_factor)));
 }
 
 static void SM64DebugPrintFunction(const char *msg) {
@@ -491,6 +524,122 @@ void LibSM64::surface_object_delete(int32_t p_object_id) {
 	sm64_surface_object_delete(static_cast<uint32_t>(p_object_id));
 }
 
+godot::Dictionary LibSM64::surface_find_wall_collision(const godot::Vector3 &p_position, godot::real_t p_offset_y, godot::real_t p_radius) {
+	float x, y, z;
+	godot_to_sm64(p_position, x, y, z, scale_factor);
+
+	const int32_t num_walls = sm64_surface_find_wall_collision(
+			&x, &y, &z,
+			static_cast<float>(p_offset_y * scale_factor),
+			static_cast<float>(p_radius * scale_factor));
+
+	godot::Dictionary ret;
+	ret["num_walls"] = num_walls;
+	ret["position"] = godot::Vector3(-z / scale_factor, y / scale_factor, x / scale_factor);
+	return ret;
+}
+
+godot::Array LibSM64::surface_find_wall_collisions(const godot::Vector3 &p_position, godot::real_t p_offset_y, godot::real_t p_radius) {
+	struct SM64WallCollisionData collision_data = {};
+
+	float x, y, z;
+	godot_to_sm64(p_position, x, y, z, scale_factor);
+	collision_data.x = x;
+	collision_data.y = y;
+	collision_data.z = z;
+	collision_data.offsetY = static_cast<float>(p_offset_y * scale_factor);
+	collision_data.radius = static_cast<float>(p_radius * scale_factor);
+
+	const int32_t num_walls = sm64_surface_find_wall_collisions(&collision_data);
+
+	godot::Array ret;
+	const int32_t wall_count = godot::MIN(num_walls, static_cast<int32_t>(4));
+	for (int32_t i = 0; i < wall_count; i++) {
+		const godot::Ref<LibSM64SurfaceCollisionData> wall = make_collision_data(collision_data.walls[i], scale_factor);
+		if (wall.is_valid()) {
+			ret.append(wall);
+		}
+	}
+	return ret;
+}
+
+godot::real_t LibSM64::surface_find_ceil_height(const godot::Vector3 &p_position) {
+	float x, y, z;
+	godot_to_sm64(p_position, x, y, z, scale_factor);
+
+	// libsm64 writes through this pointer unconditionally, so it can never be null.
+	struct SM64SurfaceCollisionData *ceil_surface = nullptr;
+	return sm64_ceil_height_to_godot(sm64_surface_find_ceil(x, y, z, &ceil_surface), scale_factor);
+}
+
+godot::Dictionary LibSM64::surface_find_ceil(const godot::Vector3 &p_position) {
+	float x, y, z;
+	godot_to_sm64(p_position, x, y, z, scale_factor);
+
+	// libsm64 writes through this pointer unconditionally, so it can never be null.
+	struct SM64SurfaceCollisionData *ceil_surface = nullptr;
+	const float height = sm64_surface_find_ceil(x, y, z, &ceil_surface);
+
+	godot::Dictionary ret;
+	ret["height"] = sm64_ceil_height_to_godot(height, scale_factor);
+	ret["surface"] = make_collision_data(ceil_surface, scale_factor);
+	return ret;
+}
+
+godot::Dictionary LibSM64::surface_find_floor_height_and_data(const godot::Vector3 &p_position) {
+	float x, y, z;
+	godot_to_sm64(p_position, x, y, z, scale_factor);
+
+	struct SM64FloorCollisionData *floor_data = nullptr;
+	const float height = sm64_surface_find_floor_height_and_data(x, y, z, &floor_data);
+
+	godot::Dictionary ret;
+	ret["height"] = sm64_floor_height_to_godot(height, scale_factor);
+	if (floor_data != nullptr) {
+		ret["normal"] = godot::Vector3(-floor_data->normalZ, floor_data->normalY, floor_data->normalX);
+		ret["origin_offset"] = static_cast<godot::real_t>(floor_data->originOffset) / scale_factor;
+	} else {
+		ret["normal"] = godot::Vector3();
+		ret["origin_offset"] = static_cast<godot::real_t>(0.0);
+	}
+	return ret;
+}
+
+godot::real_t LibSM64::surface_find_floor_height(const godot::Vector3 &p_position) {
+	float x, y, z;
+	godot_to_sm64(p_position, x, y, z, scale_factor);
+	return sm64_floor_height_to_godot(sm64_surface_find_floor_height(x, y, z), scale_factor);
+}
+
+godot::Dictionary LibSM64::surface_find_floor(const godot::Vector3 &p_position) {
+	float x, y, z;
+	godot_to_sm64(p_position, x, y, z, scale_factor);
+
+	struct SM64SurfaceCollisionData *floor_surface = nullptr;
+	const float height = sm64_surface_find_floor(x, y, z, &floor_surface);
+
+	godot::Dictionary ret;
+	ret["height"] = sm64_floor_height_to_godot(height, scale_factor);
+	ret["surface"] = make_collision_data(floor_surface, scale_factor);
+	return ret;
+}
+
+godot::real_t LibSM64::surface_find_water_level(godot::real_t p_x, godot::real_t p_z) {
+	const float level = sm64_surface_find_water_level(static_cast<float>(p_z * scale_factor), static_cast<float>(-p_x * scale_factor));
+	if (level <= SM64_NO_LIQUID_LEVEL) {
+		return -std::numeric_limits<godot::real_t>::infinity();
+	}
+	return static_cast<godot::real_t>(level) / scale_factor;
+}
+
+godot::real_t LibSM64::surface_find_poison_gas_level(godot::real_t p_x, godot::real_t p_z) {
+	const float level = sm64_surface_find_poison_gas_level(static_cast<float>(p_z * scale_factor), static_cast<float>(-p_x * scale_factor));
+	if (level <= SM64_NO_LIQUID_LEVEL) {
+		return -std::numeric_limits<godot::real_t>::infinity();
+	}
+	return static_cast<godot::real_t>(level) / scale_factor;
+}
+
 void LibSM64::seq_player_play_sequence(SeqPlayer p_player, SeqId p_seq_id, double p_fade_in_time) {
 	sm64_seq_player_play_sequence(static_cast<uint8_t>(p_player), static_cast<uint8_t>(p_seq_id), p_fade_in_time / tick_delta_time);
 }
@@ -573,6 +722,15 @@ void LibSM64::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("mario_extend_cap", "mario_id", "cap_time"), &LibSM64::mario_extend_cap);
 	godot::ClassDB::bind_method(godot::D_METHOD("mario_attack", "mario_id", "position", "hitbox_height"), &LibSM64::mario_attack);
 
+	godot::ClassDB::bind_method(godot::D_METHOD("surface_find_ceil", "position"), &LibSM64::surface_find_ceil);
+	godot::ClassDB::bind_method(godot::D_METHOD("surface_find_ceil_height", "position"), &LibSM64::surface_find_ceil_height);
+	godot::ClassDB::bind_method(godot::D_METHOD("surface_find_floor", "position"), &LibSM64::surface_find_floor);
+	godot::ClassDB::bind_method(godot::D_METHOD("surface_find_floor_height", "position"), &LibSM64::surface_find_floor_height);
+	godot::ClassDB::bind_method(godot::D_METHOD("surface_find_floor_height_and_data", "position"), &LibSM64::surface_find_floor_height_and_data);
+	godot::ClassDB::bind_method(godot::D_METHOD("surface_find_poison_gas_level", "x", "z"), &LibSM64::surface_find_poison_gas_level);
+	godot::ClassDB::bind_method(godot::D_METHOD("surface_find_wall_collision", "position", "offset_y", "radius"), &LibSM64::surface_find_wall_collision);
+	godot::ClassDB::bind_method(godot::D_METHOD("surface_find_wall_collisions", "position", "offset_y", "radius"), &LibSM64::surface_find_wall_collisions);
+	godot::ClassDB::bind_method(godot::D_METHOD("surface_find_water_level", "x", "z"), &LibSM64::surface_find_water_level);
 	godot::ClassDB::bind_method(godot::D_METHOD("surface_object_create", "position", "rotation", "surfaces"), &LibSM64::surface_object_create);
 	godot::ClassDB::bind_method(godot::D_METHOD("surface_object_move", "object_id", "position", "rotation"), &LibSM64::surface_object_move);
 	godot::ClassDB::bind_method(godot::D_METHOD("surface_object_delete", "object_id"), &LibSM64::surface_object_delete);

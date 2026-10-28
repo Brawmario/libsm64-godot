@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="LibSM64SurfaceCollisionData" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Read-only snapshot of a surface in the [code]libsm64[/code] world.
+	</brief_description>
+	<description>
+		[LibSM64SurfaceCollisionData] describes a single surface (triangle) of the [code]libsm64[/code] world, as returned by the collision queries of [LibSM64]: [method LibSM64.surface_find_floor], [method LibSM64.surface_find_ceil] and [method LibSM64.surface_find_wall_collisions].
+		All positions, heights and offsets are converted to Godot's units and coordinate system using [member LibSM64.scale_factor].
+		[b]Note:[/b] Instances of this class are snapshots. They are not updated when the [code]libsm64[/code] world changes, and their properties are read-only.
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="force" type="int" getter="get_force" default="0">
+			The force the surface exerts over Mario. Only meaningful for surfaces that can move Mario, such as quicksand.
+		</member>
+		<member name="flags" type="int" getter="get_flags" default="0">
+			The internal flags of the surface.
+		</member>
+		<member name="lower_y" type="float" getter="get_lower_y" default="0.0">
+			The lower height of the surface.
+		</member>
+		<member name="normal" type="Vector3" getter="get_normal" default="Vector3(0, 0, 0)">
+			The normal of the surface, in Godot's coordinate system.
+		</member>
+		<member name="origin_offset" type="float" getter="get_origin_offset" default="0.0">
+			The offset of the surface's plane along its normal.
+		</member>
+		<member name="room" type="int" getter="get_room" default="0">
+			The room the surface belongs to.
+		</member>
+		<member name="surface_type" type="int" getter="get_surface_type" enum="LibSM64.SurfaceType" default="0">
+			The type of the surface.
+		</member>
+		<member name="terrain_type" type="int" getter="get_terrain_type" enum="LibSM64.TerrainType" default="0">
+			The terrain type of the surface.
+		</member>
+		<member name="upper_y" type="float" getter="get_upper_y" default="0.0">
+			The upper height of the surface.
+		</member>
+		<member name="valid" type="bool" getter="get_valid" default="false">
+			Whether the surface is valid. Surfaces whose triangles are actually line segments are not valid, and are ignored by [code]libsm64[/code].
+		</member>
+		<member name="vertices" type="PackedVector3Array" getter="get_vertices" default="PackedVector3Array()">
+			The three vertices of the surface's triangle, in Godot's coordinate system.
+		</member>
+	</members>
+</class>
