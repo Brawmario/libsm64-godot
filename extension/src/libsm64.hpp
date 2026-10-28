@@ -1464,9 +1464,9 @@ public:
 	// extern SM64_LIB_FN uint32_t sm64_surface_object_create( const struct SM64SurfaceObject *surfaceObject );
 	int surface_object_create(const godot::Vector3 &p_position, const godot::Quaternion &p_rotation, const godot::Ref<LibSM64SurfaceArray> &p_surfaces);
 	// extern SM64_LIB_FN void sm64_surface_object_move( uint32_t objectId, const struct SM64ObjectTransform *transform );
-	void surface_object_move(uint32_t p_object_id, const godot::Vector3 &p_position, const godot::Quaternion &p_rotation);
+	void surface_object_move(int32_t p_object_id, const godot::Vector3 &p_position, const godot::Quaternion &p_rotation);
 	// extern SM64_LIB_FN void sm64_surface_object_delete( uint32_t objectId );
-	void surface_object_delete(uint32_t p_object_id);
+	void surface_object_delete(int32_t p_object_id);
 
 	// extern SM64_LIB_FN int32_t sm64_surface_find_wall_collision( float *xPtr, float *yPtr, float *zPtr, float offsetY, float radius );
 	// extern SM64_LIB_FN int32_t sm64_surface_find_wall_collisions( struct SM64WallCollisionData *colData );

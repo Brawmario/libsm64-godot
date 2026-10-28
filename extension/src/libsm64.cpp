@@ -170,7 +170,7 @@ static void SM64PlaySoundFunction(uint32_t soundBits, float *pos) {
 		return;
 	}
 
-	play_sound_function.call(soundBits, sm64_3d_to_godot(pos));
+	play_sound_function.call(soundBits, sm64_3d_to_godot(pos, libsm64->get_scale_factor()));
 }
 
 LibSM64::LibSM64() {
@@ -475,18 +475,20 @@ int LibSM64::surface_object_create(const godot::Vector3 &p_position, const godot
 	return sm64_surface_object_create(&object);
 }
 
-void LibSM64::surface_object_move(uint32_t p_object_id, const godot::Vector3 &p_position, const godot::Quaternion &p_rotation) {
+void LibSM64::surface_object_move(int32_t p_object_id, const godot::Vector3 &p_position, const godot::Quaternion &p_rotation) {
 	ERR_FAIL_COND(p_object_id < 0);
 
 	struct SM64ObjectTransform object_transform; // NOLINT(cppcoreguidelines-pro-type-member-init)
 	godot_to_sm64(p_position, object_transform.position, scale_factor);
 	godot_to_sm64_object_rotation(p_rotation, object_transform.eulerRotation);
 
-	sm64_surface_object_move(p_object_id, &object_transform);
+	sm64_surface_object_move(static_cast<uint32_t>(p_object_id), &object_transform);
 }
 
-void LibSM64::surface_object_delete(uint32_t p_object_id) {
-	sm64_surface_object_delete(p_object_id);
+void LibSM64::surface_object_delete(int32_t p_object_id) {
+	ERR_FAIL_COND(p_object_id < 0);
+
+	sm64_surface_object_delete(static_cast<uint32_t>(p_object_id));
 }
 
 void LibSM64::seq_player_play_sequence(SeqPlayer p_player, SeqId p_seq_id, double p_fade_in_time) {
