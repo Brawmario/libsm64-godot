@@ -12,11 +12,6 @@ extends Object
 ## [code]sha256sum "Super Mario 64 (USA).z64"[/code]
 const ROM_FILE_SHA256 := "17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91"
 
-## The SHA256 hash of the base64 encoded string of the expected ROM file. [method load_rom_from_base64_string] will fail if the base64 encoded string of the loaded ROM file does not match this value.
-## The expected ROM file is the US version of Super Mario 64.
-## This is used when loading the ROM file in the Web export.
-const ROM_BASE64_ENCODED_SHA256 := "4a07a7862d48234293aa2c47f1feb4672671c3ffa825f0fa2970b9c14bc75348"
-
 ## The loaded ROM file.
 ## The ROM file should be loaded using [method load_rom_file] or [method load_rom_from_base64_string] before calling [method init].
 static var rom: PackedByteArray
@@ -95,15 +90,23 @@ static func load_rom_file(rom_path: String, skip_checksum_validation := false) -
 ## If [param skip_checksum_validation] is [code]true[/code], the checksum validation will be skipped ([b]Warning[/b]: invalid ROM files will cause the library to crash).
 ## Returns [code]true[/code] if the ROM file was loaded successfully.
 static func load_rom_from_base64_string(rom_base64: String, skip_checksum_validation := false) -> bool:
-	if not skip_checksum_validation:
-		var rom_base64_sha256 := rom_base64.sha256_text()
-		if rom_base64_sha256 != ROM_BASE64_ENCODED_SHA256:
-			push_error("Base64 encoded ROM's SHA256 mismatch, expected: ", ROM_BASE64_ENCODED_SHA256, " recieved: ", rom_base64_sha256)
-			return false
+	# Line breaks and spaces are common in base64 payloads, and they don't change the decoded bytes.
+	var cleaned_base64 := rom_base64.replace("\n", "").replace("\r", "").replace("\t", "").replace(" ", "")
 
-	rom = Marshalls.base64_to_raw(rom_base64)
-	if rom.is_empty():
+	var rom_bytes := Marshalls.base64_to_raw(cleaned_base64)
+	if rom_bytes.is_empty():
 		push_error("Failed to decode base64 encoded ROM")
 		return false
+
+	if not skip_checksum_validation:
+		var hashing_context := HashingContext.new()
+		hashing_context.start(HashingContext.HASH_SHA256)
+		hashing_context.update(rom_bytes)
+		var rom_sha256 := hashing_context.finish().hex_encode()
+		if rom_sha256 != ROM_FILE_SHA256:
+			push_error("ROM's SHA256 mismatch, expected: ", ROM_FILE_SHA256, " recieved: ", rom_sha256)
+			return false
+
+	rom = rom_bytes
 
 	return true
