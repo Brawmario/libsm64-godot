@@ -27,9 +27,20 @@ static var mario_texture: ImageTexture
 static var _audio_init_once := false
 
 
+## Whether the global state of the library is currently initialized.
+## Set by [method init] and cleared by [method terminate].
+static var is_initialized := false
+
+
 ## Initializes the global state and the audio systems of the library (ROM file should be loaded before calling this function).
+## Calling this method while the library is already initialized does nothing (it only pushes a warning); initializing a
+## second time would destroy all existing Marios and surfaces, since [code]libsm64[/code] rebuilds its global state.
 ## Returns [code]true[/code] if the global state was initialized successfully.
 static func init() -> bool:
+	if is_initialized:
+		push_warning("LibSM64Global is already initialized")
+		return true
+
 	if rom.is_empty():
 		push_error("ROM not loaded")
 		return false
@@ -42,13 +53,20 @@ static func init() -> bool:
 		_audio_init_once = true
 		LibSM64.audio_init(rom)
 
+	is_initialized = true
+
 	return true
 
 
 ## Terminates the global state of the library.
+## Calling this method while the library is not initialized does nothing.
 static func terminate() -> void:
+	if not is_initialized:
+		return
+
 	LibSM64.global_terminate()
 	mario_texture = null
+	is_initialized = false
 
 
 ## Loads the ROM file from the given path.
