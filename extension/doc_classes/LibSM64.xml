@@ -56,12 +56,13 @@
 			</description>
 		</method>
 		<method name="mario_attack">
-			<return type="void" />
+			<return type="bool" />
 			<param index="0" name="mario_id" type="int" />
 			<param index="1" name="position" type="Vector3" />
 			<param index="2" name="hitbox_height" type="float" />
 			<description>
 				Triggers an attack from the Mario instance with the given [param mario_id] at the given [param position] with the specified [param hitbox_height].
+				Returns [code]true[/code] if the attack hit a surface object, and [code]false[/code] otherwise.
 			</description>
 		</method>
 		<method name="mario_create">

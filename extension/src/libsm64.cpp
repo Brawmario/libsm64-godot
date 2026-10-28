@@ -484,12 +484,12 @@ void LibSM64::mario_extend_cap(int32_t p_mario_id, double p_cap_time) {
 	sm64_mario_extend_cap(p_mario_id, static_cast<uint16_t>(p_cap_time / tick_delta_time));
 }
 
-void LibSM64::mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position, godot::real_t p_hitbox_height) {
-	ERR_FAIL_COND(p_mario_id < 0);
+bool LibSM64::mario_attack(int32_t p_mario_id, const godot::Vector3 &p_position, godot::real_t p_hitbox_height) {
+	ERR_FAIL_COND_V(p_mario_id < 0, false);
 
 	float x, y, z;
 	godot_to_sm64(p_position, x, y, z, scale_factor);
-	sm64_mario_attack(p_mario_id, x, y, z, p_hitbox_height * scale_factor);
+	return sm64_mario_attack(p_mario_id, x, y, z, p_hitbox_height * scale_factor);
 }
 
 int LibSM64::surface_object_create(const godot::Vector3 &p_position, const godot::Quaternion &p_rotation, const godot::Ref<LibSM64SurfaceArray> &p_surfaces) {
