@@ -242,6 +242,7 @@ var _wing_material := preload("res://addons/libsm64_godot/libsm64_mario/libsm64_
 
 var _physics_time_since_last_tick := 0.0
 var _reset_interpolation_next_tick := false
+var _camera_warning_pushed := false
 
 
 func _ready() -> void:
@@ -356,13 +357,32 @@ func create() -> void:
 	_metal_material.next_pass.albedo_texture = LibSM64Global.mario_texture
 	_vanish_material.next_pass.albedo_texture = LibSM64Global.mario_texture
 
+	if is_instance_valid(_mesh_instance):
+		_mesh_instance.visible = true
+
 
 ## Delete mario inside the [code]libsm64[/code] world.
+## This is called automatically when the node leaves the tree or is freed, and is safe to call more than once.
 func delete() -> void:
 	if _id < 0:
 		return
-	LibSM64.mario_delete(_id)
+
+	# The library may have been terminated before this node was freed.
+	if LibSM64Global.is_initialized:
+		LibSM64.mario_delete(_id)
+
 	_id = -1
+	if is_instance_valid(_mesh_instance):
+		_mesh_instance.visible = false
+
+
+func _exit_tree() -> void:
+	delete()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		delete()
 
 
 ## Teleport mario in the [code]libsm64[/code] world.
@@ -381,7 +401,7 @@ func set_angle(to_global_rotation: Quaternion) -> void:
 	if _id < 0:
 		return
 	LibSM64.set_mario_angle(_id, to_global_rotation)
-	_face_angle = to_global_rotation.get_euler().y
+	_face_angle = to_global_rotation.get_euler(EULER_ORDER_YZX).y
 	_mario_interpolator.mario_state_current.face_angle = _face_angle
 	_mario_interpolator.mario_state_previous.face_angle = _face_angle
 	reset_interpolation()
@@ -432,8 +452,15 @@ func _make_mario_inputs() -> LibSM64MarioInputs:
 
 	mario_inputs.stick = Input.get_vector(mario_inputs_stick_left, mario_inputs_stick_right, mario_inputs_stick_up, mario_inputs_stick_down)
 
-	var look_direction := camera.global_transform.basis.z
-	mario_inputs.cam_look = Vector2(look_direction.x, look_direction.z)
+	# The camera is optional: fall back to the viewport's camera, and warn only once so that the tick
+	# loop doesn't flood the output.
+	var cam := camera if is_instance_valid(camera) else get_viewport().get_camera_3d()
+	if is_instance_valid(cam):
+		var look_direction := cam.global_transform.basis.z
+		mario_inputs.cam_look = Vector2(look_direction.x, look_direction.z)
+	elif not _camera_warning_pushed:
+		_camera_warning_pushed = true
+		push_warning("LibSM64Mario has no camera assigned, so Mario will not receive camera-relative input. Set the `camera` property or add a Camera3D to the viewport.")
 
 	mario_inputs.button_a = Input.is_action_pressed(mario_inputs_button_a)
 	mario_inputs.button_b = Input.is_action_pressed(mario_inputs_button_b)
