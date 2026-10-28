@@ -20,7 +20,7 @@ In order to use libsm64-godot, a ROM of Super Mario 64 (USA) is necessary (for l
 
 >17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91
 
-The path to this ROM file needs to be provided to the `LibSM64Global` static class when calling `LibSM64Global.load_rom_filepath(filepath: String)` before you can call the `LibSM64Global.init()` method. If the SHA256 doesn't match, it will be rejected and the addon will fail to initialize.
+The path to this ROM file needs to be provided to the `LibSM64Global` static class when calling `LibSM64Global.load_rom_file(rom_path: String, skip_checksum_validation := false)` before you can call the `LibSM64Global.init()` method. If the SHA256 doesn't match, it will be rejected and the addon will fail to initialize.
 
 The ROM file does not need to be included with a project that uses this addon and can be dynamically sourced from the user at runtime in order to avoid the unauthorized distribution of copyrighted material. Check the `main` scene in the included demo project on this repository for an example on how to request a filepath from the user at runtime.
 
@@ -36,9 +36,9 @@ The floor a is 20 meters by 20 meters plane and the pillar is a 5 meters tall re
 
 ### Static Surfaces
 
-In order to allow the addon to use the meshes as collision, you'll need to add an `LibSM64StaticSurfaceHandler` node to the scene via the Create New Node dialog. Then, you'll need to add all the meshes that will serve as the Static Surfaces of the world to the node group specified by the `static_surfaces_group` field of the `LibSM64StaticSurfaceHandler` node (by default the group name will be `libsm64_static_surfaces`, you shouldn't really need to change this).
+In order to allow the addon to use the meshes as collision, you'll need to add a `LibSM64StaticSurfacesHandler` node to the scene via the Create New Node dialog. Then, you'll need to add all the meshes that will serve as the Static Surfaces of the world to the node group specified by the `static_surfaces_group` field of the `LibSM64StaticSurfacesHandler` node (by default the group name will be `libsm64_static_surfaces`, you shouldn't really need to change this).
 
-![Create LibSM64StaticSurfaceHandler node](sm64staticsurfacehandler-add.png)
+![Create LibSM64StaticSurfacesHandler node](sm64staticsurfacehandler-add.png)
 
 ![Static surface node setup](static-surface-node-setup.png)
 
@@ -65,7 +65,7 @@ extends Node3D
 
 
 @onready var libsm_64_mario: LibSM64Mario = $LibSM64Mario
-@onready var libsm_64_static_surface_handler: Node = $LibSM64StaticSurfaceHandler
+@onready var libsm_64_static_surface_handler: LibSM64StaticSurfacesHandler = $LibSM64StaticSurfacesHandler
 
 
 func _ready() -> void:
@@ -91,7 +91,7 @@ func _ready() -> void:
 func _on_tree_exiting() -> void:
 	# Clean up the `libsm64` world when the scene is freed.
 	libsm_64_mario.delete()
-	SM64Global.terminate()
+	LibSM64Global.terminate()
 ```
 
 If everything goes correctly, you should be able to run this scene and get it all to work.
