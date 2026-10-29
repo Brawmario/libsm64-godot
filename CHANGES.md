@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2026-10-28
+
+### Added
+
+- `LibSM64SurfaceCollisionData` class, holding the surface data returned by the collision queries.
+- Nine collision-query methods on `LibSM64`: `surface_find_floor()`, `surface_find_floor_height()`, `surface_find_floor_height_and_data()`, `surface_find_ceil()`, `surface_find_ceil_height()`, `surface_find_wall_collision()`, `surface_find_wall_collisions()`, `surface_find_water_level()` and `surface_find_poison_gas_level()`. Sentinel values returned by `libsm64` are converted to `-INF` and `+INF`. Note that the water and poison gas queries always return `-INF`, since they are stubs in `libsm64`.
+- `LibSM64Global.is_initialized` property, reporting whether the global state of the library is currently initialized.
+- `LibSM64Global.load_rom_from_base64_string()` now accepts base64 payloads containing line breaks, tabs or spaces.
+
+### Changed
+
+- `LibSM64.mario_attack()` now returns `bool` instead of `void`, reporting whether the attack hit a surface object.
+- `LibSM64Global.init()` no longer re-initializes the library when it is already initialized. It pushes a warning and returns `true`, since initializing a second time recreates the global state and destroys all existing Marios and surfaces.
+- Surface object IDs are now signed `int32_t` values in the GDExtension, matching the Mario IDs. `LibSM64.surface_object_move()` and `LibSM64.surface_object_delete()` now reject negative IDs instead of forwarding them to `libsm64` as large unsigned integers.
+- `LibSM64Global.load_rom_from_base64_string()` now validates the decoded ROM bytes against `ROM_FILE_SHA256`, instead of hashing the base64 encoded string. `ROM_BASE64_ENCODED_SHA256` has been removed.
+
+### Fixed
+
+- `LibSM64.play_sound()` didn't scale the given position by `scale_factor`, so sounds were emitted in the wrong place in the `libsm64` world.
+- `LibSM64Mario` didn't delete its `libsm64` Mario when the node left the tree or was freed, leaking it. `delete()` is now called automatically from `_exit_tree()` and `NOTIFICATION_PREDELETE`, is safe to call more than once, and no longer reaches into the library after `LibSM64Global.terminate()`.
+- `LibSM64Mario` left its mesh visible after its Mario was deleted. The mesh is now hidden by `delete()` and shown again by `create()`.
+- `LibSM64SurfaceObjectsHandler` never disconnected the `tree_exiting` callables it connected, failed on nodes freed while outside the tree, left surface objects behind when the handler itself was freed, and leaked a surface object when the same node was loaded twice.
+- `LibSM64Mario` pushed an error on every physics tick when its `camera` property was not set. It now falls back to the viewport's current `Camera3D` and warns only once.
+- `LibSM64Mario.set_angle()` read the face angle using the default Euler order, which doesn't match the angles used by `libsm64`. It now uses the YZX order.
+
 ## [2.7.2] - 2026-04-03
 
 ### Changed
