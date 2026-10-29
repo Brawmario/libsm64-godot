@@ -76,7 +76,7 @@ runs:
         cd extension/libsm64
         cc --version
         if [[ "${{inputs.platform}}" == "web" ]]; then
-            emmake make -j $(nproc) CC=emcc
+            emmake make -j $(nproc) CC=emcc\ -sFAKE_DYLIBS=1
         else
             make -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
         fi
